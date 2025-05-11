@@ -10,16 +10,12 @@ import { GlobalStyle } from '@/styles/global';
 import { theme } from '@/styles/theme';
 import AuthProvider from '@/hooks/useAuth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import handleError from '@/utils/handleToast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
-    },
-    mutations: {
-      onError: handleError,
     },
   },
 });
@@ -36,6 +32,7 @@ const Providers = ({ children }: PropsWithChildren) => {
           <ToastContainer
             style={{
               zIndex: 999999,
+              fontSize: '1.6rem',
             }}
           />
         </QueryClientProvider>

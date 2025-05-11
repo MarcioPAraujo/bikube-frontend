@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const CustomLink = styled.p`
+export const CustomLink = styled.span`
   cursor: pointer;
   text-decoration: underline;
   margin-top: 2rem;
