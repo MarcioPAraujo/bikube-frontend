@@ -12,6 +12,7 @@ import { loginAuth } from '@/services/login/loginService';
 import SuccessModal from '@/components/modals/SuccessModal';
 import { useState } from 'react';
 import { CustomLink } from './styles';
+import PasswordInput from '../Elements/PasswordInput';
 
 export function UserRegister() {
   const router = useRouter();
@@ -68,13 +69,12 @@ export function UserRegister() {
           })}
           errors={errors.register}
         />
-        <LoginInput
+        <PasswordInput
           id="password"
-          label="Senha"
-          placeholder="Digite sua senha"
-          type="password"
+          labelText="Senha"
+          placeholder="Digite sua senha..."
           register={register('password')}
-          errors={errors.password}
+          errors={errors.password?.message}
         />
         <CustomLink onClick={() => setShowPassword(true)}>Clique aqui se esqueceu sua senha</CustomLink>
         <Button text="Continuar" />
