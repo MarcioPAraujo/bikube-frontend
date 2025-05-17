@@ -6,18 +6,26 @@ interface ILoginBody {
   registro: string;
   senha: string;
 }
+interface ILoginResponse {
+  access_token: string;
+  refresh_token: string;
+  role: string;
+}
 
 type Result<T> = {data: T; error: null} | {data: null; error: string};
 
 
-export const loginAuth = async (body: ILoginBody): Promise<Result<string>> => {
+export const loginAuth = async (body: ILoginBody): Promise<Result<ILoginResponse>> => {
   const url = '/auth/login';
   try {
-    const response: AxiosResponse<string> = await api.post(url, body);
+    const response: AxiosResponse<ILoginResponse> = await api.post(url, body);
 
-    const token = response.data;
-    localStorage.setItem(LOCAL_STORAGE_KEYS.token, token);
-    return { data: token, error: null };
+    const data = response.data;
+    localStorage.setItem(LOCAL_STORAGE_KEYS.token, data.access_token);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, data.refresh_token);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.role, data.role);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.employee_registration, body.registro);
+    return { data, error: null };
 
   } catch (error: any) {
     if (axios.isAxiosError(error)) {

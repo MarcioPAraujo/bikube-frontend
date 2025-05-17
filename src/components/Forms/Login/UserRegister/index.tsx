@@ -6,13 +6,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { LoginSchema, ILoginSchema } from '@/validation/Login/LoginSchema';
 import { registerMask } from '@/utils/masks/registerMask';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { notifyError } from '@/utils/handleToast';
 import { loginAuth } from '@/services/login/loginService';
 import SuccessModal from '@/components/modals/SuccessModal';
 import { useState } from 'react';
 import { CustomLink } from './styles';
 import PasswordInput from '../Elements/PasswordInput';
+import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 
 export function UserRegister() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export function UserRegister() {
       return;
     }
 
-    redirect('/dashboard');
+    router.push('/dashboard');
   };
   return (
     <>
