@@ -6,7 +6,6 @@ export const InputWrapper = styled.div`
     flex-direction: column;
     gap: 1rem;
     width: 36.8rem;
-    margin-bottom: 2.4rem;
 `;
 export const Label = styled.label`
     color: ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};

@@ -11,6 +11,8 @@ import { useState } from 'react';
 import { ErrorMessage, Input, InputContainer, InputWrapper, Label } from './styles';
 import { Icons } from '@/components/Icons/Icons';
 import IconButton from '@/components/Buttons/IconButton';
+import { resetPassword } from '@/services/login/passwordResetService';
+import { notifyError } from '@/utils/handleToast';
 
 const ResetPasswordForm = () => {
   const router = useRouter();
@@ -25,8 +27,20 @@ const ResetPasswordForm = () => {
     resolver: yupResolver(ResetPasswordSchema),
     mode: 'onChange',
   });
-  const onSubmit = (data: IResetPasswordSchema) => {
+  const onSubmit = async (data: IResetPasswordSchema) => {
     console.log(data);
+    const body = {
+      email: data.email,
+      senha: data.newPassword,
+    };
+
+    const response = await resetPassword(body);
+
+    if (response.error) {
+      notifyError(response.error);
+      return;
+    }
+
     setSuccessModal(true);
   };
   return (
@@ -40,6 +54,14 @@ const ResetPasswordForm = () => {
       />
       <FormBackground onSubmit={handleSubmit(onSubmit)}>
         <Logo />
+        <LoginInput
+          id="email"
+          label="Email"
+          type="text"
+          placeholder="Digite seu email..."
+          register={register('email')}
+          errors={errors?.email}
+        />
         <InputWrapper>
           <Label htmlFor="new-password">Insira a nova senha</Label>
           <InputContainer>

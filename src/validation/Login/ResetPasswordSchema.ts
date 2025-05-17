@@ -1,7 +1,9 @@
 import * as yup from 'yup';
 
 export type IResetPasswordSchema = yup.InferType<typeof ResetPasswordSchema>;
+
 export const ResetPasswordSchema = yup.object().shape({
+  email: yup.string().email('Insira um email válido').required('Insira o email informado na sua contratação'),
   newPassword: yup
     .string()
     .required('Nova senha é obrigatória')
