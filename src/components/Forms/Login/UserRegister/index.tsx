@@ -14,10 +14,11 @@ import { useState } from 'react';
 import { CustomLink } from './styles';
 import PasswordInput from '../Elements/PasswordInput';
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { sendCode } from '@/services/login/sentCodeService';
 
 export function UserRegister() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
   const {
     register,
     setValue,
@@ -28,12 +29,25 @@ export function UserRegister() {
     resolver: yupResolver(LoginSchema),
     mode: 'onChange',
   });
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const filteredValue = registerMask(value);
     setValue('register', filteredValue.toLocaleUpperCase());
     trigger('register');
   };
+
+  const handleCustomLinkClick = async () => {
+    const response = await sendCode();
+
+    if (response.error) {
+      notifyError(response.error);
+      return;
+    }
+
+    setSuccessModal(true);
+  };
+
   const onSubmit = async (data: ILoginSchema) => {
     const body = {
       registro: data.register,
@@ -49,10 +63,11 @@ export function UserRegister() {
 
     router.push('/dashboard');
   };
+
   return (
     <>
       <SuccessModal
-        isOpen={showPassword}
+        isOpen={successModal}
         onClose={() => router.push('/login/codigo')}
         message="Um código de confimação foi enviadopara seu email informado na sua admissão."
         title="Atenção!"
@@ -77,7 +92,7 @@ export function UserRegister() {
           register={register('password')}
           errors={errors.password?.message}
         />
-        <CustomLink onClick={() => setShowPassword(true)}>Clique aqui se esqueceu sua senha</CustomLink>
+        <CustomLink onClick={handleCustomLinkClick}>Clique aqui se esqueceu sua senha</CustomLink>
         <Button text="Continuar" />
       </FormBackground>
     </>

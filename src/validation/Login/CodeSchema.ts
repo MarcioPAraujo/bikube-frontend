@@ -8,6 +8,6 @@ export const CodeSchema = yup.object().shape({
     .string()
     .required('O código é obrigatório')
     .matches(regexes.onlyNumbers, 'O código deve conter apenas números')
-    .min(6, 'O código deve conter 6 dígitos')
-    .max(6, 'O código deve conter 6 dígitos'),
+    .min(4, 'O código deve conter 4 dígitos')
+    .max(4, 'O código deve conter 4 dígitos'),
 });

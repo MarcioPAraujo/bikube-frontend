@@ -10,6 +10,7 @@ interface ILoginResponse {
   access_token: string;
   refresh_token: string;
   role: string;
+  email: string;
 }
 
 type Result<T> = {data: T; error: null} | {data: null; error: string};
@@ -25,6 +26,7 @@ export const loginAuth = async (body: ILoginBody): Promise<Result<ILoginResponse
     localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, data.refresh_token);
     localStorage.setItem(LOCAL_STORAGE_KEYS.role, data.role);
     localStorage.setItem(LOCAL_STORAGE_KEYS.employee_registration, body.registro);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.email, data.email);
     return { data, error: null };
 
   } catch (error: any) {
