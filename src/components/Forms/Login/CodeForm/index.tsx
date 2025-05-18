@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { CodeSchema, ICodeSchema } from '@/validation/Login/CodeSchema';
 import { useRouter } from 'next/navigation';
 import codeMask from '@/utils/masks/codeMask';
+import { validateCode } from '@/services/login/validateCodeService';
+import { notifyError } from '@/utils/handleToast';
 
 const CodeForm = () => {
   const router = useRouter();
@@ -20,16 +22,27 @@ const CodeForm = () => {
     resolver: yupResolver(CodeSchema),
     mode: 'onChange',
   });
-  const onSubmit = (data: ICodeSchema) => {
-    console.log(data);
-    router.push('/login/redefinir-senha');
-  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const formattedValue = codeMask(value); // Remove non-digit characters
     setValue('code', formattedValue);
     trigger('code');
   };
+
+  const onSubmit = async (data: ICodeSchema) => {
+    console.log(data);
+
+    const response = await validateCode(data.code);
+
+    if (response.error) {
+      notifyError(response.error);
+      return;
+    }
+
+    router.push('/login/redefinir-senha');
+  };
+
   return (
     <FormBackground onSubmit={handleSubmit(onSubmit)}>
       <Logo />
