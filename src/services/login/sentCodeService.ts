@@ -1,14 +1,13 @@
-import { LOCAL_STORAGE_KEYS } from "@/utils/localStorageKeys";
 import { api } from "../api";
 import axios, { AxiosError, isAxiosError } from "axios";
 
 type Result = {successFul: boolean; error: null} | {successFul: boolean; error: string};
 
-export const sendCode = async (): Promise<Result> => {
+export const sendCode = async (email: string): Promise<Result> => {
   const url = '/codigosenha'
 
   const body = {
-    email: localStorage.getItem(LOCAL_STORAGE_KEYS.email),
+    email: email,
   }
 
   try {

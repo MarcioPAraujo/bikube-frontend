@@ -9,16 +9,11 @@ import { registerMask } from '@/utils/masks/registerMask';
 import { useRouter } from 'next/navigation';
 import { notifyError } from '@/utils/handleToast';
 import { loginAuth } from '@/services/login/loginService';
-import SuccessModal from '@/components/modals/SuccessModal';
-import { useState } from 'react';
 import { CustomLink } from './styles';
 import PasswordInput from '../Elements/PasswordInput';
-import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
-import { sendCode } from '@/services/login/sentCodeService';
 
 export function UserRegister() {
   const router = useRouter();
-  const [successModal, setSuccessModal] = useState(false);
   const {
     register,
     setValue,
@@ -35,17 +30,6 @@ export function UserRegister() {
     const filteredValue = registerMask(value);
     setValue('register', filteredValue.toLocaleUpperCase());
     trigger('register');
-  };
-
-  const handleCustomLinkClick = async () => {
-    const response = await sendCode();
-
-    if (response.error) {
-      notifyError(response.error);
-      return;
-    }
-
-    setSuccessModal(true);
   };
 
   const onSubmit = async (data: ILoginSchema) => {
@@ -66,13 +50,6 @@ export function UserRegister() {
 
   return (
     <>
-      <SuccessModal
-        isOpen={successModal}
-        onClose={() => router.push('/login/codigo')}
-        message="Um código de confimação foi enviadopara seu email informado na sua admissão."
-        title="Atenção!"
-        buttonText="Continuar"
-      />
       <FormBackground onSubmit={handleSubmit(onSubmit)}>
         <Logo />
         <LoginInput
@@ -92,7 +69,7 @@ export function UserRegister() {
           register={register('password')}
           errors={errors.password?.message}
         />
-        <CustomLink onClick={handleCustomLinkClick}>Clique aqui se esqueceu sua senha</CustomLink>
+        <CustomLink onClick={() => router.push('/login/enviar-codigo')}>Clique aqui se esqueceu sua senha</CustomLink>
         <Button text="Continuar" />
       </FormBackground>
     </>
