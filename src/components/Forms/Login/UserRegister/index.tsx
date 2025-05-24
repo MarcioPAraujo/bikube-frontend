@@ -11,9 +11,14 @@ import { notifyError } from '@/utils/handleToast';
 import { loginAuth } from '@/services/login/loginService';
 import { CustomLink } from './styles';
 import PasswordInput from '../Elements/PasswordInput';
+import { useState } from 'react';
+import { AlertLoginTriesModal } from '@/components/modals/AlertModal';
 
 export function UserRegister() {
   const router = useRouter();
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [alertMessage, setAlertmessage] = useState<string>('');
+  const [blocked, setBloqued] = useState<boolean>(false);
   const {
     register,
     setValue,
@@ -40,16 +45,54 @@ export function UserRegister() {
 
     const response = await loginAuth(body);
 
-    if (response.error) {
-      notifyError(response.error);
+    if (!response.error) {
+      router.push('/dashboard');
       return;
     }
 
-    router.push('/dashboard');
+    if (response.error === 'Usuario desativado') {
+      setBloqued(true);
+      setAlertmessage('Devido a multiplas tentativas de login incorretas, seu acesso foi bloqueado permanentemente.');
+      setAlertModal(true);
+      return;
+    }
+
+    const isANumber = !Number.isNaN(Number(response.error));
+
+    if (Number(response.error) === 5) {
+      setBloqued(true);
+      setAlertmessage('Devido a multiplas tentativas de login incorretas, seu acesso foi bloqueado permanentemente.');
+      setAlertModal(true);
+      return;
+    }
+
+    if (Number(response.error) === 3) {
+      setAlertmessage(
+        'Detectamos multiplas tentativas de login invcorretas. Seu acesso ao sistema foi bloquieado temporariamente por questões de segurança',
+      );
+      setAlertModal(true);
+      return;
+    }
+
+    if (isANumber) {
+      notifyError(`Tentavias de login incorretas: ${response.error}`);
+      return;
+    }
+
+    if (response.error) {
+      notifyError(response.error);
+    }
   };
 
   return (
     <>
+      <AlertLoginTriesModal
+        isOpen={alertModal}
+        onClose={() => setAlertModal(false)}
+        message={alertMessage}
+        textButton="Entendido"
+        blocked={blocked}
+      />
       <FormBackground onSubmit={handleSubmit(onSubmit)}>
         <Logo />
         <LoginInput
