@@ -22,11 +22,6 @@ export const loginAuth = async (body: ILoginBody): Promise<Result<ILoginResponse
     const response: AxiosResponse<ILoginResponse> = await api.post(url, body);
 
     const data = response.data;
-    localStorage.setItem(LOCAL_STORAGE_KEYS.token, data.access_token);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, data.refresh_token);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.role, data.role);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.employee_registration, body.registro);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.email, data.email);
     return { data, error: null };
 
   } catch (error: any) {

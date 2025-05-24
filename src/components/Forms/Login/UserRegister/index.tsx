@@ -13,15 +13,30 @@ import { CustomLink } from './styles';
 import PasswordInput from '../Elements/PasswordInput';
 import { useState } from 'react';
 import { AlertLoginTriesModal } from '@/components/modals/AlertModal';
+import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'react-toastify';
+import { KeepLoggedInToastModal } from '@/components/modals/KeepLoggedInToastModal';
+
+interface ILoginResponse {
+  access_token: string;
+  refresh_token: string;
+  role: string;
+  email: string;
+}
 
 export function UserRegister() {
+  const { setUser } = useAuth();
   const router = useRouter();
   const [alertModal, setAlertModal] = useState<boolean>(false);
   const [alertMessage, setAlertmessage] = useState<string>('');
+  const [keepLoggedInModal, setKeepLoggedInModal] = useState<boolean>(false);
   const [blocked, setBloqued] = useState<boolean>(false);
+  const [response, setResponse] = useState<ILoginResponse>({} as ILoginResponse);
   const {
     register,
     setValue,
+    getValues,
     trigger,
     handleSubmit,
     formState: { errors },
@@ -45,8 +60,9 @@ export function UserRegister() {
 
     const response = await loginAuth(body);
 
-    if (!response.error) {
-      router.push('/dashboard');
+    if (!response.error && response.data) {
+      setResponse(response.data);
+      setKeepLoggedInModal(true);
       return;
     }
 
@@ -86,6 +102,29 @@ export function UserRegister() {
 
   return (
     <>
+      <KeepLoggedInToastModal
+        isOpen={keepLoggedInModal}
+        onStayLoggedIn={() => {
+          localStorage.setItem(LOCAL_STORAGE_KEYS.token, response.access_token);
+          localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, response.refresh_token);
+          setUser({
+            role: response.role,
+            register: getValues('register'),
+            email: response.email,
+          });
+          router.push('/dashboard');
+        }}
+        onJustLogin={() => {
+          localStorage.setItem(LOCAL_STORAGE_KEYS.token, response.access_token);
+          setUser({
+            role: response.role,
+            register: getValues('register'),
+            email: response.email,
+          });
+          router.push('/dashboard');
+        }}
+      />
+      ,
       <AlertLoginTriesModal
         isOpen={alertModal}
         onClose={() => setAlertModal(false)}

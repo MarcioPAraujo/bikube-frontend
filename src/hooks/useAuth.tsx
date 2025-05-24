@@ -2,25 +2,21 @@
 
 'use client';
 
-import { useContext, useState } from 'react';
+import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { Dispatch, SetStateAction, useContext, useMemo, useState } from 'react';
 import { createContext, ReactNode } from 'react';
 
 export interface User {
-  id: number;
+  register: string;
   email: string;
-  username: string;
-}
-
-export interface ILoginResponse {
-  jwt: string;
-  refreshToken: string;
-  user: User;
-  role: number;
+  role: string;
 }
 
 interface IUserProvider {
   user: User | undefined;
+  setUser: Dispatch<SetStateAction<User | undefined>>;
   isAuthenticated: boolean;
+  logout: VoidFunction;
 }
 
 interface ChildrenProps {
@@ -30,15 +26,25 @@ interface ChildrenProps {
 const AuthContext = createContext({} as IUserProvider);
 
 const AuthProvider = ({ children }: ChildrenProps) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | undefined>();
 
   const isAuthenticated = !!user;
 
-  return (
-    <AuthContext.Provider value={{ user, isAuthenticated }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const logout = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
+  };
+
+  const value = useMemo(() => {
+    return {
+      user,
+      setUser,
+      isAuthenticated,
+      logout,
+    };
+  }, [user]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
