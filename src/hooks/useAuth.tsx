@@ -4,7 +4,7 @@
 
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { redirect, usePathname } from 'next/navigation';
-import { Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { createContext, ReactNode } from 'react';
 
 export interface User {
@@ -34,9 +34,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const pathName = usePathname();
   const [loading, setLoading] = useState(true);
 
-  const isAuthenticated = !!user?.id;
-  const publicRoutes = ['/'];
-
   useEffect(() => {
     const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
     if (storedUser) {
@@ -45,24 +42,18 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     }
     setLoading(false);
   }, []);
+
+  if (loading) return null;
+
+  const isAuthenticated = !!user?.id;
+  const publicRoutes = ['/'];
+
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.user);
     setUser(undefined);
-    redirect('/');
   };
-  const value = useMemo(
-    () => ({
-      user,
-      setUser,
-      isAuthenticated,
-      logout,
-    }),
-    [user, isAuthenticated],
-  );
-
-  if (loading) return null;
 
   if (!isAuthenticated && !publicRoutes.includes(pathName)) {
     redirect('/');
@@ -71,7 +62,18 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     redirect('/home');
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        isAuthenticated,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

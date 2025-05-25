@@ -98,7 +98,7 @@ export function UserRegister() {
     const response = await loginAuth(body);
 
     if (!response.error && response.data) {
-      getList(response.data.email);
+      await getList(response.data.email);
       setResponse(response.data);
       setKeepLoggedInModal(true);
       return;
@@ -147,16 +147,13 @@ export function UserRegister() {
           localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, response.refresh_token);
           setUser(userData);
           localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(userData));
-          router.push('/dashboard');
         }}
         onJustLogin={() => {
           localStorage.setItem(LOCAL_STORAGE_KEYS.token, response.access_token);
           setUser(userData);
           localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(userData));
-          router.push('/dashboard');
         }}
       />
-      ,
       <AlertLoginTriesModal
         isOpen={alertModal}
         onClose={() => setAlertModal(false)}
