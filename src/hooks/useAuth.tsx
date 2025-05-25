@@ -2,14 +2,18 @@
 
 'use client';
 
+import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
-import { Dispatch, SetStateAction, useContext, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from 'react';
 import { createContext, ReactNode } from 'react';
 
 export interface User {
   register: string;
   email: string;
   role: string;
+  nome: string;
+  id: string;
+  setor: string;
 }
 
 interface IUserProvider {
@@ -29,6 +33,14 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const [user, setUser] = useState<User | undefined>();
 
   const isAuthenticated = !!user;
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+    }
+  }, []);
 
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);

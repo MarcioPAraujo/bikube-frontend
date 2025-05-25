@@ -17,6 +17,7 @@ import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-toastify';
 import { KeepLoggedInToastModal } from '@/components/modals/KeepLoggedInToastModal';
+import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
 
 interface ILoginResponse {
   access_token: string;
@@ -25,8 +26,18 @@ interface ILoginResponse {
   email: string;
 }
 
+export interface User {
+  register: string;
+  email: string;
+  role: string;
+  nome: string;
+  id: string;
+  setor: string;
+}
+
 export function UserRegister() {
   const { setUser } = useAuth();
+  const [userData, setUserData] = useState<User>({} as User);
   const router = useRouter();
   const [alertModal, setAlertModal] = useState<boolean>(false);
   const [alertMessage, setAlertmessage] = useState<string>('');
@@ -52,6 +63,32 @@ export function UserRegister() {
     trigger('register');
   };
 
+  const getList = async (email: string) => {
+    const response = await getListOfEmployees();
+
+    if (response.error) {
+      console.error('Error fetching user list:', response.error);
+      return;
+    }
+    const usersList = response.data;
+    if (!usersList) {
+      console.error('No user list found');
+      return;
+    }
+
+    const userData = usersList.find(item => item.email === email);
+    if (userData) {
+      setUserData({
+        id: userData.id,
+        email: userData.email,
+        nome: userData.nome,
+        role: userData.cargo,
+        register: userData.idusuario.registro,
+        setor: userData.id_setor.nome,
+      });
+    }
+  };
+
   const onSubmit = async (data: ILoginSchema) => {
     const body = {
       registro: data.register,
@@ -61,6 +98,7 @@ export function UserRegister() {
     const response = await loginAuth(body);
 
     if (!response.error && response.data) {
+      getList(response.data.email);
       setResponse(response.data);
       setKeepLoggedInModal(true);
       return;
@@ -107,20 +145,14 @@ export function UserRegister() {
         onStayLoggedIn={() => {
           localStorage.setItem(LOCAL_STORAGE_KEYS.token, response.access_token);
           localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, response.refresh_token);
-          setUser({
-            role: response.role,
-            register: getValues('register'),
-            email: response.email,
-          });
+          setUser(userData);
+          localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(userData));
           router.push('/dashboard');
         }}
         onJustLogin={() => {
           localStorage.setItem(LOCAL_STORAGE_KEYS.token, response.access_token);
-          setUser({
-            role: response.role,
-            register: getValues('register'),
-            email: response.email,
-          });
+          setUser(userData);
+          localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(userData));
           router.push('/dashboard');
         }}
       />
