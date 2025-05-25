@@ -13,7 +13,7 @@ import { CustomLink } from './styles';
 import PasswordInput from '../Elements/PasswordInput';
 import { useState } from 'react';
 import { AlertLoginTriesModal } from '@/components/modals/AlertModal';
-import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { LOCAL_STORAGE_KEYS, SESSION_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-toastify';
 import { KeepLoggedInToastModal } from '@/components/modals/KeepLoggedInToastModal';
@@ -143,15 +143,15 @@ export function UserRegister() {
       <KeepLoggedInToastModal
         isOpen={keepLoggedInModal}
         onStayLoggedIn={() => {
+          setUser(userData);
           localStorage.setItem(LOCAL_STORAGE_KEYS.token, response.access_token);
           localStorage.setItem(LOCAL_STORAGE_KEYS.refreshToken, response.refresh_token);
-          setUser(userData);
           localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(userData));
         }}
         onJustLogin={() => {
-          localStorage.setItem(LOCAL_STORAGE_KEYS.token, response.access_token);
           setUser(userData);
-          localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(userData));
+          sessionStorage.setItem(SESSION_STORAGE_KEYS.token, response.access_token);
+          sessionStorage.setItem(SESSION_STORAGE_KEYS.user, JSON.stringify(userData));
         }}
       />
       <AlertLoginTriesModal

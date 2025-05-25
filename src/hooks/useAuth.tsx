@@ -2,7 +2,7 @@
 
 /* eslint-disable react/jsx-no-constructed-context-values */
 
-import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { LOCAL_STORAGE_KEYS, SESSION_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { redirect, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { createContext, ReactNode } from 'react';
@@ -35,7 +35,10 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
+    let storedUser = sessionStorage.getItem(SESSION_STORAGE_KEYS.user);
+    if (!storedUser) {
+      storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
+    }
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
@@ -52,6 +55,9 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.user);
+
+    sessionStorage.removeItem(SESSION_STORAGE_KEYS.user);
+    sessionStorage.removeItem(SESSION_STORAGE_KEYS.token);
     setUser(undefined);
   };
 
