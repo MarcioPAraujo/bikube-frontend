@@ -4,6 +4,8 @@ import Logo from '../../../public/images/BIKUBE_LOGO.svg';
 import { BsArrowLeftCircle } from 'react-icons/bs';
 import { BsEye } from 'react-icons/bs';
 import { BsEyeSlash } from 'react-icons/bs';
+import { BsPersonFill } from 'react-icons/bs';
+import UserIcon from './UserIcon';
 
 interface IconProps {
   size?: number;
@@ -17,5 +19,7 @@ export const Icons = {
   ArrowLeft: (props: IconProps) => <IconWrapper Icon={BsArrowLeftCircle} {...props} />,
   OpenedEye: (props: IconProps) => <IconWrapper Icon={BsEye} color={props.color} size={props.size} />,
   ClosedEye: (props: IconProps) => <IconWrapper Icon={BsEyeSlash} {...props} />,
+  PersonFillBlack: (props: IconProps) => <IconWrapper Icon={BsPersonFill} {...props} />,
+  Person: () => <IconWrapper Icon={UserIcon} />,
   Logo: () => <Logo />,
 };

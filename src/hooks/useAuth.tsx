@@ -68,7 +68,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     redirect('/');
   }
   if (isAuthenticated && pathName === '/') {
-    redirect('/dashboard');
+    redirect('/home');
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
