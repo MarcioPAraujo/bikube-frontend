@@ -1,8 +1,7 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
-
 'use client';
 
-import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
+/* eslint-disable react/jsx-no-constructed-context-values */
+
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { redirect, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from 'react';
@@ -33,15 +32,10 @@ const AuthContext = createContext({} as IUserProvider);
 const AuthProvider = ({ children }: ChildrenProps) => {
   const [user, setUser] = useState<User | undefined>();
   const pathName = usePathname();
+  const [loading, setLoading] = useState(true);
 
-  const isAuthenticated = !!user;
+  const isAuthenticated = !!user?.id;
   const publicRoutes = ['/'];
-  if (!isAuthenticated && !publicRoutes.includes(pathName)) {
-    redirect('/');
-  }
-  if (isAuthenticated && pathName === '/') {
-    redirect('/home');
-  }
 
   useEffect(() => {
     const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
@@ -49,22 +43,33 @@ const AuthProvider = ({ children }: ChildrenProps) => {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
     }
+    setLoading(false);
   }, []);
-
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.user);
+    setUser(undefined);
+    redirect('/');
   };
-
-  const value = useMemo(() => {
-    return {
+  const value = useMemo(
+    () => ({
       user,
       setUser,
       isAuthenticated,
       logout,
-    };
-  }, [user]);
+    }),
+    [user, isAuthenticated],
+  );
+
+  if (loading) return null;
+
+  if (!isAuthenticated && !publicRoutes.includes(pathName)) {
+    redirect('/');
+  }
+  if (isAuthenticated && pathName === '/') {
+    redirect('/dashboard');
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
