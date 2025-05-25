@@ -4,6 +4,7 @@
 
 import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { redirect, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from 'react';
 import { createContext, ReactNode } from 'react';
 
@@ -31,8 +32,16 @@ const AuthContext = createContext({} as IUserProvider);
 
 const AuthProvider = ({ children }: ChildrenProps) => {
   const [user, setUser] = useState<User | undefined>();
+  const pathName = usePathname();
 
   const isAuthenticated = !!user;
+  const publicRoutes = ['/'];
+  if (!isAuthenticated && !publicRoutes.includes(pathName)) {
+    redirect('/');
+  }
+  if (isAuthenticated && pathName === '/') {
+    redirect('/home');
+  }
 
   useEffect(() => {
     const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
@@ -45,6 +54,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.user);
   };
 
   const value = useMemo(() => {
