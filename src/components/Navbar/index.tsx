@@ -42,7 +42,7 @@ const tabs: Tab[] = [
 
 export const Navbar = () => {
   const { user } = useAuth();
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const navbarRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 

@@ -1,6 +1,6 @@
 'use client';
 
-export const ReportsPage = () => {
+const ReportsPage = () => {
   return (
     <div>
       <h1>Relatórios</h1>

@@ -34,6 +34,11 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const pathName = usePathname();
   const [loading, setLoading] = useState(true);
 
+  const isAuthenticated = !!user?.id;
+  const isAdmin = user?.role === 'ADMIN';
+  const isRH = user?.role === 'RH';
+  const isOnlyEmployee = user?.role === 'FUNCIONARIO';
+
   useEffect(() => {
     let storedUser = sessionStorage.getItem(SESSION_STORAGE_KEYS.user);
     if (!storedUser) {
@@ -46,11 +51,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     setLoading(false);
   }, []);
 
-  if (loading) return null;
-
-  const isAuthenticated = !!user?.id;
-  const publicRoutes = ['/'];
-
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
@@ -60,11 +60,28 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.token);
     setUser(undefined);
   };
+  const publicRoutes = ['/'];
+
+  if (loading) return null;
+  const allowedMenus = (routes: string[]) => {
+    const isAllowed = routes.some(route => pathName.startsWith(route));
+    return isAllowed;
+  };
+
+  const allowedRoles = ['ADMIN', 'RH', 'FUNCIONARIO'];
+  const employeeRoutes = ['/home', '/minhas-informacoes'];
+  const rhRoutes = ['/setores', '/home', '/funcionarios', '/minhas-informacoes'];
 
   if (!isAuthenticated && !publicRoutes.includes(pathName)) {
     redirect('/');
   }
   if (isAuthenticated && pathName === '/') {
+    redirect('/home');
+  }
+  if (isAuthenticated && isOnlyEmployee && !allowedMenus(employeeRoutes)) {
+    redirect('/home');
+  }
+  if (isAuthenticated && isRH && !allowedMenus(rhRoutes)) {
     redirect('/home');
   }
 
