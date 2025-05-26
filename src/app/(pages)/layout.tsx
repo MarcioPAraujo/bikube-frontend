@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { DataContainer, Header, ProfileContainer, UserInfo, UserName } from './styles';
 import { Icons } from '@/components/Icons/Icons';
 import { useRouter } from 'next/navigation';
+import { Navbar } from '@/components/Navbar';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { push } = useRouter();
@@ -35,6 +36,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </ProfileContainer>
         </DataContainer>
       </Header>
+      <Navbar />
       {children}
     </div>
   );
