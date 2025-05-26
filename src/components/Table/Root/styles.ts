@@ -23,4 +23,10 @@ export const Table = styled.div`
       grid-template-columns: 1fr 4fr 1fr;
     }
   }
+  &.employees {
+    .table-header,
+    .table-row {
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    }
+  }
 `;
