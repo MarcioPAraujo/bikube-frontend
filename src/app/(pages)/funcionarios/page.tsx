@@ -1,11 +1,10 @@
 'use client';
 
-const MyInformationPage = () => {
+const EmployeesPage = () => {
   return (
     <div>
-      <h1>Minhas Informações</h1>
-      <p>Esta página está em construção.</p>
+      <h1>Funcionários</h1>
     </div>
   );
 };
-export default MyInformationPage;
+export default EmployeesPage;

@@ -17,4 +17,10 @@ export const Table = styled.div`
       grid-template-columns: 1fr;
     }
   }
+  &.logs {
+    .table-header,
+    .table-row {
+      grid-template-columns: 1fr 4fr 1fr;
+    }
+  }
 `;
