@@ -45,6 +45,7 @@ export const TitleContainer = styled.div`
 `;
 
 export const Field = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -70,7 +71,12 @@ export const Field = styled.div`
     }
   }
 `;
-
+export const ErrorMessage = styled.span`
+  position: absolute;
+  bottom: -1.5rem;
+  color: ${({ theme }) => theme.colors.RED.normal};
+  font-size: 1.4rem;
+`;
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: end;

@@ -11,7 +11,11 @@ import { SectorForm } from '@/components/Forms/SetorForm';
 const columns = ['Nome'];
 const SectorsPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const { data: sectors, isFetching } = useQuery({
+  const {
+    data: sectors,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ['sectors'],
     queryFn: () => getsectors(),
   });
@@ -22,7 +26,7 @@ const SectorsPage = () => {
 
   return (
     <>
-      <SectorForm isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <SectorForm isOpen={modalOpen} onClose={() => setModalOpen(false)} successfulSubmit={refetch} />
 
       <div>
         <TopTitle>
