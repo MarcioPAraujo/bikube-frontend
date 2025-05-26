@@ -6,10 +6,17 @@ interface DefaultButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  classname?: 'bordered';
 }
-export const DefaultButton: FC<DefaultButtonProps> = ({ text, onClick, disabled = false, type = 'button' }) => {
+export const DefaultButton: FC<DefaultButtonProps> = ({
+  text,
+  onClick,
+  disabled = false,
+  type = 'button',
+  classname,
+}) => {
   return (
-    <Button type={type} onClick={onClick} disabled={disabled} className="default-button">
+    <Button type={type} onClick={onClick} disabled={disabled} className={classname}>
       {text}
     </Button>
   );

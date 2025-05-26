@@ -7,6 +7,7 @@ import { BsEyeSlash } from 'react-icons/bs';
 import { BsPersonFill } from 'react-icons/bs';
 import UserIcon from './UserIcon';
 import { BsCaretRightFill } from 'react-icons/bs';
+import { BsFileExcelFill } from 'react-icons/bs';
 
 interface IconProps {
   size?: number;
@@ -22,6 +23,7 @@ export const Icons = {
   ClosedEye: (props: IconProps) => <IconWrapper Icon={BsEyeSlash} {...props} />,
   PersonFillBlack: (props: IconProps) => <IconWrapper Icon={BsPersonFill} {...props} />,
   CaretRight: (props: IconProps) => <IconWrapper Icon={BsCaretRightFill} {...props} />,
+  CloseIcon: (props: IconProps) => <IconWrapper Icon={BsFileExcelFill} {...props} />,
   Person: () => <IconWrapper Icon={UserIcon} />,
   Logo: () => <Logo />,
 };

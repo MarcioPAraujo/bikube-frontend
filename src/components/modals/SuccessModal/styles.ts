@@ -7,7 +7,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 99999;
 `;
 export const BlurBackground = styled.div`
   position: absolute;
@@ -17,14 +17,14 @@ export const BlurBackground = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5px);
-  z-index: 1;
+  z-index: 99999;
 `;
 export const ModalContent = styled.div`
   position: relative;
   background: white;
   padding: 1rem;
   border-radius: 0.8rem;
-  z-index: 2;
+  z-index: 100000;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   height: 30rem;
   width: 25rem;

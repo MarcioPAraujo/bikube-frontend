@@ -22,4 +22,10 @@ export const Button = styled.button`
     transition: 0.2s;
     box-shadow: 0 0.1rem 0.5rem rgba(0, 0, 0, 0.3);
   }
+
+  &.bordered {
+    background-color: transparent;
+    border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_353535};
+    color: ${({ theme }) => theme.colors.GRAY.hex_353535};
+  }
 `;
