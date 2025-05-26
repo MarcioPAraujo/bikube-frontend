@@ -48,3 +48,41 @@ export const OpenCloseButton = styled.button`
     transform: rotate(180deg);
   }
 `;
+export const UL = styled.ul`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  color: ${({ theme }) => theme.colors.WHITE};
+  font-size: 1.6rem;
+  font-weight: 500;
+`;
+
+export const LI = styled.li`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  padding-left: 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_353535};
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.WHITE};
+    width: 100%;
+    height: 100%;
+  }
+
+  &.selected {
+    background-color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+    font-weight: 600;
+  }
+`;

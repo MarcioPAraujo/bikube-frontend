@@ -1,6 +1,6 @@
 'use client';
 
-export const SectorsPage = () => {
+const SectorsPage = () => {
   return (
     <div>
       <h1>Setores</h1>
@@ -8,3 +8,4 @@ export const SectorsPage = () => {
     </div>
   );
 };
+export default SectorsPage;

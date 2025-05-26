@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import Image from 'next/image';
-import { DataContainer, Header, ProfileContainer, UserInfo, UserName } from './styles';
+import { DataContainer, Header, MainContainer, ProfileContainer, UserInfo, UserName } from './styles';
 import { Icons } from '@/components/Icons/Icons';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
@@ -37,7 +37,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </DataContainer>
       </Header>
       <Navbar />
-      {children}
+      <MainContainer>{children}</MainContainer>
     </div>
   );
 };

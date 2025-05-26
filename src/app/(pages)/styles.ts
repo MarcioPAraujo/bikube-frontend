@@ -40,3 +40,9 @@ export const ProfileContainer = styled.div`
   height: 10rem;
   background-color: #fff;
 `;
+export const MainContainer = styled.main`
+  margin-top: 12rem; /* Adjust based on header height */
+  padding: 2rem;
+  background-color: #f4f4f4;
+  min-height: calc(100vh - 12rem); /* Ensure it covers the full height minus header */
+`;
