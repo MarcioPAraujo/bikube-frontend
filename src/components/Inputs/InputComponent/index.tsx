@@ -8,6 +8,7 @@ interface IProps {
   disabled?: boolean;
   errorMessage?: string;
   register?: any;
+  fieldClassName?: string;
 }
 const InputComponent: React.FC<IProps> = ({
   id,
@@ -16,10 +17,11 @@ const InputComponent: React.FC<IProps> = ({
   value,
   disabled = false,
   errorMessage,
+  fieldClassName,
   register,
 }) => {
   return (
-    <Field>
+    <Field className={fieldClassName}>
       <Label htmlFor={id}>{labelText}</Label>
       <Input id={id} type="text" placeholder={placeholder} defaultValue={value} disabled={disabled} {...register} />
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}

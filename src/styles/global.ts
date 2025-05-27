@@ -40,7 +40,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   body {
     text-rendering: optimizeLegibility;
-    background: white;
+    background: #ffffff;
     color: #000;
   }
   button {

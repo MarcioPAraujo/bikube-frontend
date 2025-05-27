@@ -22,7 +22,7 @@ export const InputContainer = styled.button`
   justify-content: space-between;
   align-items: center;
 
-  border: none;
+  border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
   border-radius: 0.8rem;
   padding-left: 0.8rem;
   background-color: ${({ theme }) => theme.colors.WHITE};
@@ -37,12 +37,12 @@ export const InputContainer = styled.button`
     border-radius: 0.8rem 0.8rem 0px 0px;
   }
   svg.opened {
-    transform: rotate(0deg);
+    transform: rotate(180deg);
     transition: transform 0.3s ease;
     margin-right: 1.6rem;
   }
   svg.closed {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
     transition: transform 0.3s ease;
     margin-right: 1.6rem;
   }

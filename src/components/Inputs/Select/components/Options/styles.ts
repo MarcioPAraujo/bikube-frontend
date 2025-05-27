@@ -11,6 +11,7 @@ export const Options = styled.div`
   border-radius: 0px 0px 8px 8px;
   border: none;
   background-color: ${({ theme }) => theme.colors.WHITE};
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
 `;
 export const OptionsContainer = styled.div`
   width: 100%;

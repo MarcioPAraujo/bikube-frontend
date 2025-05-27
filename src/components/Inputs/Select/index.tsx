@@ -26,6 +26,7 @@ interface ISelectProps {
   label?: string;
   enableSearch?: boolean;
   errorMessage?: string;
+  fieldClassName?: string;
 }
 
 const SelectComponent: FC<ISelectProps> = ({
@@ -39,6 +40,7 @@ const SelectComponent: FC<ISelectProps> = ({
   disabled = false,
   enableSearch = false,
   errorMessage,
+  fieldClassName,
 }) => {
   const selectRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -71,7 +73,7 @@ const SelectComponent: FC<ISelectProps> = ({
     };
   }, [setIsOpen]);
   return (
-    <Container id="select-component">
+    <Container id="select-component" className={fieldClassName}>
       {label && <Label>{label}</Label>}
       <SelectArea ref={selectRef}>
         <InputContainer
