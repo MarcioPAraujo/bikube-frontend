@@ -4,11 +4,14 @@ import { Table } from '@/components/Table/Index/Index';
 import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
 import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
-import { CustomLink } from './styles';
+import { CustomLink, TopTitle } from './styles';
+import { DefaultButton } from '@/components/Buttons/DefaultButton';
+import { useRouter } from 'next/navigation';
 
 const columns = ['Nome', 'Cargo', 'Setor', 'Função', 'Data de Admissão'];
 
 const EmployeesPage = () => {
+  const { push } = useRouter();
   const { data: employees, isFetching } = useQuery({
     queryKey: ['employees'],
     queryFn: () => getListOfEmployees(),
@@ -27,16 +30,15 @@ const EmployeesPage = () => {
 
   return (
     <div>
-      <h1>Funcionários</h1>
+      <TopTitle>
+        <h1>Funcionários</h1>
+        <DefaultButton text="Cadastrar funcionário" onClick={() => push('/funcionarios/cadastrar')} />
+      </TopTitle>
       <Table.Root tableClassName="employees">
         <Table.Header columns={columns} />
         <Table.Body>
           {employees?.data?.map(employee => (
-            <CustomLink
-              href={`/funcionarios/detalhes/${employee.id}`}
-              key={employee.id}
-              style={{ textDecoration: 'none' }}
-            >
+            <CustomLink href={`/funcionarios/detalhes/${employee.id}`} key={employee.id}>
               <Table.Row>
                 <Table.BodyCell>{employee.nome}</Table.BodyCell>
                 <Table.BodyCell>{employee.cargo}</Table.BodyCell>
