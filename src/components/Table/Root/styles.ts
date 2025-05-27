@@ -28,5 +28,8 @@ export const Table = styled.div`
     .table-row {
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
     }
+    .table-body:last-child > a > .table-row {
+      border-radius: 0 0 1rem 1rem;
+    }
   }
 `;
