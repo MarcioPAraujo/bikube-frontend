@@ -60,7 +60,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.token);
     setUser(undefined);
   };
-  const publicRoutes = ['/'];
+  const publicRoutes = ['/', '/login', '/login/codigo', '/login/redefinir-senha', '/login/enviar-codigo'];
 
   if (loading) return null;
   const allowedMenus = (routes: string[]) => {

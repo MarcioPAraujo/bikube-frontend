@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { notifyError } from '@/utils/handleToast';
 import { sendCode } from '@/services/login/sentCodeService';
+import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 
 const SendCodeForm = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const SendCodeForm = () => {
       notifyError(response.error);
       return;
     }
-
+    localStorage.setItem(LOCAL_STORAGE_KEYS.email, data.email);
     setSuccessModal(true);
   };
 

@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const { user, logout } = useAuth();
   console.log('user', user);
   if (!user) {
-    return null; // or a loading spinner
+    return <>{children}</>; // or a loading spinner
   }
 
   return (
