@@ -1,4 +1,4 @@
-import { CPF_REGEX, DDMMYYYY_REGEX, EMAIL_REGEX, MOBILE_REGEX, ZIP_CODE_REGEX } from '@/utils/regex/regexes';
+import { CPF_REGEX, DDMMYYYY_REGEX, EMAIL_REGEX, MOBILE_REGEX, ONLY_NUMBERS, ZIP_CODE_REGEX } from '@/utils/regex/regexes';
 import * as yup from 'yup';
 
 export type EmployeesFormValues = yup.InferType<typeof EmployeesFormSchema>;
@@ -21,13 +21,11 @@ export const EmployeesFormSchema = yup.object().shape({
     .matches(EMAIL_REGEX, 'O e-mail deve estar com o formato correto'),
   cargo: yup.string().required('O cargo é obrigatório'),
   telefone: yup.string().required('O telefone é obrigatório').matches(MOBILE_REGEX, 'O telefone deve estar no formato (XX) XXXXX-XXXX'),
-  salario: yup
-    .number()
-    .required('O salário é obrigatório')
-    .typeError('O salário deve ser um número')
-    .positive('O salário deve ser um valor positivo')
-    .min(1, 'O salário deve ser maior que zero'),
-  contabancaria: yup.string().required('A conta bancária é obrigatória').matches(/^\d$/, 'A conta bancária deve conter apenas números'),
+  salario: yup.string().required('O salário é obrigatório').test('biggerThanZero', 'O salário deve ser maior que zero', value => {
+    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
+    return !isNaN(numericValue) && numericValue > 0;
+  }),
+  contabancaria: yup.string().required('A conta bancária é obrigatória').matches(ONLY_NUMBERS, 'A conta bancária deve conter apenas números'),
   dataentrada: yup
     .string()
     .required('A data de admissão é obrigatória')
