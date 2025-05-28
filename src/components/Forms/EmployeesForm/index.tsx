@@ -22,6 +22,7 @@ import LoadingScreen from '@/components/LoadingScreen';
 import SuccessModal from '@/components/modals/SuccessModal';
 import { useRouter } from 'next/navigation';
 import { format, parse } from 'date-fns';
+import WarningModal from '@/components/modals/WarningModal';
 
 interface Address {
   city: string;
@@ -60,6 +61,7 @@ const EmployeeForm = () => {
   const [gettingAddress, setGettingAddress] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [warningModal, setWarningModal] = useState(false);
 
   const { data: sectors, isFetching } = useQuery({
     queryKey: ['sectors'],
@@ -180,15 +182,22 @@ const EmployeeForm = () => {
         message="Funcionário cadastrado com sucesso!"
         buttonText="Continuar"
       />
+      <WarningModal
+        isOpen={warningModal}
+        message="Você tem certeza que deseja cancelar o cadastro? Todas as informações serão perdidas."
+        title="Cancelar Cadastro"
+        confirmText="Sim, cancelar"
+        cancelText="Não, continuar"
+        onConfirm={() => {
+          setWarningModal(false);
+          router.push('/funcionarios');
+        }}
+        onCancel={() => setWarningModal(false)}
+      />
       <FormContainer onSubmit={handleSubmit(onFormSubmit)}>
         <ButtonContainer>
           <DefaultButton text="Salvar Funcionário" type="submit" />
-          <DefaultButton
-            text="Cancelar"
-            type="button"
-            onClick={() => router.push('/funcionarios')}
-            classname="bordered"
-          />
+          <DefaultButton text="Cancelar" type="button" onClick={() => setWarningModal(true)} classname="bordered" />
         </ButtonContainer>
         <Fieldset>
           <Legend>Dados do Funcionário</Legend>
