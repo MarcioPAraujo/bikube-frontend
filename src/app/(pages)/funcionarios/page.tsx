@@ -44,7 +44,7 @@ const EmployeesPage = () => {
                 <Table.BodyCell>{employee.cargo}</Table.BodyCell>
                 <Table.BodyCell>{employee.id_setor.nome}</Table.BodyCell>
                 <Table.BodyCell>{employee.funcao}</Table.BodyCell>
-                <Table.BodyCell>{format(parseISO(employee.dataentrada), 'dd/MM/yyyy')}</Table.BodyCell>
+                <Table.BodyCell>{format(new Date(employee.dataentrada), 'dd/MM/yyyy')}</Table.BodyCell>
               </Table.Row>
             </CustomLink>
           ))}

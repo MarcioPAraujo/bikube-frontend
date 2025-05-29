@@ -18,13 +18,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-toastify';
 import { KeepLoggedInToastModal } from '@/components/modals/KeepLoggedInToastModal';
 import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
-
-interface ILoginResponse {
-  access_token: string;
-  refresh_token: string;
-  role: string;
-  email: string;
-}
+import { ILoginResponse } from '@/interfaces/login/loginResponse';
+import TermsOfUseModal from '@/components/modals/LoginTermsOfUsemodal';
+import SuccessModal from '@/components/modals/SuccessModal';
 
 export interface User {
   register: string;
@@ -39,11 +35,15 @@ export function UserRegister() {
   const { setUser } = useAuth();
   const [userData, setUserData] = useState<User>({} as User);
   const router = useRouter();
+
   const [alertModal, setAlertModal] = useState<boolean>(false);
   const [alertMessage, setAlertmessage] = useState<string>('');
   const [keepLoggedInModal, setKeepLoggedInModal] = useState<boolean>(false);
   const [blocked, setBloqued] = useState<boolean>(false);
   const [response, setResponse] = useState<ILoginResponse>({} as ILoginResponse);
+
+  const [showTermsOfUseModal, setShowTermsOfUseModal] = useState<boolean>(false);
+  const [infoModal, setInfoModal] = useState<boolean>(false);
   const {
     register,
     setValue,
@@ -100,6 +100,11 @@ export function UserRegister() {
     if (!response.error && response.data) {
       await getList(response.data.email);
       setResponse(response.data);
+
+      if (response.data.termo === 'false') {
+        setShowTermsOfUseModal(true);
+        return;
+      }
       setKeepLoggedInModal(true);
       return;
     }
@@ -138,8 +143,31 @@ export function UserRegister() {
     }
   };
 
+  const onAcceptTerms = () => {
+    if (response.primeirologin === 'true') {
+      setInfoModal(true);
+      setShowTermsOfUseModal(false);
+      return;
+    }
+    setKeepLoggedInModal(true);
+  };
+
   return (
     <>
+      <SuccessModal
+        isOpen={infoModal}
+        onClose={() => router.push('/login/enviar-codigo')}
+        title="Primeiro acesso"
+        message="Você será redirecionado para a página de envio de código, onde poderá criar sua senha de acesso."
+        buttonText="Continuar"
+      />
+      <TermsOfUseModal
+        isOpen={showTermsOfUseModal}
+        onClose={() => setShowTermsOfUseModal(false)}
+        onAccept={onAcceptTerms}
+        onReject={() => setShowTermsOfUseModal(false)}
+        email={response.email}
+      />
       <KeepLoggedInToastModal
         isOpen={keepLoggedInModal}
         onStayLoggedIn={() => {

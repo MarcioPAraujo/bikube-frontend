@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE_KEYS } from "@/utils/localStorageKeys";
+import { ILoginResponse } from "@/interfaces/login/loginResponse";
 import { api } from "../api";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
@@ -6,12 +6,7 @@ interface ILoginBody {
   registro: string;
   senha: string;
 }
-interface ILoginResponse {
-  access_token: string;
-  refresh_token: string;
-  role: string;
-  email: string;
-}
+
 
 type Result<T> = {data: T; error: null} | {data: null; error: string};
 
