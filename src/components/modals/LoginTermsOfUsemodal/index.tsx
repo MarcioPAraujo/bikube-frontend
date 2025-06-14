@@ -25,6 +25,9 @@ const TermsOfUseModal: FC<IProps> = ({ isOpen, onClose, onAccept, onReject, emai
   setValue('email', email);
   const onFormSubmit = async (data: ITermsOfUseSchema) => {
     console.log('Submitting terms of use for email:', data.email);
+    onAccept();
+    onClose();
+    /*
     const response = await termsOfUseService(data.email);
     if (response.error) {
       notifyError(response.error);
@@ -33,6 +36,7 @@ const TermsOfUseModal: FC<IProps> = ({ isOpen, onClose, onAccept, onReject, emai
 
     onAccept();
     onClose();
+    */
   };
   if (!isOpen) return null;
   return (

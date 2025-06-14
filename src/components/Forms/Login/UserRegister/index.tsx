@@ -95,6 +95,26 @@ export function UserRegister() {
       senha: data.password,
     };
 
+    // Mocking the response for demonstration purposes
+    setUserData({
+      register: data.register,
+      email: 'mock@email.com',
+      role: 'ADMIN',
+      nome: 'mockName',
+      id: 'mockId',
+      setor: 'mockSetor',
+    });
+    setResponse({
+      access_token: 'mockAccessToken',
+      refresh_token: 'mockRefreshToken',
+      email: 'mock@email.com',
+      role: 'ADMIN',
+      termo: 'true',
+      primeirologin: 'false',
+    });
+
+    setKeepLoggedInModal(true);
+    /*
     const response = await loginAuth(body);
 
     if (!response.error && response.data) {
@@ -141,6 +161,7 @@ export function UserRegister() {
     if (response.error) {
       notifyError(response.error);
     }
+*/
   };
 
   const onAcceptTerms = () => {
