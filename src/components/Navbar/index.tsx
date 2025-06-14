@@ -11,32 +11,49 @@ interface Tab {
   name: string;
   url: string;
   allowedRoles: string[];
+  baseUrl: string;
 }
+const accessLevel = {
+  none: ['ADMIN', 'RH', 'FUNCIONARIO'],
+  medium: ['ADMIN', 'RH'],
+  high: ['ADMIN'],
+};
 const tabs: Tab[] = [
   {
     name: 'Home',
     url: '/home',
-    allowedRoles: ['ADMIN', 'RH', 'USER'],
+    allowedRoles: accessLevel.none,
+    baseUrl: '/home',
   },
   {
     name: 'Setores',
     url: '/setores',
-    allowedRoles: ['ADMIN', 'RH'],
+    allowedRoles: accessLevel.medium,
+    baseUrl: '/setores',
   },
   {
     name: 'Funcionários',
     url: '/funcionarios',
-    allowedRoles: ['ADMIN', 'RH'],
+    allowedRoles: accessLevel.medium,
+    baseUrl: '/funcionarios',
   },
   {
     name: 'Relatórios',
     url: '/relatorios',
-    allowedRoles: ['ADMIN'],
+    allowedRoles: accessLevel.high,
+    baseUrl: '/relatorios',
+  },
+  {
+    name: 'Comunicados',
+    url: '/comunicados',
+    allowedRoles: accessLevel.none,
+    baseUrl: '/comunicados',
   },
   {
     name: 'Minhas informações',
     url: '/minhas-informacoes',
-    allowedRoles: ['ADMIN', 'RH', 'USER'],
+    allowedRoles: accessLevel.none,
+    baseUrl: '/minhas-informacoes',
   },
 ];
 
@@ -47,7 +64,7 @@ export const Navbar = () => {
   const pathname = usePathname();
 
   const isSelected = (tab: Tab) => {
-    return pathname.startsWith(tab.url);
+    return pathname.startsWith(tab.baseUrl);
   };
 
   useEffect(() => {

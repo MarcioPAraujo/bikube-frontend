@@ -1,7 +1,7 @@
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { theme } from '@/styles/theme';
 import usePagination from '@/hooks/usePagination';
-import { memo } from 'react';
+import { memo, SetStateAction } from 'react';
 import React from 'react';
 import { PaginationContainer, NaviagtionButton, PageNumber, Ellipsis, PaginationText } from './styles';
 
@@ -12,6 +12,18 @@ interface PaginationProps {
   totalPaginatedData: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
+
+/**
+ * This component must receive the properties returned by the usepaginationRange hook, or backend pagination properties
+ *
+ * @param {number} currentPage - represent the page that is being rendered
+ * @param {number} totalPages - represents the number of pages that can be paginated.
+ * @param {number} totalOfData - represents the total of items.
+ * @param {number} totalPaginatedData - represents the number of rows that has been paginated.
+ * @param {SetStateAction} setCurrentPage - state action to update the current page as the the navigation occur.
+ * @returns
+ */
+
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,

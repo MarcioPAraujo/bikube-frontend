@@ -29,13 +29,16 @@ interface ChildrenProps {
 
 const AuthContext = createContext({} as IUserProvider);
 
+const publicRoutes = ['/', '/login', '/login/codigo', '/login/redefinir-senha', '/login/enviar-codigo'];
+const employeeRoutes = ['/home', '/minhas-informacoes', '/comunicados'];
+const rhRoutes = ['/setores', '/home', '/funcionarios', '/minhas-informacoes', '/comunicados'];
+
 const AuthProvider = ({ children }: ChildrenProps) => {
   const [user, setUser] = useState<User | undefined>();
   const pathName = usePathname();
   const [loading, setLoading] = useState(true);
 
   const isAuthenticated = !!user?.id;
-  const isAdmin = user?.role === 'ADMIN';
   const isRH = user?.role === 'RH';
   const isOnlyEmployee = user?.role === 'FUNCIONARIO';
 
@@ -60,17 +63,12 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.token);
     setUser(undefined);
   };
-  const publicRoutes = ['/', '/login', '/login/codigo', '/login/redefinir-senha', '/login/enviar-codigo'];
 
   if (loading) return null;
   const allowedMenus = (routes: string[]) => {
     const isAllowed = routes.some(route => pathName.startsWith(route));
     return isAllowed;
   };
-
-  const allowedRoles = ['ADMIN', 'RH', 'FUNCIONARIO'];
-  const employeeRoutes = ['/home', '/minhas-informacoes'];
-  const rhRoutes = ['/setores', '/home', '/funcionarios', '/minhas-informacoes'];
 
   if (!isAuthenticated && !publicRoutes.includes(pathName)) {
     redirect('/');
