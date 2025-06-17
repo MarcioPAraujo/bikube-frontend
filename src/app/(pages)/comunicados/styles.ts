@@ -21,3 +21,7 @@ export const Header  =styled.header`
   align-items: center;
   justify-content: space-between;
 `;
+export const ButtonRow = styled.button`
+  border: none;
+  background: none;
+`;

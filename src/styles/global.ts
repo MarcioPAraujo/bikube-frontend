@@ -9,16 +9,16 @@ export const GlobalStyle = createGlobalStyle`
   * {
     scroll-behavior: smooth;
     ::-webkit-scrollbar {
-      width: 12px;
+      width: 6px;
     }
 
     ::-webkit-scrollbar-track {
-      background: #444444;
+      background: transparent;
       border-radius: 10px;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #cccccc;
+      background: #444444;
       border-radius: 10px;
     }
   }
