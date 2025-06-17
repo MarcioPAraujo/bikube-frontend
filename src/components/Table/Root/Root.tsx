@@ -1,6 +1,6 @@
 import { Table } from './styles';
 
-type TableClass = 'setores' | 'logs' | 'employees';
+type TableClass = 'setores' | 'logs' | 'employees' | 'announcements' | 'default';
 
 interface IGridTableProps {
   children: React.ReactNode;
