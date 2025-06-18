@@ -9,6 +9,7 @@ import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
 import Pagination from '@/components/Pagination/Pagination';
 import AnnouncementDetailsModal from '@/components/modals/AnnouncementDetailsModal';
+import DateInput from '@/components/Inputs/DateInput';
 
 const columns = ['Titulo', 'Conteúdo', 'Data'];
 const AnnouncementsPage = () => {
@@ -18,6 +19,7 @@ const AnnouncementsPage = () => {
   );
   const pagination = usePaginationRange(filteredAnnouncements, DEFAULT_PAGE_SIZE);
   const [detailsModal, setDetailsModal] = useState(false);
+  const [startDate, setStartDate] = useState<Date | null>(null);
 
   useEffect(() => {
     pagination.setCurrentPage(1);
@@ -30,6 +32,14 @@ const AnnouncementsPage = () => {
       <Header>
         <h1>Comunicados</h1>
         <div>
+          <input type="date" id="start" />
+          <DateInput
+            id="startDate"
+            date={startDate}
+            setDate={setStartDate}
+            label="Data de início"
+            placeholder="dd/mm/aaaa"
+          />
           <SearchBarComponent
             placeholder="Buscar comunicados"
             value={search}

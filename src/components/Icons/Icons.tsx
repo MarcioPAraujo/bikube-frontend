@@ -10,6 +10,7 @@ import { BsCaretRightFill } from 'react-icons/bs';
 import { BsFileExcelFill } from 'react-icons/bs';
 import { BsCaretDownFill } from 'react-icons/bs';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
+import { BsCalendar3 } from 'react-icons/bs';
 
 interface IconProps {
   size?: number;
@@ -35,5 +36,6 @@ export const Icons = {
   CaretDown: (props: IconProps) => <IconWrapper Icon={BsCaretDownFill} {...props} />,
   SearchIcon: (props: IconProps) => <IconWrapper Icon={HiMiniMagnifyingGlass} {...props} />,
   Person: () => <IconWrapper Icon={UserIcon} />,
+  Calendar: (props: IconProps) => <IconWrapper Icon={BsCalendar3} {...props} />,
   Logo: () => <Logo />,
 };
