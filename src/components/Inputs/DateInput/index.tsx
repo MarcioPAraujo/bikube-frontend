@@ -4,6 +4,7 @@ import { Content, Field, Label } from './styles';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { Icons } from '@/components/Icons/Icons';
 import CalendarInput from '@/components/Calendar/InputCalendar';
+import RenderIf from '@/components/RenderIf/RenderIf';
 
 interface DateInputProps {
   id: string;
@@ -35,7 +36,9 @@ const DateInput: React.FC<DateInputProps> = ({ date, label, setDate, placeholder
           {...register}
           hidden
         />
-        <CalendarInput date={date} setDate={setDate} />
+        <RenderIf isTrue={showDatePicker}>
+          <CalendarInput date={date} setDate={setDate} onClose={() => setShowDatePicker(false)} />
+        </RenderIf>
       </Label>
     </Field>
   );

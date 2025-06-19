@@ -60,6 +60,7 @@ export const DaysContainer = styled.div`
 export const WeekDay = styled.span`
   color: ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
   font-weight: 600;
+  text-align: center;
 `;
 export const DayButton = styled.button`
   aspect-ratio: 1;

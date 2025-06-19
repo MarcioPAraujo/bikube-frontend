@@ -1,6 +1,6 @@
 import { Icons } from '@/components/Icons/Icons';
 import useMonthCalendar, { ICalendarDay } from '@/hooks/useMonthCalendar';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import {
   Calendar,
   CalendarHeader,
@@ -15,6 +15,8 @@ import {
 interface ICalendarInputProps {
   date: Date | null;
   setDate: Dispatch<SetStateAction<Date | null>>;
+  onClose: () => void;
+  onChange?: (date: Date | null) => void;
 }
 
 const monthNames = [
@@ -34,9 +36,24 @@ const monthNames = [
 
 const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate }) => {
-  const { calendarDaysDate, month, year, handleNextMonth, handlePrevMonth } = useMonthCalendar(date, setDate);
+const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate, onChange, onClose }) => {
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const [calendarDate, setCalendarDate] = useState<Date | null>(date);
+  const { calendarDaysDate, month, year, handleNextMonth, handlePrevMonth } = useMonthCalendar(
+    calendarDate,
+    setCalendarDate,
+  );
   const [showMonthYearSelect, setShowMonthYearSelect] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [onClose]);
 
   const getDayClassName = (day: ICalendarDay) => {
     let className = '';
@@ -48,7 +65,7 @@ const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate }) => {
   };
 
   return (
-    <Calendar>
+    <Calendar ref={calendarRef}>
       <CalendarHeader>
         <NavigationButton type="button" onClick={handlePrevMonth} accessKey="p" aria-label="Go to previous month">
           <Icons.ChevronDoubleLeft />
@@ -72,7 +89,12 @@ const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate }) => {
             type="button"
             disabled={!day.isCurrentMonth}
             className={getDayClassName(day)}
-            onClick={() => setDate(day.dayDate)}
+            onClick={() => {
+              setDate(day.dayDate);
+              setCalendarDate(day.dayDate);
+              if (onChange) onChange(day.dayDate);
+              onClose();
+            }}
           >
             {day.dayDate.getDate()}
           </DayButton>
