@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const Calendar = styled.div`
   position: absolute;
-  bottom: -38rem;
-  height: 38rem;
+  bottom: -40rem;
+  height: 40rem;
   width: 32rem;
   background-color: ${({ theme }) => theme.colors.GRAY.hex_2e2e2e};
   border-radius: 0.8rem;
@@ -87,5 +87,24 @@ export const DayButton = styled.button`
   &:disabled {
     cursor: default;
     filter: brightness(0.5);
+  }
+`;
+export const ClearButton = styled.button`
+  align-self: start;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
+  border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
+  cursor: pointer;
+  padding: 0 1rem;
+  border-radius: 0.8rem;
+
+  transition: background-color 0.2s ease, color 0.2s ease;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
+    color: ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};
   }
 `;

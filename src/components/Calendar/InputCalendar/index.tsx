@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import {
   Calendar,
   CalendarHeader,
+  ClearButton,
   DayButton,
   DaysContainer,
   MonthYearSelect,
@@ -77,6 +78,9 @@ const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate }) => {
           </DayButton>
         ))}
       </DaysContainer>
+      <ClearButton type="button" onClick={() => setDate(null)}>
+        Limpar
+      </ClearButton>
     </Calendar>
   );
 };
