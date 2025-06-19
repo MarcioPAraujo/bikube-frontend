@@ -11,13 +11,6 @@ import {
   addDays,
 } from 'date-fns';
 
-/**
- * Represents the possible CSS class names for a calendar day:
- * - 'other-month': The day belongs to the previous or next month (not the current month).
- * - 'selected': The day is the currently selected date.
- * - '': The day is a regular day in the current month (not selected).
- */
-type DayClassNameType = 'other-month' | 'selected' | '';
 const today = new Date();
 
 /**
@@ -32,17 +25,23 @@ const today = new Date();
  * @returns {{
  *   handlePrevMonth: Function to navigate to the previous month.
  *   handleNextMonth: Function to navigate to the next month.
+ *   year: number — The current year.
+ *   month: number — The current month (0-11).
  *   calendarDaysDate: Array of objects representing each day in the calendar grid. Each object contains:
  *     - dayDate: Date — The date object for the day.
  *     - isToday: boolean — True if the day is today.
  *     - dayOfWeek: number — The day of the week (0-6).
- *     - dayClassName: DayClassNameType — CSS class for the day:
- *         - 'other-month': The day belongs to the previous or next month (not the current month).
- *         - 'selected': The day is the currently selected date.
- *         - '': The day is a regular day in the current month (not selected).
+ *     - isSelected: boolean — True if the day is the currently selected date.
+ *     - isCurrentMonth: boolean — True if the day belongs to the current month.
  * }}
  */
-const useMonthCalendar = (currentDate: Date, setCurrentDate: Dispatch<SetStateAction<Date>>) => {
+const useMonthCalendar = (date: Date | null, setCurrentDate: Dispatch<SetStateAction<Date | null>>) => {
+  const currentDate = useMemo(() => {
+    if (date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+    return new Date();
+  }, [date]);
   const handlePrevMonth = useCallback((): Date => {
     const prevMonth = subMonths(currentDate, 1);
     setCurrentDate(prevMonth);
@@ -112,15 +111,7 @@ const useMonthCalendar = (currentDate: Date, setCurrentDate: Dispatch<SetStateAc
     },
     [isDayInCurrentMonth, previousMonthDays.length, year, month],
   );
-  const getDayClassName = useCallback((isCurrentMonth: boolean, isSelected: boolean): DayClassNameType => {
-    if (!isCurrentMonth) {
-      return 'other-month';
-    }
-    if (isSelected) {
-      return 'selected';
-    }
-    return '';
-  }, []);
+
   const getDayProperties = useCallback(
     (day: number, index: number) => {
       const isCurrentMonth = isDayInCurrentMonth(index);
@@ -128,18 +119,18 @@ const useMonthCalendar = (currentDate: Date, setCurrentDate: Dispatch<SetStateAc
       const isToday = dayDate.toDateString() === today.toDateString();
       const isSelected = dayDate.toDateString() === currentDate.toDateString();
       const dayOfWeek = dayDate.getDay();
-      const dayClassName = getDayClassName(isCurrentMonth, isSelected);
       return {
         dayDate,
         isToday,
         dayOfWeek,
-        dayClassName,
+        isSelected,
+        isCurrentMonth,
       };
     },
     [previousMonthDays.length, currentMonthDays.length, year, month, currentDate],
   );
 
-  const calendarDaysDate = useMemo(() => {
+  const calendarDaysDate: ICalendarDay[] = useMemo(() => {
     return calendarDays.map((day, index) => {
       const dayDate = getDayProperties(day, index);
       return dayDate;
@@ -150,6 +141,15 @@ const useMonthCalendar = (currentDate: Date, setCurrentDate: Dispatch<SetStateAc
     handlePrevMonth,
     handleNextMonth,
     calendarDaysDate,
+    year,
+    month,
   };
 };
 export default useMonthCalendar;
+export interface ICalendarDay {
+  dayDate: Date;
+  isToday: boolean;
+  dayOfWeek: number;
+  isSelected: boolean;
+  isCurrentMonth: boolean;
+}

@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Content, Field, Label } from './styles';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { Icons } from '@/components/Icons/Icons';
+import CalendarInput from '@/components/Calendar/InputCalendar';
 
 interface DateInputProps {
   id: string;
@@ -15,7 +16,7 @@ interface DateInputProps {
 }
 const DateInput: React.FC<DateInputProps> = ({ date, label, setDate, placeholder, id, error, register }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const value = date ? format(date, 'dd/MM/yyyy') : undefined;
+  const value = date ? format(date, 'dd/MM/yyyy') : '';
   return (
     <Field>
       <Label htmlFor={id}>
@@ -27,7 +28,6 @@ const DateInput: React.FC<DateInputProps> = ({ date, label, setDate, placeholder
           id={id}
           type="text"
           placeholder={placeholder}
-          value={value}
           onClick={() => {
             setShowDatePicker(true);
             console.log('Date input clicked');
@@ -35,6 +35,7 @@ const DateInput: React.FC<DateInputProps> = ({ date, label, setDate, placeholder
           {...register}
           hidden
         />
+        <CalendarInput date={date} setDate={setDate} />
       </Label>
     </Field>
   );

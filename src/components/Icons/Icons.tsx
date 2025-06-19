@@ -11,6 +11,9 @@ import { BsFileExcelFill } from 'react-icons/bs';
 import { BsCaretDownFill } from 'react-icons/bs';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import { BsCalendar3 } from 'react-icons/bs';
+import { BsChevronDoubleRight } from 'react-icons/bs';
+import { BsChevronDoubleLeft } from 'react-icons/bs';
+import { BsChevronDown } from 'react-icons/bs';
 
 interface IconProps {
   size?: number;
@@ -37,5 +40,8 @@ export const Icons = {
   SearchIcon: (props: IconProps) => <IconWrapper Icon={HiMiniMagnifyingGlass} {...props} />,
   Person: () => <IconWrapper Icon={UserIcon} />,
   Calendar: (props: IconProps) => <IconWrapper Icon={BsCalendar3} {...props} />,
+  ChevronDoubleRight: (props: IconProps) => <IconWrapper Icon={BsChevronDoubleRight} {...props} />,
+  ChevronDoubleLeft: (props: IconProps) => <IconWrapper Icon={BsChevronDoubleLeft} {...props} />,
+  ChevronDown: (props: IconProps) => <IconWrapper Icon={BsChevronDown} {...props} />,
   Logo: () => <Logo />,
 };
