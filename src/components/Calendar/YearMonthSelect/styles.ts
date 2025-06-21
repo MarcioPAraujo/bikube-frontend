@@ -38,3 +38,23 @@ export const ScrollContainer = styled.div`
   max-height: 24rem;
   overflow-y: auto;
 `;
+export const Button = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
+  font-size: 1.6rem;
+  padding: 0.8rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};
+    color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+  }
+
+  &.selected {
+    background-color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+    color: ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};
+  }
+`;
+
+

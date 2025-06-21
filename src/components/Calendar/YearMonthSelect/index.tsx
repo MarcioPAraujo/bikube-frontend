@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Backbutton, Container, Header, ScrollContainer, SelectsContainer } from './styles';
+import { Backbutton, Button, Container, Header, ScrollContainer, SelectsContainer } from './styles';
 import { Icons } from '@/components/Icons/Icons';
 import { date } from 'yup';
 
@@ -38,6 +38,7 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
 
   const [years, setYears] = useState<number[]>([]);
   const yearScrollRef = useRef<HTMLDivElement>(null);
+  const hasScrolledToYear = useRef(false);
   useEffect(() => {
     const currentYear = new Date().getFullYear();
     const startYear = currentYear - 20; // 10 years ago
@@ -45,6 +46,41 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
     const yearRange = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
     setYears(yearRange);
   }, []);
+  useEffect(() => {
+    if (hasScrolledToYear.current) return;
+    if (!yearScrollRef.current) return;
+
+    const currentYear = selectedYear ?? new Date().getFullYear();
+    const index = years.indexOf(currentYear);
+
+    if (index !== -1) {
+      // Assuming each button has a fixed height (e.g., 42px), adjust if needed
+      const buttonHeight = 36;
+      yearScrollRef.current.scrollTop =
+        index * buttonHeight - yearScrollRef.current.clientHeight / 2 + buttonHeight / 2;
+
+      hasScrolledToYear.current = true;
+    }
+  }, [isOpen, selectedYear, years]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+        onClose();
+        hasScrolledToYear.current = false;
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
+
+  const handleClose = () => {
+    onClose();
+    hasScrolledToYear.current = false;
+  };
 
   // Handle infinite scroll for years
   const handleYearScroll = () => {
@@ -61,8 +97,8 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
 
       // Maintain scroll position after prepending
       setTimeout(() => {
-        container.scrollTop = (container.scrollHeight / (years.length + 20)) * 13;
-      }, 100);
+        container.scrollTop = (container.scrollHeight / (years.length + 20)) * 21;
+      }, 0);
       return;
     }
 
@@ -84,23 +120,11 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
 
   if (!isOpen) return null;
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [onClose]);
-
+  console.log(hasScrolledToYear.current);
   return (
     <Container ref={selectRef}>
       <Header>
-        <Backbutton type="button" onClick={onClose}>
+        <Backbutton type="button" onClick={handleClose}>
           <Icons.ArrowLeft color="white" />
         </Backbutton>
         <button type="button" onClick={handleSetSelectedDate} disabled={!selectedYear || !selectedMonth}>
@@ -111,7 +135,7 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
       <SelectsContainer>
         <ScrollContainer>
           {monthNames.map((month, index) => (
-            <button
+            <Button
               key={index}
               id={month}
               type="button"
@@ -119,12 +143,12 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
               onClick={() => setSelectedMonth(index + 1)}
             >
               {month}
-            </button>
+            </Button>
           ))}
         </ScrollContainer>
         <ScrollContainer ref={yearScrollRef} onScroll={handleYearScroll}>
           {years.map((year, index) => (
-            <button
+            <Button
               key={`${year}${index}`}
               id={String(year)}
               type="button"
@@ -132,7 +156,7 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
               onClick={() => setSelectedYear(year)}
             >
               {year}
-            </button>
+            </Button>
           ))}
         </ScrollContainer>
       </SelectsContainer>
