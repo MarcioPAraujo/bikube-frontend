@@ -7,10 +7,11 @@ import {
   ClearButton,
   DayButton,
   DaysContainer,
-  MonthYearSelect,
+  MonthYearButton,
   NavigationButton,
   WeekDay,
 } from './styles';
+import YearMonthSelect from '../YearMonthSelect';
 
 interface ICalendarInputProps {
   date: Date | null;
@@ -35,7 +36,7 @@ const monthNames = [
 ];
 
 const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-
+// TODO: add monht and year select functionality
 const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate, onChange, onClose }) => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const [calendarDate, setCalendarDate] = useState<Date | null>(date);
@@ -64,15 +65,26 @@ const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate, onChange,
     return className.trim();
   };
 
+  if (showMonthYearSelect) {
+    return (
+      <YearMonthSelect
+        isOpen={showMonthYearSelect}
+        onClose={() => setShowMonthYearSelect(false)}
+        currentDate={calendarDate}
+        setDate={setDate}
+      />
+    );
+  }
+
   return (
     <Calendar ref={calendarRef}>
       <CalendarHeader>
         <NavigationButton type="button" onClick={handlePrevMonth} accessKey="p" aria-label="Go to previous month">
           <Icons.ChevronDoubleLeft />
         </NavigationButton>
-        <MonthYearSelect type="button" onClick={() => setShowMonthYearSelect(true)} aria-label="Select month and year">
+        <MonthYearButton type="button" onClick={() => setShowMonthYearSelect(true)} aria-label="Select month and year">
           {monthNames[month]} {year} <Icons.ChevronDown size={15} />
-        </MonthYearSelect>
+        </MonthYearButton>
         <NavigationButton type="button" onClick={handleNextMonth} accessKey="n" aria-label="Go to next month">
           <Icons.ChevronDoubleRight />
         </NavigationButton>

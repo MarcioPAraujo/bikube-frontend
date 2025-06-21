@@ -8,7 +8,6 @@ export const Field = styled.div`
   gap: 0.5rem;
 `;
 export const Label = styled.label`
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   font-size: 1.6rem;

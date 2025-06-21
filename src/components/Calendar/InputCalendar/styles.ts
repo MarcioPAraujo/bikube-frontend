@@ -34,7 +34,7 @@ export const NavigationButton = styled.button`
     color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
   }
 `;
-export const MonthYearSelect = styled.button`
+export const MonthYearButton = styled.button`
   border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
   background-color: ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};
   display: flex;
