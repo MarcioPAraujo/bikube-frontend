@@ -38,6 +38,21 @@ export const ScrollContainer = styled.div`
   max-height: 24rem;
   overflow-y: auto;
 `;
+export const Datebutton = styled.button`
+  background-color: ${({ theme }) => theme.colors.GRAY.hex_2e2e2e};
+  color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+  font-size: 1.6rem;
+  height: 3.5rem;
+  padding: 0rem 0.8rem;
+  border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
+  border-radius: 0.8rem;
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};
+    color: ${({ theme }) => theme.colors.GRAY.hex_353535};
+    cursor: not-allowed;
+  }
+`;
 export const Button = styled.button`
   background: none;
   border: none;
@@ -45,6 +60,7 @@ export const Button = styled.button`
   font-size: 1.6rem;
   padding: 0.8rem;
   cursor: pointer;
+  border-radius: 0.8rem;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};

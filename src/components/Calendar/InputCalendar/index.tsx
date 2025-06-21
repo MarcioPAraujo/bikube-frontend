@@ -71,7 +71,7 @@ const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate, onChange,
         isOpen={showMonthYearSelect}
         onClose={() => setShowMonthYearSelect(false)}
         currentDate={calendarDate}
-        setDate={setDate}
+        setDate={setCalendarDate}
       />
     );
   }

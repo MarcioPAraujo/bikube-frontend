@@ -8,9 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { push } = useRouter();
   const { user, logout } = useAuth();
-  console.log('user', user);
   if (!user) {
     return <>{children}</>; // or a loading spinner
   }

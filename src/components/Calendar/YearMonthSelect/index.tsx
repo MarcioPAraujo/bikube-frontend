@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Backbutton, Button, Container, Header, ScrollContainer, SelectsContainer } from './styles';
+import { Backbutton, Button, Container, Datebutton, Header, ScrollContainer, SelectsContainer } from './styles';
 import { Icons } from '@/components/Icons/Icons';
 import { date } from 'yup';
 
@@ -39,13 +39,15 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
   const [years, setYears] = useState<number[]>([]);
   const yearScrollRef = useRef<HTMLDivElement>(null);
   const hasScrolledToYear = useRef(false);
+
   useEffect(() => {
-    const currentYear = new Date().getFullYear();
-    const startYear = currentYear - 20; // 10 years ago
-    const endYear = currentYear + 20; // 10 years in the future
+    const currentYear = selectedYear || new Date().getFullYear();
+    const startYear = currentYear - 20; // 20 years ago
+    const endYear = currentYear + 20; // 20 years in the future
     const yearRange = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
     setYears(yearRange);
   }, []);
+
   useEffect(() => {
     if (hasScrolledToYear.current) return;
     if (!yearScrollRef.current) return;
@@ -115,22 +117,21 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
     if (!selectedYear || !selectedMonth) return;
     const newDate = new Date(Number(selectedYear), Number(selectedMonth) - 1, 1);
     setDate(newDate);
-    onClose();
+    handleClose();
   };
 
   if (!isOpen) return null;
 
-  console.log(hasScrolledToYear.current);
   return (
     <Container ref={selectRef}>
       <Header>
         <Backbutton type="button" onClick={handleClose}>
           <Icons.ArrowLeft color="white" />
         </Backbutton>
-        <button type="button" onClick={handleSetSelectedDate} disabled={!selectedYear || !selectedMonth}>
+        <Datebutton type="button" onClick={handleSetSelectedDate} disabled={!selectedYear || !selectedMonth}>
           {(!selectedMonth || !selectedYear) && 'Selecionar mês e ano'}
-          {selectedMonth && selectedYear && `${monthNames[selectedMonth - 1]} de ${selectedYear}`}
-        </button>
+          {selectedMonth && selectedYear && `Confirmar ${monthNames[selectedMonth - 1]} de ${selectedYear}`}
+        </Datebutton>
       </Header>
       <SelectsContainer>
         <ScrollContainer>
