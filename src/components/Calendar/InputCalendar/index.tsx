@@ -77,7 +77,7 @@ const CalendarInput: React.FC<ICalendarInputProps> = ({ date, setDate, onChange,
   }
 
   return (
-    <Calendar ref={calendarRef}>
+    <Calendar ref={calendarRef} className="calendar-input">
       <CalendarHeader>
         <NavigationButton type="button" onClick={handlePrevMonth} accessKey="p" aria-label="Go to previous month">
           <Icons.ChevronDoubleLeft />

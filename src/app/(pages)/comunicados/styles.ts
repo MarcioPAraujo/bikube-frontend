@@ -5,6 +5,10 @@ export const Page = styled.div`
     min-width: 3.2rem;
     padding-right: 1.6rem;
   }
+  .new-announcement-btn {
+    margin-top: 1rem;
+    margin-left: auto;
+  }
 `;
 
 export const Content = styled.p`
@@ -21,6 +25,17 @@ export const Header  =styled.header`
   align-items: center;
   justify-content: space-between;
 `;
+export const FiltersContainer = styled.div`
+  display: flex;
+  align-items: end;
+  gap: 1rem;
+
+  & > :first-child,
+  & > :nth-child(2) {
+    width: 20rem;
+  }
+`;
+
 export const ButtonRow = styled.button`
   border: none;
   background: none;
