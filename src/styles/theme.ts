@@ -1,5 +1,6 @@
 const gray = {
   hex_353535: '#353535',
+  hex_999999: '#999999',
   hex_2e2e2e: '#2E2E2E',
   hex_e2e2e2: '#E2E2E2',
   hex_d7d7d7: '#D7D7D7',
