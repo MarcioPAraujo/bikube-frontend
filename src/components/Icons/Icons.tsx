@@ -14,6 +14,8 @@ import { BsCalendar3 } from 'react-icons/bs';
 import { BsChevronDoubleRight } from 'react-icons/bs';
 import { BsChevronDoubleLeft } from 'react-icons/bs';
 import { BsChevronDown } from 'react-icons/bs';
+import { VscEyeClosed } from 'react-icons/vsc';
+import { VscEye } from 'react-icons/vsc';
 
 interface IconProps {
   size?: number;
@@ -31,8 +33,8 @@ const IconWrapper: FC<IconWrapperProps> = ({ size = 24, color, Icon, className }
 );
 export const Icons = {
   ArrowLeft: (props: IconProps) => <IconWrapper Icon={BsArrowLeftCircle} {...props} />,
-  OpenedEye: (props: IconProps) => <IconWrapper Icon={BsEye} color={props.color} size={props.size} />,
-  ClosedEye: (props: IconProps) => <IconWrapper Icon={BsEyeSlash} {...props} />,
+  OpenedEye: (props: IconProps) => <IconWrapper Icon={VscEye} color={props.color} size={props.size} />,
+  ClosedEye: (props: IconProps) => <IconWrapper Icon={VscEyeClosed} {...props} />,
   PersonFillBlack: (props: IconProps) => <IconWrapper Icon={BsPersonFill} {...props} />,
   CaretRight: (props: IconProps) => <IconWrapper Icon={BsCaretRightFill} {...props} />,
   CloseIcon: (props: IconProps) => <IconWrapper Icon={BsFileExcelFill} {...props} />,
