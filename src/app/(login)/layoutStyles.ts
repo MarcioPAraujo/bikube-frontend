@@ -58,6 +58,7 @@ export const Title = styled.h1`
 }
 `;
 
+/*
 export const BackgroundImage = styled.div`
   height: 100%;
 
@@ -70,15 +71,57 @@ export const BackgroundImage = styled.div`
 
   opacity: 1;
 
-  &.fade {
-    opacity: 0;
-  }
-
   filter: brightness(0.5);
 
   &.candidate {
     background-image: url('/images/candidate-login-background.png');
     background-position: initial;
     filter: none;
+  }
+`;
+*/
+
+export const EmployeeImage = styled.div`
+  height: 100%;
+
+  background-image: url('/images/login_background.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  transition: background-image 0.5s, opacity 2s ease;
+  will-change: opacity, background-image;
+
+  opacity: 1;
+
+  filter: brightness(0.5);
+
+  &.candidate {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+`;
+export const CandidateImage = styled.div`
+  height: 100%;
+
+  background-image: url('/images/candidate-login-background.png');
+  background-position: initial;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  transition: background-image 0.5s, opacity 2s ease;
+  will-change: opacity, background-image;
+
+  opacity: 1;
+
+  &.employee {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
 `;

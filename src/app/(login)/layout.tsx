@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { BackgroundImage, Container, ImageContainer, TextImageContainer, Title } from './layoutStyles';
+import { CandidateImage, Container, EmployeeImage, ImageContainer, TextImageContainer, Title } from './layoutStyles';
 import { Orbitron } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 
@@ -60,7 +60,9 @@ const LoginLayout: React.FC<IChildren> = ({ children }) => {
   return (
     <Container className={side}>
       <ImageContainer>
-        <BackgroundImage className={area.classname} />
+        {/*<BackgroundImage className={area.classname} />*/}
+        <CandidateImage className={area.classname} />
+        <EmployeeImage className={area.classname} />
         <TextImageContainer>
           <Title className={orbitron.className}>{area.title}</Title>
           <Image src="/images/login-logo-white.png" width={230} height={120} alt="logo da bikube branca" />
