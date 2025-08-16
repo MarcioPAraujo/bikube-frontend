@@ -1,5 +1,6 @@
 const gray = {
   hex_353535: '#353535',
+  hex_747474: '#747474',
   hex_999999: '#999999',
   hex_2e2e2e: '#2E2E2E',
   hex_e2e2e2: '#E2E2E2',
@@ -22,6 +23,8 @@ const blue = {
 };
 const yellow = {
   hex_F6B31B: '#F6B31B',
+  hex_FFB936: '#FFB936',
+  hex_9E4A00: '#9E4A00',
 };
 
 export const theme = {

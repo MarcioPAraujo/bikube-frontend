@@ -58,29 +58,6 @@ export const Title = styled.h1`
 }
 `;
 
-/*
-export const BackgroundImage = styled.div`
-  height: 100%;
-
-  background-image: url('/images/login_background.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-
-  transition: background-image 0s, opacity 0.7s ease;
-
-  opacity: 1;
-
-  filter: brightness(0.5);
-
-  &.candidate {
-    background-image: url('/images/candidate-login-background.png');
-    background-position: initial;
-    filter: none;
-  }
-`;
-*/
-
 export const EmployeeImage = styled.div`
   height: 100%;
 
