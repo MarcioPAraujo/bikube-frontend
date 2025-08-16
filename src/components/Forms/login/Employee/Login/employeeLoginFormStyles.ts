@@ -56,4 +56,9 @@ export const SubmitButton = styled.button`
   &:hover {
     box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.15);
   }
+
+  &:disabled {
+    cursor: default;
+    box-shadow: none;
+  }
 `;
