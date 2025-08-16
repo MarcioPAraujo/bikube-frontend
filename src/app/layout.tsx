@@ -7,8 +7,8 @@ const inter = Inter({
   subsets: ['latin'],
 });
 export const metadata: Metadata = {
-  title: 'hris',
-  description: 'hris',
+  title: 'Bikube',
+  description: 'Bikube, um sistema de autenticação e gestão de usuários voltado ao setor de recursos humanos. ',
 };
 
 const RootLayout = ({
