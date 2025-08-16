@@ -64,6 +64,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     setUser(undefined);
   };
 
+  /*
   if (loading) return null;
   const allowedMenus = (routes: string[]) => {
     const isAllowed = routes.some(route => pathName.startsWith(route));
@@ -82,6 +83,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   if (isAuthenticated && isRH && !allowedMenus(rhRoutes)) {
     redirect('/home');
   }
+  */
 
   return (
     <AuthContext.Provider

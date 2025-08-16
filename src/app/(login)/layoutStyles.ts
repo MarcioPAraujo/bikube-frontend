@@ -6,9 +6,22 @@ export const Container = styled.div`
 
   display: flex;
 
+  // swaps the image container position
+  &.right {
+    & > :first-child {
+      transform: translateX(100%);
+      transition: transform 1s ease;
+    }
+    & > :last-child {
+      transform: translateX(-100%);
+      transition: transform 1s ease;
+    }
+  }
+
   & > :first-child,
   & > :last-child {
-    flex: 1;
+    width: 50vw;
+    transition: transform 1s ease;
   }
 `;
 
@@ -49,9 +62,23 @@ export const BackgroundImage = styled.div`
   height: 100%;
 
   background-image: url('/images/login_background.png');
-  background-position: center right;
+  background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
 
+  transition: background-image 0s, opacity 0.7s ease;
+
+  opacity: 1;
+
+  &.fade {
+    opacity: 0;
+  }
+
   filter: brightness(0.5);
+
+  &.candidate {
+    background-image: url('/images/candidate-login-background.png');
+    background-position: initial;
+    filter: none;
+  }
 `;
