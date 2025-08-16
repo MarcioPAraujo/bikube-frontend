@@ -1,6 +1,6 @@
-import { ILogsresponse } from "@/interfaces/logs/logsResponse";
-import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { api } from "../api";
+import { ILogsresponse } from '@/interfaces/logs/logsResponse';
+import { AxiosError, AxiosResponse, isAxiosError } from 'axios';
+import { api } from '../api';
 
 type Result<T> = { data: T; error: null } | { data: null; error: string };
 
@@ -11,7 +11,6 @@ export const getLogs = async (): Promise<Result<ILogsresponse[]>> => {
     const response: AxiosResponse<ILogsresponse[]> = await api.get(url);
 
     return { data: response.data, error: null };
-
   } catch (error) {
     if (isAxiosError(error)) {
       const axiosError = error as AxiosError;
@@ -19,6 +18,6 @@ export const getLogs = async (): Promise<Result<ILogsresponse[]>> => {
         return { data: null, error: axiosError.response.data as string };
       }
     }
-    return { data: null, error: "Erro ao buscar logs" };
+    return { data: null, error: 'Erro ao buscar logs' };
   }
 };
