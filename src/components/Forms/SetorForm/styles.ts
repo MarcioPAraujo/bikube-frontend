@@ -74,7 +74,7 @@ export const Field = styled.div`
 export const ErrorMessage = styled.span`
   position: absolute;
   bottom: -1.5rem;
-  color: ${({ theme }) => theme.colors.RED.normal};
+  color: ${({ theme }) => theme.colors.RED.hex_D32F2F};
   font-size: 1.4rem;
 `;
 export const ButtonContainer = styled.div`

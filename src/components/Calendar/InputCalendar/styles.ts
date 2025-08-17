@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Calendar = styled.div`
   position: absolute;
@@ -68,7 +68,7 @@ export const DayButton = styled.button`
   background-color: transparent;
   border: none;
 
-      border-radius: 0.5rem;
+  border-radius: 0.5rem;
 
   &:not(.not-current-month) {
     &:hover {
@@ -77,7 +77,7 @@ export const DayButton = styled.button`
   }
 
   &.weekend {
-    color: ${({ theme }) => theme.colors.RED.dark};
+    color: ${({ theme }) => theme.colors.RED.hex_D32F2F};
   }
 
   &.selected {

@@ -7,7 +7,7 @@ interface IKeepLoggedInToastModalProps {
   onJustLogin: () => void;
 }
 
-export const KeepLoggedInToastModal: FC<IKeepLoggedInToastModalProps> = ({ onStayLoggedIn, onJustLogin, isOpen }) => {
+export const KeepLoggedInModal: FC<IKeepLoggedInToastModalProps> = ({ onStayLoggedIn, onJustLogin, isOpen }) => {
   if (!isOpen) return null;
 
   return (

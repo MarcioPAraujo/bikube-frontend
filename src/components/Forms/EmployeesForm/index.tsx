@@ -174,7 +174,7 @@ const EmployeeForm = () => {
 
   return (
     <>
-      {isSubmitting && <LoadingScreen />}
+      {isSubmitting && <LoadingScreen message="Salvando..." />}
       <SuccessModal
         isOpen={successModal}
         onClose={() => setSuccessModal(false)}

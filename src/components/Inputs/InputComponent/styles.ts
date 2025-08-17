@@ -30,6 +30,6 @@ export const Input = styled.input`
 export const ErrorMessage = styled.span`
   position: absolute;
   bottom: -1.5rem;
-  color: ${({ theme }) => theme.colors.RED.normal};
+  color: ${({ theme }) => theme.colors.RED.hex_D32F2F};
   font-size: 1.2rem;
 `;

@@ -1,5 +1,4 @@
-import styled from "styled-components";
-
+import styled from 'styled-components';
 
 export const Container = styled.div`
   position: fixed;
@@ -61,11 +60,11 @@ export const Button = styled.button`
   }
 
   &.not-logged-in {
-    border-color: ${({ theme }) => theme.colors.RED.normal};
-    color: ${({ theme }) => theme.colors.RED.normal};
+    border-color: ${({ theme }) => theme.colors.RED.hex_D32F2F};
+    color: ${({ theme }) => theme.colors.RED.hex_D32F2F};
 
     &:hover {
-      background-color: ${({ theme }) => theme.colors.RED.normal};
+      background-color: ${({ theme }) => theme.colors.RED.hex_D32F2F};
       color: ${({ theme }) => theme.colors.WHITE};
     }
   }
