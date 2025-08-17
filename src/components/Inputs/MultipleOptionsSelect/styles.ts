@@ -24,7 +24,6 @@ export const InputContainer = styled.button`
   justify-content: space-between;
   align-items: center;
 
-
   border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
   border-radius: 0.5rem;
   padding-left: 0.5rem;
@@ -76,5 +75,5 @@ export const ErrorMessage = styled.span`
   position: absolute;
   bottom: -1.1rem;
   color: ${({ theme }) => theme.colors.RED.normal};
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 `;

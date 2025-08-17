@@ -1,5 +1,6 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { ErrorMessage, Field, Input, Label } from './styles';
+import { CSSProperties } from 'styled-components';
 
 interface IProps {
   id: string;
@@ -10,6 +11,8 @@ interface IProps {
   errorMessage?: string;
   register?: UseFormRegisterReturn;
   fieldClassName?: string;
+  onCopy?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
+  onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
 }
 /**
  * This is a reusable input component that can be used in forms.
@@ -21,6 +24,8 @@ interface IProps {
  * @param errorMessage - The error message to be displayed if there is an error.
  * @param fieldClassName - The class name for the field container.
  * @param register - The register function from react-hook-form to connect the input with the form
+ * @param onCopy - clipboard copy event function
+ * @param onPaste - clipboard paste event funtion
  *
  */
 const InputComponent: React.FC<IProps> = ({
@@ -32,11 +37,22 @@ const InputComponent: React.FC<IProps> = ({
   errorMessage,
   fieldClassName,
   register,
+  onCopy,
+  onPaste,
 }) => {
   return (
     <Field className={fieldClassName}>
       <Label htmlFor={id}>{labelText}</Label>
-      <Input id={id} type="text" placeholder={placeholder} defaultValue={value} disabled={disabled} {...register} />
+      <Input
+        id={id}
+        type="text"
+        placeholder={placeholder}
+        defaultValue={value}
+        disabled={disabled}
+        {...register}
+        onCopy={onCopy}
+        onPaste={onPaste}
+      />
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </Field>
   );

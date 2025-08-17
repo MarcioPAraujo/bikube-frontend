@@ -45,5 +45,5 @@ export const ErrorMessage = styled.span`
   position: absolute;
   bottom: -1.5rem;
   color: ${({ theme }) => theme.colors.RED.normal};
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 `;
