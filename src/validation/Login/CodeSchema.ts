@@ -1,7 +1,7 @@
 import { ONLY_NUMBERS } from '@/utils/regex/regexes';
 import * as yup from 'yup';
 
-export type ICodeSchema = yup.InferType<typeof CodeSchema>;
+export type CodeSchemaType = yup.InferType<typeof CodeSchema>;
 
 export const CodeSchema = yup.object().shape({
   code: yup
