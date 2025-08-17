@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { LoginSchema, ILoginSchema } from '@/validation/Login/LoginSchema';
+import { EmployeeLoginSchema, IEmployeeLoginSchema } from '@/validation/Login/EmployeeLoginSchema';
 import InputComponent from '@/components/Inputs/InputComponent';
 import { CustomLink, Form, SubmitButton, Title } from '../commonStyles';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
@@ -12,8 +12,8 @@ const EmployeeLoginForm: React.FC = () => {
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting, isValid },
-  } = useForm<ILoginSchema>({
-    resolver: yupResolver(LoginSchema),
+  } = useForm<IEmployeeLoginSchema>({
+    resolver: yupResolver(EmployeeLoginSchema),
     mode: 'onTouched',
   });
 
@@ -22,7 +22,7 @@ const EmployeeLoginForm: React.FC = () => {
     setValue('register', formattedRegister);
   };
 
-  const onFormSubmit = (data: ILoginSchema) => {
+  const onFormSubmit = (data: IEmployeeLoginSchema) => {
     console.log(data);
   };
 

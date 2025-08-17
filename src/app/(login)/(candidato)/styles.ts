@@ -1,0 +1,17 @@
+import styled, { keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+`;
+export const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 1.6rem;
+
+  // make the form smoothly appear on screens transitions
+  opacity: 0;
+  animation: ${fadeIn} 2s forwards;
+`;
