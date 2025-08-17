@@ -6,6 +6,7 @@ import { CodeResntButton, Description, Form, SubmitButton, Title } from '../comm
 import codeMask from '@/utils/masks/codeMask';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { notifySuccess } from '@/utils/handleToast';
 
 const RESEND_TIMEOUT = 60;
 
@@ -55,6 +56,8 @@ const CodeVerficationForm: React.FC = () => {
 
     const oneMinute = 1000 * RESEND_TIMEOUT;
     setResetTime(RESEND_TIMEOUT);
+
+    notifySuccess('Um novo código foi enviado ao seu email!');
 
     setTimeout(() => {
       setCanResendCode(true);

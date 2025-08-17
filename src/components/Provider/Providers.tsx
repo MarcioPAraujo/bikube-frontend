@@ -10,6 +10,7 @@ import { GlobalStyle } from '@/styles/global';
 import { theme } from '@/styles/theme';
 import AuthProvider from '@/hooks/useAuth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import NextNProgress from 'nextjs-progressbar';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,8 +26,9 @@ const Providers = ({ children }: PropsWithChildren) => {
     <StyledComponentsRegistry>
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
+          <GlobalStyle />
           <AuthProvider>
-            <GlobalStyle />
+            <NextNProgress color={theme.colors.WHITE} options={{ easing: 'ease', speed: 500 }} />
             {children}
           </AuthProvider>
           <ToastContainer
