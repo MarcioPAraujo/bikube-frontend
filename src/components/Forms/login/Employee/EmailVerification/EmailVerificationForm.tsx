@@ -5,6 +5,7 @@ import InputComponent from '@/components/Inputs/InputComponent';
 import { Description, Form, SubmitButton, Title } from '../commonStyles';
 import { emailMask } from '@/utils/masks/emailMask';
 import { useRouter } from 'next/navigation';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 
 const EmailVerificationForm: React.FC = () => {
   const router = useRouter();
@@ -19,6 +20,8 @@ const EmailVerificationForm: React.FC = () => {
   });
 
   const onFormSubmit = (data: SendCodeSchemaType) => {
+    // here it stores the email to reuse on code verification, for code resent, and on the reset password on the body of the request
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.email, data.email);
     console.log(data);
     router.push('/codigo');
   };

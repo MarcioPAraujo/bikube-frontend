@@ -2,7 +2,8 @@
 
 /* eslint-disable react/jsx-no-constructed-context-values */
 
-import { LOCAL_STORAGE_KEYS, SESSION_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { redirect, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { createContext, ReactNode } from 'react';

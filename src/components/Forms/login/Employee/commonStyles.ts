@@ -68,3 +68,26 @@ export const SubmitButton = styled.button`
     box-shadow: none;
   }
 `;
+
+export const CodeResntButton = styled.button`
+  border: none;
+  background: none;
+  width: fit-content;
+
+  text-decoration: underline;
+
+  color: ${({ theme }) => theme.colors.YELLOW.hex_9E4A00};
+
+  transition: color 0.5s ease;
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 1;
+    color: ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
+    text-decoration: none;
+
+    cursor: not-allowed;
+  }
+`;
