@@ -5,7 +5,7 @@ import InputComponent from '@/components/Inputs/InputComponent';
 import { Form, SubmitButton, Title } from '../commonStyles';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import SuccessModal from '@/components/modals/SuccessModal';
+import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 
 const ResetPasswordForm: React.FC = () => {
   const router = useRouter();

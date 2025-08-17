@@ -19,10 +19,10 @@ import { IEmployeeBody } from '@/interfaces/funcionarios/registerEmployee';
 import { notifyError } from '@/utils/handleToast';
 import { createEmployee } from '@/services/funcionarios/funcionariosService';
 import LoadingScreen from '@/components/LoadingScreen';
-import SuccessModal from '@/components/modals/SuccessModal';
+import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import { useRouter } from 'next/navigation';
 import { format, parse } from 'date-fns';
-import WarningModal from '@/components/modals/WarningModal';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
 
 interface Address {
   city: string;

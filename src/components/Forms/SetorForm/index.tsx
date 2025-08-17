@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { sectorSchema, SectorFormValues } from '@/validation/setor/sectorSchema';
 import { createSector } from '@/services/setor/setorService';
 import { notifyError } from '@/utils/handleToast';
-import SuccessModal from '@/components/modals/SuccessModal';
+import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 
 interface SectorFormProps {
   isOpen: boolean;

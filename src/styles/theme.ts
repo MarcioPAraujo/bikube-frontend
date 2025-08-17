@@ -1,5 +1,7 @@
 const gray = {
   hex_353535: '#353535',
+  hex_454545: '#454545',
+  hex_696969: '#696969',
   hex_747474: '#747474',
   hex_999999: '#999999',
   hex_2e2e2e: '#2E2E2E',
@@ -13,7 +15,10 @@ const red = {
   light: '#FFEBEE',
 };
 const green = {
+  hex_FEFAE0: '#FEFAE0',
+  hex_78C841: '#78C841',
   hex_018D1F: '#018D1F',
+  hex_4A9782: '#4A9782',
 };
 const blue = {
   darker: '#2F80ED',

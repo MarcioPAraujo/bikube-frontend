@@ -1,4 +1,5 @@
 import { BlurBackground, Button, ButtonContainer, Container, Message, ModalContent, Title } from './styles';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
 interface WarningModalProps {
   isOpen: boolean;

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { BlurBackground, Button, Container, Message, ModalContent } from './styles';
 import { IIcon } from '@/components/Icons/IIcon';
+import { IoAlertCircleOutline } from 'react-icons/io5';
 
 interface IAlertModalProps {
   isOpen: boolean;

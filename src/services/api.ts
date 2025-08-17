@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import axios, { AxiosRequestConfig } from 'axios';
-import { LOCAL_STORAGE_KEYS, SESSION_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
