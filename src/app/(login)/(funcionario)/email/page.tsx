@@ -1,10 +1,18 @@
 'use client';
 
+import EmailVerificationForm from '@/components/Forms/login/Employee/EmailVerification/EmailVerificationForm';
+import { PageContainer } from '../styles';
+import IconButton from '@/components/Buttons/IconButton';
+import { Icons } from '@/components/Icons/Icons';
+import { useRouter } from 'next/navigation';
+
 const ForgotPasswordPage: React.FC = () => {
+  const router = useRouter();
   return (
-    <div>
-      <h1>esqueci a senha</h1>
-    </div>
+    <PageContainer style={{ alignItems: 'flex-start' }}>
+      <IconButton icon={Icons.ArrowLeft} onClick={() => router.push('/')} />
+      <EmailVerificationForm />
+    </PageContainer>
   );
 };
 export default ForgotPasswordPage;

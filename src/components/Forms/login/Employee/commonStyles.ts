@@ -1,12 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
-export const Title = styled.h2`
-  font-size: 3.2rem;
-  color: ${({ theme }) => theme.colors.GRAY.hex_747474};
-  text-align: center;
-`;
-
 export const Form = styled.form`
   width: clamp(20rem, 80%, 35rem);
   height: 40rem;
@@ -21,6 +15,18 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+`;
+
+export const Title = styled.h2`
+  font-size: 3.2rem;
+  color: ${({ theme }) => theme.colors.GRAY.hex_747474};
+  text-align: center;
+`;
+
+export const Description = styled.p`
+  font-size: 1.6rem;
+  color: ${({ theme }) => theme.colors.GRAY.hex_353535};
+  text-align: center;
 `;
 
 export const CustomLink = styled(Link)`

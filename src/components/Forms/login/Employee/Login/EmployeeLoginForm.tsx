@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginSchema, ILoginSchema } from '@/validation/Login/LoginSchema';
 import InputComponent from '@/components/Inputs/InputComponent';
-import { CustomLink, Form, SubmitButton, Title } from './employeeLoginFormStyles';
+import { CustomLink, Form, SubmitButton, Title } from '../commonStyles';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
 import { registerMask } from '@/utils/masks/registerMask';
 
