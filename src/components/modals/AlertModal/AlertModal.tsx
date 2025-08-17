@@ -1,32 +1,58 @@
-import { FC } from 'react';
-import { BlurBackground, Button, Container, Message, ModalContent } from './styles';
-import { IIcon } from '@/components/Icons/IIcon';
+import {
+  BlurBackground,
+  Button,
+  ButtonContainer,
+  Container,
+  ContentWrapper,
+  IconContainer,
+  Message,
+  ModalContent,
+  Title,
+} from './styles';
 import { IoAlertCircleOutline } from 'react-icons/io5';
 
-interface IAlertModalProps {
+interface WarningModalProps {
   isOpen: boolean;
-  onClose: VoidFunction;
   message: string;
-  textButton: string;
-  blocked?: boolean;
+  title: string;
+  confirmText: string;
+  cancelText?: string;
+  onConfirm: () => void;
+  onCancel?: () => void;
 }
-export const AlertLoginTriesModal: FC<IAlertModalProps> = (props: IAlertModalProps) => {
-  const { isOpen, message, onClose, textButton, blocked = false } = props;
-
+const AlertModal: React.FC<WarningModalProps> = ({
+  isOpen,
+  message,
+  title,
+  confirmText,
+  cancelText,
+  onConfirm,
+  onCancel,
+}) => {
   if (!isOpen) return null;
-
   return (
     <Container>
       <BlurBackground />
       <ModalContent>
-        <IIcon />
-        <Message>{message}</Message>
-        {!blocked && (
-          <Button type="button" onClick={onClose}>
-            {textButton}
-          </Button>
-        )}
+        <IconContainer>
+          <IoAlertCircleOutline color="white" size={70} />
+        </IconContainer>
+        <ContentWrapper>
+          <Title>{title}</Title>
+          <Message>{message}</Message>
+          <ButtonContainer>
+            {onCancel && cancelText && (
+              <Button type="button" onClick={onCancel}>
+                {cancelText}
+              </Button>
+            )}
+            <Button type="button" onClick={onConfirm} className="filled">
+              {confirmText}
+            </Button>
+          </ButtonContainer>
+        </ContentWrapper>
       </ModalContent>
     </Container>
   );
 };
+export default AlertModal;

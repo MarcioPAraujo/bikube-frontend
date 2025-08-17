@@ -10,9 +10,10 @@ const gray = {
   hex_1b1b1b: '#1B1B1B',
 };
 const red = {
-  dark: '#D32F2F',
-  normal: '#EB5757',
-  light: '#FFEBEE',
+  hex_B9375D: '#B9375D',
+  hex_D32F2F: '#D32F2F',
+  hex_EB5757: '#EB5757',
+  hex_FFEBEE: '#FFEBEE',
 };
 const green = {
   hex_FEFAE0: '#FEFAE0',
