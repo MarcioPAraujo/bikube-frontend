@@ -24,7 +24,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose, message, t
       <BlurBackground />
       <ModalContent>
         <IconContainer>
-          <GoIssueClosed color="white" size={50} />
+          <GoIssueClosed color="white" size={70} />
         </IconContainer>
         <ContentWrapper>
           <Title>{title}</Title>

@@ -1,4 +1,14 @@
-import { BlurBackground, Button, ButtonContainer, Container, Message, ModalContent, Title } from './styles';
+import {
+  BlurBackground,
+  Button,
+  ButtonContainer,
+  Container,
+  ContentWrapper,
+  IconContainer,
+  Message,
+  ModalContent,
+  Title,
+} from './styles';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 
 interface WarningModalProps {
@@ -24,16 +34,21 @@ const WarningModal: React.FC<WarningModalProps> = ({
     <Container>
       <BlurBackground />
       <ModalContent>
-        <Title>{title}</Title>
-        <Message>{message}</Message>
-        <ButtonContainer>
-          <Button type="button" onClick={onCancel}>
-            {cancelText}
-          </Button>
-          <Button type="button" onClick={onConfirm} className="filled">
-            {confirmText}
-          </Button>
-        </ButtonContainer>
+        <IconContainer>
+          <IoCloseCircleOutline color="white" size={70} />
+        </IconContainer>
+        <ContentWrapper>
+          <Title>{title}</Title>
+          <Message>{message}</Message>
+          <ButtonContainer>
+            <Button type="button" onClick={onCancel}>
+              {cancelText}
+            </Button>
+            <Button type="button" onClick={onConfirm} className="filled">
+              {confirmText}
+            </Button>
+          </ButtonContainer>
+        </ContentWrapper>
       </ModalContent>
     </Container>
   );
