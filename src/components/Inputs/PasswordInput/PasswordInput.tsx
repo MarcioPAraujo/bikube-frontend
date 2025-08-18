@@ -12,6 +12,8 @@ interface IProps {
   errorMessage?: string;
   register?: UseFormRegisterReturn;
   fieldClassName?: string;
+  onCopy?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
+  onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
 }
 const PasswordInput: React.FC<IProps> = ({
   id,
@@ -22,6 +24,8 @@ const PasswordInput: React.FC<IProps> = ({
   fieldClassName,
   register,
   value,
+  onCopy,
+  onPaste,
 }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -33,6 +37,8 @@ const PasswordInput: React.FC<IProps> = ({
         value={value}
         placeholder={placeholder}
         disabled={disabled}
+        onCopy={onCopy}
+        onPaste={onPaste}
         {...register}
       />
       <EyButton type="button" onClick={() => setShowPassword(!showPassword)}>

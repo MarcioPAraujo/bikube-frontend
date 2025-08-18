@@ -1,11 +1,12 @@
 'use client';
 
+import CandidateRestPasswordForm from '@/components/Forms/login/Candidate/ResetPassword/CandidateRestPasswordForm';
 import { PageContainer } from '../styles';
 
 const CandidateResetPasswordPage: React.FC = () => {
   return (
     <PageContainer>
-      <h1>aaa</h1>
+      <CandidateRestPasswordForm />
     </PageContainer>
   );
 };

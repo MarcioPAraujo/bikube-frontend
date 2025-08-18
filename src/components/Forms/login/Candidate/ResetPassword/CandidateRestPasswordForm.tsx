@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ResetPasswordSchema, ResetPasswordSchemaType } from '@/validation/Login/ResetPasswordSchema';
-import { Form, SubmitButton, Title } from '../commonStyles';
+import { Form, SubmitButton, Title } from '../styles';
+import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
+import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
-import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
 
-const ResetPasswordForm: React.FC = () => {
+const CandidateRestPasswordForm: React.FC = () => {
   const router = useRouter();
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const {
@@ -21,7 +21,6 @@ const ResetPasswordForm: React.FC = () => {
 
   const onFormSubmit = (data: ResetPasswordSchemaType) => {
     console.log(data);
-    // router.push('/');
     setSuccessModal(true);
   };
 
@@ -29,12 +28,11 @@ const ResetPasswordForm: React.FC = () => {
     <>
       <SuccessModal
         isOpen={successModal}
-        onClose={() => router.push('/')}
+        onClose={() => router.push('/candidato-login')}
         title="Senha redefinida"
         message="Sua senha foi redefinida com sucesso, agora você pode logar no sistema utilizando a nova senha."
         buttonText="Continuar"
       />
-
       <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Title>Redefinir senha</Title>
         <PasswordInput
@@ -46,9 +44,9 @@ const ResetPasswordForm: React.FC = () => {
           errorMessage={errors.newPassword?.message}
         />
         <PasswordInput
-          id="confirm-password"
+          id="confrim-password"
           labelText="Confirmar senha"
-          placeholder="Digie a senha novamente"
+          placeholder="Digite a senha novamente"
           onPaste={e => e.preventDefault()}
           register={register('confirmPassword')}
           errorMessage={errors.confirmPassword?.message}
@@ -60,4 +58,4 @@ const ResetPasswordForm: React.FC = () => {
     </>
   );
 };
-export default ResetPasswordForm;
+export default CandidateRestPasswordForm;
