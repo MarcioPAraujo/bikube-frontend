@@ -35,6 +35,12 @@ export const CustomLink = styled(Link)`
   }
 `;
 
+export const Description = styled.p`
+  font-size: 1.6rem;
+  color: ${({ theme }) => theme.colors.GRAY.hex_353535};
+  text-align: center;
+`;
+
 export const SubmitButton = styled.button`
   margin-top: auto;
   width: fit-content;
