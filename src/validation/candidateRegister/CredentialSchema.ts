@@ -11,11 +11,11 @@ export const CredentialsSchema = yup.object().shape({
     .min(8, 'A senha deve ter ao menos 8 caracteres')
     .test('has-uppercase', 'Deve conter ao menos uma letra maiúscula', value => {
       if (!value) return false;
-      return !/[A-Z]/g.test(value);
+      return /[A-Z]/g.test(value);
     })
     .test('has-lowercase', 'Deve conter ao menos uma letra minúscula', value => {
       if (!value) return false;
-      return !/[a-z]/g.test(value);
+      return /[a-z]/g.test(value);
     })
     .test('has-number', 'Deve conter ao menos um número', value => {
       if (!value) return false;

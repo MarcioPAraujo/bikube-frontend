@@ -5,7 +5,15 @@ import * as yup from 'yup';
 export type AcedemicDataSchemaType = yup.InferType<typeof AcedemicDataSchema>;
 
 export const AcedemicDataSchema = yup.object().shape({
-  languages: yup.array().of(yup.string()).optional(),
+  languages: yup
+    .array()
+    .of(
+      yup.object().shape({
+        language: yup.string().required('Insira o nome do idioma'),
+        level: yup.string().required('Informe o nível de domínio do idioma'),
+      }),
+    )
+    .optional(),
   education: yup.array().of(
     yup.object().shape({
       instituition: yup.string().required('o nome da instituição é obrigatório'),
@@ -27,7 +35,7 @@ export const AcedemicDataSchema = yup.object().shape({
         .matches(DDMMYYYY_REGEX, 'Data inválida')
         .test(
           'smaller-than-start-date',
-          'A data de fim deve ser posterios a date de início',
+          'A data de fim deve ser posterior a date de início',
           function isGreatter(value) {
             const { startDate } = this.parent;
             if (!startDate || !value) return false;

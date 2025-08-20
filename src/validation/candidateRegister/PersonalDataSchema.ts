@@ -1,6 +1,5 @@
 import { DDMMYYYY_REGEX, MOBILE_REGEX } from '@/utils/regex/regexes';
 import { differenceInYears, isValid, parse } from 'date-fns';
-import test from 'node:test';
 import * as yup from 'yup';
 
 export type PersonalDataSchemaType = yup.InferType<typeof PersonalDataSchema>;
