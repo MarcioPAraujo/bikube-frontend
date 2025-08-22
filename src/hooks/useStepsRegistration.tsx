@@ -63,7 +63,6 @@ const StepsFormContext = createContext({} as IStepsValues);
 
 export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
   const pathname = usePathname();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
@@ -114,8 +113,6 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
         formData: JSON.parse(storedStep5),
       }));
     }
-
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -132,8 +129,6 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
       redirect(steps[firstIncompleteIndex].pathname);
     }
   }, [currentStep, step1, step2, step3, step4, step5]);
-
-  if (isLoading) return null;
 
   if (!pathname.startsWith(basePath)) {
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.step1);
