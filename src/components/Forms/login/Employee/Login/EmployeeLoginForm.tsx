@@ -1,30 +1,14 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { EmployeeLoginSchema, IEmployeeLoginSchema } from '@/validation/Login/EmployeeLoginSchema';
 import InputComponent from '@/components/Inputs/InputComponent';
 import { CustomLink, Form, SubmitButton, Title } from '../commonStyles';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
-import { registerMask } from '@/utils/masks/registerMask';
+import useEmployeeLoginForm from './useEmployeeLoginForm';
 
 const EmployeeLoginForm: React.FC = () => {
   const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isSubmitting, isValid },
-  } = useForm<IEmployeeLoginSchema>({
-    resolver: yupResolver(EmployeeLoginSchema),
-    mode: 'onTouched',
-  });
-
-  const onRegisterFieldChange = (value: string) => {
-    const formattedRegister = registerMask(value);
-    setValue('register', formattedRegister);
-  };
-
-  const onFormSubmit = (data: IEmployeeLoginSchema) => {
-    console.log(data);
-  };
+    hookform: { errors, handleSubmit, isSubmitting, isValid, register },
+    onFormSubmit,
+    onRegisterFieldChange,
+  } = useEmployeeLoginForm();
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>

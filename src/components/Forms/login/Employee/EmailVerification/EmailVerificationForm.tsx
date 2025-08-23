@@ -1,35 +1,13 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { SendCodeSchema, SendCodeSchemaType } from '@/validation/Login/SendCodeSchema';
 import InputComponent from '@/components/Inputs/InputComponent';
 import { Description, Form, SubmitButton, Title } from '../commonStyles';
-import { emailMask } from '@/utils/masks/emailMask';
-import { useRouter } from 'next/navigation';
-import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
+import useEmailVerificationForm from './useEmailVerificationForm';
 
 const EmailVerificationForm: React.FC = () => {
-  const router = useRouter();
   const {
-    handleSubmit,
-    register,
-    setValue,
-    formState: { errors, isValid, isSubmitting },
-  } = useForm<SendCodeSchemaType>({
-    mode: 'onTouched',
-    resolver: yupResolver(SendCodeSchema),
-  });
-
-  const onFormSubmit = (data: SendCodeSchemaType) => {
-    // here it stores the email to reuse on code verification, for code resent, and on the reset password on the body of the request
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.email, data.email);
-    console.log(data);
-    router.push('/codigo');
-  };
-
-  const onEmailChange = (value: string) => {
-    const formattedEmailValue = emailMask(value);
-    setValue('email', formattedEmailValue);
-  };
+    hookform: { errors, isSubmitting, isValid, handleSubmit, register },
+    onEmailChange,
+    onFormSubmit,
+  } = useEmailVerificationForm();
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>

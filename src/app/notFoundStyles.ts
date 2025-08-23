@@ -13,7 +13,7 @@ export const Container = styled.div`
   display: grid;
   place-items: center;
 
-  background: linear-gradient(200deg, #f6b31b 0%, #fffbe6 100%);
+  background: linear-gradient(200deg, #f6b31b 0%, #fffbe6 60%);
 `;
 
 export const ContentWrapper = styled.div`
@@ -57,6 +57,6 @@ export const Button = styled.button`
   transition: background 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.45);
   }
 `;

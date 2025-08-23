@@ -1,68 +1,16 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { CodeSchema, CodeSchemaType } from '@/validation/Login/CodeSchema';
 import InputComponent from '@/components/Inputs/InputComponent';
 import { CodeResntButton, Description, Form, SubmitButton, Title } from '../commonStyles';
-import codeMask from '@/utils/masks/codeMask';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { notifySuccess } from '@/utils/handleToast';
-
-const RESEND_TIMEOUT = 60;
+import useCodeVerificationForm from './useCodeVerificationForm';
 
 const CodeVerficationForm: React.FC = () => {
-  const router = useRouter();
-  const [canResendCode, setCanResendCode] = useState<boolean>(true);
-  const [resetTime, setResetTime] = useState<number>(0);
   const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isValid, isSubmitting },
-  } = useForm<CodeSchemaType>({
-    mode: 'onTouched',
-    resolver: yupResolver(CodeSchema),
-  });
-
-  // timer to display how mauch seocnds remain to resend the code
-  useEffect(() => {
-    if (resetTime === 0) return;
-    const interval = setInterval(() => {
-      let newTime = 0;
-      if (resetTime <= 0) {
-        setCanResendCode(true);
-        clearInterval(interval);
-      } else {
-        newTime = resetTime - 1;
-      }
-      setResetTime(newTime);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [resetTime]);
-
-  const onFormSubmit = (data: CodeSchemaType) => {
-    console.log(data);
-    router.push('/redefinir-senha');
-  };
-
-  const onCodeChange = (codeValue: string) => {
-    const formattedCode = codeMask(codeValue);
-    setValue('code', formattedCode);
-  };
-
-  const resendCode = () => {
-    console.log('code resent');
-    setCanResendCode(false);
-
-    const oneMinute = 1000 * RESEND_TIMEOUT;
-    setResetTime(RESEND_TIMEOUT);
-
-    notifySuccess('Um novo código foi enviado ao seu email!');
-
-    setTimeout(() => {
-      setCanResendCode(true);
-    }, oneMinute);
-  };
+    hookform: { errors, isSubmitting, isValid, handleSubmit, register },
+    canResendCode,
+    resetTime,
+    onCodeChange,
+    onFormSubmit,
+    resendCode,
+  } = useCodeVerificationForm();
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>

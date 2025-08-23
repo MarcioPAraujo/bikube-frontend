@@ -1,35 +1,21 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { ResetPasswordSchema, ResetPasswordSchemaType } from '@/validation/Login/ResetPasswordSchema';
 import { Form, SubmitButton, Title } from '../commonStyles';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
+import useResetPasswordForm from './useResetPasswordForm';
 
 const ResetPasswordForm: React.FC = () => {
-  const router = useRouter();
-  const [successModal, setSuccessModal] = useState<boolean>(false);
   const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid, isSubmitting },
-  } = useForm<ResetPasswordSchemaType>({
-    mode: 'onTouched',
-    resolver: yupResolver(ResetPasswordSchema),
-  });
-
-  const onFormSubmit = (data: ResetPasswordSchemaType) => {
-    console.log(data);
-    // router.push('/');
-    setSuccessModal(true);
-  };
+    hookform: { isSubmitting, isValid, errors, register, handleSubmit },
+    backToLogin,
+    onFormSubmit,
+    successModal,
+  } = useResetPasswordForm();
 
   return (
     <>
       <SuccessModal
         isOpen={successModal}
-        onClose={() => router.push('/')}
+        onClose={backToLogin}
         title="Senha redefinida"
         message="Sua senha foi redefinida com sucesso, agora você pode logar no sistema utilizando a nova senha."
         buttonText="Continuar"
