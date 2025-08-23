@@ -17,7 +17,7 @@ const stepClassname: Record<number, string> = {
   5: 'step-5',
 };
 
-const Layout: FC<IChildren> = ({ children }) => {
+const RegistrationLayout: FC<IChildren> = ({ children }) => {
   const { currentStep } = useStepsRegistration();
 
   return (
@@ -30,16 +30,6 @@ const Layout: FC<IChildren> = ({ children }) => {
       </Header>
       <ChildenWrapper>{children}</ChildenWrapper>
     </Main>
-  );
-};
-
-const RegistrationLayout: FC<IChildren> = ({ children }) => {
-  return (
-    <Suspense fallback={null}>
-      <StepsRegistrationProvider>
-        <Layout>{children}</Layout>
-      </StepsRegistrationProvider>
-    </Suspense>
   );
 };
 export default RegistrationLayout;

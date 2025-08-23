@@ -11,6 +11,7 @@ import { theme } from '@/styles/theme';
 import AuthProvider from '@/hooks/useAuth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import NextNProgress from 'nextjs-progressbar';
+import { StepsRegistrationProvider } from '@/hooks/useStepsRegistration';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,7 +30,7 @@ const Providers = ({ children }: PropsWithChildren) => {
           <GlobalStyle />
           <AuthProvider>
             <NextNProgress color={theme.colors.WHITE} options={{ easing: 'ease', speed: 500 }} />
-            {children}
+            <StepsRegistrationProvider>{children}</StepsRegistrationProvider>
           </AuthProvider>
           <ToastContainer
             style={{

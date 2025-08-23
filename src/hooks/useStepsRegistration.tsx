@@ -130,7 +130,9 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
     }
   }, [currentStep, step1, step2, step3, step4, step5]);
 
-  if (!pathname.startsWith(basePath)) {
+  useEffect(() => {
+    if (pathname.startsWith(basePath)) return;
+
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.step1);
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.step2);
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.step3);
@@ -145,7 +147,7 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
 
     // Reset current step to 1 if the pathname is not a valid step
     setCurrentStep(1);
-  }
+  }, [pathname]);
 
   const value: IStepsValues = useMemo(
     () => ({
