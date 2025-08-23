@@ -1,10 +1,8 @@
 'use client';
 
+import AccessCredentialsForm from '@/components/Forms/candidateRegister/Credetials/AccessCredentialsForm';
+
 const RegisterCandidatPage: React.FC = () => {
-  return (
-    <div>
-      <h1>registro de candidato</h1>
-    </div>
-  );
+  return <AccessCredentialsForm />;
 };
 export default RegisterCandidatPage;
