@@ -1,6 +1,5 @@
 'use client';
 
-import Select from 'react-select';
 import { announcements } from '@/components/MOCK/annoucements';
 import SearchBarComponent from '@/components/Inputs/SearchBar';
 import { useEffect, useState } from 'react';

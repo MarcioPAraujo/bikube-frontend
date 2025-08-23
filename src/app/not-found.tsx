@@ -10,7 +10,14 @@ const NotFoundPage: React.FC = () => {
     <Container>
       <ContentWrapper>
         <LogoWrapper>
-          <Image src="/images/bikube-3d-logo.png" fill alt="bikube logo" quality={100} style={{ objectFit: 'cover' }} />
+          <Image
+            src="/images/bikube-3d-logo.png"
+            fill
+            priority
+            alt="bikube logo"
+            quality={100}
+            style={{ objectFit: 'cover' }}
+          />
         </LogoWrapper>
         <ContentWrapper>
           <Title>404</Title>
