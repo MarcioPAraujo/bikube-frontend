@@ -1,6 +1,8 @@
 'use client';
 
+import EmailVerificationForm from '@/components/Forms/candidateRegister/EmailVerification/EmailVerificationForm';
+
 const CandidateVerifyEmailRegistrationPage: React.FC = () => {
-  return <h1>verificar email</h1>;
+  return <EmailVerificationForm />;
 };
 export default CandidateVerifyEmailRegistrationPage;

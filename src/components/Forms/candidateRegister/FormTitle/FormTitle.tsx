@@ -4,6 +4,7 @@ interface IFormTitleProps {
   title: string;
   onBack: VoidFunction;
   onNext?: VoidFunction;
+  isNextDisabled?: boolean;
   nextButtonText?: string;
 }
 
@@ -32,7 +33,13 @@ interface IFormTitleProps {
  *
  * @component
  */
-const FormTitle: React.FC<IFormTitleProps> = ({ onBack, onNext, title, nextButtonText = 'Avançar' }) => {
+const FormTitle: React.FC<IFormTitleProps> = ({
+  onBack,
+  onNext,
+  title,
+  nextButtonText = 'Avançar',
+  isNextDisabled = false,
+}) => {
   return (
     <Container>
       <Title>{title}</Title>
@@ -40,7 +47,7 @@ const FormTitle: React.FC<IFormTitleProps> = ({ onBack, onNext, title, nextButto
         <Button type="button" onClick={onBack} className="back">
           Voltar
         </Button>
-        <Button type="submit" onClick={onNext} className="next">
+        <Button type="submit" onClick={onNext} className="next" disabled={isNextDisabled}>
           {nextButtonText}
         </Button>
       </ButtonsContainer>
