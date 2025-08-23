@@ -3,7 +3,7 @@
 import { StepsRegistrationProvider, useStepsRegistration } from '@/hooks/useStepsRegistration';
 import Image from 'next/image';
 import { FC, ReactNode, Suspense } from 'react';
-import { BarContent, Header, Main, ProgressbarContainer } from './layoutStyles';
+import { BarContent, ChildenWrapper, Header, Main, ProgressbarContainer } from './layoutStyles';
 
 interface IChildren {
   children: ReactNode;
@@ -28,7 +28,7 @@ const Layout: FC<IChildren> = ({ children }) => {
         </ProgressbarContainer>
         <Image src="/images/default-logo.png" width={218} height={90} alt="logo da bikube" />
       </Header>
-      <div>{children}</div>
+      <ChildenWrapper>{children}</ChildenWrapper>
     </Main>
   );
 };

@@ -17,7 +17,7 @@ const useEmployeeLoginForm = () => {
 
   const onRegisterFieldChange = (value: string) => {
     const formattedRegister = registerMask(value);
-    setValue('register', formattedRegister);
+    setValue('register', formattedRegister, { shouldValidate: true });
   };
 
   const onFormSubmit = (data: IEmployeeLoginSchema) => {

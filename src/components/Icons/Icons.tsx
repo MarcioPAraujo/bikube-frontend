@@ -16,6 +16,7 @@ import { BsChevronDoubleLeft } from 'react-icons/bs';
 import { BsChevronDown } from 'react-icons/bs';
 import { VscEyeClosed } from 'react-icons/vsc';
 import { VscEye } from 'react-icons/vsc';
+import { BsExclamationOctagonFill } from 'react-icons/bs';
 
 interface IconProps {
   size?: number;
@@ -45,5 +46,6 @@ export const Icons = {
   ChevronDoubleRight: (props: IconProps) => <IconWrapper Icon={BsChevronDoubleRight} {...props} />,
   ChevronDoubleLeft: (props: IconProps) => <IconWrapper Icon={BsChevronDoubleLeft} {...props} />,
   ChevronDown: (props: IconProps) => <IconWrapper Icon={BsChevronDown} {...props} />,
+  BsExclamationOctagonFill: (props: IconProps) => <IconWrapper Icon={BsExclamationOctagonFill} {...props} />,
   Logo: () => <Logo />,
 };

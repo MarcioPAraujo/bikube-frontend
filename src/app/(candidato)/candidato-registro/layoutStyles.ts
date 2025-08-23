@@ -45,3 +45,9 @@ export const BarContent = styled.span`
     width: 100%;
   }
 `;
+
+export const ChildenWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 12rem);
+`;

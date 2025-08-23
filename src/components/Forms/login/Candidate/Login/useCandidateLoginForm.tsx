@@ -1,6 +1,7 @@
 import { emailMask } from '@/utils/masks/emailMask';
 import { CandidateLoginSchema, CandidateLoginSchemaType } from '@/validation/Login/CandidateLoginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 
 const useCandidateLoginForm = () => {
@@ -10,8 +11,8 @@ const useCandidateLoginForm = () => {
     setValue,
     formState: { errors, isValid, isSubmitting },
   } = useForm<CandidateLoginSchemaType>({
-    mode: 'onTouched',
     resolver: yupResolver(CandidateLoginSchema),
+    mode: 'onTouched',
   });
 
   const onEmailChange = (value: string) => {

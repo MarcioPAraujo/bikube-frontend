@@ -25,5 +25,8 @@ export const CredentialsSchema = yup.object().shape({
       if (!value) return false;
       return /\W|_/g.test(value);
     }),
-  confirmPassword: yup.string().required('Campo obrigatório').oneOf(['password'], 'As senhas estão diferentes'),
+  confirmPassword: yup
+    .string()
+    .required('Campo obrigatório')
+    .oneOf([yup.ref('password')], 'As senhas estão diferentes'),
 });

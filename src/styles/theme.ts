@@ -9,12 +9,15 @@ const gray = {
   hex_e2e2e2: '#E2E2E2',
   hex_d7d7d7: '#D7D7D7',
   hex_1b1b1b: '#1B1B1B',
+  hex_A2A2A2: '#A2A2A2',
+  hex_f2f2f2: '#f2f2f2',
 };
 const red = {
   hex_B9375D: '#B9375D',
   hex_D32F2F: '#D32F2F',
   hex_EB5757: '#EB5757',
   hex_FFEBEE: '#FFEBEE',
+  hex_FFB4B4: '#FFB4B4',
 };
 const green = {
   hex_FEFAE0: '#FEFAE0',
