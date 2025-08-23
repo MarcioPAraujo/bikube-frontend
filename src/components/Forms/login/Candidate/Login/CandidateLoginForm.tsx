@@ -1,30 +1,14 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { CandidateLoginSchema, CandidateLoginSchemaType } from '@/validation/Login/CandidateLoginSchema';
 import InputComponent from '@/components/Inputs/InputComponent';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
 import { CustomLink, Form, SubmitButton, Title } from '../styles';
-import { emailMask } from '@/utils/masks/emailMask';
+import useCandidateLoginForm from './useCandidateLoginForm';
 
 const CandidateLoginForm: React.FC = () => {
   const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isValid, isSubmitting },
-  } = useForm<CandidateLoginSchemaType>({
-    mode: 'onTouched',
-    resolver: yupResolver(CandidateLoginSchema),
-  });
-
-  const onEmailChange = (value: string) => {
-    const formattedEmail = emailMask(value);
-    setValue('email', formattedEmail);
-  };
-
-  const onFormSubmit = (data: CandidateLoginSchemaType) => {
-    console.log(data);
-  };
+    hookform: { errors, isValid, isSubmitting, handleSubmit, register },
+    onEmailChange,
+    onFormSubmit,
+  } = useCandidateLoginForm();
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>

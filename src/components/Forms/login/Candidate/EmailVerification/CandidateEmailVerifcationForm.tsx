@@ -1,32 +1,13 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { SendCodeSchema, SendCodeSchemaType } from '@/validation/Login/SendCodeSchema';
 import InputComponent from '@/components/Inputs/InputComponent';
 import { Description, Form, SubmitButton, Title } from '../styles';
-import { emailMask } from '@/utils/masks/emailMask';
-import { useRouter } from 'next/navigation';
+import useCandidateEmailVerificationForm from './useCandidateEmailVerificationForm';
 
 const CandidateEmailVerificationForm: React.FC = () => {
-  const router = useRouter();
   const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isValid, isSubmitting },
-  } = useForm<SendCodeSchemaType>({
-    mode: 'onTouched',
-    resolver: yupResolver(SendCodeSchema),
-  });
-
-  const onFormSubmit = (data: SendCodeSchemaType) => {
-    console.log(data);
-    router.push('/candidato-codigo');
-  };
-
-  const onEmailChange = (value: string) => {
-    const formattedEmail = emailMask(value);
-    setValue('email', formattedEmail);
-  };
+    hookform: { errors, isValid, isSubmitting, register, handleSubmit },
+    onEmailChange,
+    onFormSubmit,
+  } = useCandidateEmailVerificationForm();
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>
