@@ -6,7 +6,7 @@ export type PersonalDataSchemaType = yup.InferType<typeof PersonalDataSchema>;
 
 export const PersonalDataSchema = yup.object().shape({
   name: yup.string().required('O nome é obrigatóro'),
-  nascimento: yup
+  birthday: yup
     .string()
     .required('A data de nascimetno é obrigatória')
     .matches(DDMMYYYY_REGEX, 'Deve estar no formato dd/mm/aaaa')
@@ -50,7 +50,7 @@ export const PersonalDataSchema = yup.object().shape({
   linkedin: yup
     .string()
     .required('O link do perfil do linkedin é obrigatório')
-    .matches(/^https:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+\/?$/, 'Link do LinkedIn inválido'),
+    .matches(/^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/, 'Link do LinkedIn inválido'),
   github: yup
     .string()
     .required('o link do perfil do github é obrigatório')
