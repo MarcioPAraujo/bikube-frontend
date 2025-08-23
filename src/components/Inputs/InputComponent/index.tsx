@@ -1,6 +1,5 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { ErrorMessage, Field, Input, Label } from './styles';
-import { CSSProperties } from 'styled-components';
 
 interface IProps {
   id: string;
@@ -10,7 +9,6 @@ interface IProps {
   disabled?: boolean;
   errorMessage?: string;
   register?: UseFormRegisterReturn;
-  fieldClassName?: string;
   onCopy?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
   onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
 }
@@ -22,7 +20,6 @@ interface IProps {
  * @param value - The default value of the input field.
  * @param disabled - Whether the input field is disabled or not.
  * @param errorMessage - The error message to be displayed if there is an error.
- * @param fieldClassName - The class name for the field container.
  * @param register - The register function from react-hook-form to connect the input with the form
  * @param onCopy - clipboard copy event function
  * @param onPaste - clipboard paste event funtion
@@ -35,13 +32,12 @@ const InputComponent: React.FC<IProps> = ({
   value,
   disabled = false,
   errorMessage,
-  fieldClassName,
   register,
   onCopy,
   onPaste,
 }) => {
   return (
-    <Field className={fieldClassName}>
+    <Field>
       <Label htmlFor={id}>{labelText}</Label>
       <Input
         id={id}
