@@ -11,17 +11,32 @@ import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import { useEffect, useState } from 'react';
 import { fetchBrazilianStates, IState } from '@/services/statesAPI';
 import { IOption } from '@/interfaces/option';
-import { fetchCitiesByState } from '@/services/citiesAPI';
+import { City, fetchCitiesByState } from '@/services/citiesAPI';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
+import { stateNames } from '@/utils/statesNames';
+
+const fetchCities = async (stateUF: string): Promise<IOption[]> => {
+  const response = await fetchCitiesByState(stateUF);
+  if (response.length > 0) {
+    const citiesOptions = response.map((city: City) => ({
+      label: city.nome,
+      value: city.nome,
+    }));
+    return citiesOptions;
+  }
+  return [];
+};
 
 const PersonalDataForm: React.FC = () => {
-  const { step1 } = useStepsRegistration();
+  const { step1, setStep2, step2 } = useStepsRegistration();
   const router = useRouter();
   const {
     register,
     handleSubmit,
     setValue,
     trigger,
+    getValues,
     formState: { errors },
   } = useForm<PersonalDataSchemaType>({
     resolver: yupResolver(PersonalDataSchema),
@@ -45,6 +60,32 @@ const PersonalDataForm: React.FC = () => {
       }
     };
     fetchStates();
+
+    let data = step2.formData;
+    if (!data) {
+      const storedData = sessionStorage.getItem(SESSION_STORAGE_KEYS.step2);
+      data = storedData ? JSON.parse(storedData) : null;
+      if (!data) return;
+    }
+
+    setValue('name', data.name);
+    setValue('phoneNumber', data.phoneNumber);
+    setValue('birthday', data.birthday);
+    setValue('state', data.state);
+    setValue('city', data.city);
+    setValue('linkedin', data.linkedin);
+    setValue('github', data.github);
+    const stateName = stateNames[data.state];
+    if (stateName) {
+      setSelectedState({ label: stateName, value: data.state });
+
+      fetchCities(data.state).then(citiesOptions => {
+        setCities(citiesOptions);
+        if (data.city) {
+          setSelectedCity({ label: data.city, value: data.city });
+        }
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -52,7 +93,7 @@ const PersonalDataForm: React.FC = () => {
     const fetchCities = async () => {
       const response = await fetchCitiesByState(selectedState.value);
       if (response.length > 0) {
-        const citiesOptions = response.map((city: any) => ({
+        const citiesOptions = response.map((city: City) => ({
           label: city.nome,
           value: city.nome,
         }));
@@ -62,17 +103,32 @@ const PersonalDataForm: React.FC = () => {
     fetchCities();
   }, [selectedState]);
 
+  const storeValue = (field: keyof PersonalDataSchemaType, value: string) => {
+    const values = getValues();
+    const newValues = { ...values, [field]: value };
+    setValue(field, value);
+    setStep2(prev => ({
+      ...prev,
+      formData: newValues,
+    }));
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.step2, JSON.stringify(newValues));
+  };
+
   const handleStateChange = (option: IOption) => {
     setSelectedState(option);
     setSelectedCity({} as IOption);
     setValue('state', option.value);
     setValue('city', '');
     trigger('state');
+
+    storeValue('state', option.value);
+    storeValue('city', '');
   };
   const handleCityChange = (option: IOption) => {
     setSelectedCity(option);
     setValue('city', option.value);
     trigger('city');
+    storeValue('city', option.value);
   };
 
   const onSubmit = (data: PersonalDataSchemaType) => {
@@ -87,7 +143,9 @@ const PersonalDataForm: React.FC = () => {
           id="name"
           labelText="Nome completo"
           placeholder="Insira seu nome"
-          register={register('name')}
+          register={register('name', {
+            onChange: e => storeValue('name', e.target.value),
+          })}
           errorType={errors.name}
         />
         <UnderlinedInput
@@ -95,7 +153,7 @@ const PersonalDataForm: React.FC = () => {
           labelText="Telefone"
           placeholder="Insira seu telefone"
           register={register('phoneNumber', {
-            onChange: e => setValue('phoneNumber', mobileMask(e.target.value)),
+            onChange: e => storeValue('phoneNumber', mobileMask(e.target.value)),
           })}
           errorType={errors.phoneNumber}
         />
@@ -104,7 +162,7 @@ const PersonalDataForm: React.FC = () => {
           labelText="Data de nascimento"
           placeholder="Insira sua data de nascimento"
           register={register('birthday', {
-            onChange: e => setValue('birthday', ddmmyyyyMask(e.target.value)),
+            onChange: e => storeValue('birthday', ddmmyyyyMask(e.target.value)),
           })}
           errorType={errors.birthday}
         />
@@ -135,14 +193,18 @@ const PersonalDataForm: React.FC = () => {
           id="linkedin"
           labelText="Linkedin"
           placeholder="Insira o link do seu perfil"
-          register={register('linkedin')}
+          register={register('linkedin', {
+            onChange: e => storeValue('linkedin', e.target.value),
+          })}
           errorType={errors.linkedin}
         />
         <UnderlinedInput
           id="github"
           labelText="Github"
           placeholder="Insira o link do seu perfil"
-          register={register('github')}
+          register={register('github', {
+            onChange: e => storeValue('github', e.target.value),
+          })}
           errorType={errors.github}
         />
       </Content>
