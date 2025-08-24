@@ -1,19 +1,20 @@
-import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
-import {
-  InputContainer,
-  Container,
-  Label,
-  Placeholder,
-  SelectedOption,
-  Input,
-  InputWrapper,
-  SelectArea,
-  ErrorMessage,
-} from './styles';
-import OptionsSelect from './Options';
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { IOption } from '@/interfaces/option';
+import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+  Container,
+  ErrorMessage,
+  Input,
+  InputContainer,
+  InputWrapper,
+  Label,
+  Placeholder,
+  SelectArea,
+  SelectedOption,
+} from './underlinedSelectStyles';
 import { Icons } from '@/components/Icons/Icons';
+import OptionsSelect from './Options';
+import { FieldError } from 'react-hook-form';
 
 interface ISelectProps {
   id: string;
@@ -25,11 +26,11 @@ interface ISelectProps {
   disabled?: boolean;
   label?: string;
   enableSearch?: boolean;
-  errorMessage?: string;
+  error: FieldError | undefined;
   fieldClassName?: string;
 }
 
-const SelectComponent: FC<ISelectProps> = ({
+const UnderlinedSelect: FC<ISelectProps> = ({
   id,
   options,
   selectedOption,
@@ -39,7 +40,7 @@ const SelectComponent: FC<ISelectProps> = ({
   label,
   disabled = false,
   enableSearch = false,
-  errorMessage,
+  error,
   fieldClassName,
 }) => {
   const selectRef = useRef<HTMLDivElement>(null);
@@ -72,6 +73,12 @@ const SelectComponent: FC<ISelectProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [setIsOpen]);
+
+  const filledClassname = selectedOption.label ? 'filled' : '';
+  const errorClassname = error ? 'has-error' : '';
+  const openClassname = isOpen ? 'opened' : '';
+  const inpuytClassname = `${errorClassname} ${openClassname} ${filledClassname}`.trim();
+
   return (
     <Container id="select-component" className={fieldClassName}>
       {label && <Label>{label}</Label>}
@@ -81,11 +88,11 @@ const SelectComponent: FC<ISelectProps> = ({
           type="button"
           onClick={toggleSelect}
           disabled={disabled}
-          className={isOpen ? 'opened' : ''}
+          className={inpuytClassname}
         >
           <RenderIf isFalse={enableSearch && isOpen}>
             {selectedOption.label && <SelectedOption>{selectedOption.label}</SelectedOption>}
-            {!selectedOption.label && <Placeholder>{placeholder}</Placeholder>}
+            {!selectedOption.label && <Placeholder className={errorClassname}>{placeholder}</Placeholder>}
           </RenderIf>
           <RenderIf isTrue={isOpen && enableSearch}>
             <InputWrapper onClick={e => e.stopPropagation()}>
@@ -98,7 +105,7 @@ const SelectComponent: FC<ISelectProps> = ({
               />
             </InputWrapper>
           </RenderIf>
-          <Icons.CaretDown className={isOpen ? 'opened' : 'closed'} />
+          <Icons.MdKeyboardArrowDown className={isOpen ? 'opened' : 'closed'} />
         </InputContainer>
         <RenderIf isTrue={isOpen}>
           <OptionsSelect
@@ -108,9 +115,9 @@ const SelectComponent: FC<ISelectProps> = ({
             handleOptionClick={handleOptionClick}
           />
         </RenderIf>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        {error && <ErrorMessage>{error.message}</ErrorMessage>}
       </SelectArea>
     </Container>
   );
 };
-export default SelectComponent;
+export default UnderlinedSelect;
