@@ -1,6 +1,8 @@
 'use client';
 
+import PersonalDataForm from '@/components/Forms/candidateRegister/PersonalData/PersonalDataForm';
+
 const PersonalDataPage: React.FC = () => {
-  return <h1>dados pessoais</h1>;
+  return <PersonalDataForm />;
 };
 export default PersonalDataPage;

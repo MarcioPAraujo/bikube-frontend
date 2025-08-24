@@ -2,8 +2,6 @@
 import React, { ElementType, FC } from 'react';
 import Logo from '../../../public/images/BIKUBE_LOGO.svg';
 import { BsArrowLeftCircle } from 'react-icons/bs';
-import { BsEye } from 'react-icons/bs';
-import { BsEyeSlash } from 'react-icons/bs';
 import { BsPersonFill } from 'react-icons/bs';
 import UserIcon from './UserIcon';
 import { BsCaretRightFill } from 'react-icons/bs';
@@ -17,6 +15,7 @@ import { BsChevronDown } from 'react-icons/bs';
 import { VscEyeClosed } from 'react-icons/vsc';
 import { VscEye } from 'react-icons/vsc';
 import { BsExclamationOctagonFill } from 'react-icons/bs';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 interface IconProps {
   size?: number;
@@ -47,5 +46,6 @@ export const Icons = {
   ChevronDoubleLeft: (props: IconProps) => <IconWrapper Icon={BsChevronDoubleLeft} {...props} />,
   ChevronDown: (props: IconProps) => <IconWrapper Icon={BsChevronDown} {...props} />,
   BsExclamationOctagonFill: (props: IconProps) => <IconWrapper Icon={BsExclamationOctagonFill} {...props} />,
+  MdKeyboardArrowDown: (props: IconProps) => <IconWrapper Icon={MdKeyboardArrowDown} {...props} />,
   Logo: () => <Logo />,
 };

@@ -1,8 +1,8 @@
 'use client';
 
-import { StepsRegistrationProvider, useStepsRegistration } from '@/hooks/useStepsRegistration';
+import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import Image from 'next/image';
-import { FC, ReactNode, Suspense } from 'react';
+import { FC, ReactNode } from 'react';
 import { BarContent, ChildenWrapper, Header, Main, ProgressbarContainer } from './layoutStyles';
 
 interface IChildren {

@@ -36,7 +36,6 @@ export const PersonalDataSchema = yup.object().shape({
       return years <= 120;
     }),
   state: yup.string().required('O estado é obrigatório'),
-  uf: yup.string().required(),
   city: yup.string().required('A cidade é obrigatória'),
   phoneNumber: yup
     .string()
@@ -45,7 +44,7 @@ export const PersonalDataSchema = yup.object().shape({
     .test('repeated', 'Númeor inválido', value => {
       if (!value) return false;
       const numeric = value.replace(/\D/g, '');
-      return /(.)\1{4}/g.test(numeric);
+      return !/(.)\1{4}/g.test(numeric);
     }),
   linkedin: yup
     .string()
