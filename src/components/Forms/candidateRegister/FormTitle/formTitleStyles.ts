@@ -24,7 +24,6 @@ export const Button = styled.button`
   height: 3.6rem;
 
   border: none;
-  border-radius: 1rem;
   color: ${({ theme }) => theme.colors.WHITE};
   font-weight: 600;
 
