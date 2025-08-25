@@ -60,7 +60,6 @@ const PersonalDataForm: React.FC = () => {
           placeholder="Selecione seu estado"
           options={states}
           selectedOption={selectedState}
-          setSelectedOption={setSelectedState}
           onChange={handleStateChange}
           error={errors.state}
         />
@@ -71,7 +70,6 @@ const PersonalDataForm: React.FC = () => {
           onChange={handleCityChange}
           options={cities}
           selectedOption={selectedCity}
-          setSelectedOption={setSelectedCity}
           enableSearch
           disabled={!selectedState || cities.length === 0}
           error={errors.city}

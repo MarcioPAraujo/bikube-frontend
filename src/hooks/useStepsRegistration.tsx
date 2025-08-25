@@ -1,5 +1,5 @@
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { AcedemicDataSchemaType } from '@/validation/candidateRegister/AcademicData';
+import { AcademicDataSchemaType } from '@/validation/candidateRegister/AcademicData';
 import { CredentialsSchemaType } from '@/validation/candidateRegister/CredentialSchema';
 import { PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalDataSchema';
 import { ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
@@ -29,13 +29,13 @@ interface IStepsValues {
 
   setStep1: Dispatch<SetStateAction<StepType<CredentialsSchemaType>>>;
   setStep2: Dispatch<SetStateAction<StepType<PersonalDataSchemaType>>>;
-  setStep3: Dispatch<SetStateAction<StepType<AcedemicDataSchemaType>>>;
+  setStep3: Dispatch<SetStateAction<StepType<AcademicDataSchemaType>>>;
   setStep4: Dispatch<SetStateAction<StepType<ProfessionalSchemaType>>>;
   setStep5: Dispatch<SetStateAction<StepType<SkillsSchemaType>>>;
 
   step1: StepType<CredentialsSchemaType>;
   step2: StepType<PersonalDataSchemaType>;
-  step3: StepType<AcedemicDataSchemaType>;
+  step3: StepType<AcademicDataSchemaType>;
   step4: StepType<ProfessionalSchemaType>;
   step5: StepType<SkillsSchemaType>;
 }
@@ -68,7 +68,7 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
 
   const [step1, setStep1] = useState<StepType<CredentialsSchemaType>>(setInitialStepState(1));
   const [step2, setStep2] = useState<StepType<PersonalDataSchemaType>>(setInitialStepState(2));
-  const [step3, setStep3] = useState<StepType<AcedemicDataSchemaType>>(setInitialStepState(3));
+  const [step3, setStep3] = useState<StepType<AcademicDataSchemaType>>(setInitialStepState(3));
   const [step4, setStep4] = useState<StepType<ProfessionalSchemaType>>(setInitialStepState(4));
   const [step5, setStep5] = useState<StepType<SkillsSchemaType>>(setInitialStepState(5));
 

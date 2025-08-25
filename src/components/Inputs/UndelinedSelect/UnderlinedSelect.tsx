@@ -20,7 +20,6 @@ interface ISelectProps {
   id: string;
   options: IOption[];
   selectedOption: IOption;
-  setSelectedOption: Dispatch<SetStateAction<IOption>>;
   onChange: (option: IOption) => void;
   placeholder: string;
   disabled?: boolean;
@@ -34,7 +33,6 @@ const UnderlinedSelect: FC<ISelectProps> = ({
   id,
   options,
   selectedOption,
-  setSelectedOption,
   onChange,
   placeholder,
   label,
@@ -50,7 +48,6 @@ const UnderlinedSelect: FC<ISelectProps> = ({
     option.label.toLowerCase().includes(searchValue.toLowerCase()),
   );
   const handleOptionClick = (option: IOption) => {
-    setSelectedOption(option);
     onChange(option);
     setIsOpen(false);
   };

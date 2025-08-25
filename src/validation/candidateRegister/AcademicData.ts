@@ -2,9 +2,9 @@ import { DDMMYYYY_REGEX } from '@/utils/regex/regexes';
 import { parse } from 'date-fns';
 import * as yup from 'yup';
 
-export type AcedemicDataSchemaType = yup.InferType<typeof AcedemicDataSchema>;
+export type AcademicDataSchemaType = yup.InferType<typeof AcademicDataSchema>;
 
-export const AcedemicDataSchema = yup.object().shape({
+export const AcademicDataSchema = yup.object().shape({
   languages: yup
     .array()
     .of(

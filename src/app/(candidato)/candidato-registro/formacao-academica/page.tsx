@@ -1,6 +1,8 @@
 'use client';
 
+import AcedmicBackgroundForm from '@/components/Forms/candidateRegister/AcademicBackground/AcademicBackgroundForm';
+
 const AcademicBackgroundPage: React.FC = () => {
-  return <h1>fomração academica</h1>;
+  return <AcedmicBackgroundForm />;
 };
 export default AcademicBackgroundPage;
