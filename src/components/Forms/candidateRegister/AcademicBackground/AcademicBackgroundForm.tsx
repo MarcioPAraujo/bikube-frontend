@@ -3,15 +3,26 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import FormTitle from '../FormTitle/FormTitle';
-import { Form } from './academicBackgroundFormStyles';
+import {
+  AddLanguageButton,
+  Content,
+  Form,
+  LanguageWrapper,
+  Legend,
+  RemoveButton,
+} from './academicBackgroundFormStyles';
 import { useRouter } from 'next/navigation';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
 import { IOption } from '@/interfaces/option';
 import languages from '@/utils/languages';
 import { useEffect, useState } from 'react';
+import RadioInput from '@/components/Inputs/Radio/Radio';
+import { Icons } from '@/components/Icons/Icons';
+import { theme } from '@/styles/theme';
 
 const languageOptions: IOption[] = languages.map(lang => ({ label: lang, value: lang }));
+const levels: string[] = ['Básico', 'Intermediário', 'Avançado'];
 
 const AcedmicBackgroundForm: React.FC = () => {
   const { setCurrentStep, step2, step3, setStep3, step4 } = useStepsRegistration();
@@ -21,6 +32,7 @@ const AcedmicBackgroundForm: React.FC = () => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<AcademicDataSchemaType>({
     resolver: yupResolver(AcademicDataSchema),
@@ -35,7 +47,9 @@ const AcedmicBackgroundForm: React.FC = () => {
 
   const [availableLanguages, setAvailableLanguages] = useState<IOption[]>(languageOptions);
   const [selectedLanguages, setSelectedLanguages] = useState<Record<string, IOption>>({});
+  const [selectedLevels, setSelectedLevels] = useState<Record<string, string>>({});
 
+  // It synchronizes the available languages with the currently selected ones.
   useEffect(() => {
     const currentSelectedLanguages = Object.values(selectedLanguages);
 
@@ -50,11 +64,16 @@ const AcedmicBackgroundForm: React.FC = () => {
     append({ language: '', level: '' });
   };
 
-  // fix apend available languages when remove
   const removeLanguage = (index: number, fieldId: string) => {
     remove(index); // remove from field array
+
+    const newSelectedLevels = { ...selectedLevels };
+    delete newSelectedLevels[fieldId];
+
     const newSelectedLanguages = { ...selectedLanguages };
     delete newSelectedLanguages[fieldId];
+
+    setSelectedLevels(newSelectedLevels);
     setSelectedLanguages(newSelectedLanguages);
   };
 
@@ -69,16 +88,26 @@ const AcedmicBackgroundForm: React.FC = () => {
     setAvailableLanguages(newAvailableLanguages);
   };
 
+  const onLevelChange = (fieldId: string, level: string, index: number) => {
+    const newSelectedLevels = { ...selectedLevels, [fieldId]: level };
+    setSelectedLevels(newSelectedLevels);
+    setValue(`languages.${index}.level`, level);
+  };
+
+  console.log(getValues());
+
   return (
     <Form>
       <FormTitle title="Formação acadêmica" onBack={() => router.push(step4.pathname)} />
-      <div>
-        <p>Idiomas, adicione até 5 idiomas que ache relevante - (Opcional)</p>
-        <button type="button" onClick={addLanguage}>
-          adicionar
-        </button>
+      <Content>
+        <Legend>Idiomas, adicione até 5 idiomas que ache relevante - (Opcional)</Legend>
+        {fields.length < 5 && (
+          <AddLanguageButton type="button" onClick={addLanguage}>
+            adicionar
+          </AddLanguageButton>
+        )}
         {fields.map((field, index) => (
-          <div key={field.id}>
+          <LanguageWrapper key={field.id}>
             <UnderlinedSelect
               id={field.id}
               label="Idioma"
@@ -88,19 +117,24 @@ const AcedmicBackgroundForm: React.FC = () => {
               onChange={(option: IOption) => onLanguageChange(field.id, option, index)}
               error={errors.languages?.[index]?.language}
             />
-            <UnderlinedInput
-              id={field.id}
-              labelText="Nível de domínio"
-              placeholder="Insira o nível de domínio"
-              register={register(`languages.${index}.level`)}
-              errorType={errors.languages?.[index]?.level}
-            />
-            <button type="button" onClick={() => removeLanguage(index, field.id)}>
-              remover
-            </button>
-          </div>
+            {levels.map(level => (
+              <RadioInput
+                key={`${field.id}${level}`}
+                id={`${field.id}${level}`}
+                radioname={`${field.id}`}
+                label={level}
+                isChecked={selectedLevels[field.id] === level}
+                onChange={() => onLevelChange(field.id, level, index)}
+              />
+            ))}
+            <div>
+              <RemoveButton type="button" onClick={() => removeLanguage(index, field.id)}>
+                <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
+              </RemoveButton>
+            </div>
+          </LanguageWrapper>
         ))}
-      </div>
+      </Content>
     </Form>
   );
 };

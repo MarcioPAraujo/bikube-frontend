@@ -16,6 +16,7 @@ import { VscEyeClosed } from 'react-icons/vsc';
 import { VscEye } from 'react-icons/vsc';
 import { BsExclamationOctagonFill } from 'react-icons/bs';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+import { PiTrashSimpleFill } from 'react-icons/pi';
 
 interface IconProps {
   size?: number;
@@ -47,5 +48,6 @@ export const Icons = {
   ChevronDown: (props: IconProps) => <IconWrapper Icon={BsChevronDown} {...props} />,
   BsExclamationOctagonFill: (props: IconProps) => <IconWrapper Icon={BsExclamationOctagonFill} {...props} />,
   MdKeyboardArrowDown: (props: IconProps) => <IconWrapper Icon={MdKeyboardArrowDown} {...props} />,
+  Trash: (props: IconProps) => <IconWrapper Icon={PiTrashSimpleFill} {...props} />,
   Logo: () => <Logo />,
 };
