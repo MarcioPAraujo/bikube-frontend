@@ -53,7 +53,7 @@ const AcedmicBackgroundForm: React.FC = () => {
     mode: 'onChange',
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     rules: { maxLength: 5 },
     name: 'languages',
@@ -62,6 +62,7 @@ const AcedmicBackgroundForm: React.FC = () => {
     fields: educationArray,
     append: appendEducation,
     remove: removeEducation,
+    replace: replaceEducation,
   } = useFieldArray({
     control,
     name: 'education',
@@ -89,34 +90,11 @@ const AcedmicBackgroundForm: React.FC = () => {
     }
 
     if (storedData.languages && storedData.languages.length > 0) {
-      storedData.languages.forEach((lang: { language: string; level: string }, index: number) => {
-        if (index === 0) {
-          setValue(`languages.${index}.language`, lang.language);
-          setValue(`languages.${index}.level`, lang.level);
-        } else {
-          append({ language: lang.language, level: lang.level });
-        }
-      });
+      replace(storedData.languages);
     }
 
     if (storedData.education && storedData.education.length > 0) {
-      storedData.education.forEach(
-        (edu: { instituition: string; course: string; startDate: string; endDate: string }, index: number) => {
-          if (index === 0) {
-            setValue(`education.${index}.instituition`, edu.instituition);
-            setValue(`education.${index}.course`, edu.course);
-            setValue(`education.${index}.startDate`, edu.startDate);
-            setValue(`education.${index}.endDate`, edu.endDate);
-          } else {
-            appendEducation({
-              instituition: edu.instituition,
-              course: edu.course,
-              startDate: edu.startDate,
-              endDate: edu.endDate,
-            });
-          }
-        },
-      );
+      replaceEducation(storedData.education);
     }
   }, []);
 

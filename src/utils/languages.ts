@@ -64,7 +64,7 @@ const languages: string[] = [
 
 languages.sort((a, b) => a.localeCompare(b, 'pt-BR'));
 
-export default languages.map((lang, idx) => ({
+export default languages.map(lang => ({
   label: lang,
-  value: idx.toString(),
+  value: lang,
 })) as IOption[];
