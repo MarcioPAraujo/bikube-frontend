@@ -1,3 +1,5 @@
+import { IOption } from '@/interfaces/option';
+
 const languages: string[] = [
   'Inglês',
   'Chinês Mandarim',
@@ -60,4 +62,9 @@ const languages: string[] = [
   'Hebraico',
 ];
 
-export default languages.sort((a, b) => a.localeCompare(b, 'pt-BR'));
+languages.sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+export default languages.map((lang, idx) => ({
+  label: lang,
+  value: idx.toString(),
+})) as IOption[];

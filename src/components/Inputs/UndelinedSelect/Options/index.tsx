@@ -5,12 +5,12 @@ import { IOption } from '@/interfaces/option';
 interface Option {
   options: IOption[];
   handleOptionClick: (option: IOption) => void;
-  selectedOption: IOption;
+  selectedOption: string | undefined;
   id: string;
 }
 const OptionsSelect: FC<Option> = ({ options, selectedOption, handleOptionClick, id }) => {
   const isSelected = (option: IOption) => {
-    return selectedOption.value === option.value;
+    return selectedOption === option.value;
   };
   return (
     <Options>

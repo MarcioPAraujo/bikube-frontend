@@ -1,6 +1,6 @@
 import { AcademicDataSchema, AcademicDataSchemaType } from '@/validation/candidateRegister/AcademicData';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import FormTitle from '../FormTitle/FormTitle';
 import {
@@ -12,6 +12,9 @@ import {
   Legend,
   RemoveButton,
   EducationWrapper,
+  RadioOptions,
+  OptionsWrapper,
+  RadioErrorMessage,
 } from './academicBackgroundFormStyles';
 import { useRouter } from 'next/navigation';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
@@ -32,8 +35,6 @@ export type EducationEntry = {
   startDate: string;
   endDate: string;
 };
-
-const languageOptions: IOption[] = languages.map(lang => ({ label: lang, value: lang }));
 const levels: string[] = ['Básico', 'Intermediário', 'Avançado'];
 
 const AcedmicBackgroundForm: React.FC = () => {
@@ -67,89 +68,69 @@ const AcedmicBackgroundForm: React.FC = () => {
     rules: { maxLength: 3 },
   });
 
-  const [availableLanguages, setAvailableLanguages] = useState<IOption[]>(languageOptions);
-  const [selectedLanguages, setSelectedLanguages] = useState<Record<string, IOption>>({});
-  const [selectedLevels, setSelectedLevels] = useState<Record<string, string>>({});
-
   useEffect(() => {
     setCurrentStep(3);
-    setValue('education', [
-      {
-        instituition: '',
-        course: '',
-        startDate: '',
-        endDate: '',
-      },
-    ]);
+
+    let storedData = step3.formData;
+    if (!storedData) {
+      const sessionData = sessionStorage.getItem(SESSION_STORAGE_KEYS.step3);
+      storedData = sessionData ? JSON.parse(sessionData) : null;
+      if (!storedData) {
+        setValue('education', [
+          {
+            instituition: '',
+            course: '',
+            startDate: '',
+            endDate: '',
+          },
+        ]);
+        return;
+      }
+    }
+
+    if (storedData.languages && storedData.languages.length > 0) {
+      storedData.languages.forEach((lang: { language: string; level: string }, index: number) => {
+        if (index === 0) {
+          setValue(`languages.${index}.language`, lang.language);
+          setValue(`languages.${index}.level`, lang.level);
+        } else {
+          append({ language: lang.language, level: lang.level });
+        }
+      });
+    }
+
+    if (storedData.education && storedData.education.length > 0) {
+      storedData.education.forEach(
+        (edu: { instituition: string; course: string; startDate: string; endDate: string }, index: number) => {
+          if (index === 0) {
+            setValue(`education.${index}.instituition`, edu.instituition);
+            setValue(`education.${index}.course`, edu.course);
+            setValue(`education.${index}.startDate`, edu.startDate);
+            setValue(`education.${index}.endDate`, edu.endDate);
+          } else {
+            appendEducation({
+              instituition: edu.instituition,
+              course: edu.course,
+              startDate: edu.startDate,
+              endDate: edu.endDate,
+            });
+          }
+        },
+      );
+    }
   }, []);
 
   // It synchronizes the available languages with the currently selected ones.
   useEffect(() => {
-    const currentSelectedLanguages = Object.values(selectedLanguages);
-
-    const newAvailableLanguages = languageOptions.filter(
-      lang => !currentSelectedLanguages.some(selected => selected.value === lang.value),
-    );
-
-    setAvailableLanguages(newAvailableLanguages);
-
     const languageValues = getValues('languages') || [];
     const educationValues = getValues('education') || [];
 
     const newValues = { languages: languageValues, education: educationValues };
     setStep3(prev => ({ ...prev, formData: newValues }));
     sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
-  }, [fields, selectedLanguages]);
+  }, [fields]);
 
-  const addLanguage = () => {
-    append({ language: '', level: '' });
-  };
-
-  const removeLanguage = (index: number, fieldId: string) => {
-    remove(index); // remove from field array
-
-    const newSelectedLevels = { ...selectedLevels };
-    delete newSelectedLevels[fieldId];
-
-    const newSelectedLanguages = { ...selectedLanguages };
-    delete newSelectedLanguages[fieldId];
-
-    setSelectedLevels(newSelectedLevels);
-    setSelectedLanguages(newSelectedLanguages);
-  };
-
-  const onLanguageChange = (fieldId: string, option: IOption, index: number) => {
-    // Atualiza o idioma selecionado no estado local
-    const newSelectedLanguages = { ...selectedLanguages, [fieldId]: option };
-    setSelectedLanguages(newSelectedLanguages);
-    // Atualiza o valor do campo no react-hook-form
-    setValue(`languages.${index}.language`, option.label);
-    // Remove o idioma selecionado das opções disponíveis
-    const newAvailableLanguages = availableLanguages.filter(lang => lang.value !== option.value);
-    setAvailableLanguages(newAvailableLanguages);
-  };
-
-  const onLevelChange = (fieldId: string, level: string, index: number) => {
-    const newSelectedLevels = { ...selectedLevels, [fieldId]: level };
-    const languagesValues = getValues('languages') || [];
-    const newLanguageRecord: Record<string, { language: string; level: string }> = {};
-    languagesValues.forEach((langEntry, i) => {
-      if (i === index) {
-        newLanguageRecord[fieldId] = { language: langEntry.language || '', level };
-      } else {
-        const existingLevel = selectedLevels[fields[i].id];
-        newLanguageRecord[fields[i].id] = { language: langEntry.language || '', level: existingLevel || '' };
-      }
-    });
-
-    const newValues = { languages: Object.values(newLanguageRecord), education: getValues('education') || [] };
-    setStep3(prev => ({ ...prev, formData: newValues }));
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
-
-    setSelectedLevels(newSelectedLevels);
-    setValue(`languages.${index}.level`, level);
-  };
-
+  // education date input handler with mask
   const onDateChange = (value: string, index: number, field: 'startDate' | 'endDate') => {
     const formattedDate = ddmmyyyyMask(value);
     setValue(`education.${index}.${field}`, formattedDate, { shouldValidate: true });
@@ -166,6 +147,7 @@ const AcedmicBackgroundForm: React.FC = () => {
     }
   };
 
+  // education input handler to store values in session storage
   const storeValues = (value: string, index: number, field: keyof EducationEntry) => {
     const eduValues = getValues('education') || [];
     const languagesValues = getValues('languages') || [];
@@ -190,34 +172,46 @@ const AcedmicBackgroundForm: React.FC = () => {
         <Fieldset>
           <Legend>Idiomas, adicione até 5 idiomas que ache relevante - (Opcional)</Legend>
           {fields.length < 5 && (
-            <AddLanguageButton type="button" onClick={addLanguage}>
+            <AddLanguageButton type="button" onClick={() => append({ language: '', level: '' })}>
               adicionar
             </AddLanguageButton>
           )}
           {fields.map((field, index) => (
             <LanguageWrapper key={field.id}>
-              <UnderlinedSelect
-                id={field.id}
-                enableSearch
-                label="Idioma"
-                placeholder="Selecione o idioma"
-                options={availableLanguages}
-                selectedOption={selectedLanguages[field.id] || { label: '', value: '' }}
-                onChange={(option: IOption) => onLanguageChange(field.id, option, index)}
-                error={errors.languages?.[index]?.language}
+              <Controller
+                control={control}
+                name={`languages.${index}.language`}
+                render={({ field }) => (
+                  <UnderlinedSelect
+                    id={`languages.${index}.language`}
+                    enableSearch
+                    label="Idioma"
+                    placeholder="Selecione o idioma"
+                    options={languages}
+                    selectedOption={field.value}
+                    onChange={field.onChange}
+                    error={errors.languages?.[index]?.language}
+                  />
+                )}
               />
-              {levels.map(level => (
-                <RadioInput
-                  key={`${field.id}${level}`}
-                  id={`${field.id}${level}`}
-                  radioname={`${field.id}`}
-                  label={level}
-                  isChecked={selectedLevels[field.id] === level}
-                  onChange={() => onLevelChange(field.id, level, index)}
-                />
-              ))}
+              <RadioOptions>
+                <OptionsWrapper>
+                  {levels.map(level => (
+                    <RadioInput
+                      key={`${field.id}${level}`}
+                      id={`${field.id}${level}`}
+                      label={level}
+                      value={level}
+                      register={register(`languages.${index}.level`)}
+                    />
+                  ))}
+                </OptionsWrapper>
+                {errors.languages?.[index]?.level && (
+                  <RadioErrorMessage>{errors.languages[index]?.level?.message}</RadioErrorMessage>
+                )}
+              </RadioOptions>
               <div>
-                <RemoveButton type="button" onClick={() => removeLanguage(index, field.id)}>
+                <RemoveButton type="button" onClick={() => remove(index)}>
                   <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
                 </RemoveButton>
               </div>

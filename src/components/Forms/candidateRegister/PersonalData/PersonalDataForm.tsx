@@ -5,20 +5,17 @@ import mobileMask from '@/utils/masks/mobileMask';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
 import usePersonalDataForm from './usePersonalDataForm';
+import { Controller } from 'react-hook-form';
+import { stateNames } from '@/utils/statesNames';
 
 const PersonalDataForm: React.FC = () => {
   const {
-    hookform: { errors, register, handleSubmit },
+    hookform: { errors, register, handleSubmit, control, setValue },
     states,
     cities,
     selectedState,
-    selectedCity,
-    setSelectedState,
-    setSelectedCity,
     backToPreviousStep,
     storeValue,
-    handleStateChange,
-    handleCityChange,
     onSubmit,
   } = usePersonalDataForm();
 
@@ -53,26 +50,44 @@ const PersonalDataForm: React.FC = () => {
           })}
           errorType={errors.birthday}
         />
-        <UnderlinedSelect
-          id="state"
-          enableSearch
-          label="Estado"
-          placeholder="Selecione seu estado"
-          options={states}
-          selectedOption={selectedState}
-          onChange={handleStateChange}
-          error={errors.state}
+        <Controller
+          control={control}
+          name="state"
+          render={({ field }) => (
+            <UnderlinedSelect
+              id="state"
+              enableSearch
+              label="Estado"
+              placeholder="Selecione seu estado"
+              options={states}
+              selectedOption={stateNames[field.value]}
+              onChange={value => {
+                field.onChange(value);
+                setValue('city', '');
+              }}
+              error={errors.state}
+            />
+          )}
         />
-        <UnderlinedSelect
-          id="city"
-          label="Cidade"
-          placeholder="Selecione sua cidade"
-          onChange={handleCityChange}
-          options={cities}
-          selectedOption={selectedCity}
-          enableSearch
-          disabled={!selectedState || cities.length === 0}
-          error={errors.city}
+        <Controller
+          control={control}
+          name="city"
+          render={({ field }) => (
+            <UnderlinedSelect
+              id="city"
+              label="Cidade"
+              placeholder="Selecione sua cidade"
+              options={cities}
+              onChange={value => {
+                field.onChange(value);
+                storeValue('city', value);
+              }}
+              selectedOption={field.value}
+              enableSearch
+              disabled={!selectedState || cities.length === 0}
+              error={errors.city}
+            />
+          )}
         />
         <UnderlinedInput
           id="linkedin"

@@ -5,16 +5,14 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 interface CheckboxProps {
   id: string;
   label: string;
-  radioname: string;
-  isChecked: boolean;
-  onChange: VoidFunction;
+  value: string;
+  register?: UseFormRegisterReturn;
 }
 
-const RadioInput: FC<CheckboxProps> = ({ isChecked, radioname, id, label, onChange }) => {
-  const classname = isChecked ? 'checked' : '';
+const RadioInput: FC<CheckboxProps> = ({ value, id, label, register }) => {
   return (
-    <Label htmlFor={id} className={`${classname}`}>
-      <Input type="radio" name={radioname} id={id} checked={isChecked} onChange={onChange} />
+    <Label htmlFor={id}>
+      <Input type="radio" id={id} value={value} {...register} />
       <span>{label}</span>
     </Label>
   );

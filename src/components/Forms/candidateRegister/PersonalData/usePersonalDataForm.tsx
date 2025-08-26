@@ -26,11 +26,13 @@ const usePersonalDataForm = () => {
   const { setCurrentStep, step1, setStep2, step2, step3 } = useStepsRegistration();
   const router = useRouter();
   const {
+    control,
     register,
     handleSubmit,
     setValue,
     trigger,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<PersonalDataSchemaType>({
     resolver: yupResolver(PersonalDataSchema),
@@ -39,8 +41,7 @@ const usePersonalDataForm = () => {
   const [states, setStates] = useState<IOption[]>([]);
   const [cities, setCities] = useState<IOption[]>([]);
 
-  const [selectedState, setSelectedState] = useState<IOption>({} as IOption);
-  const [selectedCity, setSelectedCity] = useState<IOption>({} as IOption);
+  const selectedStateWatch = watch('state');
 
   useEffect(() => {
     setCurrentStep(2);
@@ -68,26 +69,20 @@ const usePersonalDataForm = () => {
     setValue('phoneNumber', data.phoneNumber);
     setValue('birthday', data.birthday);
     setValue('state', data.state);
-    setValue('city', data.city);
     setValue('linkedin', data.linkedin);
     setValue('github', data.github);
-    const stateName = stateNames[data.state];
-    if (stateName) {
-      setSelectedState({ label: stateName, value: data.state });
 
-      fetchCities(data.state).then(citiesOptions => {
-        setCities(citiesOptions);
-        if (data.city) {
-          setSelectedCity({ label: data.city, value: data.city });
-        }
-      });
-    }
+    fetchCities(data.state).then(citiesOptions => {
+      setCities(citiesOptions);
+    });
+
+    setValue('city', data.city);
   }, []);
 
   useEffect(() => {
-    if (!states || !selectedState) return;
+    if (!states || !selectedStateWatch) return;
     const fetchCities = async () => {
-      const response = await fetchCitiesByState(selectedState.value);
+      const response = await fetchCitiesByState(watch('state'));
       if (response.length > 0) {
         const citiesOptions = response.map((city: City) => ({
           label: city.nome,
@@ -97,7 +92,8 @@ const usePersonalDataForm = () => {
       }
     };
     fetchCities();
-  }, [selectedState]);
+    storeValue('state', selectedStateWatch);
+  }, [selectedStateWatch]);
 
   const storeValue = (field: keyof PersonalDataSchemaType, value: string) => {
     const values = getValues();
@@ -108,23 +104,6 @@ const usePersonalDataForm = () => {
       formData: newValues,
     }));
     sessionStorage.setItem(SESSION_STORAGE_KEYS.step2, JSON.stringify(newValues));
-  };
-
-  const handleStateChange = (option: IOption) => {
-    setSelectedState(option);
-    setSelectedCity({} as IOption);
-    setValue('state', option.value);
-    setValue('city', '');
-    trigger('state');
-
-    storeValue('state', option.value);
-    storeValue('city', '');
-  };
-  const handleCityChange = (option: IOption) => {
-    setSelectedCity(option);
-    setValue('city', option.value);
-    trigger('city');
-    storeValue('city', option.value);
   };
 
   const onSubmit = (data: PersonalDataSchemaType) => {
@@ -139,21 +118,18 @@ const usePersonalDataForm = () => {
   const hookform = {
     register,
     handleSubmit,
+    setValue,
     errors,
+    control,
   };
 
   return {
     hookform,
     storeValue,
     backToPreviousStep,
-    handleStateChange,
-    handleCityChange,
-    selectedState,
-    selectedCity,
-    setSelectedCity,
-    setSelectedState,
     states,
     cities,
+    selectedState: selectedStateWatch,
     onSubmit,
   };
 };

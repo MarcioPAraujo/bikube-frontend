@@ -13,7 +13,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   width: clamp(30rem, 100%, 70rem);
-  gap: 1.6rem;
+  gap: 3.6rem;
 `;
 export const Fieldset = styled.fieldset`
   display: flex;
@@ -74,4 +74,21 @@ export const AddLanguageButton = styled.button`
   &:hover {
     opacity: 0.8;
   }
+`;
+
+export const RadioOptions = styled.div`
+  position: relative;
+`;
+
+export const OptionsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+`;
+
+export const RadioErrorMessage = styled.small`
+  position: absolute;
+  bottom: -1.6rem;
+  font-size: 1.2rem;
+  color: ${({ theme }) => theme.colors.RED.hex_EB5757};
 `;

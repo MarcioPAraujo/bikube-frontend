@@ -1,6 +1,6 @@
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { IOption } from '@/interfaces/option';
-import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import {
   Container,
   ErrorMessage,
@@ -19,8 +19,8 @@ import { FieldError } from 'react-hook-form';
 interface ISelectProps {
   id: string;
   options: IOption[];
-  selectedOption: IOption;
-  onChange: (option: IOption) => void;
+  selectedOption: string | undefined;
+  onChange: (option: string) => void;
   placeholder: string;
   disabled?: boolean;
   label?: string;
@@ -48,7 +48,7 @@ const UnderlinedSelect: FC<ISelectProps> = ({
     option.label.toLowerCase().includes(searchValue.toLowerCase()),
   );
   const handleOptionClick = (option: IOption) => {
-    onChange(option);
+    onChange(option.value);
     setIsOpen(false);
   };
 
@@ -71,7 +71,7 @@ const UnderlinedSelect: FC<ISelectProps> = ({
     };
   }, [setIsOpen]);
 
-  const filledClassname = selectedOption.label ? 'filled' : '';
+  const filledClassname = selectedOption ? 'filled' : '';
   const errorClassname = error ? 'has-error' : '';
   const openClassname = isOpen ? 'opened' : '';
   const inpuytClassname = `${errorClassname} ${openClassname} ${filledClassname}`.trim();
@@ -88,8 +88,8 @@ const UnderlinedSelect: FC<ISelectProps> = ({
           className={inpuytClassname}
         >
           <RenderIf isFalse={enableSearch && isOpen}>
-            {selectedOption.label && <SelectedOption>{selectedOption.label}</SelectedOption>}
-            {!selectedOption.label && <Placeholder className={errorClassname}>{placeholder}</Placeholder>}
+            {selectedOption && <SelectedOption>{selectedOption}</SelectedOption>}
+            {!selectedOption && <Placeholder className={errorClassname}>{placeholder}</Placeholder>}
           </RenderIf>
           <RenderIf isTrue={isOpen && enableSearch}>
             <InputWrapper onClick={e => e.stopPropagation()}>
