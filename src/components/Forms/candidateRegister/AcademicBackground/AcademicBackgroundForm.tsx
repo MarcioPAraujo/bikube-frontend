@@ -24,6 +24,14 @@ import { Icons } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import { notifyError } from '@/utils/handleToast';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
+
+export type EducationEntry = {
+  instituition: string;
+  course: string;
+  startDate: string;
+  endDate: string;
+};
 
 const languageOptions: IOption[] = languages.map(lang => ({ label: lang, value: lang }));
 const levels: string[] = ['Básico', 'Intermediário', 'Avançado'];
@@ -84,6 +92,13 @@ const AcedmicBackgroundForm: React.FC = () => {
     );
 
     setAvailableLanguages(newAvailableLanguages);
+
+    const languageValues = getValues('languages') || [];
+    const educationValues = getValues('education') || [];
+
+    const newValues = { languages: languageValues, education: educationValues };
+    setStep3(prev => ({ ...prev, formData: newValues }));
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
   }, [fields, selectedLanguages]);
 
   const addLanguage = () => {
@@ -116,6 +131,21 @@ const AcedmicBackgroundForm: React.FC = () => {
 
   const onLevelChange = (fieldId: string, level: string, index: number) => {
     const newSelectedLevels = { ...selectedLevels, [fieldId]: level };
+    const languagesValues = getValues('languages') || [];
+    const newLanguageRecord: Record<string, { language: string; level: string }> = {};
+    languagesValues.forEach((langEntry, i) => {
+      if (i === index) {
+        newLanguageRecord[fieldId] = { language: langEntry.language || '', level };
+      } else {
+        const existingLevel = selectedLevels[fields[i].id];
+        newLanguageRecord[fields[i].id] = { language: langEntry.language || '', level: existingLevel || '' };
+      }
+    });
+
+    const newValues = { languages: Object.values(newLanguageRecord), education: getValues('education') || [] };
+    setStep3(prev => ({ ...prev, formData: newValues }));
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
+
     setSelectedLevels(newSelectedLevels);
     setValue(`languages.${index}.level`, level);
   };
@@ -136,6 +166,15 @@ const AcedmicBackgroundForm: React.FC = () => {
     }
   };
 
+  const storeValues = (value: string, index: number, field: keyof EducationEntry) => {
+    const eduValues = getValues('education') || [];
+    const languagesValues = getValues('languages') || [];
+    const newEducationValues = eduValues.map((edu, i) => (i === index ? { ...edu, [field]: value } : edu));
+    const newValues = { education: newEducationValues, languages: languagesValues };
+    setStep3(prev => ({ ...prev, formData: newValues }));
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
+  };
+
   const onFormSubmit = (data: AcademicDataSchemaType) => {
     if (data.education?.length === 0) {
       notifyError('Adicione ao menos uma formação acadêmica para prosseguir');
@@ -143,8 +182,6 @@ const AcedmicBackgroundForm: React.FC = () => {
     }
     console.log('submitted data: ', data);
   };
-
-  console.log('errors: ', errors);
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>
@@ -161,6 +198,7 @@ const AcedmicBackgroundForm: React.FC = () => {
             <LanguageWrapper key={field.id}>
               <UnderlinedSelect
                 id={field.id}
+                enableSearch
                 label="Idioma"
                 placeholder="Selecione o idioma"
                 options={availableLanguages}
@@ -202,14 +240,18 @@ const AcedmicBackgroundForm: React.FC = () => {
                 id={`instituition-${field.id}`}
                 labelText="Instituição"
                 placeholder="Nome da instituição"
-                register={register(`education.${index}.instituition`)}
+                register={register(`education.${index}.instituition`, {
+                  onChange: e => storeValues(e.target.value, index, 'instituition'),
+                })}
                 errorType={errors.education?.[index]?.instituition}
               />
               <UnderlinedInput
                 id={`course-${field.id}`}
                 labelText="Curso"
                 placeholder="Nome do curso"
-                register={register(`education.${index}.course`)}
+                register={register(`education.${index}.course`, {
+                  onChange: e => storeValues(e.target.value, index, 'course'),
+                })}
                 errorType={errors.education?.[index]?.course}
               />
               <UnderlinedInput
@@ -217,7 +259,10 @@ const AcedmicBackgroundForm: React.FC = () => {
                 labelText="Data de início"
                 placeholder="DD/MM/AAAA"
                 register={register(`education.${index}.startDate`, {
-                  onChange: e => onDateChange(e.target.value, index, 'startDate'),
+                  onChange: e => {
+                    onDateChange(e.target.value, index, 'startDate');
+                    storeValues(ddmmyyyyMask(e.target.value), index, 'startDate');
+                  },
                 })}
                 errorType={errors.education?.[index]?.startDate}
               />
@@ -226,7 +271,10 @@ const AcedmicBackgroundForm: React.FC = () => {
                 labelText="Data de conclusão"
                 placeholder="DD/MM/AAAA"
                 register={register(`education.${index}.endDate`, {
-                  onChange: e => onDateChange(e.target.value, index, 'endDate'),
+                  onChange: e => {
+                    onDateChange(e.target.value, index, 'endDate');
+                    storeValues(ddmmyyyyMask(e.target.value), index, 'endDate');
+                  },
                 })}
                 errorType={errors.education?.[index]?.endDate}
               />
