@@ -7,9 +7,11 @@ import {
   AddLanguageButton,
   Content,
   Form,
+  Fieldset,
   LanguageWrapper,
   Legend,
   RemoveButton,
+  EducationWrapper,
 } from './academicBackgroundFormStyles';
 import { useRouter } from 'next/navigation';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
@@ -20,6 +22,8 @@ import { useEffect, useState } from 'react';
 import RadioInput from '@/components/Inputs/Radio/Radio';
 import { Icons } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
+import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
+import { notifyError } from '@/utils/handleToast';
 
 const languageOptions: IOption[] = languages.map(lang => ({ label: lang, value: lang }));
 const levels: string[] = ['Básico', 'Intermediário', 'Avançado'];
@@ -32,11 +36,12 @@ const AcedmicBackgroundForm: React.FC = () => {
     register,
     handleSubmit,
     setValue,
+    trigger,
     getValues,
     formState: { errors },
   } = useForm<AcademicDataSchemaType>({
     resolver: yupResolver(AcademicDataSchema),
-    mode: 'onTouched',
+    mode: 'onChange',
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -44,10 +49,31 @@ const AcedmicBackgroundForm: React.FC = () => {
     rules: { maxLength: 5 },
     name: 'languages',
   });
+  const {
+    fields: educationArray,
+    append: appendEducation,
+    remove: removeEducation,
+  } = useFieldArray({
+    control,
+    name: 'education',
+    rules: { maxLength: 3 },
+  });
 
   const [availableLanguages, setAvailableLanguages] = useState<IOption[]>(languageOptions);
   const [selectedLanguages, setSelectedLanguages] = useState<Record<string, IOption>>({});
   const [selectedLevels, setSelectedLevels] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    setCurrentStep(3);
+    setValue('education', [
+      {
+        instituition: '',
+        course: '',
+        startDate: '',
+        endDate: '',
+      },
+    ]);
+  }, []);
 
   // It synchronizes the available languages with the currently selected ones.
   useEffect(() => {
@@ -94,46 +120,124 @@ const AcedmicBackgroundForm: React.FC = () => {
     setValue(`languages.${index}.level`, level);
   };
 
-  console.log(getValues());
+  const onDateChange = (value: string, index: number, field: 'startDate' | 'endDate') => {
+    const formattedDate = ddmmyyyyMask(value);
+    setValue(`education.${index}.${field}`, formattedDate, { shouldValidate: true });
+    if (field === 'endDate') {
+      const startDateErrors = errors.education?.[index]?.startDate;
+      if (startDateErrors) {
+        trigger(`education.${index}.startDate`);
+      }
+      return;
+    }
+    const endDateErrors = errors.education?.[index]?.endDate;
+    if (endDateErrors) {
+      trigger(`education.${index}.endDate`);
+    }
+  };
+
+  const onFormSubmit = (data: AcademicDataSchemaType) => {
+    if (data.education?.length === 0) {
+      notifyError('Adicione ao menos uma formação acadêmica para prosseguir');
+      return;
+    }
+    console.log('submitted data: ', data);
+  };
+
+  console.log('errors: ', errors);
 
   return (
-    <Form>
-      <FormTitle title="Formação acadêmica" onBack={() => router.push(step4.pathname)} />
+    <Form onSubmit={handleSubmit(onFormSubmit)}>
+      <FormTitle title="Formação acadêmica" onBack={() => router.push(step2.pathname)} />
       <Content>
-        <Legend>Idiomas, adicione até 5 idiomas que ache relevante - (Opcional)</Legend>
-        {fields.length < 5 && (
-          <AddLanguageButton type="button" onClick={addLanguage}>
-            adicionar
-          </AddLanguageButton>
-        )}
-        {fields.map((field, index) => (
-          <LanguageWrapper key={field.id}>
-            <UnderlinedSelect
-              id={field.id}
-              label="Idioma"
-              placeholder="Selecione o idioma"
-              options={availableLanguages}
-              selectedOption={selectedLanguages[field.id] || { label: '', value: '' }}
-              onChange={(option: IOption) => onLanguageChange(field.id, option, index)}
-              error={errors.languages?.[index]?.language}
-            />
-            {levels.map(level => (
-              <RadioInput
-                key={`${field.id}${level}`}
-                id={`${field.id}${level}`}
-                radioname={`${field.id}`}
-                label={level}
-                isChecked={selectedLevels[field.id] === level}
-                onChange={() => onLevelChange(field.id, level, index)}
+        <Fieldset>
+          <Legend>Idiomas, adicione até 5 idiomas que ache relevante - (Opcional)</Legend>
+          {fields.length < 5 && (
+            <AddLanguageButton type="button" onClick={addLanguage}>
+              adicionar
+            </AddLanguageButton>
+          )}
+          {fields.map((field, index) => (
+            <LanguageWrapper key={field.id}>
+              <UnderlinedSelect
+                id={field.id}
+                label="Idioma"
+                placeholder="Selecione o idioma"
+                options={availableLanguages}
+                selectedOption={selectedLanguages[field.id] || { label: '', value: '' }}
+                onChange={(option: IOption) => onLanguageChange(field.id, option, index)}
+                error={errors.languages?.[index]?.language}
               />
-            ))}
-            <div>
-              <RemoveButton type="button" onClick={() => removeLanguage(index, field.id)}>
-                <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
-              </RemoveButton>
-            </div>
-          </LanguageWrapper>
-        ))}
+              {levels.map(level => (
+                <RadioInput
+                  key={`${field.id}${level}`}
+                  id={`${field.id}${level}`}
+                  radioname={`${field.id}`}
+                  label={level}
+                  isChecked={selectedLevels[field.id] === level}
+                  onChange={() => onLevelChange(field.id, level, index)}
+                />
+              ))}
+              <div>
+                <RemoveButton type="button" onClick={() => removeLanguage(index, field.id)}>
+                  <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
+                </RemoveButton>
+              </div>
+            </LanguageWrapper>
+          ))}
+        </Fieldset>
+        <Fieldset>
+          <Legend>Formação acadêmica, adicione até 3 formações - (Obrigatório)</Legend>
+          {educationArray.length < 3 && (
+            <AddLanguageButton
+              type="button"
+              onClick={() => appendEducation({ instituition: '', course: '', startDate: '', endDate: '' })}
+            >
+              adicionar
+            </AddLanguageButton>
+          )}
+          {educationArray.map((field, index) => (
+            <EducationWrapper key={field.id}>
+              <UnderlinedInput
+                id={`instituition-${field.id}`}
+                labelText="Instituição"
+                placeholder="Nome da instituição"
+                register={register(`education.${index}.instituition`)}
+                errorType={errors.education?.[index]?.instituition}
+              />
+              <UnderlinedInput
+                id={`course-${field.id}`}
+                labelText="Curso"
+                placeholder="Nome do curso"
+                register={register(`education.${index}.course`)}
+                errorType={errors.education?.[index]?.course}
+              />
+              <UnderlinedInput
+                id={`startDate-${field.id}`}
+                labelText="Data de início"
+                placeholder="DD/MM/AAAA"
+                register={register(`education.${index}.startDate`, {
+                  onChange: e => onDateChange(e.target.value, index, 'startDate'),
+                })}
+                errorType={errors.education?.[index]?.startDate}
+              />
+              <UnderlinedInput
+                id={`endDate-${field.id}`}
+                labelText="Data de conclusão"
+                placeholder="DD/MM/AAAA"
+                register={register(`education.${index}.endDate`, {
+                  onChange: e => onDateChange(e.target.value, index, 'endDate'),
+                })}
+                errorType={errors.education?.[index]?.endDate}
+              />
+              <div>
+                <RemoveButton type="button" onClick={() => removeEducation(index)}>
+                  <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
+                </RemoveButton>
+              </div>
+            </EducationWrapper>
+          ))}
+        </Fieldset>
       </Content>
     </Form>
   );

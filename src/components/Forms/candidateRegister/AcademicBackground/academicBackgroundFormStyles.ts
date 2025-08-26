@@ -15,12 +15,10 @@ export const Content = styled.div`
   width: clamp(30rem, 100%, 70rem);
   gap: 1.6rem;
 `;
-
-export const LanguageWrapper = styled.fieldset`
+export const Fieldset = styled.fieldset`
   display: flex;
+  flex-direction: column;
   gap: 1.6rem;
-  align-items: self-end;
-
   border: none;
 `;
 
@@ -29,6 +27,19 @@ export const Legend = styled.legend`
   font-size: 1.4rem;
   line-height: 2rem;
   color: ${({ theme }) => theme.colors.GRAY.hex_353535};
+  margin-bottom: 1.2rem;
+`;
+
+export const LanguageWrapper = styled.div`
+  display: flex;
+  gap: 1.6rem;
+  align-items: self-end;
+`;
+
+export const EducationWrapper = styled.div`
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: repeat(2, 1fr);
 `;
 
 export const RemoveButton = styled.button`
