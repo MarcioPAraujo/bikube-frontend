@@ -1,7 +1,3 @@
-import { useForm, useFieldArray } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { ProfessionalSchema, ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
-import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import FormTitle from '../FormTitle/FormTitle';
 import {
   AddButton,
@@ -13,22 +9,11 @@ import {
   Form,
   RemoveButton,
 } from './professionalExperieceFormStyle';
-import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/Icons/Icons';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import { theme } from '@/styles/theme';
 import Textarea from '@/components/Inputs/Textarea/Textarea';
-import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
-import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { useEffect } from 'react';
 import useProfessionalExperienceForm from './useProfessionalExperienceForm';
-
-type ProfessionalExperience = {
-  company: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-};
 
 const ProfessionalExperienceForm: React.FC = () => {
   const {
