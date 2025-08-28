@@ -17,6 +17,7 @@ import { VscEye } from 'react-icons/vsc';
 import { BsExclamationOctagonFill } from 'react-icons/bs';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { PiTrashSimpleFill } from 'react-icons/pi';
+import { FaCheck } from 'react-icons/fa6';
 
 interface IconProps {
   size?: number;
@@ -49,5 +50,6 @@ export const Icons = {
   BsExclamationOctagonFill: (props: IconProps) => <IconWrapper Icon={BsExclamationOctagonFill} {...props} />,
   MdKeyboardArrowDown: (props: IconProps) => <IconWrapper Icon={MdKeyboardArrowDown} {...props} />,
   Trash: (props: IconProps) => <IconWrapper Icon={PiTrashSimpleFill} {...props} />,
+  Check: (props: IconProps) => <IconWrapper Icon={FaCheck} {...props} />,
   Logo: () => <Logo />,
 };

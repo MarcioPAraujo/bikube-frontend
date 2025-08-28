@@ -141,6 +141,9 @@ const AcedmicBackgroundForm: React.FC = () => {
       return;
     }
     console.log('submitted data: ', data);
+    setStep3(prev => ({ ...prev, formData: data }));
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(data));
+    router.push(step4.pathname);
   };
 
   return (
