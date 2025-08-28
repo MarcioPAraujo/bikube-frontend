@@ -29,6 +29,8 @@ export const BarContent = styled.span`
   background-color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
   border-radius: 1rem;
 
+  transition: width 0.3s ease-in-out;
+
   &.step-1 {
     width: 20%;
   }
