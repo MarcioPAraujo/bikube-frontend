@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const FormContainer = styled.form`
   display: flex;
@@ -24,8 +24,8 @@ export const GridContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 1.6rem;
 
-  .complemento,
-  .nome {
+  #complement,
+  #name {
     grid-column: span 2;
   }
 `;

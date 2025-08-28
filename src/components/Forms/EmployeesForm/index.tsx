@@ -206,7 +206,6 @@ const EmployeeForm = () => {
               id="name"
               labelText="Nome"
               placeholder="Digite o nome do funcionário"
-              fieldClassName="nome"
               register={register('nome')}
               errorMessage={errors.nome?.message}
             />
@@ -214,7 +213,6 @@ const EmployeeForm = () => {
               id="birthday"
               labelText="Data de nascimento"
               placeholder="DD/MM/AAAA"
-              fieldClassName="nascimento"
               register={register('data_nascimento', {
                 onChange: e => handleDateChange(e.target.value, 'data_nascimento'),
               })}
@@ -224,7 +222,6 @@ const EmployeeForm = () => {
               id="admission-date"
               labelText="Data de admissão"
               placeholder="DD/MM/AAAA"
-              fieldClassName="admissao"
               register={register('dataentrada', {
                 onChange: e => handleDateChange(e.target.value, 'dataentrada'),
               })}
@@ -234,7 +231,6 @@ const EmployeeForm = () => {
               id="cpf"
               labelText="CPF"
               placeholder="Digite o CPF do funcionário"
-              fieldClassName="cpf"
               register={register('cpf', {
                 onChange: e => handleCPFChange(e.target.value),
               })}
@@ -244,7 +240,6 @@ const EmployeeForm = () => {
               id="email"
               labelText="E-mail"
               placeholder="Digite o e-mail do funcionário"
-              fieldClassName="email"
               register={register('email')}
               errorMessage={errors.email?.message}
             />
@@ -252,7 +247,6 @@ const EmployeeForm = () => {
               id="phone"
               labelText="Telefone"
               placeholder="Digite o telefone do funcionário"
-              fieldClassName="telefone"
               register={register('telefone', {
                 onChange: e => handlePhoneChange(e.target.value),
               })}
@@ -262,7 +256,6 @@ const EmployeeForm = () => {
               id="bank-account"
               labelText="Conta Bancária"
               placeholder="Digite a conta bancária do funcionário"
-              fieldClassName="contabancaria"
               register={register('contabancaria', {
                 onChange: e => hadleBankAccountChange(e.target.value),
               })}
@@ -272,7 +265,6 @@ const EmployeeForm = () => {
               id="salary"
               labelText="Salário"
               placeholder="Digite o salário do funcionário"
-              fieldClassName="salario"
               register={register('salario', {
                 onChange: e => handleWageChange(e.target.value),
               })}
@@ -282,7 +274,6 @@ const EmployeeForm = () => {
               id="function"
               labelText="Função"
               placeholder="Digite a função do funcionário"
-              fieldClassName="funcao"
               register={register('funcao')}
               errorMessage={errors.funcao?.message}
             />
@@ -320,7 +311,6 @@ const EmployeeForm = () => {
               id="zip-code"
               labelText="CEP"
               placeholder="Digite o CEP do funcionário"
-              fieldClassName="cep"
               register={register('cep', {
                 onChange: e => handleCepChange(e.target.value),
               })}
@@ -331,7 +321,6 @@ const EmployeeForm = () => {
               id="state"
               labelText="Estado"
               placeholder={gettingAddress ? 'Buscando estado...' : 'Digite o estado do funcionário'}
-              fieldClassName="estado"
               register={register('estado')}
               errorMessage={errors.estado?.message}
             />
@@ -340,7 +329,6 @@ const EmployeeForm = () => {
               id="city"
               labelText="Cidade"
               placeholder={gettingAddress ? 'Buscando cidade...' : 'Digite a cidade do funcionário'}
-              fieldClassName="cidade"
               register={register('cidade')}
               errorMessage={errors.cidade?.message}
             />
@@ -349,7 +337,6 @@ const EmployeeForm = () => {
               id="street"
               labelText="Rua"
               placeholder={gettingAddress ? 'Buscando rua...' : 'Digite a rua do funcionário'}
-              fieldClassName="rua"
               register={register('logradouro')}
               errorMessage={errors.logradouro?.message}
             />
@@ -358,7 +345,6 @@ const EmployeeForm = () => {
               id="neighborhood"
               labelText="Bairro"
               placeholder={gettingAddress ? 'Buscando bairro...' : 'Digite o bairro do funcionário'}
-              fieldClassName="bairro"
               register={register('bairro')}
               errorMessage={errors.bairro?.message}
             />
@@ -367,7 +353,6 @@ const EmployeeForm = () => {
               id="number"
               labelText="Número"
               placeholder="Digite o número da residência"
-              fieldClassName="numero"
               register={register('numero')}
               errorMessage={errors.numero?.message}
             />
@@ -376,7 +361,6 @@ const EmployeeForm = () => {
               id="complement"
               labelText="Complemento"
               placeholder="Digite o complemento (opcional)"
-              fieldClassName="complemento"
               register={register('complemento')}
               errorMessage={errors.complemento?.message}
             />
