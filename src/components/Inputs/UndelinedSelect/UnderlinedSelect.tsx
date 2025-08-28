@@ -77,7 +77,7 @@ const UnderlinedSelect: FC<ISelectProps> = ({
   const inpuytClassname = `${errorClassname} ${openClassname} ${filledClassname}`.trim();
 
   return (
-    <Container id="select-component" className={fieldClassName}>
+    <Container id="select-component" className={`${fieldClassName} ${openClassname}`}>
       {label && <Label>{label}</Label>}
       <SelectArea ref={selectRef}>
         <InputContainer

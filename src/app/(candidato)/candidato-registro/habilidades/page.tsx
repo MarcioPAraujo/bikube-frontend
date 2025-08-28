@@ -1,6 +1,8 @@
 'use client';
 
+import SkillsForm from '@/components/Forms/candidateRegister/Skills/SkillsForm';
+
 const SkillsPage: React.FC = () => {
-  return <h1>habilidades</h1>;
+  return <SkillsForm />;
 };
 export default SkillsPage;

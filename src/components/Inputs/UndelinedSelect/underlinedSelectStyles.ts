@@ -8,6 +8,10 @@ export const Container = styled.div`
   gap: 0.4rem;
   max-width: 100%;
   width: 100%;
+
+  &.opened {
+    z-index: 10;
+  }
 `;
 export const Label = styled.p`
   color: ${({ theme }) => theme.colors.BLACK};
