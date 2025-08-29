@@ -11,6 +11,7 @@ interface IProps {
   register?: UseFormRegisterReturn;
   onCopy?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
   onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
+  classname?: string;
 }
 /**
  * This is a reusable input component that can be used in forms.
@@ -23,6 +24,7 @@ interface IProps {
  * @param register - The register function from react-hook-form to connect the input with the form
  * @param onCopy - clipboard copy event function
  * @param onPaste - clipboard paste event funtion
+ * @param classname - additional class name for custom styling
  *
  */
 const InputComponent: React.FC<IProps> = ({
@@ -35,9 +37,10 @@ const InputComponent: React.FC<IProps> = ({
   register,
   onCopy,
   onPaste,
+  classname,
 }) => {
   return (
-    <Field>
+    <Field className={classname}>
       <Label htmlFor={id}>{labelText}</Label>
       <Input
         id={id}

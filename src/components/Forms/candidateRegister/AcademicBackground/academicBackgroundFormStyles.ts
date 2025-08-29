@@ -14,6 +14,8 @@ export const Content = styled.div`
   flex-direction: column;
   width: clamp(30rem, 100%, 70rem);
   gap: 3.6rem;
+
+  padding-bottom: 2.4rem;
 `;
 export const Fieldset = styled.fieldset`
   display: flex;

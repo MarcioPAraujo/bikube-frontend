@@ -204,6 +204,7 @@ const EmployeeForm = () => {
           <GridContainer>
             <InputComponent
               id="name"
+              classname="name"
               labelText="Nome"
               placeholder="Digite o nome do funcionário"
               register={register('nome')}
@@ -359,6 +360,7 @@ const EmployeeForm = () => {
 
             <InputComponent
               id="complement"
+              classname="complement"
               labelText="Complemento"
               placeholder="Digite o complemento (opcional)"
               register={register('complemento')}
