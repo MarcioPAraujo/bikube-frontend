@@ -1,4 +1,5 @@
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
+import { encryptPassword } from '@/utils/encryptPassword';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { CredentialsSchema, CredentialsSchemaType } from '@/validation/candidateRegister/CredentialSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,7 +14,6 @@ const useAccessCredentialsForm = () => {
     register,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors, isSubmitting },
   } = useForm<CredentialsSchemaType>({
     resolver: yupResolver(CredentialsSchema),
@@ -38,23 +38,20 @@ const useAccessCredentialsForm = () => {
     }));
   }, []);
 
-  const handleFieldChange = (field: keyof CredentialsSchemaType, value: string) => {
-    const newData = getValues();
-    const updatedData = { ...newData, [field]: value };
-    setValue(field, value);
-    setStep1(prev => ({
-      ...prev,
-      formData: updatedData,
-    }));
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.step1, JSON.stringify(updatedData));
-  };
+  const onFormSubmit = async (data: CredentialsSchemaType) => {
+    const encriptedPassword = await encryptPassword(data.password);
 
-  const onFormSubmit = (data: CredentialsSchemaType) => {
-    console.log(data);
+    data = {
+      ...data,
+      password: encriptedPassword,
+      confirmPassword: encriptedPassword,
+    };
+
     setStep1(prev => ({
       ...prev,
       formData: data,
     }));
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.step1, JSON.stringify(data));
     router.push('/candidato-registro/credenciais-de-acesso/verificar-email');
   };
 
@@ -72,7 +69,6 @@ const useAccessCredentialsForm = () => {
   return {
     hookform,
     onFormSubmit,
-    handleFieldChange,
     back,
   };
 };

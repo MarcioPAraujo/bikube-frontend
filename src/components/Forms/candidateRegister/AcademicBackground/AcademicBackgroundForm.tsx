@@ -19,9 +19,8 @@ import {
 import { useRouter } from 'next/navigation';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
-import { IOption } from '@/interfaces/option';
 import languages from '@/utils/languages';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import RadioInput from '@/components/Inputs/Radio/Radio';
 import { Icons } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';

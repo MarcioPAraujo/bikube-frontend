@@ -1,14 +1,12 @@
 import FormTitle from '../FormTitle/FormTitle';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import { Content, Form } from './accessCredentialsFormStyles';
-import { emailMask } from '@/utils/masks/emailMask';
 import useAccessCredentialsForm from './useAccessCredentialsForm';
 
 const AccessCredentialsForm: React.FC = () => {
   const {
     hookform: { errors, handleSubmit, isSubmitting, register },
     back,
-    handleFieldChange,
     onFormSubmit,
   } = useAccessCredentialsForm();
 
@@ -20,9 +18,7 @@ const AccessCredentialsForm: React.FC = () => {
           id="email"
           labelText="Email"
           placeholder="Insira seu email"
-          register={register('email', {
-            onChange: e => handleFieldChange('email', emailMask(e.target.value)),
-          })}
+          register={register('email')}
           errorType={errors.email}
         />
         <UnderlinedInput
@@ -31,18 +27,14 @@ const AccessCredentialsForm: React.FC = () => {
           placeholder="Insira sua senha"
           isPassword
           errorType={errors.password}
-          register={register('password', {
-            onChange: e => handleFieldChange('password', e.target.value),
-          })}
+          register={register('password')}
         />
         <UnderlinedInput
           id="confirm-password"
           labelText="Confirmar senha"
           placeholder="Digite a senha novamente"
           isPassword
-          register={register('confirmPassword', {
-            onChange: e => handleFieldChange('confirmPassword', e.target.value),
-          })}
+          register={register('confirmPassword')}
           errorType={errors.confirmPassword}
         />
       </Content>
