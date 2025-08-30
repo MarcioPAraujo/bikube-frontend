@@ -71,13 +71,19 @@ const SkillsForm = () => {
               />
               <UnderlinedInput
                 id={`skills-${index}-periodInMonths`}
-                labelText="Período de experiência (em meses)"
+                labelText="Período de experiência (em meses) - máx 360 meses"
                 placeholder='Ex: "12"'
                 register={register(`skills.${index}.periodInMonths`, {
                   onChange: e => {
                     const value = e.target.value.replace(/\D/g, '');
-                    setValue(`skills.${index}.periodInMonths`, value);
-                    storeOnChange(value, index, 'periodInMonths');
+                    if (value === '') {
+                      setValue(`skills.${index}.periodInMonths`, '0');
+                      storeOnChange('0', index, 'periodInMonths');
+                      return;
+                    }
+                    const filteredNumber = Math.min(Number(value), 360).toString();
+                    setValue(`skills.${index}.periodInMonths`, filteredNumber);
+                    storeOnChange(filteredNumber, index, 'periodInMonths');
                   },
                 })}
                 errorType={errors.skills?.[index]?.periodInMonths}
