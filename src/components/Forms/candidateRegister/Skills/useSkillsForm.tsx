@@ -113,6 +113,18 @@ const useSkillsForm = () => {
     router.push(step4.pathname);
   };
 
+  const onPeriodChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const value = e.target.value.replace(/\D/g, '');
+    if (value === '') {
+      setValue(`skills.${index}.periodInMonths`, '0');
+      storeOnChange('0', index, 'periodInMonths');
+      return;
+    }
+    const filteredNumber = Math.min(Number(value), 360).toString();
+    setValue(`skills.${index}.periodInMonths`, filteredNumber);
+    storeOnChange(filteredNumber, index, 'periodInMonths');
+  };
+
   const hookform = {
     register,
     handleSubmit,
@@ -133,6 +145,7 @@ const useSkillsForm = () => {
     successModalOpen,
     setSuccessModalOpen,
     back,
+    onPeriodChange,
   };
 };
 export default useSkillsForm;

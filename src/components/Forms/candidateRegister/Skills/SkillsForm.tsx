@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation';
 import FormTitle from '../FormTitle/FormTitle';
 import { AddButton, Content, Description, FieldWrapper, Form, RemoveButton } from './skillsFormStyles';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
-import { IOption } from '@/interfaces/option';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import { Icons } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
@@ -23,6 +22,7 @@ const SkillsForm = () => {
     setSuccessModalOpen,
     successModalOpen,
     storeOnChange,
+    onPeriodChange,
   } = useSkillsForm();
   return (
     <>
@@ -74,17 +74,7 @@ const SkillsForm = () => {
                 labelText="Período de experiência (em meses) - máx 360 meses"
                 placeholder='Ex: "12"'
                 register={register(`skills.${index}.periodInMonths`, {
-                  onChange: e => {
-                    const value = e.target.value.replace(/\D/g, '');
-                    if (value === '') {
-                      setValue(`skills.${index}.periodInMonths`, '0');
-                      storeOnChange('0', index, 'periodInMonths');
-                      return;
-                    }
-                    const filteredNumber = Math.min(Number(value), 360).toString();
-                    setValue(`skills.${index}.periodInMonths`, filteredNumber);
-                    storeOnChange(filteredNumber, index, 'periodInMonths');
-                  },
+                  onChange: e => onPeriodChange(e, index),
                 })}
                 errorType={errors.skills?.[index]?.periodInMonths}
               />
