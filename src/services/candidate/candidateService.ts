@@ -60,7 +60,7 @@ export const registerNewCandidate = async (steps: ICreateCandidateRequest): Prom
     idiomas: steps.step3.languages
       ? steps.step3.languages.map(item => ({
           idioma: item.language,
-          nivel: item.level,
+          nivel: Number(item.level),
         }))
       : [],
   };

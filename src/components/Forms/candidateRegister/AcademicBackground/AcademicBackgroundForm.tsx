@@ -1,7 +1,4 @@
-import { AcademicDataSchema, AcademicDataSchemaType } from '@/validation/candidateRegister/AcademicData';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useFieldArray, useForm, Controller } from 'react-hook-form';
-import { useStepsRegistration } from '@/hooks/useStepsRegistration';
+import { Controller } from 'react-hook-form';
 import FormTitle from '../FormTitle/FormTitle';
 import {
   AddLanguageButton,
@@ -16,165 +13,30 @@ import {
   OptionsWrapper,
   RadioErrorMessage,
 } from './academicBackgroundFormStyles';
-import { useRouter } from 'next/navigation';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
-import { useEffect, useState } from 'react';
 import RadioInput from '@/components/Inputs/Radio/Radio';
 import { Icons } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
-import { notifyError } from '@/utils/handleToast';
-import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { getLanguages } from '@/services/language/languageService';
-import { IOption } from '@/interfaces/option';
-
-export type EducationEntry = {
-  instituition: string;
-  course: string;
-  startDate: string;
-  endDate: string;
-};
-const levels: string[] = ['Básico', 'Intermediário', 'Avançado'];
+import useAcademicBackgroundForm from './useAcademicBackgroundForm';
 
 const AcedmicBackgroundForm: React.FC = () => {
-  const { setCurrentStep, step2, step3, setStep3, step4 } = useStepsRegistration();
-  const router = useRouter();
-  const [languagesList, setLanguagesList] = useState<IOption[]>([]);
   const {
-    control,
-    register,
-    handleSubmit,
-    setValue,
-    trigger,
-    getValues,
-    formState: { errors },
-  } = useForm<AcademicDataSchemaType>({
-    resolver: yupResolver(AcademicDataSchema),
-    mode: 'onChange',
-  });
-
-  const { fields, append, remove, replace } = useFieldArray({
-    control,
-    rules: { maxLength: 5 },
-    name: 'languages',
-  });
-  const {
-    fields: educationArray,
-    append: appendEducation,
-    remove: removeEducation,
-    replace: replaceEducation,
-  } = useFieldArray({
-    control,
-    name: 'education',
-    rules: { maxLength: 3 },
-  });
-
-  useEffect(() => {
-    const retrieveLanguages = async () => {
-      const result = await getLanguages();
-      if (result.error) {
-        notifyError(result.error);
-        return;
-      }
-      if (result.data) {
-        const options = result.data.map(lang => ({
-          label: lang.idioma,
-          value: lang.idioma,
-        }));
-        setLanguagesList(options);
-      }
-    };
-    retrieveLanguages();
-
-    setCurrentStep(3);
-
-    let storedData = step3.formData;
-    if (!storedData) {
-      const sessionData = sessionStorage.getItem(SESSION_STORAGE_KEYS.step3);
-      storedData = sessionData ? JSON.parse(sessionData) : null;
-      if (!storedData) {
-        setValue('education', [
-          {
-            instituition: '',
-            course: '',
-            startDate: '',
-            endDate: '',
-          },
-        ]);
-        return;
-      }
-    }
-
-    if (storedData.languages && storedData.languages.length > 0) {
-      replace(storedData.languages);
-    }
-
-    if (storedData.education && storedData.education.length > 0) {
-      replaceEducation(storedData.education);
-    }
-  }, []);
-
-  // It synchronizes the available languages with the currently selected ones.
-  useEffect(() => {
-    const languageValues = getValues('languages') || [];
-    const educationValues = getValues('education') || [];
-
-    const newValues = { languages: languageValues, education: educationValues };
-    setStep3(prev => ({ ...prev, formData: newValues }));
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
-  }, [fields]);
-
-  // education date input handler with mask
-  const onDateChange = (value: string, index: number, field: 'startDate' | 'endDate') => {
-    const formattedDate = ddmmyyyyMask(value);
-    setValue(`education.${index}.${field}`, formattedDate, { shouldValidate: true });
-    if (field === 'endDate') {
-      const startDateErrors = errors.education?.[index]?.startDate;
-      if (startDateErrors) {
-        trigger(`education.${index}.startDate`);
-      }
-      return;
-    }
-    const endDateErrors = errors.education?.[index]?.endDate;
-    if (endDateErrors) {
-      trigger(`education.${index}.endDate`);
-    }
-  };
-
-  // education input handler to store values in session storage
-  const storeValues = (value: string, index: number, field: keyof EducationEntry) => {
-    const eduValues = getValues('education') || [];
-    const languagesValues = getValues('languages') || [];
-    const newEducationValues = eduValues.map((edu, i) => (i === index ? { ...edu, [field]: value } : edu));
-    const newValues = { education: newEducationValues, languages: languagesValues };
-    setStep3(prev => ({ ...prev, formData: newValues }));
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
-  };
-
-  const onFormSubmit = (data: AcademicDataSchemaType) => {
-    if (data.education?.length === 0) {
-      notifyError('Adicione ao menos uma formação acadêmica para prosseguir');
-      return;
-    }
-
-    const hasDuplicatedLanguages =
-      data.languages &&
-      data.languages.some((lang, idx) => data.languages?.findIndex(l => l.language === lang.language) !== idx);
-
-    if (hasDuplicatedLanguages) {
-      notifyError('Você adicionou idiomas duplicados, por favor verifique.');
-      return;
-    }
-
-    setStep3(prev => ({ ...prev, formData: data }));
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(data));
-    router.push(step4.pathname);
-  };
+    back,
+    languagesList,
+    levels,
+    onDateChange,
+    storeValues,
+    onFormSubmit,
+    educationFieldArray: { appendEducation, removeEducation, educationArray },
+    languageFieldArray: { append, remove, fields },
+    hookform: { control, register, handleSubmit, errors },
+  } = useAcademicBackgroundForm();
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>
-      <FormTitle title="Formação acadêmica" onBack={() => router.push(step2.pathname)} />
+      <FormTitle title="Formação acadêmica" onBack={back} />
       <Content>
         <Fieldset>
           <Legend>Idiomas, adicione até 5 idiomas que ache relevante - (Opcional)</Legend>
@@ -205,10 +67,10 @@ const AcedmicBackgroundForm: React.FC = () => {
                 <OptionsWrapper>
                   {levels.map(level => (
                     <RadioInput
-                      key={`${field.id}${level}`}
-                      id={`${field.id}${level}`}
-                      label={level}
-                      value={level}
+                      key={`${field.id}${level.value}`}
+                      id={`${field.id}${level.value}`}
+                      label={level.label}
+                      value={level.value}
                       register={register(`languages.${index}.level`)}
                     />
                   ))}

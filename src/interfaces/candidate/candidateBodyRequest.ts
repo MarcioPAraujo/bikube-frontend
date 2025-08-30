@@ -35,5 +35,5 @@ export interface Habilidade {
 
 export interface Idioma {
   idioma: string;
-  nivel: string;
+  nivel: number;
 }
