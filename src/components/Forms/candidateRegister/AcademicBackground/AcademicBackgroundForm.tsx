@@ -157,7 +157,16 @@ const AcedmicBackgroundForm: React.FC = () => {
       notifyError('Adicione ao menos uma formação acadêmica para prosseguir');
       return;
     }
-    console.log('submitted data: ', data);
+
+    const hasDuplicatedLanguages =
+      data.languages &&
+      data.languages.some((lang, idx) => data.languages?.findIndex(l => l.language === lang.language) !== idx);
+
+    if (hasDuplicatedLanguages) {
+      notifyError('Você adicionou idiomas duplicados, por favor verifique.');
+      return;
+    }
+
     setStep3(prev => ({ ...prev, formData: data }));
     sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(data));
     router.push(step4.pathname);
