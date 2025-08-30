@@ -1,7 +1,9 @@
+import { candidateLogin } from '@/services/login/candidateLogin';
+import { notifyError } from '@/utils/handleToast';
 import { emailMask } from '@/utils/masks/emailMask';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { CandidateLoginSchema, CandidateLoginSchemaType } from '@/validation/Login/CandidateLoginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 
 const useCandidateLoginForm = () => {
@@ -20,7 +22,15 @@ const useCandidateLoginForm = () => {
     setValue('email', formattedEmail);
   };
 
-  const onFormSubmit = (data: CandidateLoginSchemaType) => {
+  const onFormSubmit = async (data: CandidateLoginSchemaType) => {
+    const result = await candidateLogin({ email: data.email, password: data.password });
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+    if (result.data) {
+      sessionStorage.setItem(SESSION_STORAGE_KEYS.token, JSON.stringify(result.data.access_token));
+    }
     console.log(data);
   };
 

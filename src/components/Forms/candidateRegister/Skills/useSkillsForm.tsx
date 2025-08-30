@@ -1,4 +1,7 @@
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
+import { IOption } from '@/interfaces/option';
+import { registerNewCandidate } from '@/services/candidate/candidateService';
+import { getSkills } from '@/services/skilss/skilssService';
 import { notifyError } from '@/utils/handleToast';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { SkillsSchema, SkillsSchemaType } from '@/validation/candidateRegister/SkillSchema';
@@ -9,8 +12,9 @@ import { useFieldArray, useForm } from 'react-hook-form';
 
 const useSkillsForm = () => {
   const router = useRouter();
-  const { setCurrentStep, step4, setStep5, step5 } = useStepsRegistration();
+  const { setCurrentStep, setStep5, step5, step4, step3, step2, step1 } = useStepsRegistration();
   const [successModalOpen, setSuccessModalOpen] = useState<boolean>(false);
+  const [skillsOptions, setSkillsOptions] = useState<IOption[]>([]);
 
   const {
     control,
@@ -33,6 +37,22 @@ const useSkillsForm = () => {
   });
 
   useEffect(() => {
+    const retrieveSkills = async () => {
+      const result = await getSkills();
+      if (result.error) {
+        notifyError(result.error);
+        return;
+      }
+      if (result.data) {
+        const options = result.data.map(skill => ({
+          label: skill.habilidade,
+          value: skill.habilidade,
+        }));
+        setSkillsOptions(options);
+      }
+    };
+    retrieveSkills();
+
     setCurrentStep(5);
     let data = step5.formData;
     if (!data) {
@@ -65,7 +85,7 @@ const useSkillsForm = () => {
     storeValues({ skills: newValues });
   };
 
-  const onSubmit = (data: SkillsSchemaType) => {
+  const onSubmit = async (data: SkillsSchemaType) => {
     const hasDuplicates = data.skills.some(
       (skill, index) => data.skills.findIndex(s => s.competency === skill.competency) !== index,
     );
@@ -73,6 +93,19 @@ const useSkillsForm = () => {
       notifyError('Habilidades duplicadas não são permitidas.');
       return;
     }
+
+    const result = await registerNewCandidate({
+      step1: step1.formData!,
+      step2: step2.formData!,
+      step3: step3.formData!,
+      step4: step4.formData!,
+      step5: data,
+    });
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+
     setSuccessModalOpen(true);
   };
 
@@ -91,6 +124,7 @@ const useSkillsForm = () => {
 
   return {
     hookform,
+    skillsOptions,
     fields,
     append,
     onSubmit,

@@ -19,14 +19,15 @@ import {
 import { useRouter } from 'next/navigation';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
-import languages from '@/utils/languages';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import RadioInput from '@/components/Inputs/Radio/Radio';
 import { Icons } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import { notifyError } from '@/utils/handleToast';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
+import { getLanguages } from '@/services/language/languageService';
+import { IOption } from '@/interfaces/option';
 
 export type EducationEntry = {
   instituition: string;
@@ -39,6 +40,7 @@ const levels: string[] = ['Básico', 'Intermediário', 'Avançado'];
 const AcedmicBackgroundForm: React.FC = () => {
   const { setCurrentStep, step2, step3, setStep3, step4 } = useStepsRegistration();
   const router = useRouter();
+  const [languagesList, setLanguagesList] = useState<IOption[]>([]);
   const {
     control,
     register,
@@ -69,6 +71,22 @@ const AcedmicBackgroundForm: React.FC = () => {
   });
 
   useEffect(() => {
+    const retrieveLanguages = async () => {
+      const result = await getLanguages();
+      if (result.error) {
+        notifyError(result.error);
+        return;
+      }
+      if (result.data) {
+        const options = result.data.map(lang => ({
+          label: lang.idioma,
+          value: lang.idioma,
+        }));
+        setLanguagesList(options);
+      }
+    };
+    retrieveLanguages();
+
     setCurrentStep(3);
 
     let storedData = step3.formData;
@@ -167,7 +185,7 @@ const AcedmicBackgroundForm: React.FC = () => {
                     enableSearch
                     label="Idioma"
                     placeholder="Selecione o idioma"
-                    options={languages}
+                    options={languagesList}
                     selectedOption={field.value}
                     onChange={field.onChange}
                     error={errors.languages?.[index]?.language}

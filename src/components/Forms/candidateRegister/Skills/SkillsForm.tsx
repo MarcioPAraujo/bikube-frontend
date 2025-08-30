@@ -1,4 +1,4 @@
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import FormTitle from '../FormTitle/FormTitle';
 import { AddButton, Content, Description, FieldWrapper, Form, RemoveButton } from './skillsFormStyles';
@@ -10,17 +10,13 @@ import { theme } from '@/styles/theme';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import useSkillsForm from './useSkillsForm';
 
-const skilsOptions: IOption[] = Array.from({ length: 100 }, (_, i) => ({
-  label: `Skill ${i + 1}`,
-  value: `skill_${i + 1}`,
-}));
-
 const SkillsForm = () => {
   const router = useRouter();
   const {
     hookform: { errors, register, handleSubmit, isSubmitting, setValue, control },
     append,
     back,
+    skillsOptions,
     fields,
     onRemove,
     onSubmit,
@@ -42,7 +38,7 @@ const SkillsForm = () => {
       />
 
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormTitle onBack={back} title="Habilidades e competências" />
+        <FormTitle onBack={back} title="Habilidades e competências" isNextDisabled={isSubmitting} />
         <Content>
           <Description>Adicione até 10 habilidades diferentes</Description>
           <AddButton
@@ -62,7 +58,7 @@ const SkillsForm = () => {
                     id={`skills-${index}-competency`}
                     label="Habilidade ou Competência"
                     placeholder="Selecione"
-                    options={skilsOptions}
+                    options={skillsOptions}
                     selectedOption={field.value}
                     onChange={(value: string) => {
                       field.onChange(value);
