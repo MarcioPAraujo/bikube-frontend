@@ -9,7 +9,8 @@ import {
   MessageButton,
   MessageWrapper,
 } from './messageBarStyles';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import MessageDetailsModal from '@/components/modals/MessageDetailsModal/MessageDetailsModal';
 
 interface IMessageBar {
   isOpen: boolean;
@@ -25,13 +26,16 @@ const messages = Array.from({ length: 20 }, (_, index) => ({
 }));
 
 const MessagesBar: React.FC<IMessageBar> = ({ isOpen, onClose }) => {
+  const [showDetails, setShowDetails] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
+  const [messageId, setMessageId] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (!barRef.current) return;
       if (barRef.current.contains(event.target as Node)) return;
       onClose();
+      setMessageId(null);
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -44,11 +48,25 @@ const MessagesBar: React.FC<IMessageBar> = ({ isOpen, onClose }) => {
     <Container>
       <BlurBackground />
       <Bar ref={barRef}>
+        <MessageDetailsModal
+          isOpen={showDetails}
+          onClose={() => {
+            setShowDetails(false);
+            setMessageId(null);
+          }}
+          messageId={messageId}
+        />
         {messages.map(msg => (
           <Message key={msg.id}>
             <DateMessage>{msg.date}</DateMessage>
             <Content>
-              <MessageButton type="button">
+              <MessageButton
+                type="button"
+                onClick={() => {
+                  setShowDetails(true);
+                  setMessageId(msg.id);
+                }}
+              >
                 <Icons.Mail />
               </MessageButton>
               <MessageWrapper>
