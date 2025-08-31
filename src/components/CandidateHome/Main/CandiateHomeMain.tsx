@@ -14,6 +14,7 @@ import {
 } from './candidateHomeMainStyles';
 import { useState } from 'react';
 import VacancyCard from '@/components/VacancyCard/VacancyCard';
+import MessagesBar from '../MessagesBar/MessagesBar';
 
 interface IVancancyCardProps {
   title: string;
@@ -34,6 +35,7 @@ const CandidateHomeMain: React.FC = () => {
   const [openNotifications, setOpenNotifications] = useState(false);
   return (
     <MainContainer>
+      <MessagesBar isOpen={openNotifications} onClose={() => setOpenNotifications(false)} />
       <NotificationButton type="button" onClick={() => setOpenNotifications(true)}>
         <Icons.NotificationOn size={25} />
       </NotificationButton>

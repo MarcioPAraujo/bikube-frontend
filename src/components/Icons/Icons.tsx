@@ -20,6 +20,7 @@ import { PiTrashSimpleFill } from 'react-icons/pi';
 import { FaCheck } from 'react-icons/fa6';
 import { VscBellDot } from 'react-icons/vsc';
 import { VscBell } from 'react-icons/vsc';
+import { IoMdMail } from 'react-icons/io';
 
 interface IconProps {
   size?: number;
@@ -55,5 +56,6 @@ export const Icons = {
   Check: (props: IconProps) => <IconWrapper Icon={FaCheck} {...props} />,
   NotificationOn: (props: IconProps) => <IconWrapper Icon={VscBellDot} {...props} />,
   NotificationOff: (props: IconProps) => <IconWrapper Icon={VscBell} {...props} />,
+  Mail: (props: IconProps) => <IconWrapper Icon={IoMdMail} {...props} />,
   Logo: () => <Logo />,
 };
