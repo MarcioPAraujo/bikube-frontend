@@ -1,9 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
-const VacanciesPage: React.FC = () => {
+const Vacancies: React.FC = () => {
   const searchParmas = useSearchParams();
   const [vacancyId, setVacancyId] = useState<string | undefined>(undefined);
 
@@ -13,5 +13,13 @@ const VacanciesPage: React.FC = () => {
   }, []);
 
   return <div>Vagas {vacancyId}</div>;
+};
+
+const VacanciesPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <Vacancies />
+    </Suspense>
+  );
 };
 export default VacanciesPage;
