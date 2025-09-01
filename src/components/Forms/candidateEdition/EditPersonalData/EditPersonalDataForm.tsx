@@ -2,20 +2,16 @@ import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSele
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import ModalBackground from '@/components/modals/elements/ModalBackground';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
-import { IOption } from '@/interfaces/option';
-import { City, fetchCitiesByState } from '@/services/citiesAPI';
-import { fetchBrazilianStates } from '@/services/statesAPI';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import mobileMask from '@/utils/masks/mobileMask';
 import { stateNames } from '@/utils/statesNames';
-import { PersonalDataSchema, PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalDataSchema';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalDataSchema';
+import { Controller } from 'react-hook-form';
 import { FieldsWrapper, Form } from './editPersonalDataForm';
 import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import EditSubmitButton from '../Elements/EditSubmitButtons/EditSubmitButtons';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
+import useEditPersonalDataForm from './useEditPersonalDataForm';
 
 interface EditPersonalDataFormProps {
   defaultValues: PersonalDataSchemaType;
@@ -25,69 +21,14 @@ interface EditPersonalDataFormProps {
 
 const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValues, isOpen, onClose }) => {
   const {
-    control,
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<PersonalDataSchemaType>({
-    resolver: yupResolver(PersonalDataSchema),
-    mode: 'onTouched',
-    defaultValues,
-  });
-  const [states, setStates] = useState<IOption[]>([]);
-  const [cities, setCities] = useState<IOption[]>([]);
-  const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const [warningModalOpen, setWarningModalOpen] = useState(false);
-
-  const selectedStateWatch = watch('state');
-  useEffect(() => {
-    const fetchStates = async () => {
-      const response = await fetchBrazilianStates();
-      if (response.length > 0) {
-        const statesOptions = response.map(state => ({
-          label: state.nome,
-          value: state.sigla,
-        }));
-        setStates(statesOptions);
-      }
-    };
-    const fetchCities = async (stateUF: string) => {
-      const response = await fetchCitiesByState(stateUF);
-      if (response.length > 0) {
-        const citiesOptions = response.map((city: City) => ({
-          label: city.nome,
-          value: city.nome,
-        }));
-        setCities(citiesOptions);
-      }
-    };
-    fetchStates();
-    if (defaultValues.state) {
-      fetchCities(defaultValues.state);
-    }
-  }, []);
-  useEffect(() => {
-    if (!states || !selectedStateWatch) return;
-    const fetchCities = async () => {
-      const response = await fetchCitiesByState(watch('state'));
-      if (response.length > 0) {
-        const citiesOptions = response.map((city: City) => ({
-          label: city.nome,
-          value: city.nome,
-        }));
-        setCities(citiesOptions);
-      }
-    };
-    fetchCities();
-  }, [selectedStateWatch]);
-
-  const onFormSubmit = (data: PersonalDataSchemaType) => {
-    console.log(data);
-    setSuccessModalOpen(true);
-  };
+    cities,
+    states,
+    selectedState,
+    hanldleClose,
+    onFormSubmit,
+    hookform: { control, register, handleSubmit, setValue, errors, isSubmitting },
+    modals: { setWarningModalOpen, warningModalOpen, successModalOpen },
+  } = useEditPersonalDataForm({ defaultValues, onClose });
 
   if (!isOpen) return null;
 
@@ -98,11 +39,7 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
         title="Dados atualizados com sucesso!"
         message="As suas informações pessoais foram atualizadas com sucesso."
         buttonText="Ok"
-        onClose={() => {
-          setSuccessModalOpen(false);
-          reset();
-          onClose();
-        }}
+        onClose={hanldleClose}
       />
     );
   }
@@ -116,11 +53,7 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
         cancelText="Continuar editando"
         confirmText="Descartar alterações"
         onCancel={() => setWarningModalOpen(false)}
-        onConfirm={() => {
-          setWarningModalOpen(false);
-          reset();
-          onClose();
-        }}
+        onConfirm={hanldleClose}
       />
     );
   }
@@ -186,7 +119,7 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
                 onChange={field.onChange}
                 selectedOption={field.value}
                 enableSearch
-                disabled={!selectedStateWatch || cities.length === 0}
+                disabled={!selectedState || cities.length === 0}
                 error={errors.city}
               />
             )}

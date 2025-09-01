@@ -38,7 +38,6 @@ export const fetchCitiesByState = async (stateCode: string) => {
       throw new Error('Network response was not ok');
     }
     const data: City[] = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error('Error fetching cities:', error);
