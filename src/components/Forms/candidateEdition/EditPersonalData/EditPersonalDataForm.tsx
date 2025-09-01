@@ -12,6 +12,10 @@ import { PersonalDataSchema, PersonalDataSchemaType } from '@/validation/candida
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { FieldsWrapper, Form } from './editPersonalDataForm';
+import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
+import EditSubmitButton from '../Elements/EditSubmitButtons/EditSubmitButtons';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
 
 interface EditPersonalDataFormProps {
   defaultValues: PersonalDataSchemaType;
@@ -27,7 +31,7 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
     setValue,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<PersonalDataSchemaType>({
     resolver: yupResolver(PersonalDataSchema),
     mode: 'onTouched',
@@ -36,6 +40,7 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
   const [states, setStates] = useState<IOption[]>([]);
   const [cities, setCities] = useState<IOption[]>([]);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [warningModalOpen, setWarningModalOpen] = useState(false);
 
   const selectedStateWatch = watch('state');
   useEffect(() => {
@@ -49,7 +54,20 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
         setStates(statesOptions);
       }
     };
+    const fetchCities = async (stateUF: string) => {
+      const response = await fetchCitiesByState(stateUF);
+      if (response.length > 0) {
+        const citiesOptions = response.map((city: City) => ({
+          label: city.nome,
+          value: city.nome,
+        }));
+        setCities(citiesOptions);
+      }
+    };
     fetchStates();
+    if (defaultValues.state) {
+      fetchCities(defaultValues.state);
+    }
   }, []);
   useEffect(() => {
     if (!states || !selectedStateWatch) return;
@@ -89,10 +107,29 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
     );
   }
 
+  if (warningModalOpen) {
+    return (
+      <WarningModal
+        isOpen={warningModalOpen}
+        title="Descartar alterações?"
+        message="Tem certeza que deseja descartar as alterações feitas? As informações não salvas serão perdidas."
+        cancelText="Continuar editando"
+        confirmText="Descartar alterações"
+        onCancel={() => setWarningModalOpen(false)}
+        onConfirm={() => {
+          setWarningModalOpen(false);
+          reset();
+          onClose();
+        }}
+      />
+    );
+  }
+
   return (
     <ModalBackground>
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        <div>
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
+        <EditFormTitle title="Editar dados pessoais" />
+        <FieldsWrapper>
           <UnderlinedInput
             id="name"
             labelText="Nome completo"
@@ -168,8 +205,19 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
             register={register('github')}
             errorType={errors.github}
           />
-        </div>
-      </form>
+        </FieldsWrapper>
+        <EditSubmitButton
+          submitButton={{
+            disabled: isSubmitting,
+            labelText: isSubmitting ? 'Salvando...' : 'Salvar alterações',
+          }}
+          cancelButton={{
+            disabled: isSubmitting,
+            labelText: 'Cancelar',
+            onClick: () => setWarningModalOpen(true),
+          }}
+        />
+      </Form>
     </ModalBackground>
   );
 };

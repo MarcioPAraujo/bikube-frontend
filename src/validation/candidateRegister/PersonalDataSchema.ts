@@ -41,7 +41,7 @@ export const PersonalDataSchema = yup.object().shape({
     .string()
     .required('O número de telefone é obrigatório')
     .matches(MOBILE_REGEX, 'Número inválido')
-    .test('repeated', 'Númeor inválido', value => {
+    .test('repeated', 'Número inválido', value => {
       if (!value) return false;
       const numeric = value.replace(/\D/g, '');
       return !/(.)\1{4}/g.test(numeric);

@@ -1,12 +1,10 @@
+import { Title } from './editFormTitleStyles';
+
 interface EditFormTitleProps {
   title: string;
 }
 
 const EditFormTitle: React.FC<EditFormTitleProps> = ({ title }) => {
-  return (
-    <div>
-      <h2>{title}</h2>
-    </div>
-  );
+  return <Title>{title}</Title>;
 };
 export default EditFormTitle;
