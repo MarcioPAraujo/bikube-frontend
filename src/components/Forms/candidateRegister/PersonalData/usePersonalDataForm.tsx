@@ -30,7 +30,6 @@ const usePersonalDataForm = () => {
     register,
     handleSubmit,
     setValue,
-    trigger,
     getValues,
     watch,
     formState: { errors },
