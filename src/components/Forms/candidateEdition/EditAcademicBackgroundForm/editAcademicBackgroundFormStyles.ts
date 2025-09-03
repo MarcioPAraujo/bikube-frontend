@@ -54,46 +54,6 @@ export const OptionsWrapper = styled.div`
   }
 `;
 
-export const AddButton = styled.button`
-  width: fit-content;
-  background: ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
-  padding: 0.4rem 1rem;
-  border: none;
-  color: ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};
-  font-weight: 500;
-  font-size: 1.4rem;
-  line-height: 2.4rem;
-  text-align: center;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
-  }
-
-  &:disabled {
-    background: ${({ theme }) => theme.colors.GRAY.hex_f2f2f2};
-    color: ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
-    cursor: not-allowed;
-  }
-`;
-
-export const RemoveButton = styled.button`
-  width: 2.8rem;
-  height: 2.8rem;
-  background: none;
-  border: none;
-  border-radius: 50%;
-
-  display: grid;
-  place-items: center;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.RED.hex_FFEBEE};
-    svg path {
-      fill: ${({ theme }) => theme.colors.RED.hex_D32F2F};
-    }
-  }
-`;
-
 export const EducationWrapper = styled.div`
   display: flex;
   flex-direction: column;

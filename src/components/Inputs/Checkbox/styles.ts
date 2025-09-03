@@ -20,19 +20,17 @@ export const Label = styled.label`
   &.disabled {
     cursor: default;
   }
-  svg {
-    transition: all 0.2s ease-in-out;
-    opacity: 0;
-    &.checked {
-      opacity: 1;
-      transition: all 0.2s ease-in-out;
-    }
-  }
 `;
 export const CheckboxContainer = styled.div`
   position: relative;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2rem;
+  height: 2rem;
+
+  &:has(input:checked) {
+    & > svg {
+      opacity: 1;
+    }
+  }
 
   svg {
     position: absolute;
@@ -40,13 +38,15 @@ export const CheckboxContainer = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
   }
 `;
 export const Checkbox = styled.input`
   cursor: pointer;
   appearance: none;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2rem;
+  height: 2rem;
   border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
   border-radius: 0.5rem;
 

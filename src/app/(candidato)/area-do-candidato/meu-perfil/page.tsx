@@ -13,6 +13,7 @@ import {
 } from './styles';
 import EditPersonalDataForm from '@/components/Forms/candidateEdition/EditPersonalData/EditPersonalDataForm';
 import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/EditAcademicBackgroundForm/EditAcademicBackgroundForm';
+import EditProfessionalExperience from '@/components/Forms/candidateEdition/EditProfessionalExperirence/EditProfesionalExperience';
 
 const levels = ['1', '2', '3'];
 
@@ -58,6 +59,21 @@ const MyProfilePage: React.FC = () => {
         defaultValues={{
           languages: languages,
           education: education,
+        }}
+      />
+      <EditProfessionalExperience
+        isOpen={experienceFormVisible}
+        onClose={() => setExperienceFormVisible(false)}
+        defaultValues={{
+          isFirstJob: false,
+          experiences: [
+            {
+              company: 'Empresa exemplo',
+              description: 'Descrição exemplo',
+              startDate: '01/01/2020',
+              endDate: '31/12/2021',
+            },
+          ],
         }}
       />
       <PageContainer>

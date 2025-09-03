@@ -8,19 +8,19 @@ import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSele
 import RadioInput from '@/components/Inputs/Radio/Radio';
 import { Icons } from '@/components/Icons/Icons';
 import {
-  AddButton,
   EducationContainer,
   EducationWrapper,
   FieldWrapper,
   Form,
   LanguagesContainer,
   OptionsWrapper,
-  RemoveButton,
   Section,
 } from './editAcademicBackgroundFormStyles';
 import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import useEditAcademicBackgroundForm from './useEditAcademicBackgroundForm';
+import AddButton from '../Elements/AddButton/AddButton';
+import RemoveButton from '../Elements/RemoveButton/RemoveButton';
 
 interface EditAcademicBackgroundFormProps {
   isOpen: boolean;
@@ -77,12 +77,10 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
         <Section>
           <LanguagesContainer>
             <AddButton
-              type="button"
+              label="+ Idioma"
               onClick={() => addLanguage({ language: '', level: '1' })}
               disabled={languagesArray.length >= 5}
-            >
-              + Idioma
-            </AddButton>
+            />
             {languagesArray.map((lang, index) => (
               <FieldWrapper key={lang.id}>
                 <Controller
@@ -114,9 +112,7 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
                     ))}
                   </div>
                   <div>
-                    <RemoveButton type="button" onClick={() => removeLanguage(index)}>
-                      <Icons.Trash size={20} color="#747474" />
-                    </RemoveButton>
+                    <RemoveButton onClick={() => removeLanguage(index)} />
                   </div>
                 </OptionsWrapper>
               </FieldWrapper>
@@ -124,12 +120,10 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
           </LanguagesContainer>
           <EducationContainer>
             <AddButton
-              type="button"
+              label="+ Formação"
               disabled={educationArray.length >= 3}
               onClick={() => appendEducation({ instituition: '', course: '', startDate: '', endDate: '' })}
-            >
-              + Formação acadêmica
-            </AddButton>
+            />
             {educationArray.map((field, index) => (
               <EducationWrapper key={field.id}>
                 <UnderlinedInput
@@ -169,9 +163,7 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
                   errorType={errors.education?.[index]?.endDate}
                 />
                 <div>
-                  <RemoveButton type="button" onClick={() => removeEducation(index)}>
-                    <Icons.Trash size={20} color="#747474" />
-                  </RemoveButton>
+                  <RemoveButton onClick={() => removeEducation(index)} />
                 </div>
               </EducationWrapper>
             ))}

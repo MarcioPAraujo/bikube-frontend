@@ -1,24 +1,33 @@
 import { FC } from 'react';
 import { FaCheck } from 'react-icons/fa6';
 import { Checkbox, CheckboxContainer, Container, Label } from './styles';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface CheckboxProps {
   id: string;
   children: React.ReactNode;
-  isChecked: boolean;
+  register?: UseFormRegisterReturn;
+  isChecked?: boolean;
   disabled?: boolean;
   value?: string;
-  onChange: () => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void | (() => void);
 }
 
-const CheckboxComponent: FC<CheckboxProps> = ({ isChecked, id, children, value, disabled = false, onChange }) => {
-  const classname = isChecked ? 'checked' : '';
+const CheckboxComponent: FC<CheckboxProps> = ({
+  isChecked,
+  id,
+  children,
+  value,
+  disabled = false,
+  onChange,
+  register,
+}) => {
   const isDisabled = disabled ? 'disabled' : '';
   return (
     <Container>
-      <Label htmlFor={id} className={`${classname} ${isDisabled}`}>
+      <Label htmlFor={id} className={isDisabled}>
         <CheckboxContainer>
-          <FaCheck size={15} color="white" className={classname} />
+          <FaCheck size={15} color="white" />
           <Checkbox
             type="checkbox"
             name={id}
@@ -27,6 +36,7 @@ const CheckboxComponent: FC<CheckboxProps> = ({ isChecked, id, children, value, 
             disabled={disabled}
             checked={isChecked}
             onChange={onChange}
+            {...register}
           />
         </CheckboxContainer>
       </Label>

@@ -6,7 +6,7 @@ interface ISubmitButton {
 interface ICancelButton {
   labelText: string;
   onClick: () => void;
-  disabled: boolean;
+  disabled?: boolean;
 }
 interface EditSubmitButtonProps {
   submitButton: ISubmitButton;

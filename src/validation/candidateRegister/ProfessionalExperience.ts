@@ -19,7 +19,7 @@ export const ProfessionalSchema = yup.object().shape({
           .string()
           .required('A data de início é obrigatória')
           .matches(DDMMYYYY_REGEX, 'Data inválida')
-          .test('is-before', 'A data de iníco deve ser anterior a date de fim', function (value) {
+          .test('is-before', 'A data de iníco deve ser anterior a data de fim', function (value) {
             const { endDate } = this.parent;
             if (!endDate || !value) return false;
             const start = parse(value, 'dd/MM/yyyy', new Date());
@@ -30,7 +30,7 @@ export const ProfessionalSchema = yup.object().shape({
           .string()
           .required('A data final é obrigatória')
           .matches(DDMMYYYY_REGEX, 'Data inválida')
-          .test('is-after', 'A data de fim deve ser posterior a date de início', function (value) {
+          .test('is-after', 'A data de fim deve ser posterior a data de início', function (value) {
             const { startDate } = this.parent;
             if (!startDate || !value) return false;
             const start = parse(startDate, 'dd/MM/yyyy', new Date());
