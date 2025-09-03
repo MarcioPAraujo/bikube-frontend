@@ -12,10 +12,19 @@ import {
   Title,
 } from './styles';
 import EditPersonalDataForm from '@/components/Forms/candidateEdition/EditPersonalData/EditPersonalDataForm';
+import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/EditAcademicBackgroundForm/EditAcademicBackgroundForm';
 
-const lnaguages = Array.from({ length: 5 }, (_, i) => ({
+const levels = ['1', '2', '3'];
+
+const languages = Array.from({ length: 5 }, (_, i) => ({
   language: `Linguagem ${i + 1}`,
-  level: `Nível ${i + 1}`,
+  level: levels[i % levels.length],
+}));
+const education = Array.from({ length: 3 }, (_, i) => ({
+  instituition: `Instituição ${i + 1}`,
+  course: `Curso ${i + 1}`,
+  startDate: `01/03/2010`,
+  endDate: `01/07/2015`,
 }));
 
 const skills = Array.from({ length: 5 }, (_, i) => ({
@@ -41,6 +50,14 @@ const MyProfilePage: React.FC = () => {
           linkedin: 'linkedin.com/in/exemplo',
           github: 'https://github.com/exemplo',
           birthday: '01/01/2000',
+        }}
+      />
+      <EditAcademicBackgroundForm
+        isOpen={academicFormVisible}
+        onClose={() => setAcademicFormVisible(false)}
+        defaultValues={{
+          languages: languages,
+          education: education,
         }}
       />
       <PageContainer>
@@ -80,7 +97,7 @@ const MyProfilePage: React.FC = () => {
             <SectionContent className="academic">
               <div>
                 <Subtitle>Idiomas</Subtitle>
-                {lnaguages.map((lang, index) => (
+                {languages.map((lang, index) => (
                   <div key={index}>
                     <Paragraph>
                       <strong>Idioma: </strong>

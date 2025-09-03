@@ -12,7 +12,7 @@ interface EditSubmitButtonProps {
   submitButton: ISubmitButton;
   cancelButton: ICancelButton;
 }
-const EditSubmitButton: React.FC<EditSubmitButtonProps> = ({ submitButton, cancelButton }) => {
+const EditSubmitButtons: React.FC<EditSubmitButtonProps> = ({ submitButton, cancelButton }) => {
   return (
     <ButtonsContainer>
       <CancelButton type="button" onClick={cancelButton.onClick} disabled={cancelButton.disabled}>
@@ -24,4 +24,4 @@ const EditSubmitButton: React.FC<EditSubmitButtonProps> = ({ submitButton, cance
     </ButtonsContainer>
   );
 };
-export default EditSubmitButton;
+export default EditSubmitButtons;

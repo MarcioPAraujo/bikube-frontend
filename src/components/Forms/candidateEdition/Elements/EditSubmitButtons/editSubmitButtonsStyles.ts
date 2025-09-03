@@ -5,6 +5,7 @@ export const ButtonsContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
   gap: 1.8rem;
+  margin-top: auto;
 `;
 
 export const SubmitButton = styled.button`
