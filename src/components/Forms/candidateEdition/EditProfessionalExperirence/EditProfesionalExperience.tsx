@@ -1,20 +1,16 @@
 import ModalBackground from '@/components/modals/elements/ModalBackground';
 import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { ProfessionalSchema, ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
-import { yupResolver } from '@hookform/resolvers/yup';
-import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
+import { ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
 import CheckboxComponent from '@/components/Inputs/Checkbox';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import Textarea from '@/components/Inputs/Textarea/Textarea';
-import { Icons } from '@/components/Icons/Icons';
 import { Description, Field, Form } from './editProfessionalExperienceStyles';
 import RemoveButton from '../Elements/RemoveButton/RemoveButton';
 import AddButton from '../Elements/AddButton/AddButton';
 import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';
-import { useState } from 'react';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import useProfessionalExperience from './useEditProfessionalExperience';
 
 interface EditProfessionalExperienceProps {
   isOpen: boolean;
@@ -22,56 +18,12 @@ interface EditProfessionalExperienceProps {
   defaultValues: ProfessionalSchemaType;
 }
 const EditProfessionalExperience: React.FC<EditProfessionalExperienceProps> = ({ isOpen, onClose, defaultValues }) => {
-  const [warningModal, setWarningModal] = useState<boolean>(false);
-  const [successModal, setSuccessModal] = useState<boolean>(false);
   const {
-    control,
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    clearErrors,
-    trigger,
-    formState: { errors, isSubmitting },
-  } = useForm<ProfessionalSchemaType>({
-    resolver: yupResolver(ProfessionalSchema),
-    mode: 'onChange',
-    defaultValues,
-  });
-
-  const { fields, append, remove, replace } = useFieldArray({
-    control,
-    name: 'experiences',
-    rules: { maxLength: 3 },
-  });
-
-  const onFistJobChange = (isFirstJob: boolean) => {
-    setValue('isFirstJob', isFirstJob);
-
-    // Prepare new experiences array
-    const experiences = isFirstJob ? [] : [{ company: '', description: '', startDate: '', endDate: '' }];
-
-    // Update field array and errors
-    replace(experiences);
-    clearErrors('experiences');
-  };
-
-  const onDateChange = (value: string, index: number, field: 'startDate' | 'endDate') => {
-    const maskedValue = ddmmyyyyMask(value);
-    setValue(`experiences.${index}.${field}`, maskedValue, { shouldValidate: true });
-    if (field === 'startDate') {
-      const endDateErrors = errors.experiences?.[index]?.endDate;
-      if (endDateErrors) trigger(`experiences.${index}.endDate`);
-      return;
-    }
-    const startDateErrors = errors.experiences?.[index]?.startDate;
-    if (startDateErrors) trigger(`experiences.${index}.startDate`);
-  };
-
-  const onFormSubmit = (data: ProfessionalSchemaType) => {
-    console.log(data);
-    setSuccessModal(true);
-  };
+    hookform: { errors, register, handleSubmit, isSubmitting, watch },
+    fieldArray: { fields, append, remove },
+    modals: { warningModal, setWarningModal, successModal, setSuccessModal },
+    handlers: { onFistJobChange, onDateChange, onFormSubmit },
+  } = useProfessionalExperience(defaultValues);
 
   if (!isOpen) return null;
 
