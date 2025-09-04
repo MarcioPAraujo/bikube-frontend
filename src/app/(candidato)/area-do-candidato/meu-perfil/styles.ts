@@ -52,3 +52,12 @@ export const Paragraph = styled.p`
     font-weight: 700;
   }
 `;
+export const DeleteButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.RED.hex_D32F2F};
+  border: none;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.WHITE};
+  padding: 0.5rem 1.5rem;
+  margin-bottom: 2rem;
+`;

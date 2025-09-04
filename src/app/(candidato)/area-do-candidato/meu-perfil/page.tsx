@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import {
+  DeleteButton,
   EditButton,
   PageContainer,
   Paragraph,
@@ -15,6 +16,7 @@ import EditPersonalDataForm from '@/components/Forms/candidateEdition/EditPerson
 import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/EditAcademicBackground/EditAcademicBackgroundForm';
 import EditProfessionalExperience from '@/components/Forms/candidateEdition/EditProfessionalExperirence/EditProfesionalExperience';
 import EditSkillsForm from '@/components/Forms/candidateEdition/EditSkills/EditSkillsForm';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
 
 const levels = ['1', '2', '3'];
 
@@ -39,6 +41,7 @@ const MyProfilePage: React.FC = () => {
   const [academicFormVisible, setAcademicFormVisible] = useState(false);
   const [experienceFormVisible, setExperienceFormVisible] = useState(false);
   const [skillsFormVisible, setSkillsFormVisible] = useState(false);
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
   return (
     <>
       <EditPersonalDataForm
@@ -87,8 +90,23 @@ const MyProfilePage: React.FC = () => {
           ],
         }}
       />
+      <WarningModal
+        isOpen={warningModalVisible}
+        title="Deletar conta"
+        message="Tem certeza que deseja deletar sua conta? Essa ação é irreversível e todos os seus dados serão perdidos."
+        cancelText="Cancelar"
+        confirmText="Deletar"
+        onCancel={() => setWarningModalVisible(false)}
+        onConfirm={() => {
+          setWarningModalVisible(false);
+          // Adicione aqui a lógica para deletar a conta
+        }}
+      />
       <PageContainer>
         <Title>Meu Perfil</Title>
+        <DeleteButton type="button" onClick={() => setWarningModalVisible(true)}>
+          Deletar conta
+        </DeleteButton>
         <SectionsContainer>
           <section>
             <SectionTitle>Dados Pessoais</SectionTitle>
