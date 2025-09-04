@@ -12,8 +12,9 @@ import {
   Title,
 } from './styles';
 import EditPersonalDataForm from '@/components/Forms/candidateEdition/EditPersonalData/EditPersonalDataForm';
-import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/EditAcademicBackgroundForm/EditAcademicBackgroundForm';
+import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/EditAcademicBackground/EditAcademicBackgroundForm';
 import EditProfessionalExperience from '@/components/Forms/candidateEdition/EditProfessionalExperirence/EditProfesionalExperience';
+import EditSkillsForm from '@/components/Forms/candidateEdition/EditSkills/EditSkillsForm';
 
 const levels = ['1', '2', '3'];
 
@@ -73,6 +74,16 @@ const MyProfilePage: React.FC = () => {
               startDate: '01/01/2020',
               endDate: '31/12/2021',
             },
+          ],
+        }}
+      />
+      <EditSkillsForm
+        isOpen={skillsFormVisible}
+        onClose={() => setSkillsFormVisible(false)}
+        defaultValues={{
+          skills: [
+            { competency: 'Habilidade 1', periodInMonths: '12' },
+            { competency: 'Habilidade 2', periodInMonths: '24' },
           ],
         }}
       />
