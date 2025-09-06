@@ -1,10 +1,10 @@
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
-import InputAuxTextProps from '../InputAuxText/InputAuxText';
 import { Icons } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
-import { EyButton, Field, Label, Undelined } from './undelinedInputStyles';
 import { useState } from 'react';
 import RenderIf from '@/components/RenderIf/RenderIf';
+import { EyButton, Field, Label, Undelined } from './undelinedInputStyles';
+import InputAuxTextProps from '../InputAuxText/InputAuxText';
 
 interface IProps {
   id: string;
@@ -15,7 +15,9 @@ interface IProps {
   value?: string;
   register?: UseFormRegisterReturn;
   errorType?: FieldError;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void | VoidFunction;
+  onChange?: (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => void | VoidFunction;
   onCopy?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
   onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
 }
@@ -70,7 +72,11 @@ const UnderlinedInput: React.FC<IProps> = ({
         </EyButton>
       </RenderIf>
       {errorType?.type === 'required' && !isPassword && (
-        <Icons.BsExclamationOctagonFill color={theme.colors.RED.hex_EB5757} size={20} className="error-icon" />
+        <Icons.BsExclamationOctagonFill
+          color={theme.colors.RED.hex_EB5757}
+          size={20}
+          className="error-icon"
+        />
       )}
       <InputAuxTextProps text={errorType?.message} variant="ERROR-MESSAGE" />
     </Field>

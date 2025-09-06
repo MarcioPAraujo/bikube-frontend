@@ -7,10 +7,10 @@ import mobileMask from '@/utils/masks/mobileMask';
 import { stateNames } from '@/utils/statesNames';
 import { PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalDataSchema';
 import { Controller } from 'react-hook-form';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import { FieldsWrapper, Form } from './editPersonalDataForm';
 import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import EditSubmitButton from '../Elements/EditSubmitButtons/EditSubmitButtons';
-import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import useEditPersonalDataForm from './useEditPersonalDataForm';
 
 interface EditPersonalDataFormProps {
@@ -19,14 +19,25 @@ interface EditPersonalDataFormProps {
   onClose: () => void;
 }
 
-const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValues, isOpen, onClose }) => {
+const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({
+  defaultValues,
+  isOpen,
+  onClose,
+}) => {
   const {
     cities,
     states,
     selectedState,
     hanldleClose,
     onFormSubmit,
-    hookform: { control, register, handleSubmit, setValue, errors, isSubmitting },
+    hookform: {
+      control,
+      register,
+      handleSubmit,
+      setValue,
+      errors,
+      isSubmitting,
+    },
     modals: { setWarningModalOpen, warningModalOpen, successModalOpen },
   } = useEditPersonalDataForm({ defaultValues, onClose });
 
@@ -75,7 +86,8 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({ defaultValu
             labelText="Telefone"
             placeholder="Insira seu telefone"
             register={register('phoneNumber', {
-              onChange: e => setValue('phoneNumber', mobileMask(e.target.value)),
+              onChange: e =>
+                setValue('phoneNumber', mobileMask(e.target.value)),
             })}
             errorType={errors.phoneNumber}
           />

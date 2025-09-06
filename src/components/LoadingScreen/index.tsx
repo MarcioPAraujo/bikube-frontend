@@ -8,7 +8,14 @@ const LoadingScreen: React.FC<ILoadingScreenProps> = ({ message }) => {
   return (
     <Background>
       <LoadingContainer>
-        <Image src="/images/loading.png" alt="Loading" width={80} height={90} priority quality={100} />
+        <Image
+          src="/images/loading.png"
+          alt="Loading"
+          width={80}
+          height={90}
+          priority
+          quality={100}
+        />
         <LoadingText>{message}</LoadingText>
       </LoadingContainer>
     </Background>

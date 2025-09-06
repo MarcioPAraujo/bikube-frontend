@@ -29,7 +29,8 @@ export interface City {
   microrregiao: Microrregiao;
 }
 
-const IBGE_API_URL = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
+const IBGE_API_URL =
+  'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
 
 export const fetchCitiesByState = async (stateCode: string) => {
   try {

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-no-useless-fragment */
 interface RenderIfProps {
   children: React.ReactNode;

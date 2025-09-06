@@ -1,6 +1,6 @@
 export interface ILogsresponse {
-  id:       number;
+  id: number;
   registro: string;
-  acao:     string;
-  data:     Date;
+  acao: string;
+  data: string;
 }

@@ -72,7 +72,8 @@ export const Button = styled.button`
   font-size: 1.6rem;
   margin-top: auto;
   margin-bottom: 2rem;
-  transition: border-color 0.5s ease, color 0.4s ease, background-color 0.7s ease;
+  transition: border-color 0.5s ease, color 0.4s ease,
+    background-color 0.7s ease;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.GREEN.hex_78C841};

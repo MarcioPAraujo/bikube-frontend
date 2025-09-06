@@ -3,7 +3,9 @@ import { api } from '../api';
 
 type Result<T> = { data: T; error: null } | { data: null; error: string };
 
-export const termsOfUseService = async (email: string): Promise<Result<string>> => {
+export const termsOfUseService = async (
+  email: string,
+): Promise<Result<string>> => {
   const url = 'funcionario/aceitartermo';
   const body = {
     email,
@@ -12,7 +14,7 @@ export const termsOfUseService = async (email: string): Promise<Result<string>> 
   try {
     const response: AxiosResponse<string> = await api.post(url, body);
 
-    const data = response.data;
+    const { data } = response;
     return { data, error: null };
   } catch (error: any) {
     if (axios.isAxiosError(error)) {

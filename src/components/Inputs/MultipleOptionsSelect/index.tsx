@@ -1,9 +1,25 @@
 import { IOption } from '@/interfaces/option';
-import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
-import { InputContainer, Container, Label, Placeholder, Input, InputWrapper, SelectArea, ErrorMessage } from './styles';
-import OptionsSelect from './components/Options';
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Icons } from '@/components/Icons/Icons';
 import RenderIf from '@/components/RenderIf/RenderIf';
+import {
+  InputContainer,
+  Container,
+  Label,
+  Placeholder,
+  Input,
+  InputWrapper,
+  SelectArea,
+  ErrorMessage,
+} from './styles';
+import OptionsSelect from './Options';
 
 interface ISelectProps {
   id: string;
@@ -42,7 +58,9 @@ const MultipleOptionsSelect: FC<ISelectProps> = ({
   const handleOptionClick = (option: IOption) => {
     let updatedOptions: IOption[] = [];
     if (isOptionSelected(option)) {
-      updatedOptions = selectedOption.filter(selected => selected.value !== option.value);
+      updatedOptions = selectedOption.filter(
+        selected => selected.value !== option.value,
+      );
     } else {
       updatedOptions = [...selectedOption, option];
     }
@@ -59,7 +77,10 @@ const MultipleOptionsSelect: FC<ISelectProps> = ({
   };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
         setSearchValue('');
         setIsOpen(false);
       }

@@ -5,8 +5,8 @@ import { Table } from '@/components/Table/Index/Index';
 import { getsectors } from '@/services/setor/setorService';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { TopTitle } from './styles';
 import { SectorForm } from '@/components/Forms/SetorForm';
+import { TopTitle } from './styles';
 
 const columns = ['Nome'];
 const SectorsPage = () => {
@@ -26,12 +26,19 @@ const SectorsPage = () => {
 
   return (
     <>
-      <SectorForm isOpen={modalOpen} onClose={() => setModalOpen(false)} successfulSubmit={refetch} />
+      <SectorForm
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        successfulSubmit={refetch}
+      />
 
       <div>
         <TopTitle>
           <h1>Setores</h1>
-          <DefaultButton text="Cadastrar setor" onClick={() => setModalOpen(true)} />
+          <DefaultButton
+            text="Cadastrar setor"
+            onClick={() => setModalOpen(true)}
+          />
         </TopTitle>
         <Table.Root tableClassName="setores">
           <Table.Header columns={columns} />

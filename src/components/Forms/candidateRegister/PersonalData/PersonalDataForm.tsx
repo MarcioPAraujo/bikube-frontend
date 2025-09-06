@@ -1,12 +1,12 @@
-import FormTitle from '../FormTitle/FormTitle';
-import { Content, Form } from './personalDataFormStyles';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import mobileMask from '@/utils/masks/mobileMask';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
-import usePersonalDataForm from './usePersonalDataForm';
 import { Controller } from 'react-hook-form';
 import { stateNames } from '@/utils/statesNames';
+import usePersonalDataForm from './usePersonalDataForm';
+import { Content, Form } from './personalDataFormStyles';
+import FormTitle from '../FormTitle/FormTitle';
 
 const PersonalDataForm: React.FC = () => {
   const {
@@ -37,7 +37,8 @@ const PersonalDataForm: React.FC = () => {
           labelText="Telefone"
           placeholder="Insira seu telefone"
           register={register('phoneNumber', {
-            onChange: e => storeValue('phoneNumber', mobileMask(e.target.value)),
+            onChange: e =>
+              storeValue('phoneNumber', mobileMask(e.target.value)),
           })}
           errorType={errors.phoneNumber}
         />

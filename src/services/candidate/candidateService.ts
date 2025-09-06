@@ -7,8 +7,8 @@ import { PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalD
 import { ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
 import { SkillsSchemaType } from '@/validation/candidateRegister/SkillSchema';
 import { format, parse } from 'date-fns';
-import { api } from '../api';
 import { AxiosError } from 'axios';
+import { api } from '../api';
 
 export interface ICreateCandidateRequest {
   step1: CredentialsSchemaType;
@@ -18,7 +18,9 @@ export interface ICreateCandidateRequest {
   step5: SkillsSchemaType;
 }
 
-export const registerNewCandidate = async (steps: ICreateCandidateRequest): Promise<Result<boolean>> => {
+export const registerNewCandidate = async (
+  steps: ICreateCandidateRequest,
+): Promise<Result<boolean>> => {
   const ENDPOINT = '/candidato';
 
   const decryptedPassword = await decryptPassword(steps.step1.password);
@@ -37,8 +39,14 @@ export const registerNewCandidate = async (steps: ICreateCandidateRequest): Prom
       : steps.step4.experiences.map(item => ({
           empresa: item.company,
           descricao: item.description,
-          dataFim: format(parse(item.endDate, 'dd/MM/yyyy', new Date()), 'yyyy-MM-dd'),
-          dataInicio: format(parse(item.startDate, 'dd/MM/yyyy', new Date()), 'yyyy-MM-dd'),
+          dataFim: format(
+            parse(item.endDate, 'dd/MM/yyyy', new Date()),
+            'yyyy-MM-dd',
+          ),
+          dataInicio: format(
+            parse(item.startDate, 'dd/MM/yyyy', new Date()),
+            'yyyy-MM-dd',
+          ),
         })),
     formacaoAcademica: steps.step3.education
       ? steps.step3.education.map(item => {

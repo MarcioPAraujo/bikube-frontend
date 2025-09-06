@@ -1,5 +1,12 @@
 import { FC } from 'react';
-import { BlurBackground, Button, ButtonGroup, Container, Message, ModalWrapper } from './styles';
+import {
+  BlurBackground,
+  Button,
+  ButtonGroup,
+  Container,
+  Message,
+  ModalWrapper,
+} from './styles';
 
 interface IKeepLoggedInToastModalProps {
   isOpen: boolean;
@@ -7,14 +14,20 @@ interface IKeepLoggedInToastModalProps {
   onJustLogin: () => void;
 }
 
-export const KeepLoggedInModal: FC<IKeepLoggedInToastModalProps> = ({ onStayLoggedIn, onJustLogin, isOpen }) => {
+export const KeepLoggedInModal: FC<IKeepLoggedInToastModalProps> = ({
+  onStayLoggedIn,
+  onJustLogin,
+  isOpen,
+}) => {
   if (!isOpen) return null;
 
   return (
     <Container>
       <BlurBackground />
       <ModalWrapper>
-        <Message>Login realizado com sucesso, deseja permanecer logado?</Message>
+        <Message>
+          Login realizado com sucesso, deseja permanecer logado?
+        </Message>
         <ButtonGroup>
           <Button onClick={onStayLoggedIn}>Sim, permanecer logado</Button>
           <Button onClick={onJustLogin} className="not-logged-in">

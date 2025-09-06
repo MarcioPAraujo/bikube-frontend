@@ -3,10 +3,9 @@ import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import { AcademicDataSchemaType } from '@/validation/candidateRegister/AcademicData';
 import { Controller } from 'react-hook-form';
-import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
 import RadioInput from '@/components/Inputs/Radio/Radio';
-import { Icons } from '@/components/Icons/Icons';
+import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import {
   EducationContainer,
   EducationWrapper,
@@ -17,7 +16,7 @@ import {
   Section,
 } from './editAcademicBackgroundFormStyles';
 import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';
-import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
+import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import useEditAcademicBackgroundForm from './useEditAcademicBackgroundForm';
 import AddButton from '../Elements/AddButton/AddButton';
 import RemoveButton from '../Elements/RemoveButton/RemoveButton';
@@ -28,7 +27,11 @@ interface EditAcademicBackgroundFormProps {
   defaultValues: AcademicDataSchemaType;
 }
 
-const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({ isOpen, onClose, defaultValues }) => {
+const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
+  isOpen,
+  onClose,
+  defaultValues,
+}) => {
   const {
     handleClose,
     onDateChange,
@@ -122,7 +125,14 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
             <AddButton
               label="+ Formação"
               disabled={educationArray.length >= 3}
-              onClick={() => appendEducation({ instituition: '', course: '', startDate: '', endDate: '' })}
+              onClick={() =>
+                appendEducation({
+                  instituition: '',
+                  course: '',
+                  startDate: '',
+                  endDate: '',
+                })
+              }
             />
             {educationArray.map((field, index) => (
               <EducationWrapper key={field.id}>
@@ -170,8 +180,15 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
           </EducationContainer>
         </Section>
         <EditSubmitButtons
-          submitButton={{ labelText: isSubmitting ? 'Salvando...' : 'Salvar mudanças', disabled: isSubmitting }}
-          cancelButton={{ labelText: 'Cancelar', onClick: () => setWarningModalOpen(true), disabled: isSubmitting }}
+          submitButton={{
+            labelText: isSubmitting ? 'Salvando...' : 'Salvar mudanças',
+            disabled: isSubmitting,
+          }}
+          cancelButton={{
+            labelText: 'Cancelar',
+            onClick: () => setWarningModalOpen(true),
+            disabled: isSubmitting,
+          }}
         />
       </Form>
     </ModalBackground>

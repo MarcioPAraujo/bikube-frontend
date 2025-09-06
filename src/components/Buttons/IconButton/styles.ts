@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Button = styled.button`
   background-color: transparent;
@@ -14,6 +14,5 @@ export const Button = styled.button`
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
-
   }
 `;

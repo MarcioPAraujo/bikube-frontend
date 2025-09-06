@@ -6,8 +6,17 @@ const CandidateHomeHeader: React.FC = () => {
   const router = useRouter();
   return (
     <Header>
-      <Image alt="logo bikube" src="/images/default-logo.png" width={180} height={80} priority />
-      <ButtonProfile type="button" onClick={() => router.push('/area-do-candidato/meu-perfil')}>
+      <Image
+        alt="logo bikube"
+        src="/images/default-logo.png"
+        width={180}
+        height={80}
+        priority
+      />
+      <ButtonProfile
+        type="button"
+        onClick={() => router.push('/area-do-candidato/meu-perfil')}
+      >
         Meu perfil
       </ButtonProfile>
     </Header>

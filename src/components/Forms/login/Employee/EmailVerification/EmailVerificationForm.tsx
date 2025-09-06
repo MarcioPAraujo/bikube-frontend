@@ -12,7 +12,10 @@ const EmailVerificationForm: React.FC = () => {
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>
       <Title>Email</Title>
-      <Description>Insira seu email informado na contratação, você receberá o código de confirmação</Description>
+      <Description>
+        Insira seu email informado na contratação, você receberá o código de
+        confirmação
+      </Description>
       <InputComponent
         id="email"
         labelText="Email"

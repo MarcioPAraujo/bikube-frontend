@@ -1,4 +1,7 @@
-import { ResetPasswordSchema, ResetPasswordSchemaType } from '@/validation/Login/ResetPasswordSchema';
+import {
+  ResetPasswordSchema,
+  ResetPasswordSchemaType,
+} from '@/validation/Login/ResetPasswordSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

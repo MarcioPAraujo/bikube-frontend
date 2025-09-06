@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   position: fixed;
@@ -40,7 +40,7 @@ export const Title = styled.h1`
   color: ${({ theme }) => theme.colors.BLACK};
   text-align: center;
   font-weight: 700;
-`
+`;
 export const TextContainer = styled.div`
   width: 100%;
   height: 45rem;

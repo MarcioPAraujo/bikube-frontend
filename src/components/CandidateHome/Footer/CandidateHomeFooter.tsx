@@ -1,7 +1,6 @@
 import Image from 'next/image';
-import { Footer, Topic, TopicsWrapper } from './candidateHomeFooterStyles';
-import { title } from 'process';
 import Link from 'next/link';
+import { Footer, Topic, TopicsWrapper } from './candidateHomeFooterStyles';
 
 const topics = [
   {
@@ -15,7 +14,10 @@ const topics = [
   {
     title: 'Institucional',
     data: ['Termos de uso', 'Políticas de privacidade'],
-    links: ['/area-do-candidato/termos-de-uso', '/area-do-candidato/politicas-de-privacidade'],
+    links: [
+      '/area-do-candidato/termos-de-uso',
+      '/area-do-candidato/politicas-de-privacidade',
+    ],
   },
   {
     title: 'Endereço',
@@ -26,7 +28,12 @@ const topics = [
 const CandidateHomeFooter: React.FC = () => {
   return (
     <Footer>
-      <Image alt="bikube logo" src="/images/login-logo-white.png" width={150} height={80} />
+      <Image
+        alt="bikube logo"
+        src="/images/login-logo-white.png"
+        width={150}
+        height={80}
+      />
       <TopicsWrapper>
         {topics.map(topic => {
           if (topic.title === 'Institucional') {
@@ -36,7 +43,9 @@ const CandidateHomeFooter: React.FC = () => {
                 <ul>
                   {topic.data.map((item, idx) => (
                     <li key={item}>
-                      <Link href={topic.links ? topic.links[idx] : '#'}>{item}</Link>
+                      <Link href={topic.links ? topic.links[idx] : '#'}>
+                        {item}
+                      </Link>
                     </li>
                   ))}
                 </ul>

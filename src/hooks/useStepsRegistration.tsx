@@ -66,11 +66,21 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  const [step1, setStep1] = useState<StepType<CredentialsSchemaType>>(setInitialStepState(1));
-  const [step2, setStep2] = useState<StepType<PersonalDataSchemaType>>(setInitialStepState(2));
-  const [step3, setStep3] = useState<StepType<AcademicDataSchemaType>>(setInitialStepState(3));
-  const [step4, setStep4] = useState<StepType<ProfessionalSchemaType>>(setInitialStepState(4));
-  const [step5, setStep5] = useState<StepType<SkillsSchemaType>>(setInitialStepState(5));
+  const [step1, setStep1] = useState<StepType<CredentialsSchemaType>>(
+    setInitialStepState(1),
+  );
+  const [step2, setStep2] = useState<StepType<PersonalDataSchemaType>>(
+    setInitialStepState(2),
+  );
+  const [step3, setStep3] = useState<StepType<AcademicDataSchemaType>>(
+    setInitialStepState(3),
+  );
+  const [step4, setStep4] = useState<StepType<ProfessionalSchemaType>>(
+    setInitialStepState(4),
+  );
+  const [step5, setStep5] = useState<StepType<SkillsSchemaType>>(
+    setInitialStepState(5),
+  );
 
   useEffect(() => {
     const storedStep1 = sessionStorage.getItem(SESSION_STORAGE_KEYS.step1);
@@ -119,7 +129,9 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
     const steps = [step1, step2, step3, step4, step5];
 
     // Find the index of the first incomplete step
-    const firstIncompleteIndex = steps.findIndex(step => step.formData === null);
+    const firstIncompleteIndex = steps.findIndex(
+      step => step.formData === null,
+    );
 
     // If all steps are complete, allow navigation anywhere
     if (firstIncompleteIndex === -1) return;
@@ -164,16 +176,35 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
       step4,
       step5,
     }),
-    [step1, step2, step3, step4, step5, setStep1, setStep2, setStep3, setStep4, setStep5, currentStep, setCurrentStep],
+    [
+      step1,
+      step2,
+      step3,
+      step4,
+      step5,
+      setStep1,
+      setStep2,
+      setStep3,
+      setStep4,
+      setStep5,
+      currentStep,
+      setCurrentStep,
+    ],
   );
 
-  return <StepsFormContext.Provider value={value}>{children}</StepsFormContext.Provider>;
+  return (
+    <StepsFormContext.Provider value={value}>
+      {children}
+    </StepsFormContext.Provider>
+  );
 };
 
 export const useStepsRegistration = (): IStepsValues => {
   const context = useContext(StepsFormContext);
   if (!context) {
-    throw new Error('The useStepsRegistration must be within a StepsFormContext provider');
+    throw new Error(
+      'The useStepsRegistration must be within a StepsFormContext provider',
+    );
   }
   return context;
 };

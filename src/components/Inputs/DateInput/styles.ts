@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Field = styled.div`
   position: relative;
@@ -34,4 +34,3 @@ export const Content = styled.span`
     opacity: 0.5;
   }
 `;
-

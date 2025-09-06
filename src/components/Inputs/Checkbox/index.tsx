@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { FaCheck } from 'react-icons/fa6';
-import { Checkbox, CheckboxContainer, Container, Label } from './styles';
 import { UseFormRegisterReturn } from 'react-hook-form';
+import { Checkbox, CheckboxContainer, Container, Label } from './styles';
 
 interface CheckboxProps {
   id: string;
@@ -10,7 +10,9 @@ interface CheckboxProps {
   isChecked?: boolean;
   disabled?: boolean;
   value?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void | (() => void);
+  onChange?: (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => void | (() => void);
 }
 
 const CheckboxComponent: FC<CheckboxProps> = ({

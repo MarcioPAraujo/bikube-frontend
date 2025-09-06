@@ -1,7 +1,10 @@
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { ProfessionalSchema, ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
+import {
+  ProfessionalSchema,
+  ProfessionalSchemaType,
+} from '@/validation/candidateRegister/ProfessionalExperience';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -16,7 +19,8 @@ type ProfessionalExperience = {
 
 const useProfessionalExperienceForm = () => {
   const router = useRouter();
-  const { setCurrentStep, step3, step4, step5, setStep4 } = useStepsRegistration();
+  const { setCurrentStep, step3, step4, step5, setStep4 } =
+    useStepsRegistration();
 
   const {
     control,
@@ -33,7 +37,9 @@ const useProfessionalExperienceForm = () => {
     mode: 'onChange',
     defaultValues: {
       isFirstJob: false,
-      experiences: [{ company: '', description: '', startDate: '', endDate: '' }],
+      experiences: [
+        { company: '', description: '', startDate: '', endDate: '' },
+      ],
     },
   });
 
@@ -51,7 +57,7 @@ const useProfessionalExperienceForm = () => {
       data = sessionData ? JSON.parse(sessionData) : null;
       if (!data) return;
     }
-    const isFirstJob = data.isFirstJob;
+    const { isFirstJob } = data;
     const experiences = isFirstJob ? [] : data.experiences;
     setValue('isFirstJob', isFirstJob);
     replace(experiences);
@@ -81,7 +87,9 @@ const useProfessionalExperienceForm = () => {
     setValue('isFirstJob', isFirstJob);
 
     // Prepare new experiences array
-    const experiences = isFirstJob ? [] : [{ company: '', description: '', startDate: '', endDate: '' }];
+    const experiences = isFirstJob
+      ? []
+      : [{ company: '', description: '', startDate: '', endDate: '' }];
 
     // Update field array and errors
     replace(experiences);
@@ -91,9 +99,15 @@ const useProfessionalExperienceForm = () => {
     storeFormDataInSession({ isFirstJob, experiences });
   };
 
-  const onDateChange = (value: string, index: number, field: 'startDate' | 'endDate') => {
+  const onDateChange = (
+    value: string,
+    index: number,
+    field: 'startDate' | 'endDate',
+  ) => {
     const maskedValue = ddmmyyyyMask(value);
-    setValue(`experiences.${index}.${field}`, maskedValue, { shouldValidate: true });
+    setValue(`experiences.${index}.${field}`, maskedValue, {
+      shouldValidate: true,
+    });
     if (field === 'startDate') {
       const endDateErrors = errors.experiences?.[index]?.endDate;
       if (endDateErrors) trigger(`experiences.${index}.endDate`);
@@ -103,7 +117,11 @@ const useProfessionalExperienceForm = () => {
     if (startDateErrors) trigger(`experiences.${index}.startDate`);
   };
 
-  const storeValuesInSession = (value: string, index: number, field: keyof ProfessionalExperience) => {
+  const storeValuesInSession = (
+    value: string,
+    index: number,
+    field: keyof ProfessionalExperience,
+  ) => {
     const currentData = getValues('experiences');
     const isFirstJob = getValues('isFirstJob');
     const newExperiencesValues = currentData.map((experience, idx) =>

@@ -2,12 +2,14 @@ import InputComponent from '@/components/Inputs/InputComponent';
 import SelectComponent from '@/components/Inputs/Select';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { EmployeesFormSchema, EmployeesFormValues } from '@/validation/Employees/EmployeesForm';
+import {
+  EmployeesFormSchema,
+  EmployeesFormValues,
+} from '@/validation/Employees/EmployeesForm';
 import { IOption } from '@/interfaces/option';
 import { getsectors } from '@/services/setor/setorService';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { ButtonContainer, Fieldset, FormContainer, GridContainer, Legend } from './styles';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import cpfMask from '@/utils/masks/cpfMask';
@@ -23,6 +25,13 @@ import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import { useRouter } from 'next/navigation';
 import { format, parse } from 'date-fns';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
+import {
+  ButtonContainer,
+  Fieldset,
+  FormContainer,
+  GridContainer,
+  Legend,
+} from './styles';
 
 interface Address {
   city: string;
@@ -57,7 +66,9 @@ const EmployeeForm = () => {
   });
   const router = useRouter();
   const [selectedSector, setSelectedSector] = useState<IOption>({} as IOption);
-  const [selectedPosition, setSelectedPosition] = useState<IOption>({} as IOption);
+  const [selectedPosition, setSelectedPosition] = useState<IOption>(
+    {} as IOption,
+  );
   const [gettingAddress, setGettingAddress] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -141,7 +152,9 @@ const EmployeeForm = () => {
 
     const employeeData: IEmployeeBody = {
       nome: data.nome,
-      salario: parseFloat(data.salario.replace(/\./g, '').replace(',', '.').replace('R$', '')),
+      salario: parseFloat(
+        data.salario.replace(/\./g, '').replace(',', '.').replace('R$', ''),
+      ),
       funcao: data.funcao,
       data_nascimento: formatDateToISO(data.data_nascimento),
       cpf: data.cpf,
@@ -197,7 +210,12 @@ const EmployeeForm = () => {
       <FormContainer onSubmit={handleSubmit(onFormSubmit)}>
         <ButtonContainer>
           <DefaultButton text="Salvar Funcionário" type="submit" />
-          <DefaultButton text="Cancelar" type="button" onClick={() => setWarningModal(true)} classname="bordered" />
+          <DefaultButton
+            text="Cancelar"
+            type="button"
+            onClick={() => setWarningModal(true)}
+            classname="bordered"
+          />
         </ButtonContainer>
         <Fieldset>
           <Legend>Dados do Funcionário</Legend>
@@ -215,7 +233,8 @@ const EmployeeForm = () => {
               labelText="Data de nascimento"
               placeholder="DD/MM/AAAA"
               register={register('data_nascimento', {
-                onChange: e => handleDateChange(e.target.value, 'data_nascimento'),
+                onChange: e =>
+                  handleDateChange(e.target.value, 'data_nascimento'),
               })}
               errorMessage={errors.data_nascimento?.message}
             />
@@ -321,7 +340,11 @@ const EmployeeForm = () => {
             <InputComponent
               id="state"
               labelText="Estado"
-              placeholder={gettingAddress ? 'Buscando estado...' : 'Digite o estado do funcionário'}
+              placeholder={
+                gettingAddress
+                  ? 'Buscando estado...'
+                  : 'Digite o estado do funcionário'
+              }
               register={register('estado')}
               errorMessage={errors.estado?.message}
             />
@@ -329,7 +352,11 @@ const EmployeeForm = () => {
             <InputComponent
               id="city"
               labelText="Cidade"
-              placeholder={gettingAddress ? 'Buscando cidade...' : 'Digite a cidade do funcionário'}
+              placeholder={
+                gettingAddress
+                  ? 'Buscando cidade...'
+                  : 'Digite a cidade do funcionário'
+              }
               register={register('cidade')}
               errorMessage={errors.cidade?.message}
             />
@@ -337,7 +364,11 @@ const EmployeeForm = () => {
             <InputComponent
               id="street"
               labelText="Rua"
-              placeholder={gettingAddress ? 'Buscando rua...' : 'Digite a rua do funcionário'}
+              placeholder={
+                gettingAddress
+                  ? 'Buscando rua...'
+                  : 'Digite a rua do funcionário'
+              }
               register={register('logradouro')}
               errorMessage={errors.logradouro?.message}
             />
@@ -345,7 +376,11 @@ const EmployeeForm = () => {
             <InputComponent
               id="neighborhood"
               labelText="Bairro"
-              placeholder={gettingAddress ? 'Buscando bairro...' : 'Digite o bairro do funcionário'}
+              placeholder={
+                gettingAddress
+                  ? 'Buscando bairro...'
+                  : 'Digite o bairro do funcionário'
+              }
               register={register('bairro')}
               errorMessage={errors.bairro?.message}
             />

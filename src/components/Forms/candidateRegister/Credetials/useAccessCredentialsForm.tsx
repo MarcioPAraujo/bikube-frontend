@@ -1,14 +1,17 @@
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import { encryptPassword } from '@/utils/encryptPassword';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { CredentialsSchema, CredentialsSchemaType } from '@/validation/candidateRegister/CredentialSchema';
+import {
+  CredentialsSchema,
+  CredentialsSchemaType,
+} from '@/validation/candidateRegister/CredentialSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 const useAccessCredentialsForm = () => {
-  const { setCurrentStep, setStep1, step1, step2 } = useStepsRegistration();
+  const { setCurrentStep, setStep1, step1 } = useStepsRegistration();
   const router = useRouter();
   const {
     register,

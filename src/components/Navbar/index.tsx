@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { LI, NavbarStyled, OpenCloseButton, UL } from './styles';
-import { Icons } from '../Icons/Icons';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { Icons } from '../Icons/Icons';
+import { LI, NavbarStyled, OpenCloseButton, UL } from './styles';
 import RenderIf from '../RenderIf/RenderIf';
 
 interface Tab {
@@ -69,7 +69,10 @@ export const Navbar = () => {
 
   useEffect(() => {
     const clickOutsideHandler = (event: MouseEvent) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target as Node)) {
+      if (
+        navbarRef.current &&
+        !navbarRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -81,10 +84,20 @@ export const Navbar = () => {
 
   return (
     <NavbarStyled className={isOpen ? 'open' : 'close'} ref={navbarRef}>
-      <Image src="/images/White-Logo.png" alt="Logo" width={200} height={95} quality={100} priority />
+      <Image
+        src="/images/White-Logo.png"
+        alt="Logo"
+        width={200}
+        height={95}
+        quality={100}
+        priority
+      />
       <UL>
         {tabs.map(tab => (
-          <RenderIf isTrue={tab.allowedRoles.includes(user?.role || '')} key={tab.name}>
+          <RenderIf
+            isTrue={tab.allowedRoles.includes(user?.role || '')}
+            key={tab.name}
+          >
             <LI key={tab.name} className={isSelected(tab) ? 'selected' : ''}>
               <Link href={tab.url} className="nav-link">
                 {tab.name}
@@ -93,7 +106,11 @@ export const Navbar = () => {
           </RenderIf>
         ))}
       </UL>
-      <OpenCloseButton type="button" onClick={() => setIsOpen(!isOpen)} className={isOpen ? 'open' : 'close'}>
+      <OpenCloseButton
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={isOpen ? 'open' : 'close'}
+      >
         <Icons.CaretRight color="white" />
       </OpenCloseButton>
     </NavbarStyled>

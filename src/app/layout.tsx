@@ -8,7 +8,8 @@ const mulish = Mulish({
 });
 export const metadata: Metadata = {
   title: 'Bikube',
-  description: 'Bikube, um sistema de autenticação e gestão de usuários voltado ao setor de recursos humanos. ',
+  description:
+    'Bikube, um sistema de autenticação e gestão de usuários voltado ao setor de recursos humanos. ',
 };
 
 const RootLayout = ({

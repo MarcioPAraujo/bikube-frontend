@@ -1,14 +1,26 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { FC, useState } from 'react';
-import { BlurBackground, ButtonContainer, Container, ErrorMessage, Field, Form, TitleContainer } from './styles';
 import IconButton from '@/components/Buttons/IconButton';
 import { Icons } from '@/components/Icons/Icons';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { sectorSchema, SectorFormValues } from '@/validation/setor/sectorSchema';
+import {
+  sectorSchema,
+  SectorFormValues,
+} from '@/validation/setor/sectorSchema';
 import { createSector } from '@/services/setor/setorService';
 import { notifyError } from '@/utils/handleToast';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import {
+  BlurBackground,
+  ButtonContainer,
+  Container,
+  ErrorMessage,
+  Field,
+  Form,
+  TitleContainer,
+} from './styles';
 
 interface SectorFormProps {
   isOpen: boolean;
@@ -16,7 +28,11 @@ interface SectorFormProps {
   successfulSubmit: () => void;
 }
 
-export const SectorForm: FC<SectorFormProps> = ({ isOpen, onClose, successfulSubmit }) => {
+export const SectorForm: FC<SectorFormProps> = ({
+  isOpen,
+  onClose,
+  successfulSubmit,
+}) => {
   const [success, setSuccess] = useState<boolean>(false);
   const {
     register,
@@ -72,12 +88,22 @@ export const SectorForm: FC<SectorFormProps> = ({ isOpen, onClose, successfulSub
         </TitleContainer>
         <Field>
           <label htmlFor="sectorName">Nome do Setor:</label>
-          <input type="text" id="sectorName" placeholder="Insira o nome do setor..." {...register('nome')} />
+          <input
+            type="text"
+            id="sectorName"
+            placeholder="Insira o nome do setor..."
+            {...register('nome')}
+          />
           {errors.nome && <ErrorMessage>{errors.nome.message}</ErrorMessage>}
         </Field>
         <ButtonContainer>
           <DefaultButton text="Salvar" type="submit" />
-          <DefaultButton text="Cancelar" onClick={onCloseModal} type="button" classname="bordered" />
+          <DefaultButton
+            text="Cancelar"
+            onClick={onCloseModal}
+            type="button"
+            classname="bordered"
+          />
         </ButtonContainer>
       </Form>
     </Container>

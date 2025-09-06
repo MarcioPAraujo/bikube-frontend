@@ -7,11 +7,15 @@ export interface ILanguagesListResponse {
   idioma: string;
 }
 
-export const getLanguages = async (): Promise<Result<ILanguagesListResponse[]>> => {
+export const getLanguages = async (): Promise<
+  Result<ILanguagesListResponse[]>
+> => {
   const ENDPOINT = '/idioma';
 
   try {
-    const response: AxiosResponse<ILanguagesListResponse[]> = await api.get(ENDPOINT);
+    const response: AxiosResponse<ILanguagesListResponse[]> = await api.get(
+      ENDPOINT,
+    );
     return { data: response.data, error: null };
   } catch (error: any) {
     const axiosError = error as AxiosError;

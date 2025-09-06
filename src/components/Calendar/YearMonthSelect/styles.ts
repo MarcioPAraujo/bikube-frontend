@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   position: absolute;
@@ -72,5 +72,3 @@ export const Button = styled.button`
     color: ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};
   }
 `;
-
-

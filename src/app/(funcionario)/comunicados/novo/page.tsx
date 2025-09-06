@@ -1,6 +1,12 @@
 'use client';
 
 import InputComponent from '@/components/Inputs/InputComponent';
+import { useState } from 'react';
+import { IOption } from '@/interfaces/option';
+import CheckboxComponent from '@/components/Inputs/Checkbox';
+import { DefaultButton } from '@/components/Buttons/DefaultButton';
+import RenderIf from '@/components/RenderIf/RenderIf';
+import MultipleOptionsSelect from '@/components/Inputs/MultipleOptionsSelect';
 import {
   ButtonsWrapper,
   CheckboxWrapper,
@@ -10,12 +16,6 @@ import {
   InputWrapper,
   TextArea,
 } from './styles';
-import { useState } from 'react';
-import { IOption } from '@/interfaces/option';
-import CheckboxComponent from '@/components/Inputs/Checkbox';
-import { DefaultButton } from '@/components/Buttons/DefaultButton';
-import RenderIf from '@/components/RenderIf/RenderIf';
-import MultipleOptionsSelect from '@/components/Inputs/MultipleOptionsSelect';
 
 const destinataryOptions: IOption[] = [
   { value: 'Todos', label: 'Todos' },
@@ -43,13 +43,21 @@ const NewAnnouncementPage = () => {
       <FormHeader>
         <h1>Novo comunicado</h1>
         <ButtonsWrapper>
-          <DefaultButton classname="bordered" text="Cancelar" onClick={() => setWarningModal(true)} />
+          <DefaultButton
+            classname="bordered"
+            text="Cancelar"
+            onClick={() => setWarningModal(true)}
+          />
           <DefaultButton text="Salvar" type="submit" />
         </ButtonsWrapper>
       </FormHeader>
       <FieldsWrapper>
         <div>
-          <InputComponent id="subject" labelText="Assunto" placeholder="Digite o assunto do comunicado" />
+          <InputComponent
+            id="subject"
+            labelText="Assunto"
+            placeholder="Digite o assunto do comunicado"
+          />
           <CheckboxWrapper>
             {destinataryOptions.map(option => (
               <CheckboxComponent
@@ -78,7 +86,10 @@ const NewAnnouncementPage = () => {
         </div>
         <InputWrapper>
           <InputLabel htmlFor="message">Mensagem</InputLabel>
-          <TextArea id="message" placeholder="Insira a mensagem do comunicado aqui." />
+          <TextArea
+            id="message"
+            placeholder="Insira a mensagem do comunicado aqui."
+          />
         </InputWrapper>
       </FieldsWrapper>
     </form>

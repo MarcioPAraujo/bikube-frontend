@@ -6,6 +6,5 @@ const cpfMask = (value: string) => {
     .replace(/(\d{3})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d)/, '$1-$2')
     .slice(0, 14); // Limit to 14 characters (11 digits + 2 dots + 1 dash)
-
 };
 export default cpfMask;

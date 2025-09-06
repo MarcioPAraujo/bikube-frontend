@@ -1,9 +1,16 @@
+/* eslint-disable max-len */
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { theme } from '@/styles/theme';
 import usePagination from '@/hooks/usePagination';
-import { memo, SetStateAction } from 'react';
+import { memo } from 'react';
 import React from 'react';
-import { PaginationContainer, NaviagtionButton, PageNumber, Ellipsis, PaginationText } from './styles';
+import {
+  PaginationContainer,
+  NaviagtionButton,
+  PageNumber,
+  Ellipsis,
+  PaginationText,
+} from './styles';
 
 interface PaginationProps {
   currentPage: number;

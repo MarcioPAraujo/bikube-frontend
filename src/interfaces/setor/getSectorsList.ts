@@ -1,4 +1,4 @@
 export interface ISectorResponse {
-  id:   number;
+  id: number;
   nome: string;
 }

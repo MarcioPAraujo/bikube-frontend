@@ -1,10 +1,10 @@
 import { format } from 'date-fns';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Content, Field, Label } from './styles';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { Icons } from '@/components/Icons/Icons';
 import CalendarInput from '@/components/Calendar/InputCalendar';
 import RenderIf from '@/components/RenderIf/RenderIf';
+import { Content, Field, Label } from './styles';
 
 interface DateInputProps {
   id: string;
@@ -15,7 +15,15 @@ interface DateInputProps {
   register?: UseFormRegisterReturn;
   error?: string;
 }
-const DateInput: React.FC<DateInputProps> = ({ date, label, setDate, placeholder, id, error, register }) => {
+const DateInput: React.FC<DateInputProps> = ({
+  date,
+  label,
+  setDate,
+  placeholder,
+  id,
+  error,
+  register,
+}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const value = date ? format(date, 'dd/MM/yyyy') : '';
   return (
@@ -23,7 +31,7 @@ const DateInput: React.FC<DateInputProps> = ({ date, label, setDate, placeholder
       <Label htmlFor={id}>
         {label}
         <Content className={value ? 'filled' : 'placeholder'}>
-          {value ? value : placeholder} <Icons.Calendar />
+          {value || placeholder} <Icons.Calendar />
         </Content>
         <input
           id={id}
@@ -37,7 +45,11 @@ const DateInput: React.FC<DateInputProps> = ({ date, label, setDate, placeholder
           hidden
         />
         <RenderIf isTrue={showDatePicker}>
-          <CalendarInput date={date} setDate={setDate} onClose={() => setShowDatePicker(false)} />
+          <CalendarInput
+            date={date}
+            setDate={setDate}
+            onClose={() => setShowDatePicker(false)}
+          />
         </RenderIf>
       </Label>
     </Field>

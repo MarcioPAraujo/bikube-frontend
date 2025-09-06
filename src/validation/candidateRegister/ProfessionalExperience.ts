@@ -19,24 +19,32 @@ export const ProfessionalSchema = yup.object().shape({
           .string()
           .required('A data de início é obrigatória')
           .matches(DDMMYYYY_REGEX, 'Data inválida')
-          .test('is-before', 'A data de iníco deve ser anterior a data de fim', function (value) {
-            const { endDate } = this.parent;
-            if (!endDate || !value) return false;
-            const start = parse(value, 'dd/MM/yyyy', new Date());
-            const end = parse(endDate, 'dd/MM/yyyy', new Date());
-            return start < end;
-          }),
+          .test(
+            'is-before',
+            'A data de iníco deve ser anterior a data de fim',
+            function isSmaller(value) {
+              const { endDate } = this.parent;
+              if (!endDate || !value) return false;
+              const start = parse(value, 'dd/MM/yyyy', new Date());
+              const end = parse(endDate, 'dd/MM/yyyy', new Date());
+              return start < end;
+            },
+          ),
         endDate: yup
           .string()
           .required('A data final é obrigatória')
           .matches(DDMMYYYY_REGEX, 'Data inválida')
-          .test('is-after', 'A data de fim deve ser posterior a data de início', function (value) {
-            const { startDate } = this.parent;
-            if (!startDate || !value) return false;
-            const start = parse(startDate, 'dd/MM/yyyy', new Date());
-            const end = parse(value, 'dd/MM/yyyy', new Date());
-            return end > start;
-          }),
+          .test(
+            'is-after',
+            'A data de fim deve ser posterior a data de início',
+            function isBigger(value) {
+              const { startDate } = this.parent;
+              if (!startDate || !value) return false;
+              const start = parse(startDate, 'dd/MM/yyyy', new Date());
+              const end = parse(value, 'dd/MM/yyyy', new Date());
+              return end > start;
+            },
+          ),
       }),
     )
     .required('Ao menos uma experiência deve ser incluída')

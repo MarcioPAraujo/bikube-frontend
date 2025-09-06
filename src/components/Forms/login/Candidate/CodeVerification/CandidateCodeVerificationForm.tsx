@@ -1,5 +1,11 @@
 import InputComponent from '@/components/Inputs/InputComponent';
-import { CodeResntButton, Description, Form, SubmitButton, Title } from '../styles';
+import {
+  CodeResntButton,
+  Description,
+  Form,
+  SubmitButton,
+  Title,
+} from '../styles';
 import useCandidateCodeVerificationForm from './useCandidateCodeVerificationForm';
 
 const CandidateCodeVerificationForm: React.FC = () => {
@@ -25,7 +31,11 @@ const CandidateCodeVerificationForm: React.FC = () => {
         })}
         errorMessage={errors.code?.message}
       />
-      <CodeResntButton type="button" disabled={!canResendCode} onClick={resendCode}>
+      <CodeResntButton
+        type="button"
+        disabled={!canResendCode}
+        onClick={resendCode}
+      >
         {canResendCode && 'Reenviar o código'}
         {!canResendCode && `Reenviar o código em: ${resetTime}`}
       </CodeResntButton>

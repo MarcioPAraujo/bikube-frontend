@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Button, ButtonsContainer, Container, Title } from './formTitleStyles';
 
 interface IFormTitleProps {
@@ -47,7 +48,12 @@ const FormTitle: React.FC<IFormTitleProps> = ({
         <Button type="button" onClick={onBack} className="back">
           Voltar
         </Button>
-        <Button type="submit" onClick={onNext} className="next" disabled={isNextDisabled}>
+        <Button
+          type="submit"
+          onClick={onNext}
+          className="next"
+          disabled={isNextDisabled}
+        >
           {nextButtonText}
         </Button>
       </ButtonsContainer>

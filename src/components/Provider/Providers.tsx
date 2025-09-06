@@ -29,7 +29,10 @@ const Providers = ({ children }: PropsWithChildren) => {
         <QueryClientProvider client={queryClient}>
           <GlobalStyle />
           <AuthProvider>
-            <NextNProgress color={theme.colors.WHITE} options={{ easing: 'ease', speed: 500 }} />
+            <NextNProgress
+              color={theme.colors.WHITE}
+              options={{ easing: 'ease', speed: 500 }}
+            />
             <StepsRegistrationProvider>{children}</StepsRegistrationProvider>
           </AuthProvider>
           <ToastContainer

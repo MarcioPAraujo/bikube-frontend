@@ -2,7 +2,10 @@ import { candidateLogin } from '@/services/login/candidateLogin';
 import { notifyError } from '@/utils/handleToast';
 import { emailMask } from '@/utils/masks/emailMask';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { CandidateLoginSchema, CandidateLoginSchemaType } from '@/validation/Login/CandidateLoginSchema';
+import {
+  CandidateLoginSchema,
+  CandidateLoginSchemaType,
+} from '@/validation/Login/CandidateLoginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
@@ -23,13 +26,19 @@ const useCandidateLoginForm = () => {
   };
 
   const onFormSubmit = async (data: CandidateLoginSchemaType) => {
-    const result = await candidateLogin({ email: data.email, password: data.password });
+    const result = await candidateLogin({
+      email: data.email,
+      password: data.password,
+    });
     if (result.error) {
       notifyError(result.error);
       return;
     }
     if (result.data) {
-      sessionStorage.setItem(SESSION_STORAGE_KEYS.token, JSON.stringify(result.data.access_token));
+      sessionStorage.setItem(
+        SESSION_STORAGE_KEYS.token,
+        JSON.stringify(result.data.access_token),
+      );
     }
     console.log(data);
   };

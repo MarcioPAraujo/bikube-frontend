@@ -1,7 +1,14 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Backbutton, Button, Container, Datebutton, Header, ScrollContainer, SelectsContainer } from './styles';
 import { Icons } from '@/components/Icons/Icons';
-import { date } from 'yup';
+import {
+  Backbutton,
+  Button,
+  Container,
+  Datebutton,
+  Header,
+  ScrollContainer,
+  SelectsContainer,
+} from './styles';
 
 interface ICalendarInputProps {
   isOpen: boolean;
@@ -27,7 +34,12 @@ const monthNames = [
 
 const MAX_YEARS = 20; // Number of years to show in the select
 
-const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, onClose, setDate }) => {
+const YearMonthSelect: React.FC<ICalendarInputProps> = ({
+  currentDate,
+  isOpen,
+  onClose,
+  setDate,
+}) => {
   const selectRef = useRef<HTMLDivElement>(null);
   const [selectedYear, setSelectedYear] = useState<number | undefined>(
     currentDate ? currentDate.getFullYear() : undefined,
@@ -44,7 +56,10 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
     const currentYear = selectedYear || new Date().getFullYear();
     const startYear = currentYear - 20; // 20 years ago
     const endYear = currentYear + 20; // 20 years in the future
-    const yearRange = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+    const yearRange = Array.from(
+      { length: endYear - startYear + 1 },
+      (_, i) => startYear + i,
+    );
     setYears(yearRange);
   }, []);
 
@@ -59,7 +74,9 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
       // Assuming each button has a fixed height (e.g., 42px), adjust if needed
       const buttonHeight = 36;
       yearScrollRef.current.scrollTop =
-        index * buttonHeight - yearScrollRef.current.clientHeight / 2 + buttonHeight / 2;
+        index * buttonHeight -
+        yearScrollRef.current.clientHeight / 2 +
+        buttonHeight / 2;
 
       hasScrolledToYear.current = true;
     }
@@ -67,7 +84,10 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
         onClose();
         hasScrolledToYear.current = false;
       }
@@ -94,18 +114,25 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
       const firstYear = years[0];
       const newYears = Array.from({ length: 20 }, (_, i) => firstYear - 20 + i);
       const updatedYears = [...newYears, ...years];
-      const newList = updatedYears.length > MAX_YEARS ? updatedYears.slice(0, MAX_YEARS) : updatedYears;
-      setYears(updatedYears);
+      const newList =
+        updatedYears.length > MAX_YEARS
+          ? updatedYears.slice(0, MAX_YEARS)
+          : updatedYears;
+      setYears(newList);
 
       // Maintain scroll position after prepending
       setTimeout(() => {
-        container.scrollTop = (container.scrollHeight / (years.length + 20)) * 21;
+        container.scrollTop =
+          (container.scrollHeight / (years.length + 20)) * 21;
       }, 0);
       return;
     }
 
     // Check if user is at the end
-    if (container.scrollTop + container.clientHeight >= container.scrollHeight - 2) {
+    if (
+      container.scrollTop + container.clientHeight >=
+      container.scrollHeight - 2
+    ) {
       const lastYear = years[years.length - 1];
       const newYears = Array.from({ length: 20 }, (_, i) => lastYear + i + 1);
       const updatedYears = [...years, ...newYears];
@@ -115,7 +142,11 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
 
   const handleSetSelectedDate = () => {
     if (!selectedYear || !selectedMonth) return;
-    const newDate = new Date(Number(selectedYear), Number(selectedMonth) - 1, 1);
+    const newDate = new Date(
+      Number(selectedYear),
+      Number(selectedMonth) - 1,
+      1,
+    );
     setDate(newDate);
     handleClose();
   };
@@ -128,9 +159,15 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({ currentDate, isOpen, o
         <Backbutton type="button" onClick={handleClose}>
           <Icons.ArrowLeft color="white" />
         </Backbutton>
-        <Datebutton type="button" onClick={handleSetSelectedDate} disabled={!selectedYear || !selectedMonth}>
+        <Datebutton
+          type="button"
+          onClick={handleSetSelectedDate}
+          disabled={!selectedYear || !selectedMonth}
+        >
           {(!selectedMonth || !selectedYear) && 'Selecionar mês e ano'}
-          {selectedMonth && selectedYear && `Confirmar ${monthNames[selectedMonth - 1]} de ${selectedYear}`}
+          {selectedMonth &&
+            selectedYear &&
+            `Confirmar ${monthNames[selectedMonth - 1]} de ${selectedYear}`}
         </Datebutton>
       </Header>
       <SelectsContainer>

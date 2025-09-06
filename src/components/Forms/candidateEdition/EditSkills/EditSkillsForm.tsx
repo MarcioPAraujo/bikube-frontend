@@ -1,15 +1,15 @@
 import ModalBackground from '@/components/modals/elements/ModalBackground';
-import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import { Controller } from 'react-hook-form';
 import { SkillsSchemaType } from '@/validation/candidateRegister/SkillSchema';
-import AddButton from '../Elements/AddButton/AddButton';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
-import RemoveButton from '../Elements/RemoveButton/RemoveButton';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
-import { Description, Field, Form } from './editSkillsStyles';
-import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import AddButton from '../Elements/AddButton/AddButton';
+import RemoveButton from '../Elements/RemoveButton/RemoveButton';
+import { Description, Field, Form } from './editSkillsStyles';
+import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';
+import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import useEditSkillsForm from './useEditSkillsForm';
 
 interface EditSkillsFormProps {
@@ -18,10 +18,19 @@ interface EditSkillsFormProps {
   defaultValues: SkillsSchemaType;
 }
 
-const EditSkillsForm: React.FC<EditSkillsFormProps> = ({ isOpen, onClose, defaultValues }) => {
+const EditSkillsForm: React.FC<EditSkillsFormProps> = ({
+  isOpen,
+  onClose,
+  defaultValues,
+}) => {
   const {
     hookform: { control, register, handleSubmit, isSubmitting, errors },
-    modals: { warningModalOpen, setWarningModalOpen, successModalOpen, setSuccessModalOpen },
+    modals: {
+      warningModalOpen,
+      setWarningModalOpen,
+      successModalOpen,
+      setSuccessModalOpen,
+    },
     skillsOptions,
     skillsArray: { fields, append, remove },
     onPeriodChange,
@@ -100,12 +109,18 @@ const EditSkillsForm: React.FC<EditSkillsFormProps> = ({ isOpen, onClose, defaul
               errorType={errors.skills?.[index]?.periodInMonths}
             />
             <div>
-              <RemoveButton onClick={() => remove(index)} disabled={fields.length === 1} />
+              <RemoveButton
+                onClick={() => remove(index)}
+                disabled={fields.length === 1}
+              />
             </div>
           </Field>
         ))}
         <EditSubmitButtons
-          cancelButton={{ labelText: 'Cancelar', onClick: () => setWarningModalOpen(true) }}
+          cancelButton={{
+            labelText: 'Cancelar',
+            onClick: () => setWarningModalOpen(true),
+          }}
           submitButton={{ labelText: 'Salvar', disabled: isSubmitting }}
         />
       </Form>

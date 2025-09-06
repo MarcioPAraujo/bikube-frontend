@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Input, Label } from './styles';
 import { UseFormRegisterReturn } from 'react-hook-form';
+import { Input, Label } from './styles';
 
 interface CheckboxProps {
   id: string;

@@ -1,23 +1,38 @@
+/* eslint-disable react/jsx-no-useless-fragment */
+
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
 import Image from 'next/image';
-import { DataContainer, Header, MainContainer, ProfileContainer, UserInfo, UserName } from './styles';
 import { Icons } from '@/components/Icons/Icons';
-import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
+import {
+  DataContainer,
+  Header,
+  MainContainer,
+  ProfileContainer,
+  UserInfo,
+  UserName,
+} from './styles';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { user, logout } = useAuth();
   if (!user) {
-    return <>{children}</>; // or a loading spinner
+    return <>{children}</>;
   }
 
   return (
     <div>
       <Header>
         <div>
-          <Image src="/images/Logo.png" alt="Logo" width={215} height={90} quality={100} priority />
+          <Image
+            src="/images/Logo.png"
+            alt="Logo"
+            width={215}
+            height={90}
+            quality={100}
+            priority
+          />
         </div>
         <button type="button" onClick={logout}>
           logout

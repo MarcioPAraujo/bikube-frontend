@@ -1,4 +1,7 @@
-import FormTitle from '../FormTitle/FormTitle';
+import { Icons } from '@/components/Icons/Icons';
+import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
+import { theme } from '@/styles/theme';
+import Textarea from '@/components/Inputs/Textarea/Textarea';
 import {
   AddButton,
   CheckboxInput,
@@ -9,10 +12,7 @@ import {
   Form,
   RemoveButton,
 } from './professionalExperieceFormStyle';
-import { Icons } from '@/components/Icons/Icons';
-import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
-import { theme } from '@/styles/theme';
-import Textarea from '@/components/Inputs/Textarea/Textarea';
+import FormTitle from '../FormTitle/FormTitle';
 import useProfessionalExperienceForm from './useProfessionalExperienceForm';
 
 const ProfessionalExperienceForm: React.FC = () => {
@@ -33,9 +33,15 @@ const ProfessionalExperienceForm: React.FC = () => {
     <Form onSubmit={handleSubmit(onFormSubmit)}>
       <FormTitle title="Experiêcia profissional" onBack={back} />
       <Content>
-        <Description>Coloque até 3 experiêcnias profissioanis que você acha relevante</Description>
+        <Description>
+          Coloque até 3 experiêcnias profissioanis que você acha relevante
+        </Description>
         {fields.length < 3 && (
-          <AddButton type="button" disabled={isFirstjob} onClick={addExperience}>
+          <AddButton
+            type="button"
+            disabled={isFirstjob}
+            onClick={addExperience}
+          >
             + Adicionar
           </AddButton>
         )}
@@ -59,7 +65,8 @@ const ProfessionalExperienceForm: React.FC = () => {
               labelText="Nome da empresa"
               placeholder="Insira o nome da empresa onde trabalhou"
               register={register(`experiences.${index}.company`, {
-                onBlur: e => storeValuesInSession(e.target.value, index, 'company'),
+                onBlur: e =>
+                  storeValuesInSession(e.target.value, index, 'company'),
               })}
               errorType={errors.experiences?.[index]?.company}
             />
@@ -69,7 +76,8 @@ const ProfessionalExperienceForm: React.FC = () => {
               placeholder="dd/mm/aaaa"
               register={register(`experiences.${index}.startDate`, {
                 onChange: e => onDateChange(e.target.value, index, 'startDate'),
-                onBlur: e => storeValuesInSession(e.target.value, index, 'startDate'),
+                onBlur: e =>
+                  storeValuesInSession(e.target.value, index, 'startDate'),
               })}
               errorType={errors.experiences?.[index]?.startDate}
             />
@@ -79,7 +87,8 @@ const ProfessionalExperienceForm: React.FC = () => {
               placeholder="dd/mm/aaaa"
               register={register(`experiences.${index}.endDate`, {
                 onChange: e => onDateChange(e.target.value, index, 'endDate'),
-                onBlur: e => storeValuesInSession(e.target.value, index, 'endDate'),
+                onBlur: e =>
+                  storeValuesInSession(e.target.value, index, 'endDate'),
               })}
               errorType={errors.experiences?.[index]?.endDate}
             />
@@ -88,12 +97,16 @@ const ProfessionalExperienceForm: React.FC = () => {
               label="Descrição"
               placeholder="Descreva suas atividades e conquistas"
               register={register(`experiences.${index}.description`, {
-                onBlur: e => storeValuesInSession(e.target.value, index, 'description'),
+                onBlur: e =>
+                  storeValuesInSession(e.target.value, index, 'description'),
               })}
               error={errors.experiences?.[index]?.description}
             />
             <div>
-              <RemoveButton type="button" onClick={() => removeExperience(index)}>
+              <RemoveButton
+                type="button"
+                onClick={() => removeExperience(index)}
+              >
                 <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
               </RemoveButton>
             </div>

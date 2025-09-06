@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Paragraph } from './inputAuxtextStyles';
 
 type Variant = 'NONE' | 'ERROR-MESSAGE';
@@ -14,7 +15,14 @@ interface IInputAuxTextProps {
  *
  * Default bottom: -1.5rem;
  */
-const InputAuxTextProps: React.FC<IInputAuxTextProps> = ({ text, color, fontSize, left, bottom, variant = 'NONE' }) => {
+const InputAuxTextProps: React.FC<IInputAuxTextProps> = ({
+  text,
+  color,
+  fontSize,
+  left,
+  bottom,
+  variant = 'NONE',
+}) => {
   const styleProps = {
     text,
     color,

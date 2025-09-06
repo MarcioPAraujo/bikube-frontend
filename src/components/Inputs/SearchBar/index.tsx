@@ -15,11 +15,20 @@ interface ISearchBarProps {
  * @param {string} placeholder - the placeholder of the input
  * @returns
  */
-const SearchBarComponent: FC<ISearchBarProps> = ({ value, onSearch, placeholder }) => {
+const SearchBarComponent: FC<ISearchBarProps> = ({
+  value,
+  onSearch,
+  placeholder,
+}) => {
   return (
     <InputContainer>
       <Icons.SearchIcon />
-      <Input type="text" value={value} placeholder={placeholder} onChange={onSearch} />
+      <Input
+        type="text"
+        value={value}
+        placeholder={placeholder}
+        onChange={onSearch}
+      />
     </InputContainer>
   );
 };

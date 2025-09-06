@@ -1,4 +1,15 @@
-import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import RenderIf from '@/components/RenderIf/RenderIf';
+import { IOption } from '@/interfaces/option';
+import { Icons } from '@/components/Icons/Icons';
+import OptionsSelect from './Options';
 import {
   InputContainer,
   Container,
@@ -10,10 +21,6 @@ import {
   SelectArea,
   ErrorMessage,
 } from './styles';
-import OptionsSelect from './Options';
-import RenderIf from '@/components/RenderIf/RenderIf';
-import { IOption } from '@/interfaces/option';
-import { Icons } from '@/components/Icons/Icons';
 
 interface ISelectProps {
   id: string;
@@ -62,7 +69,10 @@ const SelectComponent: FC<ISelectProps> = ({
   };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
         setSearchValue('');
         setIsOpen(false);
       }
@@ -84,7 +94,9 @@ const SelectComponent: FC<ISelectProps> = ({
           className={isOpen ? 'opened' : ''}
         >
           <RenderIf isFalse={enableSearch && isOpen}>
-            {selectedOption.label && <SelectedOption>{selectedOption.label}</SelectedOption>}
+            {selectedOption.label && (
+              <SelectedOption>{selectedOption.label}</SelectedOption>
+            )}
             {!selectedOption.label && <Placeholder>{placeholder}</Placeholder>}
           </RenderIf>
           <RenderIf isTrue={isOpen && enableSearch}>

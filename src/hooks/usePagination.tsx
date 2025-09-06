@@ -1,50 +1,52 @@
 import { useMemo } from 'react';
 
 /**
- * Custom hook to generate a pagination range for a given current page and total pages.
+ * Custom hook to generate a pagination range based on the current page and total pages.
+ * It displays a limited number of pages around the current page, with ellipses for skipped pages.
+ * @param currentPage - The current page number.
+ * @param totalPages - The total number of pages.
+ * @returns An array representing the pagination range.
  *
- * This hook generates a pagination range that includes the current page, its neighbors, and ellipses for large page sets.
- * @param {number} currentPage - The current active page.
- * @param {number} totalPages - The total number of pages available.
- * @returns {Array<number | string>} An array representing the pagination range.
+ * @example
+ * const pagination = usePagination(3, 10);
+ * // Returns [1, '...', 2, 3, 4, '...', 10]
  */
 const usePagination = (currentPage: number, totalPages: number) => {
   const displayPages = 3;
 
-  const paginationRange = useMemo(() => {
+  const getRange = (start: number, end: number) => {
     const range = [];
+    for (let i = start; i <= end; i++) {
+      range.push(i);
+    }
+    return range;
+  };
 
+  const paginationRange = useMemo(() => {
     if (totalPages <= displayPages + 2) {
-      // Show all pages if total pages are less than or equal to displayPages + 2
-      for (let i = 1; i <= totalPages; i++) {
-        range.push(i);
-      }
-    } else if (currentPage <= displayPages) {
-      // Show first displayPages pages, ellipsis, and last page
-      for (let i = 1; i <= displayPages; i++) {
-        range.push(i);
-      }
-      range.push('...');
-      range.push(totalPages);
-    } else if (currentPage > totalPages - displayPages) {
-      // Show first page, ellipsis, and last displayPages pages
-      range.push(1);
-      range.push('...');
-      for (let i = totalPages - displayPages + 1; i <= totalPages; i++) {
-        range.push(i);
-      }
-    } else {
-      // Show first page, ellipsis, current page and neighbors, ellipsis, and last page
-      range.push(1);
-      range.push('...');
-      for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-        range.push(i);
-      }
-      range.push('...');
-      range.push(totalPages);
+      return getRange(1, totalPages);
     }
 
-    return range;
+    if (currentPage === displayPages) {
+      // Show first displayPages + 1 pages, ellipsis, and last page
+      return [...getRange(1, displayPages + 1), '...', totalPages];
+    }
+
+    if (currentPage < displayPages) {
+      return [...getRange(1, displayPages + 1), '...', totalPages];
+    }
+
+    if (currentPage > totalPages - displayPages) {
+      return [1, '...', ...getRange(totalPages - displayPages, totalPages)];
+    }
+
+    return [
+      1,
+      '...',
+      ...getRange(currentPage - 1, currentPage + 1),
+      '...',
+      totalPages,
+    ];
   }, [currentPage, totalPages]);
 
   return paginationRange;

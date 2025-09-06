@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import { IOption } from '@/interfaces/option';
 import { registerNewCandidate } from '@/services/candidate/candidateService';
 import { getSkills } from '@/services/skilss/skilssService';
 import { notifyError } from '@/utils/handleToast';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { SkillsSchema, SkillsSchemaType } from '@/validation/candidateRegister/SkillSchema';
+import {
+  SkillsSchema,
+  SkillsSchemaType,
+} from '@/validation/candidateRegister/SkillSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,7 +16,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 
 const useSkillsForm = () => {
   const router = useRouter();
-  const { setCurrentStep, setStep5, step5, step4, step3, step2, step1 } = useStepsRegistration();
+  const { setCurrentStep, setStep5, step5, step4, step3, step2, step1 } =
+    useStepsRegistration();
   const [successModalOpen, setSuccessModalOpen] = useState<boolean>(false);
   const [skillsOptions, setSkillsOptions] = useState<IOption[]>([]);
 
@@ -79,15 +84,22 @@ const useSkillsForm = () => {
     remove(index);
   };
 
-  const storeOnChange = (value: string, index: number, field: 'competency' | 'periodInMonths') => {
+  const storeOnChange = (
+    value: string,
+    index: number,
+    field: 'competency' | 'periodInMonths',
+  ) => {
     const currentValues = getValues();
-    const newValues = currentValues.skills.map((skill, i) => (i === index ? { ...skill, [field]: value } : skill));
+    const newValues = currentValues.skills.map((skill, i) =>
+      i === index ? { ...skill, [field]: value } : skill,
+    );
     storeValues({ skills: newValues });
   };
 
   const onSubmit = async (data: SkillsSchemaType) => {
     const hasDuplicates = data.skills.some(
-      (skill, index) => data.skills.findIndex(s => s.competency === skill.competency) !== index,
+      (skill, index) =>
+        data.skills.findIndex(s => s.competency === skill.competency) !== index,
     );
     if (hasDuplicates) {
       notifyError('Habilidades duplicadas não são permitidas.');
@@ -113,7 +125,10 @@ const useSkillsForm = () => {
     router.push(step4.pathname);
   };
 
-  const onPeriodChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const onPeriodChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
     const value = e.target.value.replace(/\D/g, '');
     if (value === '') {
       setValue(`skills.${index}.periodInMonths`, '0');
@@ -128,7 +143,6 @@ const useSkillsForm = () => {
   const hookform = {
     register,
     handleSubmit,
-    setValue,
     errors,
     isSubmitting,
     control,

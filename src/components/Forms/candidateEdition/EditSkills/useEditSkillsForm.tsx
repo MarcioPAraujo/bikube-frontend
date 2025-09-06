@@ -1,6 +1,9 @@
 import { IOption } from '@/interfaces/option';
 import { notifyError } from '@/utils/handleToast';
-import { SkillsSchema, SkillsSchemaType } from '@/validation/candidateRegister/SkillSchema';
+import {
+  SkillsSchema,
+  SkillsSchemaType,
+} from '@/validation/candidateRegister/SkillSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -51,7 +54,10 @@ const useEditSkillsForm = (defaultValues: SkillsSchemaType) => {
     setSkillsOptions(options);
   }, []);
 
-  const onPeriodChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const onPeriodChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
     const value = e.target.value.replace(/\D/g, '');
     if (value === '') {
       setValue(`skills.${index}.periodInMonths`, '0');
@@ -63,7 +69,8 @@ const useEditSkillsForm = (defaultValues: SkillsSchemaType) => {
 
   const onSubmit = (data: SkillsSchemaType) => {
     const hasDuplicates = data.skills.some(
-      (skill, index) => data.skills.findIndex(s => s.competency === skill.competency) !== index,
+      (skill, index) =>
+        data.skills.findIndex(s => s.competency === skill.competency) !== index,
     );
     if (hasDuplicates) {
       notifyError('Habilidades duplicadas não são permitidas.');

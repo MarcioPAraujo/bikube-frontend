@@ -1,11 +1,22 @@
 import { FC } from 'react';
-import { BlurBackground, ButtonContainer, Container, Form, TextArea, TextContainer, Title } from './styles';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import { termsOfUseService } from '@/services/termsOfUse/termsofUseService';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TermsOfUseSchema, ITermsOfUseSchema } from '@/validation/TermsOfUse/TermsOfUseSchema';
+import {
+  TermsOfUseSchema,
+  ITermsOfUseSchema,
+} from '@/validation/TermsOfUse/TermsOfUseSchema';
 import { notifyError } from '@/utils/handleToast';
+import {
+  BlurBackground,
+  ButtonContainer,
+  Container,
+  Form,
+  TextArea,
+  TextContainer,
+  Title,
+} from './styles';
 
 interface IProps {
   isOpen: boolean;
@@ -14,12 +25,18 @@ interface IProps {
   onReject: () => void;
   email: string;
 }
-const TermsOfUseModal: FC<IProps> = ({ isOpen, onClose, onAccept, onReject, email }) => {
+const TermsOfUseModal: FC<IProps> = ({
+  isOpen,
+  onClose,
+  onAccept,
+  onReject,
+  email,
+}) => {
   const { handleSubmit, setValue } = useForm<ITermsOfUseSchema>({
     resolver: yupResolver(TermsOfUseSchema),
     mode: 'onChange',
     defaultValues: {
-      email: email,
+      email,
     },
   });
   setValue('email', email);

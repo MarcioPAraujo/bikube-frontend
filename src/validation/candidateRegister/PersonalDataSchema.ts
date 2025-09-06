@@ -49,9 +49,15 @@ export const PersonalDataSchema = yup.object().shape({
   linkedin: yup
     .string()
     .required('O link do perfil do linkedin é obrigatório')
-    .matches(/^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/, 'Link do LinkedIn inválido'),
+    .matches(
+      /^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/,
+      'Link do LinkedIn inválido',
+    ),
   github: yup
     .string()
     .required('o link do perfil do github é obrigatório')
-    .matches(/^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/, 'Link do GitHub inválido'),
+    .matches(
+      /^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/,
+      'Link do GitHub inválido',
+    ),
 });

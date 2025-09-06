@@ -1,5 +1,8 @@
 import { emailMask } from '@/utils/masks/emailMask';
-import { SendCodeSchema, SendCodeSchemaType } from '@/validation/Login/SendCodeSchema';
+import {
+  SendCodeSchema,
+  SendCodeSchemaType,
+} from '@/validation/Login/SendCodeSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';

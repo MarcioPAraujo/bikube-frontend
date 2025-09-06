@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import axios, { AxiosRequestConfig } from 'axios';
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
@@ -24,14 +25,23 @@ const clearSessionStorage = () => {
   sessionStorage.removeItem(SESSION_STORAGE_KEYS.email);
 };
 
-const PUBLIC_ENDPOINTS = ['/auth/login', '/auth/refresh', 'usuario/novasenha', 'codigosenha', 'codigosenha/validar'];
+const PUBLIC_ENDPOINTS = [
+  '/auth/login',
+  '/auth/refresh',
+  'usuario/novasenha',
+  'codigosenha',
+  'codigosenha/validar',
+];
 
 api.interceptors.request.use(
   async config => {
-    const isPublicEndpoint = PUBLIC_ENDPOINTS.some(endpoint => config.url?.startsWith(endpoint));
+    const isPublicEndpoint = PUBLIC_ENDPOINTS.some(endpoint =>
+      config.url?.startsWith(endpoint),
+    );
     if (!isPublicEndpoint) {
       const token =
-        sessionStorage.getItem(SESSION_STORAGE_KEYS.token) || localStorage.getItem(LOCAL_STORAGE_KEYS.token);
+        sessionStorage.getItem(SESSION_STORAGE_KEYS.token) ||
+        localStorage.getItem(LOCAL_STORAGE_KEYS.token);
 
       if (token) {
         if (config.headers) {
@@ -61,7 +71,9 @@ export async function refreshAccessToken(): Promise<string> {
     // Redirect to login or handle as a session end.
     // In a real application, you'd have a more robust logout process here.
     // window.location.href = '/';
-    return Promise.reject(new Error('No refresh token found. User must log in again.'));
+    return Promise.reject(
+      new Error('No refresh token found. User must log in again.'),
+    );
   }
 
   try {
@@ -78,7 +90,9 @@ export async function refreshAccessToken(): Promise<string> {
       return data;
     }
 
-    return Promise.reject(new Error('Refresh token endpoint did not return a new access token.'));
+    return Promise.reject(
+      new Error('Refresh token endpoint did not return a new access token.'),
+    );
   } catch (error) {
     // If the refresh token itself is invalid, clear storage and force login.
     console.error('Refresh token failed:', error);
@@ -130,12 +144,18 @@ const processQueue = (error: any, token: string | null = null) => {
 api.interceptors.response.use(
   response => response,
   async error => {
-    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
+    const originalRequest = error.config as AxiosRequestConfig & {
+      retry?: boolean;
+    };
     const originalResponse = error.response;
 
     // Check for a 401 status and that the request hasn't been retried yet.
     // Also, ensure it's not a request to the refresh endpoint itself.
-    if (originalResponse?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/refresh') {
+    if (
+      originalResponse?.status === 401 &&
+      !originalRequest.retry &&
+      originalRequest.url !== '/auth/refresh'
+    ) {
       // If a refresh is already in progress, add the request to a queue.
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -155,27 +175,28 @@ api.interceptors.response.use(
       }
 
       // This is the first 401. Start the refresh process.
-      originalRequest._retry = true;
+      originalRequest.retry = true;
       isRefreshing = true;
 
       try {
         const newAccessToken = await refreshAccessToken();
 
         if (newAccessToken) {
-          // If the refresh was successful, update the token in the headers for the original request.
+          // If succsss, update the token in the headers for the original request.
           if (originalRequest.headers) {
-            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            originalRequest.headers[
+              'Authorization'
+            ] = `Bearer ${newAccessToken}`;
           }
           // Process all the requests in the queue.
           processQueue(null, newAccessToken);
 
           // Retry the original request.
           return api(originalRequest);
-        } else {
-          // If the refresh function returns a non-token value, reject all pending requests.
-          processQueue(new Error('Refresh token failed'), null);
-          return Promise.reject(error);
         }
+        // If the refresh function returns a non-token value, reject all pending requests.
+        processQueue(new Error('Refresh token failed'), null);
+        return Promise.reject(error);
       } catch (refreshError) {
         // If the refresh token itself fails, reject all pending requests and log the user out.
         processQueue(refreshError, null);
@@ -196,7 +217,11 @@ api.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest.retry && originalRequest.url !== '/auth/refresh') {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest.retry &&
+      originalRequest.url !== '/auth/refresh'
+    ) {
       originalRequest.retry = true;
       const newAccessToken = await refreshAccessToken();
       if (newAccessToken) {

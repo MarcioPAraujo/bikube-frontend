@@ -1,14 +1,15 @@
-import axios, { AxiosError } from "axios";
-import { api } from "../api";
-import { LOCAL_STORAGE_KEYS } from "@/utils/localStorageKeys";
+import axios, { AxiosError } from 'axios';
+import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
+import { api } from '../api';
 
-type Result = { isValid: boolean, error: null } | { isValid: boolean, error: string };
+type Result =
+  | { isValid: boolean; error: null }
+  | { isValid: boolean; error: string };
 
 export const validateCode = async (code: string): Promise<Result> => {
   const url = 'codigosenha/validar';
 
   try {
-
     const body = {
       codigo: code,
       email: localStorage.getItem(LOCAL_STORAGE_KEYS.email),
@@ -21,8 +22,7 @@ export const validateCode = async (code: string): Promise<Result> => {
     console.log(response);
 
     return { isValid: true, error: null };
-
-  } catch(error: any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
 
@@ -31,6 +31,6 @@ export const validateCode = async (code: string): Promise<Result> => {
       }
     }
 
-    return { isValid: false, error: "falha ao validar o código" };
+    return { isValid: false, error: 'falha ao validar o código' };
   }
 };

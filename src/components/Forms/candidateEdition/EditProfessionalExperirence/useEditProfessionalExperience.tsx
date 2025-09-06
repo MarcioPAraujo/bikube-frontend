@@ -1,5 +1,8 @@
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
-import { ProfessionalSchema, ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
+import {
+  ProfessionalSchema,
+  ProfessionalSchemaType,
+} from '@/validation/candidateRegister/ProfessionalExperience';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -32,16 +35,24 @@ const useProfessionalExperience = (defaultValues: ProfessionalSchemaType) => {
     setValue('isFirstJob', isFirstJob);
 
     // Prepare new experiences array
-    const experiences = isFirstJob ? [] : [{ company: '', description: '', startDate: '', endDate: '' }];
+    const experiences = isFirstJob
+      ? []
+      : [{ company: '', description: '', startDate: '', endDate: '' }];
 
     // Update field array and errors
     replace(experiences);
     clearErrors('experiences');
   };
 
-  const onDateChange = (value: string, index: number, field: 'startDate' | 'endDate') => {
+  const onDateChange = (
+    value: string,
+    index: number,
+    field: 'startDate' | 'endDate',
+  ) => {
     const maskedValue = ddmmyyyyMask(value);
-    setValue(`experiences.${index}.${field}`, maskedValue, { shouldValidate: true });
+    setValue(`experiences.${index}.${field}`, maskedValue, {
+      shouldValidate: true,
+    });
     if (field === 'startDate') {
       const endDateErrors = errors.experiences?.[index]?.endDate;
       if (endDateErrors) trigger(`experiences.${index}.endDate`);
@@ -63,7 +74,12 @@ const useProfessionalExperience = (defaultValues: ProfessionalSchemaType) => {
     watch,
     errors,
   };
-  const modals = { successModal, warningModal, setWarningModal, setSuccessModal };
+  const modals = {
+    successModal,
+    warningModal,
+    setWarningModal,
+    setSuccessModal,
+  };
   const fieldArray = { fields, append, remove };
   const handlers = { onDateChange, onFistJobChange, onFormSubmit };
 

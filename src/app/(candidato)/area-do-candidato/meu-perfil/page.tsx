@@ -1,6 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import EditPersonalDataForm from '@/components/Forms/candidateEdition/EditPersonalData/EditPersonalDataForm';
+import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/EditAcademicBackground/EditAcademicBackgroundForm';
+import EditProfessionalExperience from '@/components/Forms/candidateEdition/EditProfessionalExperirence/EditProfesionalExperience';
+import EditSkillsForm from '@/components/Forms/candidateEdition/EditSkills/EditSkillsForm';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import {
   DeleteButton,
   EditButton,
@@ -12,11 +17,6 @@ import {
   Subtitle,
   Title,
 } from './styles';
-import EditPersonalDataForm from '@/components/Forms/candidateEdition/EditPersonalData/EditPersonalDataForm';
-import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/EditAcademicBackground/EditAcademicBackgroundForm';
-import EditProfessionalExperience from '@/components/Forms/candidateEdition/EditProfessionalExperirence/EditProfesionalExperience';
-import EditSkillsForm from '@/components/Forms/candidateEdition/EditSkills/EditSkillsForm';
-import WarningModal from '@/components/modals/WarningModal/WarningModal';
 
 const levels = ['1', '2', '3'];
 
@@ -27,8 +27,8 @@ const languages = Array.from({ length: 5 }, (_, i) => ({
 const education = Array.from({ length: 3 }, (_, i) => ({
   instituition: `Instituição ${i + 1}`,
   course: `Curso ${i + 1}`,
-  startDate: `01/03/2010`,
-  endDate: `01/07/2015`,
+  startDate: '01/03/2010',
+  endDate: '01/07/2015',
 }));
 
 const skills = Array.from({ length: 5 }, (_, i) => ({
@@ -61,8 +61,8 @@ const MyProfilePage: React.FC = () => {
         isOpen={academicFormVisible}
         onClose={() => setAcademicFormVisible(false)}
         defaultValues={{
-          languages: languages,
-          education: education,
+          languages,
+          education,
         }}
       />
       <EditProfessionalExperience
@@ -104,13 +104,19 @@ const MyProfilePage: React.FC = () => {
       />
       <PageContainer>
         <Title>Meu Perfil</Title>
-        <DeleteButton type="button" onClick={() => setWarningModalVisible(true)}>
+        <DeleteButton
+          type="button"
+          onClick={() => setWarningModalVisible(true)}
+        >
           Deletar conta
         </DeleteButton>
         <SectionsContainer>
           <section>
             <SectionTitle>Dados Pessoais</SectionTitle>
-            <EditButton type="button" onClick={() => setPersonalDataFormVisible(true)}>
+            <EditButton
+              type="button"
+              onClick={() => setPersonalDataFormVisible(true)}
+            >
               Editar
             </EditButton>
             <SectionContent>
@@ -136,7 +142,10 @@ const MyProfilePage: React.FC = () => {
           </section>
           <section>
             <SectionTitle>Formação acadêmica</SectionTitle>
-            <EditButton type="button" onClick={() => setAcademicFormVisible(true)}>
+            <EditButton
+              type="button"
+              onClick={() => setAcademicFormVisible(true)}
+            >
               Editar
             </EditButton>
             <SectionContent className="academic">
@@ -171,7 +180,10 @@ const MyProfilePage: React.FC = () => {
           </section>
           <section>
             <SectionTitle>Experiência profissional</SectionTitle>
-            <EditButton type="button" onClick={() => setExperienceFormVisible(true)}>
+            <EditButton
+              type="button"
+              onClick={() => setExperienceFormVisible(true)}
+            >
               Editar
             </EditButton>
             <SectionContent>
@@ -191,7 +203,10 @@ const MyProfilePage: React.FC = () => {
           </section>
           <section>
             <SectionTitle>Habilidades</SectionTitle>
-            <EditButton type="button" onClick={() => setSkillsFormVisible(true)}>
+            <EditButton
+              type="button"
+              onClick={() => setSkillsFormVisible(true)}
+            >
               Editar
             </EditButton>
             <SectionContent>

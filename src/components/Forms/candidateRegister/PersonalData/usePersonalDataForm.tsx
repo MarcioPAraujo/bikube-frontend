@@ -3,8 +3,10 @@ import { IOption } from '@/interfaces/option';
 import { City, fetchCitiesByState } from '@/services/citiesAPI';
 import { fetchBrazilianStates } from '@/services/statesAPI';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { stateNames } from '@/utils/statesNames';
-import { PersonalDataSchema, PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalDataSchema';
+import {
+  PersonalDataSchema,
+  PersonalDataSchemaType,
+} from '@/validation/candidateRegister/PersonalDataSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -23,7 +25,8 @@ const fetchCities = async (stateUF: string): Promise<IOption[]> => {
 };
 
 const usePersonalDataForm = () => {
-  const { setCurrentStep, step1, setStep2, step2, step3 } = useStepsRegistration();
+  const { setCurrentStep, step1, setStep2, step2, step3 } =
+    useStepsRegistration();
   const router = useRouter();
   const {
     control,
@@ -102,7 +105,10 @@ const usePersonalDataForm = () => {
       ...prev,
       formData: newValues,
     }));
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.step2, JSON.stringify(newValues));
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.step2,
+      JSON.stringify(newValues),
+    );
   };
 
   const onSubmit = (data: PersonalDataSchemaType) => {

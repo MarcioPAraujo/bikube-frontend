@@ -1,6 +1,6 @@
 import InputComponent from '@/components/Inputs/InputComponent';
-import { CustomLink, Form, SubmitButton, Title } from '../commonStyles';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
+import { CustomLink, Form, SubmitButton, Title } from '../commonStyles';
 import useEmployeeLoginForm from './useEmployeeLoginForm';
 
 const EmployeeLoginForm: React.FC = () => {

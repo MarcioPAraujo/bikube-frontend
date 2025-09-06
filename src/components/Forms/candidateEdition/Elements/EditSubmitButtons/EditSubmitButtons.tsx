@@ -1,4 +1,9 @@
-import { ButtonsContainer, CancelButton, SubmitButton } from './editSubmitButtonsStyles';
+import {
+  ButtonsContainer,
+  CancelButton,
+  SubmitButton,
+} from './editSubmitButtonsStyles';
+
 interface ISubmitButton {
   labelText: string;
   disabled: boolean;
@@ -12,10 +17,17 @@ interface EditSubmitButtonProps {
   submitButton: ISubmitButton;
   cancelButton: ICancelButton;
 }
-const EditSubmitButtons: React.FC<EditSubmitButtonProps> = ({ submitButton, cancelButton }) => {
+const EditSubmitButtons: React.FC<EditSubmitButtonProps> = ({
+  submitButton,
+  cancelButton,
+}) => {
   return (
     <ButtonsContainer>
-      <CancelButton type="button" onClick={cancelButton.onClick} disabled={cancelButton.disabled}>
+      <CancelButton
+        type="button"
+        onClick={cancelButton.onClick}
+        disabled={cancelButton.disabled}
+      >
         {cancelButton.labelText}
       </CancelButton>
       <SubmitButton type="submit" disabled={submitButton.disabled}>

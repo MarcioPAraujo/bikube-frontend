@@ -10,7 +10,9 @@ interface TextareaProps {
   disabled?: boolean;
   error?: FieldError;
   register?: UseFormRegisterReturn;
-  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void | VoidFunction;
+  onChange?: (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => void | VoidFunction;
 }
 const Textarea: React.FC<TextareaProps> = ({
   id,

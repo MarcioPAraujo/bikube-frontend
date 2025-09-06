@@ -13,11 +13,16 @@ export interface ICandidateLoginBody {
   password: string;
 }
 
-export const candidateLogin = async (body: ICandidateLoginBody): Promise<Result<ICandidaetLoginResponse>> => {
+export const candidateLogin = async (
+  body: ICandidateLoginBody,
+): Promise<Result<ICandidaetLoginResponse>> => {
   const ENDPOINT = '/auth/logincandidato';
 
   try {
-    const response: AxiosResponse<ICandidaetLoginResponse> = await api.post(ENDPOINT, body);
+    const response: AxiosResponse<ICandidaetLoginResponse> = await api.post(
+      ENDPOINT,
+      body,
+    );
     return { data: response.data, error: null };
   } catch (error: any) {
     const axiosError = error as AxiosError;

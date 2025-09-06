@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Page = styled.div`
   .content {
@@ -20,7 +20,7 @@ export const Content = styled.p`
   font-size: 1.6rem;
 `;
 
-export const Header  =styled.header`
+export const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;

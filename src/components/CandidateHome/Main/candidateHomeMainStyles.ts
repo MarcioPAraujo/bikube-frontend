@@ -28,7 +28,8 @@ export const VacanciesSection = styled.section`
     bottom: 0 !important;
   }
   .swiper-pagination-bullet-active {
-    background-color: ${props => props.theme.colors.YELLOW.hex_F6B31B} !important;
+    background-color: ${props =>
+      props.theme.colors.YELLOW.hex_F6B31B} !important;
   }
 `;
 

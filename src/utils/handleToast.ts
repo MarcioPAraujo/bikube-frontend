@@ -11,4 +11,3 @@ export const notifySuccess = (message: string) =>
     position: 'top-right',
     autoClose: 5000,
   });
-

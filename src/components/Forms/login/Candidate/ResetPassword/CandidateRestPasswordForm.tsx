@@ -1,6 +1,6 @@
-import { Form, SubmitButton, Title } from '../styles';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import { Form, SubmitButton, Title } from '../styles';
 import useCandidateResetPasswordForm from './useCandidateResetPasswordForm';
 
 const CandidateRestPasswordForm: React.FC = () => {

@@ -5,10 +5,10 @@ const getEmployees = () => {
     employees.push({
       id: `${i}`,
       name: `John Kramer ${i}`,
-      position: "Engenheiro",
-      sector: "construção",
-      duty: "Planejamento residencial",
-      joined: "1994-02-02"
+      position: 'Engenheiro',
+      sector: 'construção',
+      duty: 'Planejamento residencial',
+      joined: '1994-02-02',
     });
   }
   return employees;

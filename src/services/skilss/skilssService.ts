@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { api } from '../api';
 import { Result } from '@/interfaces/apiResult';
+import { api } from '../api';
 
 export interface ISkillsListResponse {
   id: number;
@@ -11,7 +11,9 @@ export const getSkills = async (): Promise<Result<ISkillsListResponse[]>> => {
   const ENDPOINT = '/habilidade';
 
   try {
-    const response: AxiosResponse<ISkillsListResponse[]> = await api.get(ENDPOINT);
+    const response: AxiosResponse<ISkillsListResponse[]> = await api.get(
+      ENDPOINT,
+    );
     return { data: response.data, error: null };
   } catch (error: any) {
     const axiosError = error as AxiosError;

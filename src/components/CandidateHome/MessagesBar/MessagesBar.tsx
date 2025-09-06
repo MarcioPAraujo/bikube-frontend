@@ -1,4 +1,6 @@
 import { Icons } from '@/components/Icons/Icons';
+import { useEffect, useRef, useState } from 'react';
+import MessageDetailsModal from '@/components/modals/MessageDetailsModal/MessageDetailsModal';
 import {
   Bar,
   BlurBackground,
@@ -9,8 +11,6 @@ import {
   MessageButton,
   MessageWrapper,
 } from './messageBarStyles';
-import { useEffect, useRef, useState } from 'react';
-import MessageDetailsModal from '@/components/modals/MessageDetailsModal/MessageDetailsModal';
 
 interface IMessageBar {
   isOpen: boolean;
@@ -18,10 +18,10 @@ interface IMessageBar {
 }
 
 const messages = Array.from({ length: 20 }, (_, index) => ({
-  id: 'msg-' + (index + 1),
-  content:
-    'lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, blanditiis. Quasi voluptates nemo, iure natus saepe, iste aut adipisci a quod ducimus doloremque sequi, non nisi vero quos excepturi eius? ' +
-    (index + 1),
+  id: `msg-${index + 1}`,
+  content: `lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, blanditiis. Quasi voluptates nemo, iure natus saepe, iste aut adipisci a quod ducimus doloremque sequi, non nisi vero quos excepturi eius? ${
+    index + 1
+  }`,
   date: '22/11/2024',
 }));
 

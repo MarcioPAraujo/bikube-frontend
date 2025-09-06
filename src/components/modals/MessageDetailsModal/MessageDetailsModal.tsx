@@ -1,12 +1,22 @@
 import ModalBackground from '../elements/ModalBackground';
-import { CloseButton, DateDescription, MessagesContainer, Textarea, Title } from './messageDetailsModal';
+import {
+  CloseButton,
+  DateDescription,
+  MessagesContainer,
+  Textarea,
+  Title,
+} from './messageDetailsModal';
 
 interface IMessageDetailsModal {
   isOpen: boolean;
   onClose: () => void;
   messageId: string | null;
 }
-const MessageDetailsModal: React.FC<IMessageDetailsModal> = ({ isOpen, onClose, messageId }) => {
+const MessageDetailsModal: React.FC<IMessageDetailsModal> = ({
+  isOpen,
+  onClose,
+  messageId,
+}) => {
   if (!isOpen || !messageId) return null;
   return (
     <ModalBackground>

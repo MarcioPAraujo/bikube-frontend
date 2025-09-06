@@ -1,5 +1,5 @@
-import FormTitle from '../FormTitle/FormTitle';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
+import FormTitle from '../FormTitle/FormTitle';
 import { Content, Form } from './accessCredentialsFormStyles';
 import useAccessCredentialsForm from './useAccessCredentialsForm';
 
@@ -12,7 +12,11 @@ const AccessCredentialsForm: React.FC = () => {
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>
-      <FormTitle onBack={back} title="Credenciais de acesso" isNextDisabled={isSubmitting} />
+      <FormTitle
+        onBack={back}
+        title="Credenciais de acesso"
+        isNextDisabled={isSubmitting}
+      />
       <Content>
         <UnderlinedInput
           id="email"

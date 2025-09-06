@@ -4,6 +4,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 import { Icons } from '@/components/Icons/Icons';
+import { useState } from 'react';
+import VacancyCard from '@/components/VacancyCard/VacancyCard';
 import {
   CustomLink,
   H2,
@@ -12,8 +14,6 @@ import {
   Subtitle,
   VacanciesSection,
 } from './candidateHomeMainStyles';
-import { useState } from 'react';
-import VacancyCard from '@/components/VacancyCard/VacancyCard';
 import MessagesBar from '../MessagesBar/MessagesBar';
 
 interface IVancancyCardProps {
@@ -23,20 +23,29 @@ interface IVancancyCardProps {
   salary: string;
 }
 
-const mockedvacancies: IVancancyCardProps[] = Array.from({ length: 20 }, (_, index) => ({
-  title: `Vaga ${index + 1}`,
-  description:
-    'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore inventore odio, autem suscipit obcaecati voluptates nulla mollitia reiciendis molestiae magni illo perferendis iure impedit nam alias natus culpa tempora ab.',
-  location: 'São Paulo, SP',
-  salary: 'R$ 3.000,00',
-}));
+const mockedvacancies: IVancancyCardProps[] = Array.from(
+  { length: 20 },
+  (_, index) => ({
+    title: `Vaga ${index + 1}`,
+    description:
+      'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore inventore odio, autem suscipit obcaecati voluptates nulla mollitia reiciendis molestiae magni illo perferendis iure impedit nam alias natus culpa tempora ab.',
+    location: 'São Paulo, SP',
+    salary: 'R$ 3.000,00',
+  }),
+);
 
 const CandidateHomeMain: React.FC = () => {
   const [openNotifications, setOpenNotifications] = useState(false);
   return (
     <MainContainer>
-      <MessagesBar isOpen={openNotifications} onClose={() => setOpenNotifications(false)} />
-      <NotificationButton type="button" onClick={() => setOpenNotifications(true)}>
+      <MessagesBar
+        isOpen={openNotifications}
+        onClose={() => setOpenNotifications(false)}
+      />
+      <NotificationButton
+        type="button"
+        onClick={() => setOpenNotifications(true)}
+      >
         <Icons.NotificationOn size={25} />
       </NotificationButton>
       <div>
@@ -62,7 +71,10 @@ const CandidateHomeMain: React.FC = () => {
               1940: { slidesPerView: 6 },
               2560: { slidesPerView: 7 },
             }}
-            style={{ width: 'clamp(760px, 90vw, 2400px)', padding: '3rem 0.5rem' }}
+            style={{
+              width: 'clamp(760px, 90vw, 2400px)',
+              padding: '3rem 0.5rem',
+            }}
           >
             {mockedvacancies.map((vacancy, index) => (
               <SwiperSlide key={index}>
@@ -81,7 +93,9 @@ const CandidateHomeMain: React.FC = () => {
         <VacanciesSection>
           <H2>Vagas em andamento</H2>
           <Subtitle>
-            <CustomLink href="/area-do-candidato/minhas-vagas">Veja as vagas que você já se candidatou</CustomLink>
+            <CustomLink href="/area-do-candidato/minhas-vagas">
+              Veja as vagas que você já se candidatou
+            </CustomLink>
           </Subtitle>
           <Swiper
             modules={[Navigation, Autoplay, Pagination]}
@@ -98,11 +112,16 @@ const CandidateHomeMain: React.FC = () => {
               1940: { slidesPerView: 6 },
               2560: { slidesPerView: 7 },
             }}
-            style={{ width: 'clamp(760px, 90vw, 2400px)', padding: '3rem 0.5rem' }}
+            style={{
+              width: 'clamp(760px, 90vw, 2400px)',
+              padding: '3rem 0.5rem',
+            }}
           >
             {mockedvacancies.map((vacancy, index) => (
               <SwiperSlide key={index}>
-                <CustomLink href={`/area-do-candidato/minhas-vagas?id=${index + 1}`}>
+                <CustomLink
+                  href={`/area-do-candidato/minhas-vagas?id=${index + 1}`}
+                >
                   <VacancyCard
                     title={vacancy.title}
                     description={vacancy.description}

@@ -1,6 +1,8 @@
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { IOption } from '@/interfaces/option';
 import { FC, useEffect, useRef, useState } from 'react';
+import { Icons } from '@/components/Icons/Icons';
+import { FieldError } from 'react-hook-form';
 import {
   Container,
   ErrorMessage,
@@ -12,9 +14,7 @@ import {
   SelectArea,
   SelectedOption,
 } from './underlinedSelectStyles';
-import { Icons } from '@/components/Icons/Icons';
 import OptionsSelect from './Options';
-import { FieldError } from 'react-hook-form';
 
 interface ISelectProps {
   id: string;
@@ -60,7 +60,10 @@ const UnderlinedSelect: FC<ISelectProps> = ({
   };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
         setSearchValue('');
         setIsOpen(false);
       }
@@ -74,10 +77,14 @@ const UnderlinedSelect: FC<ISelectProps> = ({
   const filledClassname = selectedOption ? 'filled' : '';
   const errorClassname = error ? 'has-error' : '';
   const openClassname = isOpen ? 'opened' : '';
-  const inpuytClassname = `${errorClassname} ${openClassname} ${filledClassname}`.trim();
+  const inpuytClassname =
+    `${errorClassname} ${openClassname} ${filledClassname}`.trim();
 
   return (
-    <Container id="select-component" className={`${fieldClassName} ${openClassname}`}>
+    <Container
+      id="select-component"
+      className={`${fieldClassName} ${openClassname}`}
+    >
       {label && <Label>{label}</Label>}
       <SelectArea ref={selectRef}>
         <InputContainer
@@ -88,8 +95,14 @@ const UnderlinedSelect: FC<ISelectProps> = ({
           className={inpuytClassname}
         >
           <RenderIf isFalse={enableSearch && isOpen}>
-            {selectedOption && <SelectedOption>{selectedOption}</SelectedOption>}
-            {!selectedOption && <Placeholder className={errorClassname}>{placeholder}</Placeholder>}
+            {selectedOption && (
+              <SelectedOption>{selectedOption}</SelectedOption>
+            )}
+            {!selectedOption && (
+              <Placeholder className={errorClassname}>
+                {placeholder}
+              </Placeholder>
+            )}
           </RenderIf>
           <RenderIf isTrue={isOpen && enableSearch}>
             <InputWrapper onClick={e => e.stopPropagation()}>

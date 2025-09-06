@@ -3,7 +3,13 @@
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import Image from 'next/image';
 import { FC, ReactNode } from 'react';
-import { BarContent, ChildenWrapper, Header, Main, ProgressbarContainer } from './layoutStyles';
+import {
+  BarContent,
+  ChildenWrapper,
+  Header,
+  Main,
+  ProgressbarContainer,
+} from './layoutStyles';
 
 interface IChildren {
   children: ReactNode;
@@ -26,7 +32,12 @@ const RegistrationLayout: FC<IChildren> = ({ children }) => {
         <ProgressbarContainer>
           <BarContent className={stepClassname[currentStep]} />
         </ProgressbarContainer>
-        <Image src="/images/default-logo.png" width={218} height={90} alt="logo da bikube" />
+        <Image
+          src="/images/default-logo.png"
+          width={218}
+          height={90}
+          alt="logo da bikube"
+        />
       </Header>
       <ChildenWrapper>{children}</ChildenWrapper>
     </Main>

@@ -1,9 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import { CandidateImage, Container, EmployeeImage, ImageContainer, TextImageContainer, Title } from './layoutStyles';
 import { Orbitron } from 'next/font/google';
 import { usePathname } from 'next/navigation';
+import {
+  CandidateImage,
+  Container,
+  EmployeeImage,
+  ImageContainer,
+  TextImageContainer,
+  Title,
+} from './layoutStyles';
 
 interface IChildren {
   children: React.ReactNode;
@@ -39,14 +46,6 @@ const right: string[] = [
   '/email',
   '/redefinir-senha',
 ];
-const left: string[] = [
-  // candidate
-  '/candidato-email',
-  '/candidato-redefinir-senha',
-  // employee
-  '/',
-  '/codigo',
-];
 
 const LoginLayout: React.FC<IChildren> = ({ children }) => {
   const pathname = usePathname();
@@ -60,12 +59,17 @@ const LoginLayout: React.FC<IChildren> = ({ children }) => {
   return (
     <Container className={side}>
       <ImageContainer>
-        {/*<BackgroundImage className={area.classname} />*/}
+        {/* <BackgroundImage className={area.classname} /> */}
         <CandidateImage className={area.classname} />
         <EmployeeImage className={area.classname} />
         <TextImageContainer>
           <Title className={orbitron.className}>{area.title}</Title>
-          <Image src="/images/login-logo-white.png" width={230} height={120} alt="logo da bikube branca" />
+          <Image
+            src="/images/login-logo-white.png"
+            width={230}
+            height={120}
+            alt="logo da bikube branca"
+          />
         </TextImageContainer>
       </ImageContainer>
       {children}

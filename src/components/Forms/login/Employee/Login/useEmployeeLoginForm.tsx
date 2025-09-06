@@ -1,6 +1,8 @@
-import { notifyError } from '@/utils/handleToast';
 import { registerMask } from '@/utils/masks/registerMask';
-import { EmployeeLoginSchema, IEmployeeLoginSchema } from '@/validation/Login/EmployeeLoginSchema';
+import {
+  EmployeeLoginSchema,
+  IEmployeeLoginSchema,
+} from '@/validation/Login/EmployeeLoginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 

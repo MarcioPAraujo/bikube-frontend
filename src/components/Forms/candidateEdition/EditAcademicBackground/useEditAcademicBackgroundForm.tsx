@@ -2,7 +2,10 @@ import { IOption } from '@/interfaces/option';
 import { notifyError } from '@/utils/handleToast';
 import languages from '@/utils/languages';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
-import { AcademicDataSchema, AcademicDataSchemaType } from '@/validation/candidateRegister/AcademicData';
+import {
+  AcademicDataSchema,
+  AcademicDataSchemaType,
+} from '@/validation/candidateRegister/AcademicData';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -13,7 +16,10 @@ const levels: IOption[] = [
   { label: 'Avançado', value: '3' },
 ];
 
-const useEditAcademicBackgroundForm = (defaultValues: AcademicDataSchemaType, onClose: VoidFunction) => {
+const useEditAcademicBackgroundForm = (
+  defaultValues: AcademicDataSchemaType,
+  onClose: VoidFunction,
+) => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [warningModalOpen, setWarningModalOpen] = useState(false);
   const [languagesList, setLanguagesList] = useState<IOption[]>([]);
@@ -80,9 +86,15 @@ const useEditAcademicBackgroundForm = (defaultValues: AcademicDataSchemaType, on
     onClose();
   };
 
-  const onDateChange = (value: string, index: number, field: 'startDate' | 'endDate') => {
+  const onDateChange = (
+    value: string,
+    index: number,
+    field: 'startDate' | 'endDate',
+  ) => {
     const formattedDate = ddmmyyyyMask(value);
-    setValue(`education.${index}.${field}`, formattedDate, { shouldValidate: true });
+    setValue(`education.${index}.${field}`, formattedDate, {
+      shouldValidate: true,
+    });
     if (field === 'endDate') {
       const startDateErrors = errors.education?.[index]?.startDate;
       if (startDateErrors) {
@@ -104,7 +116,10 @@ const useEditAcademicBackgroundForm = (defaultValues: AcademicDataSchemaType, on
 
     const hasDuplicatedLanguages =
       data.languages &&
-      data.languages.some((lang, idx) => data.languages?.findIndex(l => l.language === lang.language) !== idx);
+      data.languages.some(
+        (lang, idx) =>
+          data.languages?.findIndex(l => l.language === lang.language) !== idx,
+      );
 
     if (hasDuplicatedLanguages) {
       notifyError('Você adicionou idiomas duplicados, por favor verifique.');
@@ -122,7 +137,11 @@ const useEditAcademicBackgroundForm = (defaultValues: AcademicDataSchemaType, on
     isSubmitting,
   };
   const languageFieldArray = { languagesArray, addLanguage, removeLanguage };
-  const educationFieldArray = { educationArray, appendEducation, removeEducation };
+  const educationFieldArray = {
+    educationArray,
+    appendEducation,
+    removeEducation,
+  };
 
   return {
     languagesList,

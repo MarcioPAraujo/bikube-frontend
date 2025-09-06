@@ -1,6 +1,6 @@
-import { ElementType, FC, ReactNode } from 'react';
-import { Button } from './styles';
+import { ElementType, FC } from 'react';
 import { CSSProperties } from 'styled-components';
+import { Button } from './styles';
 
 interface DefaultButtonProps {
   text: string;
@@ -23,7 +23,13 @@ export const DefaultButton: FC<DefaultButtonProps> = ({
   styles,
 }) => {
   return (
-    <Button type={type} onClick={onClick} disabled={disabled} className={classname} style={styles}>
+    <Button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={classname}
+      style={styles}
+    >
       {Icon && iconPosition === 'left' && <Icon />}
       {text}
       {Icon && iconPosition === 'right' && <Icon />}

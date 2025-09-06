@@ -1,5 +1,10 @@
 import Image from 'next/image';
-import { CardContainer, CardContent, Description, ImageContainer } from './vacancyCardStyles';
+import {
+  CardContainer,
+  CardContent,
+  Description,
+  ImageContainer,
+} from './vacancyCardStyles';
 
 interface IVancancyCardProps {
   title: string;
@@ -7,7 +12,12 @@ interface IVancancyCardProps {
   location: string;
   salary: string;
 }
-const VacancyCard: React.FC<IVancancyCardProps> = ({ title, description, location, salary }) => {
+const VacancyCard: React.FC<IVancancyCardProps> = ({
+  title,
+  description,
+  location,
+  salary,
+}) => {
   return (
     <CardContainer>
       <ImageContainer>

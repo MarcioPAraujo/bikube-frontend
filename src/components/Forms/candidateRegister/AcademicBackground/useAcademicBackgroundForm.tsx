@@ -4,7 +4,10 @@ import { getLanguages } from '@/services/language/languageService';
 import { notifyError } from '@/utils/handleToast';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { AcademicDataSchema, AcademicDataSchemaType } from '@/validation/candidateRegister/AcademicData';
+import {
+  AcademicDataSchema,
+  AcademicDataSchemaType,
+} from '@/validation/candidateRegister/AcademicData';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -23,7 +26,8 @@ const levels: IOption[] = [
 ];
 
 const useAcademicBackgroundForm = () => {
-  const { setCurrentStep, step2, step3, setStep3, step4 } = useStepsRegistration();
+  const { setCurrentStep, step2, step3, setStep3, step4 } =
+    useStepsRegistration();
   const router = useRouter();
   const [languagesList, setLanguagesList] = useState<IOption[]>([]);
   const {
@@ -107,7 +111,10 @@ const useAcademicBackgroundForm = () => {
 
     const newValues = { languages: languageValues, education: educationValues };
     setStep3(prev => ({ ...prev, formData: newValues }));
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.step3,
+      JSON.stringify(newValues),
+    );
   }, [fields]);
 
   const back = () => {
@@ -115,9 +122,15 @@ const useAcademicBackgroundForm = () => {
   };
 
   // education date input handler with mask
-  const onDateChange = (value: string, index: number, field: 'startDate' | 'endDate') => {
+  const onDateChange = (
+    value: string,
+    index: number,
+    field: 'startDate' | 'endDate',
+  ) => {
     const formattedDate = ddmmyyyyMask(value);
-    setValue(`education.${index}.${field}`, formattedDate, { shouldValidate: true });
+    setValue(`education.${index}.${field}`, formattedDate, {
+      shouldValidate: true,
+    });
     if (field === 'endDate') {
       const startDateErrors = errors.education?.[index]?.startDate;
       if (startDateErrors) {
@@ -132,13 +145,25 @@ const useAcademicBackgroundForm = () => {
   };
 
   // education input handler to store values in session storage
-  const storeValues = (value: string, index: number, field: keyof EducationEntry) => {
+  const storeValues = (
+    value: string,
+    index: number,
+    field: keyof EducationEntry,
+  ) => {
     const eduValues = getValues('education') || [];
     const languagesValues = getValues('languages') || [];
-    const newEducationValues = eduValues.map((edu, i) => (i === index ? { ...edu, [field]: value } : edu));
-    const newValues = { education: newEducationValues, languages: languagesValues };
+    const newEducationValues = eduValues.map((edu, i) =>
+      i === index ? { ...edu, [field]: value } : edu,
+    );
+    const newValues = {
+      education: newEducationValues,
+      languages: languagesValues,
+    };
     setStep3(prev => ({ ...prev, formData: newValues }));
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.step3, JSON.stringify(newValues));
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.step3,
+      JSON.stringify(newValues),
+    );
   };
 
   const onFormSubmit = (data: AcademicDataSchemaType) => {
@@ -149,7 +174,10 @@ const useAcademicBackgroundForm = () => {
 
     const hasDuplicatedLanguages =
       data.languages &&
-      data.languages.some((lang, idx) => data.languages?.findIndex(l => l.language === lang.language) !== idx);
+      data.languages.some(
+        (lang, idx) =>
+          data.languages?.findIndex(l => l.language === lang.language) !== idx,
+      );
 
     if (hasDuplicatedLanguages) {
       notifyError('Você adicionou idiomas duplicados, por favor verifique.');

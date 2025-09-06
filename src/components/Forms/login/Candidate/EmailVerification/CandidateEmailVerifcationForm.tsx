@@ -12,7 +12,10 @@ const CandidateEmailVerificationForm: React.FC = () => {
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>
       <Title>Email</Title>
-      <Description>Insira o email usado no seu cadastro para dar seguimento a redefinição de senha</Description>
+      <Description>
+        Insira o email usado no seu cadastro para dar seguimento a redefinição
+        de senha
+      </Description>
       <InputComponent
         id="email"
         labelText="Email"

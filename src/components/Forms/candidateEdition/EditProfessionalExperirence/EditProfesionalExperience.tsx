@@ -1,15 +1,15 @@
 import ModalBackground from '@/components/modals/elements/ModalBackground';
-import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import { ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
 import CheckboxComponent from '@/components/Inputs/Checkbox';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import Textarea from '@/components/Inputs/Textarea/Textarea';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
+import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import { Description, Field, Form } from './editProfessionalExperienceStyles';
 import RemoveButton from '../Elements/RemoveButton/RemoveButton';
 import AddButton from '../Elements/AddButton/AddButton';
 import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';
-import WarningModal from '@/components/modals/WarningModal/WarningModal';
-import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import useProfessionalExperience from './useEditProfessionalExperience';
 
 interface EditProfessionalExperienceProps {
@@ -17,7 +17,11 @@ interface EditProfessionalExperienceProps {
   onClose: () => void;
   defaultValues: ProfessionalSchemaType;
 }
-const EditProfessionalExperience: React.FC<EditProfessionalExperienceProps> = ({ isOpen, onClose, defaultValues }) => {
+const EditProfessionalExperience: React.FC<EditProfessionalExperienceProps> = ({
+  isOpen,
+  onClose,
+  defaultValues,
+}) => {
   const {
     hookform: { errors, register, handleSubmit, isSubmitting, watch },
     fieldArray: { fields, append, remove },
@@ -63,17 +67,28 @@ const EditProfessionalExperience: React.FC<EditProfessionalExperienceProps> = ({
     <ModalBackground>
       <Form onSubmit={handleSubmit(onFormSubmit)}>
         <EditFormTitle title="Editar experiência profissional" />
-        <Description>Coloque até 3 experiêcnias profissioanis que você acha relevante</Description>
+        <Description>
+          Coloque até 3 experiêcnias profissioanis que você acha relevante
+        </Description>
         <CheckboxComponent
           id="first-job"
-          register={register('isFirstJob', { onChange: e => onFistJobChange(e.target.checked) })}
+          register={register('isFirstJob', {
+            onChange: e => onFistJobChange(e.target.checked),
+          })}
         >
           Primeira experiência profissional
         </CheckboxComponent>
         {fields.length < 3 && (
           <AddButton
             label="+ Adicionar"
-            onClick={() => append({ company: '', description: '', startDate: '', endDate: '' })}
+            onClick={() =>
+              append({
+                company: '',
+                description: '',
+                startDate: '',
+                endDate: '',
+              })
+            }
             disabled={watch('isFirstJob')}
           />
         )}
@@ -117,7 +132,10 @@ const EditProfessionalExperience: React.FC<EditProfessionalExperienceProps> = ({
           </Field>
         ))}
         <EditSubmitButtons
-          cancelButton={{ labelText: 'Cancelar', onClick: () => setWarningModal(true) }}
+          cancelButton={{
+            labelText: 'Cancelar',
+            onClick: () => setWarningModal(true),
+          }}
           submitButton={{ labelText: 'Salvar', disabled: isSubmitting }}
         />
       </Form>

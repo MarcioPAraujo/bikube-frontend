@@ -5,7 +5,6 @@ import { Table } from '@/components/Table/Index/Index';
 import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
 import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
-import { CustomLink, TopTitle } from './styles';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import { useRouter } from 'next/navigation';
 import SearchBarComponent from '@/components/Inputs/SearchBar';
@@ -13,13 +12,16 @@ import { useEffect, useState } from 'react';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
 import Pagination from '@/components/Pagination/Pagination';
+import { CustomLink, TopTitle } from './styles';
 
 const columns = ['Nome', 'Cargo', 'Setor', 'Função', 'Data de Admissão'];
 
 const EmployeesPage = () => {
   const { push } = useRouter();
   const [search, setSearch] = useState<string>('');
-  const filteredSearch = employees.filter(employee => employee.name.toLowerCase().includes(search.toLowerCase()));
+  const filteredSearch = employees.filter(employee =>
+    employee.name.toLowerCase().includes(search.toLowerCase()),
+  );
   const pagination = usePaginationRange(filteredSearch, DEFAULT_PAGE_SIZE);
   useEffect(() => {
     pagination.setCurrentPage(1);
@@ -47,7 +49,10 @@ const EmployeesPage = () => {
       <TopTitle>
         <h1>Funcionários</h1>
         <div>
-          <DefaultButton text="Cadastrar funcionário" onClick={() => push('/funcionarios/cadastrar')} />
+          <DefaultButton
+            text="Cadastrar funcionário"
+            onClick={() => push('/funcionarios/cadastrar')}
+          />
           <SearchBarComponent
             value={search}
             onSearch={e => setSearch(e.target.value)}
@@ -59,13 +64,18 @@ const EmployeesPage = () => {
         <Table.Header columns={columns} />
         <Table.Body>
           {pagination.currentRows.map(employee => (
-            <CustomLink href={`/funcionarios/detalhes/${employee.id}`} key={employee.id}>
+            <CustomLink
+              href={`/funcionarios/detalhes/${employee.id}`}
+              key={employee.id}
+            >
               <Table.Row>
                 <Table.BodyCell>{employee.name}</Table.BodyCell>
                 <Table.BodyCell>{employee.duty}</Table.BodyCell>
                 <Table.BodyCell>{employee.sector}</Table.BodyCell>
                 <Table.BodyCell>{employee.position}</Table.BodyCell>
-                <Table.BodyCell>{format(parseISO(employee.joined), 'dd/MM/yyyy')}</Table.BodyCell>
+                <Table.BodyCell>
+                  {format(parseISO(employee.joined), 'dd/MM/yyyy')}
+                </Table.BodyCell>
               </Table.Row>
             </CustomLink>
           ))}

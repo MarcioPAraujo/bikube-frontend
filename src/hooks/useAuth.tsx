@@ -5,7 +5,13 @@
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { redirect, usePathname } from 'next/navigation';
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { createContext, ReactNode } from 'react';
 
 export interface User {
@@ -30,9 +36,21 @@ interface ChildrenProps {
 
 const AuthContext = createContext({} as IUserProvider);
 
-const publicRoutes = ['/', '/login', '/login/codigo', '/login/redefinir-senha', '/login/enviar-codigo'];
+const publicRoutes = [
+  '/',
+  '/login',
+  '/login/codigo',
+  '/login/redefinir-senha',
+  '/login/enviar-codigo',
+];
 const employeeRoutes = ['/home', '/minhas-informacoes', '/comunicados'];
-const rhRoutes = ['/setores', '/home', '/funcionarios', '/minhas-informacoes', '/comunicados'];
+const rhRoutes = [
+  '/setores',
+  '/home',
+  '/funcionarios',
+  '/minhas-informacoes',
+  '/comunicados',
+];
 
 const AuthProvider = ({ children }: ChildrenProps) => {
   const [user, setUser] = useState<User | undefined>();

@@ -1,7 +1,13 @@
 import { Icons } from '@/components/Icons/Icons';
 import { useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
-import { ErrorMessage, EyButton, Field, Input, Label } from './passwordInputStyles';
+import {
+  ErrorMessage,
+  EyButton,
+  Field,
+  Input,
+  Label,
+} from './passwordInputStyles';
 
 interface IProps {
   id: string;

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Header = styled.header`
   position: fixed;
@@ -44,5 +44,7 @@ export const MainContainer = styled.main`
   margin-top: 12rem; /* Adjust based on header height */
   padding: 2rem 2rem 2rem 4rem;
   background-color: #f4f4f4;
-  min-height: calc(100vh - 12rem); /* Ensure it covers the full height minus header */
+  min-height: calc(
+    100vh - 12rem
+  ); /* Ensure it covers the full height minus header */
 `;

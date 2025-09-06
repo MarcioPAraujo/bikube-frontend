@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import {
   addMonths,
@@ -35,7 +36,10 @@ const today = new Date();
  *     - isCurrentMonth: boolean — True if the day belongs to the current month.
  * }}
  */
-const useMonthCalendar = (date: Date | null, setCurrentDate: Dispatch<SetStateAction<Date | null>>) => {
+const useMonthCalendar = (
+  date: Date | null,
+  setCurrentDate: Dispatch<SetStateAction<Date | null>>,
+) => {
   const currentDate = useMemo(() => {
     if (date) {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -57,8 +61,14 @@ const useMonthCalendar = (date: Date | null, setCurrentDate: Dispatch<SetStateAc
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const firstDayOfMonth = useMemo(() => getDay(startOfMonth(currentDate)), [currentDate]);
-  const daysInCurrentMonth = useMemo(() => getDaysInMonth(currentDate), [currentDate]);
+  const firstDayOfMonth = useMemo(
+    () => getDay(startOfMonth(currentDate)),
+    [currentDate],
+  );
+  const daysInCurrentMonth = useMemo(
+    () => getDaysInMonth(currentDate),
+    [currentDate],
+  );
   const currentMonthDays = useMemo(
     () => Array.from({ length: daysInCurrentMonth }, (_, i) => i + 1),
     [daysInCurrentMonth],
@@ -94,7 +104,9 @@ const useMonthCalendar = (date: Date | null, setCurrentDate: Dispatch<SetStateAc
 
   // day properties and class names from the month calendar
   const isDayInCurrentMonth = useCallback(
-    (index: number) => index >= previousMonthDays.length && index < previousMonthDays.length + currentMonthDays.length,
+    (index: number) =>
+      index >= previousMonthDays.length &&
+      index < previousMonthDays.length + currentMonthDays.length,
     [previousMonthDays.length, currentMonthDays.length],
   );
   const getMonthOffset = useCallback(
@@ -127,7 +139,13 @@ const useMonthCalendar = (date: Date | null, setCurrentDate: Dispatch<SetStateAc
         isCurrentMonth,
       };
     },
-    [previousMonthDays.length, currentMonthDays.length, year, month, currentDate],
+    [
+      previousMonthDays.length,
+      currentMonthDays.length,
+      year,
+      month,
+      currentDate,
+    ],
   );
 
   const calendarDaysDate: ICalendarDay[] = useMemo(() => {

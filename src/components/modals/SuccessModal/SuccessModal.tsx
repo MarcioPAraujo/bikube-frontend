@@ -17,7 +17,13 @@ interface SuccessModalProps {
   title: string;
   buttonText: string;
 }
-const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose, message, title, buttonText }) => {
+const SuccessModal: React.FC<SuccessModalProps> = ({
+  isOpen,
+  onClose,
+  message,
+  title,
+  buttonText,
+}) => {
   if (!isOpen) return null;
   return (
     <Container>

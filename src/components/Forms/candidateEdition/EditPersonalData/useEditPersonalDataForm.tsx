@@ -1,7 +1,10 @@
 import { IOption } from '@/interfaces/option';
 import { City, fetchCitiesByState } from '@/services/citiesAPI';
 import { fetchBrazilianStates } from '@/services/statesAPI';
-import { PersonalDataSchema, PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalDataSchema';
+import {
+  PersonalDataSchema,
+  PersonalDataSchemaType,
+} from '@/validation/candidateRegister/PersonalDataSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';

@@ -1,18 +1,25 @@
 import { Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import FormTitle from '../FormTitle/FormTitle';
-import { AddButton, Content, Description, FieldWrapper, Form, RemoveButton } from './skillsFormStyles';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import { Icons } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import {
+  AddButton,
+  Content,
+  Description,
+  FieldWrapper,
+  Form,
+  RemoveButton,
+} from './skillsFormStyles';
+import FormTitle from '../FormTitle/FormTitle';
 import useSkillsForm from './useSkillsForm';
 
 const SkillsForm = () => {
   const router = useRouter();
   const {
-    hookform: { errors, register, handleSubmit, isSubmitting, setValue, control },
+    hookform: { errors, register, handleSubmit, isSubmitting, control },
     append,
     back,
     skillsOptions,
@@ -38,7 +45,11 @@ const SkillsForm = () => {
       />
 
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormTitle onBack={back} title="Habilidades e competências" isNextDisabled={isSubmitting} />
+        <FormTitle
+          onBack={back}
+          title="Habilidades e competências"
+          isNextDisabled={isSubmitting}
+        />
         <Content>
           <Description>Adicione até 10 habilidades diferentes</Description>
           <AddButton
@@ -79,7 +90,11 @@ const SkillsForm = () => {
                 errorType={errors.skills?.[index]?.periodInMonths}
               />
               <div>
-                <RemoveButton type="button" onClick={() => onRemove(index)} disabled={fields.length === 1}>
+                <RemoveButton
+                  type="button"
+                  onClick={() => onRemove(index)}
+                  disabled={fields.length === 1}
+                >
                   <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
                 </RemoveButton>
               </div>

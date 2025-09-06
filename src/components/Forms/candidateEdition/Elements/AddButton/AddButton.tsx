@@ -5,7 +5,11 @@ interface AddButtonProps {
   label: string;
   disabled?: boolean;
 }
-const AddButton: React.FC<AddButtonProps> = ({ onClick, label, disabled = false }) => {
+const AddButton: React.FC<AddButtonProps> = ({
+  onClick,
+  label,
+  disabled = false,
+}) => {
   return (
     <Button type="button" onClick={onClick} disabled={disabled}>
       {label}

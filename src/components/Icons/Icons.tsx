@@ -1,9 +1,7 @@
 // https://react-icons.github.io/react-icons/icons/bs/
 import React, { ElementType, FC } from 'react';
-import Logo from '../../../public/images/BIKUBE_LOGO.svg';
 import { BsArrowLeftCircle } from 'react-icons/bs';
 import { BsPersonFill } from 'react-icons/bs';
-import UserIcon from './UserIcon';
 import { BsCaretRightFill } from 'react-icons/bs';
 import { BsFileExcelFill } from 'react-icons/bs';
 import { BsCaretDownFill } from 'react-icons/bs';
@@ -21,6 +19,8 @@ import { FaCheck } from 'react-icons/fa6';
 import { VscBellDot } from 'react-icons/vsc';
 import { VscBell } from 'react-icons/vsc';
 import { IoMdMail } from 'react-icons/io';
+import UserIcon from './UserIcon';
+import Logo from '../../../public/images/BIKUBE_LOGO.svg';
 
 interface IconProps {
   size?: number;
@@ -33,29 +33,62 @@ interface IconWrapperProps {
   color?: string;
   className?: string;
 }
-const IconWrapper: FC<IconWrapperProps> = ({ size = 24, color, Icon, className }) => (
-  <Icon size={size} color={color} className={className} />
-);
+const IconWrapper: FC<IconWrapperProps> = ({
+  size = 24,
+  color,
+  Icon,
+  className,
+}) => <Icon size={size} color={color} className={className} />;
 export const Icons = {
-  ArrowLeft: (props: IconProps) => <IconWrapper Icon={BsArrowLeftCircle} {...props} />,
-  OpenedEye: (props: IconProps) => <IconWrapper Icon={VscEye} color={props.color} size={props.size} />,
-  ClosedEye: (props: IconProps) => <IconWrapper Icon={VscEyeClosed} {...props} />,
-  PersonFillBlack: (props: IconProps) => <IconWrapper Icon={BsPersonFill} {...props} />,
-  CaretRight: (props: IconProps) => <IconWrapper Icon={BsCaretRightFill} {...props} />,
-  CloseIcon: (props: IconProps) => <IconWrapper Icon={BsFileExcelFill} {...props} />,
-  CaretDown: (props: IconProps) => <IconWrapper Icon={BsCaretDownFill} {...props} />,
-  SearchIcon: (props: IconProps) => <IconWrapper Icon={HiMiniMagnifyingGlass} {...props} />,
+  ArrowLeft: (props: IconProps) => (
+    <IconWrapper Icon={BsArrowLeftCircle} {...props} />
+  ),
+  OpenedEye: (props: IconProps) => <IconWrapper Icon={VscEye} {...props} />,
+  ClosedEye: (props: IconProps) => (
+    <IconWrapper Icon={VscEyeClosed} {...props} />
+  ),
+  PersonFillBlack: (props: IconProps) => (
+    <IconWrapper Icon={BsPersonFill} {...props} />
+  ),
+  CaretRight: (props: IconProps) => (
+    <IconWrapper Icon={BsCaretRightFill} {...props} />
+  ),
+  CloseIcon: (props: IconProps) => (
+    <IconWrapper Icon={BsFileExcelFill} {...props} />
+  ),
+  CaretDown: (props: IconProps) => (
+    <IconWrapper Icon={BsCaretDownFill} {...props} />
+  ),
+  SearchIcon: (props: IconProps) => (
+    <IconWrapper Icon={HiMiniMagnifyingGlass} {...props} />
+  ),
   Person: () => <IconWrapper Icon={UserIcon} />,
   Calendar: (props: IconProps) => <IconWrapper Icon={BsCalendar3} {...props} />,
-  ChevronDoubleRight: (props: IconProps) => <IconWrapper Icon={BsChevronDoubleRight} {...props} />,
-  ChevronDoubleLeft: (props: IconProps) => <IconWrapper Icon={BsChevronDoubleLeft} {...props} />,
-  ChevronDown: (props: IconProps) => <IconWrapper Icon={BsChevronDown} {...props} />,
-  BsExclamationOctagonFill: (props: IconProps) => <IconWrapper Icon={BsExclamationOctagonFill} {...props} />,
-  MdKeyboardArrowDown: (props: IconProps) => <IconWrapper Icon={MdKeyboardArrowDown} {...props} />,
-  Trash: (props: IconProps) => <IconWrapper Icon={PiTrashSimpleFill} {...props} />,
+  ChevronDoubleRight: (props: IconProps) => (
+    <IconWrapper Icon={BsChevronDoubleRight} {...props} />
+  ),
+  ChevronDoubleLeft: (props: IconProps) => (
+    <IconWrapper Icon={BsChevronDoubleLeft} {...props} />
+  ),
+  ChevronDown: (props: IconProps) => (
+    <IconWrapper Icon={BsChevronDown} {...props} />
+  ),
+  BsExclamationOctagonFill: (props: IconProps) => (
+    <IconWrapper Icon={BsExclamationOctagonFill} {...props} />
+  ),
+  MdKeyboardArrowDown: (props: IconProps) => (
+    <IconWrapper Icon={MdKeyboardArrowDown} {...props} />
+  ),
+  Trash: (props: IconProps) => (
+    <IconWrapper Icon={PiTrashSimpleFill} {...props} />
+  ),
   Check: (props: IconProps) => <IconWrapper Icon={FaCheck} {...props} />,
-  NotificationOn: (props: IconProps) => <IconWrapper Icon={VscBellDot} {...props} />,
-  NotificationOff: (props: IconProps) => <IconWrapper Icon={VscBell} {...props} />,
+  NotificationOn: (props: IconProps) => (
+    <IconWrapper Icon={VscBellDot} {...props} />
+  ),
+  NotificationOff: (props: IconProps) => (
+    <IconWrapper Icon={VscBell} {...props} />
+  ),
   Mail: (props: IconProps) => <IconWrapper Icon={IoMdMail} {...props} />,
   Logo: () => <Logo />,
 };

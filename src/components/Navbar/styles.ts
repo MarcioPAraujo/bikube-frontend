@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const NavbarStyled = styled.nav`
   position: fixed;
@@ -39,7 +39,6 @@ export const OpenCloseButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-
 
   &.close svg {
     transform: rotate(0deg);

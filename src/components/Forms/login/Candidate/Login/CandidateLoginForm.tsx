@@ -30,7 +30,9 @@ const CandidateLoginForm: React.FC = () => {
         errorMessage={errors.password?.message}
       />
       <CustomLink href="/candidato-email">Esqueci a senha</CustomLink>
-      <CustomLink href="/candidato-registro/credenciais-de-acesso">Primeiro acesso</CustomLink>
+      <CustomLink href="/candidato-registro/credenciais-de-acesso">
+        Primeiro acesso
+      </CustomLink>
       <SubmitButton type="submit" disabled={!isValid || isSubmitting}>
         Entrar
       </SubmitButton>
