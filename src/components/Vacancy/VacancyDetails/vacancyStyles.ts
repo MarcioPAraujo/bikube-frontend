@@ -1,10 +1,27 @@
 import styled from 'styled-components';
 
+export const EmptyStateContainer = styled.div`
+  flex: 1;
+  display: grid;
+  place-items: center;
+
+  font-size: 1.6rem;
+  color: ${({ theme }) => theme.colors.GRAY.hex_696969};
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6rem;
+  }
+`;
+
 export const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+  padding: 3.2rem 0rem;
 `;
 export const Header = styled.div`
   display: flex;

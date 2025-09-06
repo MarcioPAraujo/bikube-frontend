@@ -1,11 +1,17 @@
 'use client';
 
 import VacancyDetails from '@/components/Vacancy/VacancyDetails/VacancyDetails';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
-import { PageContainer, VerticalDivider } from './styles';
+import { Icons } from '@/components/Icons/Icons';
+import { BackButton, PageContainer, VerticalDivider } from './styles';
+
+enum Routes {
+  CANDIDATE_AREA = '/area-do-candidato/inicio',
+}
 
 const Vacancies: React.FC = () => {
+  const router = useRouter();
   const searchParmas = useSearchParams();
   const [vacancyId, setVacancyId] = useState<string | undefined>(undefined);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
@@ -17,7 +23,15 @@ const Vacancies: React.FC = () => {
 
   return (
     <PageContainer>
-      <div>vagas</div>
+      <div>
+        <BackButton
+          type="button"
+          onClick={() => router.push(Routes.CANDIDATE_AREA)}
+        >
+          <Icons.ArrowBack /> Voltar
+        </BackButton>
+        vagas
+      </div>
       <VerticalDivider />
       <VacancyDetails
         id={vacancyId}

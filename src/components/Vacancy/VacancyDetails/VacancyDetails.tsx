@@ -1,7 +1,9 @@
+import { Icons } from '@/components/Icons/Icons';
 import {
   ApplyButton,
   Container,
   Details,
+  EmptyStateContainer,
   Header,
   StepPhase,
   VancancyName,
@@ -34,6 +36,18 @@ const VacancyDetails: React.FC<IVacancyDetailsProps> = ({
       onApply?.();
     }
   };
+
+  if (!id) {
+    return (
+      <EmptyStateContainer>
+        <div>
+          <Icons.EmptyFile size={64} color="#ccc" />
+          <p>Selecione uma vaga para ver os detalhes</p>
+        </div>
+      </EmptyStateContainer>
+    );
+  }
+
   return (
     <Container>
       <Header>

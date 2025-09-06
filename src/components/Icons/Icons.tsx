@@ -20,6 +20,8 @@ import { VscBellDot } from 'react-icons/vsc';
 import { VscBell } from 'react-icons/vsc';
 import { IoMdMail } from 'react-icons/io';
 import { HiHome } from 'react-icons/hi2';
+import { ImFileEmpty } from 'react-icons/im';
+import { FaArrowLeftLong } from 'react-icons/fa6';
 import UserIcon from './UserIcon';
 import Logo from '../../../public/images/BIKUBE_LOGO.svg';
 
@@ -40,6 +42,7 @@ const IconWrapper: FC<IconWrapperProps> = ({
   Icon,
   className,
 }) => <Icon size={size} color={color} className={className} />;
+
 export const Icons = {
   ArrowLeft: (props: IconProps) => (
     <IconWrapper Icon={BsArrowLeftCircle} {...props} />
@@ -92,5 +95,11 @@ export const Icons = {
   ),
   Mail: (props: IconProps) => <IconWrapper Icon={IoMdMail} {...props} />,
   Home: (props: IconProps) => <IconWrapper Icon={HiHome} {...props} />,
+  EmptyFile: (props: IconProps) => (
+    <IconWrapper Icon={ImFileEmpty} {...props} />
+  ),
+  ArrowBack: (props: IconProps) => (
+    <IconWrapper Icon={FaArrowLeftLong} {...props} />
+  ),
   Logo: () => <Logo />,
 };
