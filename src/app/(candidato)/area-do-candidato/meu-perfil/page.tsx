@@ -6,7 +6,7 @@ import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/Edit
 import EditProfessionalExperience from '@/components/Forms/candidateEdition/EditProfessionalExperirence/EditProfesionalExperience';
 import EditSkillsForm from '@/components/Forms/candidateEdition/EditSkills/EditSkillsForm';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { useRouter } from 'next/navigation';
 import {
   DeleteButton,
@@ -111,7 +111,7 @@ const MyProfilePage: React.FC = () => {
         <TitleWrapper>
           <Title>Meu Perfil</Title>
           <HomeButton type="button" onClick={() => router.back()}>
-            <Icons.Home />
+            <Icon name="Home" />
           </HomeButton>
         </TitleWrapper>
         <DeleteButton

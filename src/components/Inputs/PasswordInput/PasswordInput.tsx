@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import {
@@ -48,8 +48,8 @@ const PasswordInput: React.FC<IProps> = ({
         {...register}
       />
       <EyButton type="button" onClick={() => setShowPassword(!showPassword)}>
-        {showPassword && <Icons.OpenedEye />}
-        {!showPassword && <Icons.ClosedEye />}
+        {showPassword && <Icon name="OpenedEye" />}
+        {!showPassword && <Icon name="ClosedEye" />}
       </EyButton>
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </Field>

@@ -1,7 +1,7 @@
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { IOption } from '@/interfaces/option';
 import { FC, useEffect, useRef, useState } from 'react';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { FieldError } from 'react-hook-form';
 import {
   Container,
@@ -106,7 +106,7 @@ const UnderlinedSelect: FC<ISelectProps> = ({
           </RenderIf>
           <RenderIf isTrue={isOpen && enableSearch}>
             <InputWrapper onClick={e => e.stopPropagation()}>
-              <Icons.SearchIcon />
+              <Icon name="SearchIcon" />
               <Input
                 type="text"
                 value={searchValue}
@@ -115,7 +115,10 @@ const UnderlinedSelect: FC<ISelectProps> = ({
               />
             </InputWrapper>
           </RenderIf>
-          <Icons.MdKeyboardArrowDown className={isOpen ? 'opened' : 'closed'} />
+          <Icon
+            name="MdKeyboardArrowDown"
+            className={isOpen ? 'opened' : 'closed'}
+          />
         </InputContainer>
         <RenderIf isTrue={isOpen}>
           <OptionsSelect

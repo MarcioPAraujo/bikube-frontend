@@ -2,7 +2,7 @@ import { Controller } from 'react-hook-form';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
 import RadioInput from '@/components/Inputs/Radio/Radio';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import {
@@ -88,7 +88,11 @@ const AcedmicBackgroundForm: React.FC = () => {
               </RadioOptions>
               <div>
                 <RemoveButton type="button" onClick={() => remove(index)}>
-                  <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
+                  <Icon
+                    name="Trash"
+                    size={20}
+                    color={theme.colors.GRAY.hex_747474}
+                  />
                 </RemoveButton>
               </div>
             </LanguageWrapper>
@@ -167,7 +171,11 @@ const AcedmicBackgroundForm: React.FC = () => {
                   type="button"
                   onClick={() => removeEducation(index)}
                 >
-                  <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
+                  <Icon
+                    name="Trash"
+                    size={20}
+                    color={theme.colors.GRAY.hex_747474}
+                  />
                 </RemoveButton>
               </div>
             </EducationWrapper>

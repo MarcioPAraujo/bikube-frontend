@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import {
   ApplyButton,
   Container,
@@ -41,7 +41,7 @@ const VacancyDetails: React.FC<IVacancyDetailsProps> = ({
     return (
       <EmptyStateContainer>
         <div>
-          <Icons.EmptyFile size={64} color="#ccc" />
+          <Icon name="EmptyFile" size={64} color="#ccc" />
           <p>Selecione uma vaga para ver os detalhes</p>
         </div>
       </EmptyStateContainer>
@@ -61,7 +61,9 @@ const VacancyDetails: React.FC<IVacancyDetailsProps> = ({
       </Header>
       <Details>
         <VancancyName>Nome da vaga</VancancyName>
-        <p>publicada em: 01/01/2024</p>
+        <p>
+          publicada em: <strong>01/01/2024</strong>
+        </p>
         <strong>O que buscamos:</strong>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam aliquam

@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import useMonthCalendar, { ICalendarDay } from '@/hooks/useMonthCalendar';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import {
@@ -90,21 +90,21 @@ const CalendarInput: React.FC<ICalendarInputProps> = ({
           onClick={handlePrevMonth}
           aria-label="Go to previous month"
         >
-          <Icons.ChevronDoubleLeft />
+          <Icon name="ChevronDoubleLeft" />
         </NavigationButton>
         <MonthYearButton
           type="button"
           onClick={() => setShowMonthYearSelect(true)}
           aria-label="Select month and year"
         >
-          {monthNames[month]} {year} <Icons.ChevronDown size={15} />
+          {monthNames[month]} {year} <Icon name="ChevronDown" size={15} />
         </MonthYearButton>
         <NavigationButton
           type="button"
           onClick={handleNextMonth}
           aria-label="Go to next month"
         >
-          <Icons.ChevronDoubleRight />
+          <Icon name="ChevronDoubleRight" />
         </NavigationButton>
       </CalendarHeader>
       <DaysContainer>

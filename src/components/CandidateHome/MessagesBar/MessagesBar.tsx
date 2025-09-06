@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { useEffect, useRef, useState } from 'react';
 import MessageDetailsModal from '@/components/modals/MessageDetailsModal/MessageDetailsModal';
 import {
@@ -67,7 +67,7 @@ const MessagesBar: React.FC<IMessageBar> = ({ isOpen, onClose }) => {
                   setMessageId(msg.id);
                 }}
               >
-                <Icons.Mail />
+                <Icon name="Mail" />
               </MessageButton>
               <MessageWrapper>
                 <p>{msg.content}</p>

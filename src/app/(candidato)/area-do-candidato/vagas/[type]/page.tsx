@@ -1,10 +1,16 @@
 'use client';
 
 import VacancyDetails from '@/components/Vacancy/VacancyDetails/VacancyDetails';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
-import { Icons } from '@/components/Icons/Icons';
-import { BackButton, PageContainer, VerticalDivider } from './styles';
+import { Icon } from '@/components/Icons/Icons';
+import VacancyList from '@/components/Vacancy/VacancyList/VacancyList';
+import {
+  BackButton,
+  LeftContainer,
+  PageContainer,
+  VerticalDivider,
+} from './styles';
 
 enum Routes {
   CANDIDATE_AREA = '/area-do-candidato/inicio',
@@ -13,6 +19,7 @@ enum Routes {
 const Vacancies: React.FC = () => {
   const router = useRouter();
   const searchParmas = useSearchParams();
+  const { type } = useParams<{ type: string }>();
   const [vacancyId, setVacancyId] = useState<string | undefined>(undefined);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
 
@@ -21,17 +28,19 @@ const Vacancies: React.FC = () => {
     setVacancyId(id);
   }, []);
 
+  console.log(type);
+
   return (
     <PageContainer>
-      <div>
+      <LeftContainer>
         <BackButton
           type="button"
           onClick={() => router.push(Routes.CANDIDATE_AREA)}
         >
-          <Icons.ArrowBack /> Voltar
+          <Icon name="ArrowBack" /> Voltar
         </BackButton>
-        vagas
-      </div>
+        <VacancyList />
+      </LeftContainer>
       <VerticalDivider />
       <VacancyDetails
         id={vacancyId}

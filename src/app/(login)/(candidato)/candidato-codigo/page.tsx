@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import IconButton from '@/components/Buttons/IconButton';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import CandidateCodeVerificationForm from '@/components/Forms/login/Candidate/CodeVerification/CandidateCodeVerificationForm';
 import { PageContainer } from '../styles';
 
@@ -11,7 +11,7 @@ const CandidateCodeVerificationPage: React.FC = () => {
   return (
     <PageContainer style={{ alignItems: 'flex-start' }}>
       <IconButton
-        icon={Icons.ArrowLeft}
+        iconNode={<Icon name="ArrowLeft" />}
         onClick={() => router.push('/candidato-email')}
       />
       <CandidateCodeVerificationForm />

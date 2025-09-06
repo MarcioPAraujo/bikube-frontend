@@ -37,6 +37,8 @@
     "src/utils/masks/document.tsz"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next",
+    "__tests__"
   ]
 }

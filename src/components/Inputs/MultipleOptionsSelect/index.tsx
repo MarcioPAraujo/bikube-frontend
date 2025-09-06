@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import RenderIf from '@/components/RenderIf/RenderIf';
 import {
   InputContainer,
@@ -106,7 +106,7 @@ const MultipleOptionsSelect: FC<ISelectProps> = ({
           </RenderIf>
           <RenderIf isTrue={isOpen && enableSearch}>
             <InputWrapper onClick={e => e.stopPropagation()}>
-              <Icons.SearchIcon />
+              <Icon name="SearchIcon" />
               <Input
                 type="text"
                 value={searchValue}
@@ -115,7 +115,7 @@ const MultipleOptionsSelect: FC<ISelectProps> = ({
               />
             </InputWrapper>
           </RenderIf>
-          <Icons.CaretDown className={isOpen ? 'opened' : 'closed'} />
+          <Icon name="CaretDown" className={isOpen ? 'opened' : 'closed'} />
         </InputContainer>
         <RenderIf isTrue={isOpen}>
           <OptionsSelect

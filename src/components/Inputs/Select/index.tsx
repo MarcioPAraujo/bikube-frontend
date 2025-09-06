@@ -8,7 +8,7 @@ import {
 } from 'react';
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { IOption } from '@/interfaces/option';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import OptionsSelect from './Options';
 import {
   InputContainer,
@@ -101,7 +101,7 @@ const SelectComponent: FC<ISelectProps> = ({
           </RenderIf>
           <RenderIf isTrue={isOpen && enableSearch}>
             <InputWrapper onClick={e => e.stopPropagation()}>
-              <Icons.SearchIcon />
+              <Icon name="SearchIcon" />
               <Input
                 type="text"
                 value={searchValue}
@@ -110,7 +110,7 @@ const SelectComponent: FC<ISelectProps> = ({
               />
             </InputWrapper>
           </RenderIf>
-          <Icons.CaretDown className={isOpen ? 'opened' : 'closed'} />
+          <Icon name="CaretDown" className={isOpen ? 'opened' : 'closed'} />
         </InputContainer>
         <RenderIf isTrue={isOpen}>
           <OptionsSelect

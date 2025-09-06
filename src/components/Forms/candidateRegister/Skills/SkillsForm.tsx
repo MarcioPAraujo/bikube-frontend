@@ -2,7 +2,7 @@ import { Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import {
@@ -95,7 +95,11 @@ const SkillsForm = () => {
                   onClick={() => onRemove(index)}
                   disabled={fields.length === 1}
                 >
-                  <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
+                  <Icon
+                    name="Trash"
+                    size={20}
+                    color={theme.colors.GRAY.hex_747474}
+                  />
                 </RemoveButton>
               </div>
             </FieldWrapper>

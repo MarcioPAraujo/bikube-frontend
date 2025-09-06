@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { ChangeEvent, FC } from 'react';
 import { Input, InputContainer } from './styles';
 
@@ -22,7 +22,7 @@ const SearchBarComponent: FC<ISearchBarProps> = ({
 }) => {
   return (
     <InputContainer>
-      <Icons.SearchIcon />
+      <Icon name="SearchIcon" />
       <Input
         type="text"
         value={value}

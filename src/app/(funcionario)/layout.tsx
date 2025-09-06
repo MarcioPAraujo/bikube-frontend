@@ -4,7 +4,7 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import Image from 'next/image';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { Navbar } from '@/components/Navbar';
 import {
   DataContainer,
@@ -45,7 +45,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </p>
           </UserInfo>
           <ProfileContainer>
-            <Icons.Person />
+            <Icon name="Person" />
           </ProfileContainer>
         </DataContainer>
       </Header>

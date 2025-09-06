@@ -1,5 +1,5 @@
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
 import { useState } from 'react';
 import RenderIf from '@/components/RenderIf/RenderIf';
@@ -67,12 +67,13 @@ const UnderlinedInput: React.FC<IProps> = ({
       />
       <RenderIf isTrue={isPassword}>
         <EyButton type="button" onClick={() => setShowPassword(!showPassword)}>
-          {showPassword && <Icons.OpenedEye />}
-          {!showPassword && <Icons.ClosedEye />}
+          {showPassword && <Icon name="OpenedEye" />}
+          {!showPassword && <Icon name="ClosedEye" />}
         </EyButton>
       </RenderIf>
       {errorType?.type === 'required' && !isPassword && (
-        <Icons.BsExclamationOctagonFill
+        <Icon
+          name="BsExclamationOctagonFill"
           color={theme.colors.RED.hex_EB5757}
           size={20}
           className="error-icon"

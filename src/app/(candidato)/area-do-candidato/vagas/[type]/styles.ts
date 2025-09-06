@@ -4,9 +4,13 @@ export const PageContainer = styled.div`
   display: flex;
   height: 100vh;
   padding: 0rem 3.2rem;
-  & > :first-child {
-    flex: 1;
-  }
+`;
+export const LeftContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  padding: 3.2rem 0rem;
 `;
 export const BackButton = styled.button`
   display: flex;

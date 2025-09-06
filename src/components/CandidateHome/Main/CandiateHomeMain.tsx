@@ -3,7 +3,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Autoplay, Pagination } from 'swiper/modules';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { useState } from 'react';
 import VacancyCard from '@/components/VacancyCard/VacancyCard';
 import {
@@ -46,7 +46,7 @@ const CandidateHomeMain: React.FC = () => {
         type="button"
         onClick={() => setOpenNotifications(true)}
       >
-        <Icons.NotificationOn size={25} />
+        <Icon name="NotificationOn" size={25} />
       </NotificationButton>
       <div>
         <VacanciesSection>

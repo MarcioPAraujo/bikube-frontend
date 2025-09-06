@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { Button } from './removeButtonStyles';
 
 interface RemoveButtonProps {
@@ -8,7 +8,7 @@ interface RemoveButtonProps {
 const RemoveButton: React.FC<RemoveButtonProps> = ({ onClick, disabled }) => {
   return (
     <Button type="button" onClick={onClick} disabled={disabled}>
-      <Icons.Trash size={20} color="#747474" />
+      <Icon name="Trash" size={20} color="#747474" />
     </Button>
   );
 };

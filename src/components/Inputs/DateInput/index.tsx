@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import CalendarInput from '@/components/Calendar/InputCalendar';
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { Content, Field, Label } from './styles';
@@ -31,7 +31,7 @@ const DateInput: React.FC<DateInputProps> = ({
       <Label htmlFor={id}>
         {label}
         <Content className={value ? 'filled' : 'placeholder'}>
-          {value || placeholder} <Icons.Calendar />
+          {value || placeholder} <Icon name="Calendar" />
         </Content>
         <input
           id={id}

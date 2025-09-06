@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import {
   Backbutton,
   Button,
@@ -157,7 +157,7 @@ const YearMonthSelect: React.FC<ICalendarInputProps> = ({
     <Container ref={selectRef}>
       <Header>
         <Backbutton type="button" onClick={handleClose}>
-          <Icons.ArrowLeft color="white" />
+          <Icon name="ArrowLeft" color="white" />
         </Backbutton>
         <Datebutton
           type="button"

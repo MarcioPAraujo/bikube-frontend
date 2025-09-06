@@ -1,4 +1,4 @@
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import { theme } from '@/styles/theme';
 import Textarea from '@/components/Inputs/Textarea/Textarea';
@@ -54,7 +54,7 @@ const ProfessionalExperienceForm: React.FC = () => {
                 onChange: e => onFistJobChange(e.target.checked),
               })}
             />
-            <Icons.Check size={14} color="white" />
+            <Icon name="Check" size={14} color="white" />
           </div>
           Primeira experiência profissional
         </CheckboxLabel>
@@ -107,7 +107,11 @@ const ProfessionalExperienceForm: React.FC = () => {
                 type="button"
                 onClick={() => removeExperience(index)}
               >
-                <Icons.Trash size={20} color={theme.colors.GRAY.hex_747474} />
+                <Icon
+                  name="Trash"
+                  size={20}
+                  color={theme.colors.GRAY.hex_747474}
+                />
               </RemoveButton>
             </div>
           </Fields>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { Icons } from '../Icons/Icons';
+import { Icon } from '../Icons/Icons';
 import { LI, NavbarStyled, OpenCloseButton, UL } from './styles';
 import RenderIf from '../RenderIf/RenderIf';
 
@@ -111,7 +111,7 @@ export const Navbar = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={isOpen ? 'open' : 'close'}
       >
-        <Icons.CaretRight color="white" />
+        <Icon name="CaretRight" color="white" />
       </OpenCloseButton>
     </NavbarStyled>
   );

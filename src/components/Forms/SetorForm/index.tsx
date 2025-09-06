@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FC, useState } from 'react';
 import IconButton from '@/components/Buttons/IconButton';
-import { Icons } from '@/components/Icons/Icons';
+import { Icon } from '@/components/Icons/Icons';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -84,7 +84,10 @@ export const SectorForm: FC<SectorFormProps> = ({
       <Form onSubmit={handleSubmit(onFormSubmit)}>
         <TitleContainer>
           <h2>Cadastrar Setor</h2>
-          <IconButton onClick={onCloseModal} icon={Icons.CloseIcon} />
+          <IconButton
+            onClick={onCloseModal}
+            iconNode={<Icon name="CloseIcon" />}
+          />
         </TitleContainer>
         <Field>
           <label htmlFor="sectorName">Nome do Setor:</label>
