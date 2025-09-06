@@ -111,7 +111,7 @@ const MyProfilePage: React.FC = () => {
         <TitleWrapper>
           <Title>Meu Perfil</Title>
           <HomeButton type="button" onClick={() => router.back()}>
-            <Icon name="Home" />
+            <Icon name="Home" size={24} />
           </HomeButton>
         </TitleWrapper>
         <DeleteButton

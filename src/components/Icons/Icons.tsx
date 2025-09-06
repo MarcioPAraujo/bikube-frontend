@@ -1,28 +1,37 @@
 // https://react-icons.github.io/react-icons/icons/bs/
 import React, { ElementType, FC } from 'react';
-import { BsArrowLeftCircle } from 'react-icons/bs';
-import { BsPersonFill } from 'react-icons/bs';
-import { BsCaretRightFill } from 'react-icons/bs';
-import { BsFileExcelFill } from 'react-icons/bs';
-import { BsCaretDownFill } from 'react-icons/bs';
-import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
-import { BsCalendar3 } from 'react-icons/bs';
-import { BsChevronDoubleRight } from 'react-icons/bs';
-import { BsChevronDoubleLeft } from 'react-icons/bs';
-import { BsChevronDown } from 'react-icons/bs';
-import { VscEyeClosed } from 'react-icons/vsc';
-import { VscEye } from 'react-icons/vsc';
-import { BsExclamationOctagonFill } from 'react-icons/bs';
+// Bootstrap Icons
+import {
+  BsArrowLeftCircle,
+  BsPersonFill,
+  BsCaretRightFill,
+  BsFileExcelFill,
+  BsCaretDownFill,
+  BsCalendar3,
+  BsChevronDoubleRight,
+  BsChevronDoubleLeft,
+  BsChevronDown,
+  BsExclamationOctagonFill,
+} from 'react-icons/bs';
+// VSCode Icons
+import { VscEyeClosed, VscEye, VscBellDot, VscBell } from 'react-icons/vsc';
+// Material Design Icons
 import { MdKeyboardArrowDown } from 'react-icons/md';
+// Phosphor Icons
 import { PiTrashSimpleFill } from 'react-icons/pi';
-import { FaCheck } from 'react-icons/fa6';
-import { VscBellDot } from 'react-icons/vsc';
-import { VscBell } from 'react-icons/vsc';
+// FontAwesome 6 Icons
+import { FaCheck, FaArrowLeftLong } from 'react-icons/fa6';
+// FontAwesome Icons
+import { FaHistory, FaBriefcase } from 'react-icons/fa';
+// Ionicons
 import { IoMdMail } from 'react-icons/io';
-import { HiHome } from 'react-icons/hi2';
+// Heroicons
+import { HiMiniMagnifyingGlass, HiHome } from 'react-icons/hi2';
+// IcoMoon
 import { ImFileEmpty } from 'react-icons/im';
-import { FaArrowLeftLong } from 'react-icons/fa6';
-import { FaHistory } from 'react-icons/fa';
+// Grommet Icons
+import { GrLogout } from 'react-icons/gr';
+// Local Icons
 import UserIcon from './UserIcon';
 import Logo from '../../../public/images/BIKUBE_LOGO.svg';
 
@@ -51,50 +60,52 @@ type IconNames =
   | 'EmptyFile'
   | 'ArrowBack'
   | 'History'
+  | 'Logout'
+  | 'Briefcase'
   | 'Logo';
 
-interface IconProps {
+interface IconComponentProps {
   size?: number;
   color?: string;
   className?: string;
-}
-interface IconComponentProps extends IconProps {
   name: IconNames;
 }
 
 const iconMap: { [key in IconNames]: ElementType } = {
+  ArrowBack: FaArrowLeftLong,
   ArrowLeft: BsArrowLeftCircle,
-  OpenedEye: VscEye,
-  ClosedEye: VscEyeClosed,
-  PersonFillBlack: BsPersonFill,
-  CaretRight: BsCaretRightFill,
-  CloseIcon: BsFileExcelFill,
-  CaretDown: BsCaretDownFill,
-  SearchIcon: HiMiniMagnifyingGlass,
-  Person: UserIcon,
+  Briefcase: FaBriefcase,
+  BsExclamationOctagonFill,
   Calendar: BsCalendar3,
+  CaretRight: BsCaretRightFill,
+  CaretDown: BsCaretDownFill,
+  Check: FaCheck,
+  ClosedEye: VscEyeClosed,
+  CloseIcon: BsFileExcelFill,
   ChevronDoubleRight: BsChevronDoubleRight,
   ChevronDoubleLeft: BsChevronDoubleLeft,
   ChevronDown: BsChevronDown,
-  BsExclamationOctagonFill,
+  EmptyFile: ImFileEmpty,
+  History: FaHistory,
+  Home: HiHome,
+  Logout: GrLogout,
+  Logo,
   MdKeyboardArrowDown,
-  Trash: PiTrashSimpleFill,
-  Check: FaCheck,
+  Mail: IoMdMail,
   NotificationOn: VscBellDot,
   NotificationOff: VscBell,
-  Mail: IoMdMail,
-  Home: HiHome,
-  EmptyFile: ImFileEmpty,
-  ArrowBack: FaArrowLeftLong,
-  History: FaHistory,
-  Logo,
+  OpenedEye: VscEye,
+  Person: UserIcon,
+  PersonFillBlack: BsPersonFill,
+  SearchIcon: HiMiniMagnifyingGlass,
+  Trash: PiTrashSimpleFill,
 };
 
-export const Icon: FC<IconComponentProps> = ({ name, ...props }) => {
+export const Icon: FC<IconComponentProps> = ({ name, size = 24, ...props }) => {
   const IconComponent = iconMap[name];
   if (!IconComponent) {
     console.error(`Icon with name "${name}" not found.`);
     return null;
   }
-  return <IconComponent {...props} />;
+  return <IconComponent {...props} size={size} />;
 };

@@ -9,6 +9,12 @@ export const Header = styled.header`
   background-color: ${({ theme }) => theme.colors.WHITE};
 `;
 
+export const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+`;
+
 export const ButtonProfile = styled.button`
   background: none;
   border: none;

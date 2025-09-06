@@ -5,6 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { Icon } from '@/components/Icons/Icons';
 import VacancyList from '@/components/Vacancy/VacancyList/VacancyList';
+import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import {
   BackButton,
   LeftContainer,
@@ -19,7 +20,7 @@ enum Routes {
 const Vacancies: React.FC = () => {
   const router = useRouter();
   const searchParmas = useSearchParams();
-  const { type } = useParams<{ type: string }>();
+  const { type } = useParams<{ type: 'aplicadas' | 'abertas' }>();
   const [vacancyId, setVacancyId] = useState<string | undefined>(undefined);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
 
@@ -28,26 +29,34 @@ const Vacancies: React.FC = () => {
     setVacancyId(id);
   }, []);
 
-  console.log(type);
-
   return (
-    <PageContainer>
-      <LeftContainer>
-        <BackButton
-          type="button"
-          onClick={() => router.push(Routes.CANDIDATE_AREA)}
-        >
-          <Icon name="ArrowBack" /> Voltar
-        </BackButton>
-        <VacancyList />
-      </LeftContainer>
-      <VerticalDivider />
-      <VacancyDetails
-        id={vacancyId}
-        isApplyed
-        onApply={() => setSuccessModalOpen(true)}
+    <>
+      <SuccessModal
+        isOpen={successModalOpen}
+        title="Candidatura realizada com sucesso!"
+        message="Parabéns por dar mais um passo na sua carreira. Estamos felizes em ajudar você a alcançar seus objetivos profissionais."
+        onClose={() => setSuccessModalOpen(false)}
+        buttonText="Fechar"
       />
-    </PageContainer>
+
+      <PageContainer>
+        <LeftContainer>
+          <BackButton
+            type="button"
+            onClick={() => router.push(Routes.CANDIDATE_AREA)}
+          >
+            <Icon name="ArrowBack" /> Voltar
+          </BackButton>
+          <VacancyList type={type} setSelectedVacancyId={setVacancyId} />
+        </LeftContainer>
+        <VerticalDivider />
+        <VacancyDetails
+          id={vacancyId}
+          isApplyed={type === 'aplicadas'}
+          onApply={() => setSuccessModalOpen(true)}
+        />
+      </PageContainer>
+    </>
   );
 };
 
