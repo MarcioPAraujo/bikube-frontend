@@ -19,6 +19,7 @@ import { FaCheck } from 'react-icons/fa6';
 import { VscBellDot } from 'react-icons/vsc';
 import { VscBell } from 'react-icons/vsc';
 import { IoMdMail } from 'react-icons/io';
+import { HiHome } from 'react-icons/hi2';
 import UserIcon from './UserIcon';
 import Logo from '../../../public/images/BIKUBE_LOGO.svg';
 
@@ -90,5 +91,6 @@ export const Icons = {
     <IconWrapper Icon={VscBell} {...props} />
   ),
   Mail: (props: IconProps) => <IconWrapper Icon={IoMdMail} {...props} />,
+  Home: (props: IconProps) => <IconWrapper Icon={HiHome} {...props} />,
   Logo: () => <Logo />,
 };

@@ -3,6 +3,35 @@ import styled from 'styled-components';
 export const PageContainer = styled.div`
   padding: 2rem;
 `;
+export const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+export const HomeButton = styled.button`
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
+  border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_f2f2f2};
+
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    scale: 1.05;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_f2f2f2};
+    svg {
+      fill: ${({ theme }) => theme.colors.YELLOW.hex_FFB936};
+    }
+  }
+  &:active {
+    scale: 0.9;
+    box-shadow: none;
+  }
+`;
+
 export const Title = styled.h1`
   font-size: 3.2rem;
   margin-bottom: 1rem;

@@ -6,9 +6,12 @@ import EditAcademicBackgroundForm from '@/components/Forms/candidateEdition/Edit
 import EditProfessionalExperience from '@/components/Forms/candidateEdition/EditProfessionalExperirence/EditProfesionalExperience';
 import EditSkillsForm from '@/components/Forms/candidateEdition/EditSkills/EditSkillsForm';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
+import { Icons } from '@/components/Icons/Icons';
+import { useRouter } from 'next/navigation';
 import {
   DeleteButton,
   EditButton,
+  HomeButton,
   PageContainer,
   Paragraph,
   SectionContent,
@@ -16,6 +19,7 @@ import {
   SectionTitle,
   Subtitle,
   Title,
+  TitleWrapper,
 } from './styles';
 
 const levels = ['1', '2', '3'];
@@ -37,6 +41,7 @@ const skills = Array.from({ length: 5 }, (_, i) => ({
 }));
 
 const MyProfilePage: React.FC = () => {
+  const router = useRouter();
   const [personalDataFormVisible, setPersonalDataFormVisible] = useState(false);
   const [academicFormVisible, setAcademicFormVisible] = useState(false);
   const [experienceFormVisible, setExperienceFormVisible] = useState(false);
@@ -103,7 +108,12 @@ const MyProfilePage: React.FC = () => {
         }}
       />
       <PageContainer>
-        <Title>Meu Perfil</Title>
+        <TitleWrapper>
+          <Title>Meu Perfil</Title>
+          <HomeButton type="button" onClick={() => router.back()}>
+            <Icons.Home />
+          </HomeButton>
+        </TitleWrapper>
         <DeleteButton
           type="button"
           onClick={() => setWarningModalVisible(true)}
