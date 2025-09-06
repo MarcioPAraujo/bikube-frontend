@@ -52,7 +52,7 @@ const CandidateHomeMain: React.FC = () => {
         <VacanciesSection>
           <H2>Vagas abertas</H2>
           <Subtitle>
-            <CustomLink href="/area-do-candidato/vagas">
+            <CustomLink href="/area-do-candidato/vagas/abertas">
               Veja as vagas que estão abertas para você se candidatar
             </CustomLink>
           </Subtitle>
@@ -78,7 +78,9 @@ const CandidateHomeMain: React.FC = () => {
           >
             {mockedvacancies.map((vacancy, index) => (
               <SwiperSlide key={index}>
-                <CustomLink href={`/area-do-candidato/vagas?id=${index + 1}`}>
+                <CustomLink
+                  href={`/area-do-candidato/vagas/abertas?id=${index + 1}`}
+                >
                   <VacancyCard
                     title={vacancy.title}
                     description={vacancy.description}
@@ -93,7 +95,7 @@ const CandidateHomeMain: React.FC = () => {
         <VacanciesSection>
           <H2>Vagas em andamento</H2>
           <Subtitle>
-            <CustomLink href="/area-do-candidato/minhas-vagas">
+            <CustomLink href="/area-do-candidato/vagas/aplicadas">
               Veja as vagas que você já se candidatou
             </CustomLink>
           </Subtitle>
@@ -120,7 +122,7 @@ const CandidateHomeMain: React.FC = () => {
             {mockedvacancies.map((vacancy, index) => (
               <SwiperSlide key={index}>
                 <CustomLink
-                  href={`/area-do-candidato/minhas-vagas?id=${index + 1}`}
+                  href={`/area-do-candidato/vagas/aplicadas?id=${index + 1}`}
                 >
                   <VacancyCard
                     title={vacancy.title}
