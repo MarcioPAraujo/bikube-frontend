@@ -31,6 +31,12 @@ export const TitleSection = styled.div`
   }
 `;
 
+export const ButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
 export const CardsContainer = styled.div`
   display: flex;
   gap: 2rem;

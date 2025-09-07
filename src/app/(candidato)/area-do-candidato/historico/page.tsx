@@ -3,13 +3,20 @@
 import VacancyCard from '@/components/VacancyCard/VacancyCard';
 import SearchBarComponent from '@/components/Inputs/SearchBar';
 import { useState } from 'react';
-import { CardsContainer, Page, TitleSection } from './styles';
+import IconButton from '@/components/Buttons/IconButton';
+import { useRouter } from 'next/navigation';
+import { Icon } from '@/components/Icons/Icons';
+import { ButtonsContainer, CardsContainer, Page, TitleSection } from './styles';
 
 interface IVancancyCardProps {
   title: string;
   description: string;
   location: string;
   salary: string;
+}
+
+enum Routes {
+  HOME = '/area-do-candidato/inicio',
 }
 
 const mockedvacancies: IVancancyCardProps[] = Array.from(
@@ -23,14 +30,21 @@ const mockedvacancies: IVancancyCardProps[] = Array.from(
   }),
 );
 const HistoryPage: React.FC = () => {
+  const router = useRouter();
   const [search, setSearch] = useState<string>('');
   return (
     <Page>
       <TitleSection>
-        <div>
-          <h1>Histórico</h1>
-          <p>Veja as vagas que você se candidatou</p>
-        </div>
+        <ButtonsContainer>
+          <IconButton
+            onClick={() => router.push(Routes.HOME)}
+            iconNode={<Icon name="Home" />}
+          />
+          <div>
+            <h1>Histórico</h1>
+            <p>Veja as vagas que você se candidatou</p>
+          </div>
+        </ButtonsContainer>
         <SearchBarComponent
           value={search}
           placeholder="Pesquisar vaga"
