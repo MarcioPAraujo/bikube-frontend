@@ -1,5 +1,7 @@
 import { useStepsRegistration } from '@/hooks/useStepsRegistration';
-import { encryptPassword } from '@/utils/encryptPassword';
+import { sendCodeToEmail } from '@/services/email/emailService';
+import { decryptPassword, encryptPassword } from '@/utils/encryptPassword';
+import { notifyError } from '@/utils/handleToast';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import {
   CredentialsSchema,
@@ -25,23 +27,37 @@ const useAccessCredentialsForm = () => {
 
   useEffect(() => {
     setCurrentStep(1);
-    let data = step1.formData;
-    if (!data) {
-      const storedData = sessionStorage.getItem(SESSION_STORAGE_KEYS.step1);
-      data = storedData ? JSON.parse(storedData) : null;
-      if (!data) return;
-    }
-    setValue('email', data.email);
-    setValue('confirmPassword', data.confirmPassword);
-    setValue('password', data.password);
 
-    setStep1(prev => ({
-      ...prev,
-      formData: data,
-    }));
+    const retrieveData = async () => {
+      let data = step1.formData;
+      if (!data) {
+        const storedData = sessionStorage.getItem(SESSION_STORAGE_KEYS.step1);
+        data = storedData ? JSON.parse(storedData) : null;
+        if (!data) return;
+      }
+
+      const decryptedPassword = await decryptPassword(data.password);
+      data.password = decryptedPassword;
+      data.confirmPassword = decryptedPassword;
+
+      setValue('email', data.email);
+      setValue('confirmPassword', data.confirmPassword);
+      setValue('password', data.password);
+
+      setStep1(prev => ({
+        ...prev,
+        formData: data,
+      }));
+    };
+    retrieveData();
   }, []);
 
   const onFormSubmit = async (data: CredentialsSchemaType) => {
+    const result = await sendCodeToEmail(data.email);
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
     const encriptedPassword = await encryptPassword(data.password);
 
     data = {

@@ -1,5 +1,4 @@
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
-import useSendCodeTimer from '@/hooks/useSendCodeTimer';
 import FormTitle from '../FormTitle/FormTitle';
 import {
   Content,
@@ -14,9 +13,11 @@ const EmailVerificationForm: React.FC = () => {
     back,
     handleChange,
     onFormSubmit,
+    canResendCode,
+    resendCode,
+    resetTime,
     hookform: { errors, handleSubmit, isSubmitting, register },
   } = useEmailVerificationForm();
-  const { canResendCode, resendCode, resetTime } = useSendCodeTimer();
 
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)}>

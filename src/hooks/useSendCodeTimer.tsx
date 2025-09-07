@@ -1,4 +1,5 @@
-import { notifySuccess } from '@/utils/handleToast';
+import { sendCodeToEmail } from '@/services/email/emailService';
+import { notifyError, notifySuccess } from '@/utils/handleToast';
 import { useState } from 'react';
 
 const RESEND_TIMEOUT = 60;
@@ -24,7 +25,15 @@ const useSendCodeTimer = () => {
 
     tick(time);
   };
-  const resendCode = () => {
+  const resendCode = async (email: string) => {
+    if (!canResendCode) return;
+
+    const result = await sendCodeToEmail(email);
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+
     notifySuccess('Um novo código foi enviado ao seu email!');
     startCountdown(RESEND_TIMEOUT);
   };
