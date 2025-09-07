@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import StyledComponentsRegistry from '@/lib/registry';
 import { GlobalStyle } from '@/styles/global';
 import { theme } from '@/styles/theme';
-import AuthProvider from '@/hooks/useAuth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import NextNProgress from 'nextjs-progressbar';
 import { StepsRegistrationProvider } from '@/hooks/useStepsRegistration';
@@ -28,13 +27,11 @@ const Providers = ({ children }: PropsWithChildren) => {
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <GlobalStyle />
-          <AuthProvider>
-            <NextNProgress
-              color={theme.colors.WHITE}
-              options={{ easing: 'ease', speed: 500 }}
-            />
-            <StepsRegistrationProvider>{children}</StepsRegistrationProvider>
-          </AuthProvider>
+          <NextNProgress
+            color={theme.colors.WHITE}
+            options={{ easing: 'ease', speed: 500 }}
+          />
+          <StepsRegistrationProvider>{children}</StepsRegistrationProvider>
           <ToastContainer
             style={{
               zIndex: 999999,

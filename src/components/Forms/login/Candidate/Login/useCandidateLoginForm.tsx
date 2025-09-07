@@ -1,3 +1,4 @@
+import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { candidateLogin } from '@/services/login/candidateLogin';
 import { notifyError } from '@/utils/handleToast';
 import { emailMask } from '@/utils/masks/emailMask';
@@ -10,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 const useCandidateLoginForm = () => {
+  const { setCandidate } = useCandidateAuth();
   const {
     register,
     handleSubmit,
@@ -36,9 +38,10 @@ const useCandidateLoginForm = () => {
     }
     if (result.data) {
       sessionStorage.setItem(
-        SESSION_STORAGE_KEYS.token,
-        JSON.stringify(result.data.access_token),
+        SESSION_STORAGE_KEYS.user,
+        JSON.stringify({ id: result.data.id }),
       );
+      setCandidate({ id: result.data.id });
     }
     console.log(data);
   };

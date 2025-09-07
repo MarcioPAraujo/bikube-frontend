@@ -4,6 +4,7 @@ import IconButton from '@/components/Buttons/IconButton';
 import { Icon } from '@/components/Icons/Icons';
 import { useState } from 'react';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
+import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import {
   ButtonProfile,
   ButtonWrapper,
@@ -11,11 +12,11 @@ import {
 } from './candidateHomeHeaderStyles';
 
 enum Routes {
-  CANDIDATE_LOGIN = '/candidato-login',
   CANDIDATE_PROFILE = '/area-do-candidato/meu-perfil',
 }
 
 const CandidateHomeHeader: React.FC = () => {
+  const { logout } = useCandidateAuth();
   const router = useRouter();
   const [warningModal, setWarningModal] = useState(false);
   return (
@@ -27,7 +28,7 @@ const CandidateHomeHeader: React.FC = () => {
         cancelText="Cancelar"
         confirmText="Sair"
         onCancel={() => setWarningModal(false)}
-        onConfirm={() => router.push(Routes.CANDIDATE_LOGIN)}
+        onConfirm={logout}
       />
 
       <Header>

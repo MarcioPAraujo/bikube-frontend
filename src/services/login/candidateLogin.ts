@@ -1,5 +1,6 @@
 import { Result } from '@/interfaces/apiResult';
 import { AxiosError, AxiosResponse } from 'axios';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { api } from '../api';
 
 export interface ICandidaetLoginResponse {
@@ -23,6 +24,12 @@ export const candidateLogin = async (
       ENDPOINT,
       body,
     );
+
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.token,
+      JSON.stringify(response.data.access_token),
+    );
+
     return { data: response.data, error: null };
   } catch (error: any) {
     const axiosError = error as AxiosError;

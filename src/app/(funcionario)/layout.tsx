@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useAuth } from '@/hooks/useAuth';
+import AuthProvider, { useAuth } from '@/hooks/useAuth';
 import Image from 'next/image';
 import { Icon } from '@/components/Icons/Icons';
 import { Navbar } from '@/components/Navbar';
@@ -54,4 +54,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
-export default Layout;
+
+const EmplyeeLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <AuthProvider>
+      <Layout>{children}</Layout>
+    </AuthProvider>
+  );
+};
+
+export default EmplyeeLayout;
