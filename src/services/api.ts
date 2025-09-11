@@ -70,7 +70,7 @@ export async function refreshAccessToken(): Promise<string> {
   if (!refreshToken) {
     // Redirect to login or handle as a session end.
     // In a real application, you'd have a more robust logout process here.
-    // window.location.href = '/';
+    window.location.href = '/';
     return Promise.reject(
       new Error('No refresh token found. User must log in again.'),
     );
@@ -96,9 +96,9 @@ export async function refreshAccessToken(): Promise<string> {
   } catch (error) {
     // If the refresh token itself is invalid, clear storage and force login.
     console.error('Refresh token failed:', error);
-    // clearLocalStorage();
-    // clearSessionStorage();
-    // window.location.href = '/';
+    clearLocalStorage();
+    clearSessionStorage();
+    window.location.href = '/';
     return Promise.reject(error);
   }
 }

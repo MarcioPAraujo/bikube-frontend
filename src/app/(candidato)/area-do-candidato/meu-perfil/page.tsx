@@ -8,6 +8,13 @@ import EditSkillsForm from '@/components/Forms/candidateEdition/EditSkills/EditS
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import { Icon } from '@/components/Icons/Icons';
 import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import {
+  DeleteCandidateById,
+  getCandidateById,
+} from '@/services/candidate/candidateService';
+import { useCandidateAuth } from '@/hooks/usecandidateAuth';
+import { notifyError } from '@/utils/handleToast';
 import {
   DeleteButton,
   EditButton,
@@ -34,19 +41,33 @@ const education = Array.from({ length: 3 }, (_, i) => ({
   startDate: '01/03/2010',
   endDate: '01/07/2015',
 }));
-
 const skills = Array.from({ length: 5 }, (_, i) => ({
   skill: `Habilidade ${i + 1}`,
   experienceTime: `Nível ${i + 1}`,
 }));
 
 const MyProfilePage: React.FC = () => {
+  const { candidate } = useCandidateAuth();
   const router = useRouter();
   const [personalDataFormVisible, setPersonalDataFormVisible] = useState(false);
   const [academicFormVisible, setAcademicFormVisible] = useState(false);
   const [experienceFormVisible, setExperienceFormVisible] = useState(false);
   const [skillsFormVisible, setSkillsFormVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
+
+  const { data } = useQuery({
+    queryKey: ['candidateProfile'],
+    queryFn: () => getCandidateById(Number(candidate?.id) || 0),
+  });
+
+  const handleDeleteAccount = async () => {
+    const resutl = await DeleteCandidateById(Number(candidate?.id) || 0);
+    if (resutl.error) {
+      notifyError(resutl.error);
+    }
+    setWarningModalVisible(false);
+  };
+
   return (
     <>
       <EditPersonalDataForm
@@ -102,10 +123,7 @@ const MyProfilePage: React.FC = () => {
         cancelText="Cancelar"
         confirmText="Deletar"
         onCancel={() => setWarningModalVisible(false)}
-        onConfirm={() => {
-          setWarningModalVisible(false);
-          // Adicione aqui a lógica para deletar a conta
-        }}
+        onConfirm={handleDeleteAccount}
       />
       <PageContainer>
         <TitleWrapper>

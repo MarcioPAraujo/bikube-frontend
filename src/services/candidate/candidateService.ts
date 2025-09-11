@@ -7,7 +7,9 @@ import { PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalD
 import { ProfessionalSchemaType } from '@/validation/candidateRegister/ProfessionalExperience';
 import { SkillsSchemaType } from '@/validation/candidateRegister/SkillSchema';
 import { format, parse } from 'date-fns';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
+import handleError from '@/utils/handleError';
 import { api } from '../api';
 
 export interface ICreateCandidateRequest {
@@ -82,5 +84,32 @@ export const registerNewCandidate = async (
       return { data: null, error: axiosError.response.data as string };
     }
     return { data: null, error: 'falha ao cadastrar o perfil' };
+  }
+};
+
+export const getCandidateById = async (
+  id: number,
+): Promise<Result<ICandidateDetailsResponse>> => {
+  const ENDPOINT = `candidato/perfil/${id}`;
+
+  try {
+    const response: AxiosResponse<ICandidateDetailsResponse> = await api.get(
+      ENDPOINT,
+    );
+    return { data: response.data, error: null };
+  } catch (error: any) {
+    return handleError(error, 'falha ao buscar o candidato');
+  }
+};
+
+export const DeleteCandidateById = async (
+  id: number,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = `/candidato/${id}`;
+  try {
+    await api.delete(ENDPOINT);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'falha ao deletar o candidato');
   }
 };
