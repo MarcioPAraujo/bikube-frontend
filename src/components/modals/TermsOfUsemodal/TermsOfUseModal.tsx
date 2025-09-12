@@ -41,10 +41,6 @@ const TermsOfUseModal: FC<IProps> = ({
   });
   setValue('email', email);
   const onFormSubmit = async (data: ITermsOfUseSchema) => {
-    console.log('Submitting terms of use for email:', data.email);
-    onAccept();
-    onClose();
-    /*
     const response = await termsOfUseService(data.email);
     if (response.error) {
       notifyError(response.error);
@@ -53,7 +49,6 @@ const TermsOfUseModal: FC<IProps> = ({
 
     onAccept();
     onClose();
-    */
   };
   if (!isOpen) return null;
   return (

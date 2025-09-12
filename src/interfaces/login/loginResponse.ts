@@ -1,5 +1,5 @@
 export interface ILoginResponse {
-  primeirologin: string;
+  primeiro_login: string;
   email: string;
   role: string;
   access_token: string;

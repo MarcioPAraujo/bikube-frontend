@@ -1,5 +1,8 @@
-import { notifySuccess } from '@/utils/handleToast';
+import { sendCode } from '@/services/login/sentCodeService';
+import { validateCode } from '@/services/login/validateCodeService';
+import { notifyError, notifySuccess } from '@/utils/handleToast';
 import codeMask from '@/utils/masks/codeMask';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { CodeSchema, CodeSchemaType } from '@/validation/Login/CodeSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
@@ -38,8 +41,12 @@ const useCodeVerificationForm = () => {
     return () => clearInterval(interval);
   }, [resetTime]);
 
-  const onFormSubmit = (data: CodeSchemaType) => {
-    console.log(data);
+  const onFormSubmit = async (data: CodeSchemaType) => {
+    const result = await validateCode(data.code);
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
     router.push('/redefinir-senha');
   };
 
@@ -48,7 +55,17 @@ const useCodeVerificationForm = () => {
     setValue('code', formattedCode);
   };
 
-  const resendCode = () => {
+  const resendCode = async () => {
+    const email = sessionStorage.getItem(SESSION_STORAGE_KEYS.email);
+    if (!email) {
+      notifyError('No foi possível reenviar o código. Tente novamente.');
+      return;
+    }
+    const result = await sendCode(email);
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
     setCanResendCode(false);
 
     const oneMinute = 1000 * RESEND_TIMEOUT;

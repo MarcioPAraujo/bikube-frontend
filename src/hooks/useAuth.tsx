@@ -10,6 +10,7 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { createContext, ReactNode } from 'react';
@@ -36,13 +37,7 @@ interface ChildrenProps {
 
 const AuthContext = createContext({} as IUserProvider);
 
-const publicRoutes = [
-  '/',
-  '/login',
-  '/login/codigo',
-  '/login/redefinir-senha',
-  '/login/enviar-codigo',
-];
+const publicRoutes = ['/', '/email', '/codigo', '/redefinir-senha'];
 const employeeRoutes = ['/home', '/minhas-informacoes', '/comunicados'];
 const rhRoutes = [
   '/setores',
@@ -60,6 +55,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const isAuthenticated = !!user?.id;
   const isRH = user?.role === 'RH';
   const isOnlyEmployee = user?.role === 'FUNCIONARIO';
+  console.log(user);
 
   useEffect(() => {
     let storedUser = sessionStorage.getItem(SESSION_STORAGE_KEYS.user);
@@ -83,7 +79,16 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     setUser(undefined);
   };
 
-  /*
+  const value: IUserProvider = useMemo(
+    () => ({
+      user,
+      setUser,
+      isAuthenticated,
+      logout,
+    }),
+    [user, isAuthenticated, logout, setUser],
+  );
+
   if (loading) return null;
   const allowedMenus = (routes: string[]) => {
     const isAllowed = routes.some(route => pathName.startsWith(route));
@@ -102,20 +107,8 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   if (isAuthenticated && isRH && !allowedMenus(rhRoutes)) {
     redirect('/home');
   }
-  */
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        setUser,
-        isAuthenticated,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

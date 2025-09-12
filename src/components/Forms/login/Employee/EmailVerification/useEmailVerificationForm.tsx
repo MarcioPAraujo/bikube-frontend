@@ -1,3 +1,5 @@
+import { sendCode } from '@/services/login/sentCodeService';
+import { notifyError } from '@/utils/handleToast';
 import { emailMask } from '@/utils/masks/emailMask';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import {
@@ -20,7 +22,13 @@ const useEmailVerificationForm = () => {
     resolver: yupResolver(SendCodeSchema),
   });
 
-  const onFormSubmit = (data: SendCodeSchemaType) => {
+  const onFormSubmit = async (data: SendCodeSchemaType) => {
+    const result = await sendCode(data.email);
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+
     // here it stores the email to reuse on code verification, for code resent
     // and on the reset password on the body of the request
     sessionStorage.setItem(SESSION_STORAGE_KEYS.email, data.email);
