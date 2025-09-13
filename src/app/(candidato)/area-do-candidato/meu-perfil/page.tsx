@@ -34,7 +34,7 @@ import {
 } from './styles';
 
 const MyProfilePage: React.FC = () => {
-  const { candidate } = useCandidateAuth();
+  const { candidate, setCandidate } = useCandidateAuth();
   const router = useRouter();
   const [personalDataFormVisible, setPersonalDataFormVisible] = useState(false);
   const [academicFormVisible, setAcademicFormVisible] = useState(false);
@@ -53,6 +53,7 @@ const MyProfilePage: React.FC = () => {
     if (resutl.error) {
       notifyError(resutl.error);
     }
+    setCandidate(undefined);
     setWarningModalVisible(false);
   };
 
