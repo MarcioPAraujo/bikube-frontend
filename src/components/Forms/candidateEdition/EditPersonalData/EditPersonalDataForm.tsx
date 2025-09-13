@@ -8,12 +8,14 @@ import { stateNames } from '@/utils/statesNames';
 import { PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalDataSchema';
 import { Controller } from 'react-hook-form';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import { FieldsWrapper, Form } from './editPersonalDataForm';
 import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import EditSubmitButton from '../Elements/EditSubmitButtons/EditSubmitButtons';
 import useEditPersonalDataForm from './useEditPersonalDataForm';
 
 interface EditPersonalDataFormProps {
+  data: ICandidateDetailsResponse;
   defaultValues: PersonalDataSchemaType;
   isOpen: boolean;
   onClose: () => void;

@@ -8,13 +8,17 @@ import EditSkillsForm from '@/components/Forms/candidateEdition/EditSkills/EditS
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import { Icon } from '@/components/Icons/Icons';
 import { useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   DeleteCandidateById,
   getCandidateById,
 } from '@/services/candidate/candidateService';
 import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { notifyError } from '@/utils/handleToast';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
+import { stateNames } from '@/utils/statesNames';
+import { languageLevels } from '@/utils/languageLevel';
+import { format, parseISO } from 'date-fns';
 import {
   DeleteButton,
   EditButton,
@@ -29,23 +33,6 @@ import {
   TitleWrapper,
 } from './styles';
 
-const levels = ['1', '2', '3'];
-
-const languages = Array.from({ length: 5 }, (_, i) => ({
-  language: `Linguagem ${i + 1}`,
-  level: levels[i % levels.length],
-}));
-const education = Array.from({ length: 3 }, (_, i) => ({
-  instituition: `Instituição ${i + 1}`,
-  course: `Curso ${i + 1}`,
-  startDate: '01/03/2010',
-  endDate: '01/07/2015',
-}));
-const skills = Array.from({ length: 5 }, (_, i) => ({
-  skill: `Habilidade ${i + 1}`,
-  experienceTime: `Nível ${i + 1}`,
-}));
-
 const MyProfilePage: React.FC = () => {
   const { candidate } = useCandidateAuth();
   const router = useRouter();
@@ -55,9 +42,10 @@ const MyProfilePage: React.FC = () => {
   const [skillsFormVisible, setSkillsFormVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
 
-  const { data } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ['candidateProfile'],
     queryFn: () => getCandidateById(Number(candidate?.id) || 0),
+    placeholderData: keepPreviousData,
   });
 
   const handleDeleteAccount = async () => {
@@ -68,52 +56,73 @@ const MyProfilePage: React.FC = () => {
     setWarningModalVisible(false);
   };
 
+  if (isPending) {
+    return <div>Carregando...</div>;
+  }
+
+  if (isError) {
+    return <div>Erro ao carregar os dados.</div>;
+  }
+
+  if (!data || !data.data) return <div>Dados não disponíveis.</div>;
+
   return (
     <>
       <EditPersonalDataForm
         isOpen={personalDataFormVisible}
         onClose={() => setPersonalDataFormVisible(false)}
+        data={data.data || ({} as ICandidateDetailsResponse)}
         defaultValues={{
-          name: 'Nome exemplo',
-          phoneNumber: '(00) 91230-0900',
-          state: 'SP',
-          city: 'São Paulo',
-          linkedin: 'linkedin.com/in/exemplo',
-          github: 'https://github.com/exemplo',
-          birthday: '01/01/2000',
+          name: data.data?.nome || '',
+          phoneNumber: data.data?.telefone || '',
+          state: data.data?.estado || '',
+          city: data.data?.cidade || '',
+          linkedin: data.data?.linkedin || '',
+          github: data.data?.github || '',
+          birthday: '01/01/1990',
         }}
       />
       <EditAcademicBackgroundForm
         isOpen={academicFormVisible}
         onClose={() => setAcademicFormVisible(false)}
         defaultValues={{
-          languages,
-          education,
+          languages:
+            data.data?.idiomas.map(lang => ({
+              language: lang.idioma,
+              level: String(lang.nivel),
+            })) || [],
+          education:
+            data.data?.formacaoAcademica.map(edu => ({
+              instituition: edu.instituicao,
+              course: edu.curso,
+              startDate: format(parseISO(edu.dataInicio), 'dd/MM/yyyy'),
+              endDate: format(parseISO(edu.dataFim), 'dd/MM/yyyy'),
+            })) || [],
         }}
       />
       <EditProfessionalExperience
         isOpen={experienceFormVisible}
         onClose={() => setExperienceFormVisible(false)}
         defaultValues={{
-          isFirstJob: false,
-          experiences: [
-            {
-              company: 'Empresa exemplo',
-              description: 'Descrição exemplo',
-              startDate: '01/01/2020',
-              endDate: '31/12/2021',
-            },
-          ],
+          isFirstJob: data.data?.experiencias.length === 0,
+          experiences:
+            data.data?.experiencias.map(exp => ({
+              company: exp.empresa,
+              startDate: format(parseISO(exp.dataInicio), 'dd/MM/yyyy'),
+              endDate: format(parseISO(exp.dataFim), 'dd/MM/yyyy'),
+              description: exp.descricao,
+            })) || [],
         }}
       />
       <EditSkillsForm
         isOpen={skillsFormVisible}
         onClose={() => setSkillsFormVisible(false)}
         defaultValues={{
-          skills: [
-            { competency: 'Habilidade 1', periodInMonths: '12' },
-            { competency: 'Habilidade 2', periodInMonths: '24' },
-          ],
+          skills:
+            data.data?.habilidades.map(skill => ({
+              competency: skill.habilidade,
+              periodInMonths: skill.tempoExperiencia.toString(),
+            })) || [],
         }}
       />
       <WarningModal
@@ -149,22 +158,26 @@ const MyProfilePage: React.FC = () => {
             </EditButton>
             <SectionContent>
               <Paragraph>
-                <strong>Nome: </strong>Nome exemplo
+                <strong>Nome: </strong>
+                {data.data?.nome}
               </Paragraph>
               <Paragraph>
-                <strong>Telefone: </strong>(00) 0 0000-0000
+                <strong>Telefone: </strong>
+                {data.data?.telefone}
               </Paragraph>
               <Paragraph>
-                <strong>Estado: </strong>estado exemplo
+                <strong>Estado: </strong>
+                {stateNames[data.data?.estado]}
               </Paragraph>
               <Paragraph>
-                <strong>Cidade: </strong>cidade exemplo
+                <strong>Cidade: </strong>
+                {data.data?.cidade}
               </Paragraph>
               <Paragraph>
-                <strong>Linkedin: </strong> linkedin.com/in/exemplo
+                <strong>Linkedin: </strong> {data.data?.linkedin}
               </Paragraph>
               <Paragraph>
-                <strong>Github: </strong> github.com/exemplo
+                <strong>Github: </strong> {data.data?.github}
               </Paragraph>
             </SectionContent>
           </section>
@@ -179,30 +192,37 @@ const MyProfilePage: React.FC = () => {
             <SectionContent className="academic">
               <div>
                 <Subtitle>Idiomas</Subtitle>
-                {languages.map((lang, index) => (
-                  <div key={index}>
+                {data.data?.idiomas?.map(lang => (
+                  <div key={lang.idioma}>
                     <Paragraph>
                       <strong>Idioma: </strong>
-                      {lang.language}
+                      {lang.idioma}
                     </Paragraph>
                     <Paragraph>
                       <strong>Nível: </strong>
-                      {lang.level}
+                      {languageLevels[lang.nivel]}
                     </Paragraph>
                   </div>
                 ))}
               </div>
               <div>
                 <Subtitle>Formações</Subtitle>
-                <Paragraph>
-                  <strong>Curso: </strong>Curso exemplo
-                </Paragraph>
-                <Paragraph>
-                  <strong>Instituição: </strong>Instituição exemplo
-                </Paragraph>
-                <Paragraph>
-                  <strong>Ano de conclusão: </strong>2020
-                </Paragraph>
+                {data.data.formacaoAcademica.map(edu => (
+                  <div key={edu.instituicao}>
+                    <Paragraph>
+                      <strong>Curso: </strong>
+                      {edu.curso}
+                    </Paragraph>
+                    <Paragraph>
+                      <strong>Instituição: </strong>
+                      {edu.instituicao}
+                    </Paragraph>
+                    <Paragraph>
+                      <strong>Ano de conclusão: </strong>
+                      {format(parseISO(edu.dataFim), 'dd/MM/yyyy')}
+                    </Paragraph>
+                  </div>
+                ))}
               </div>
             </SectionContent>
           </section>
@@ -214,20 +234,26 @@ const MyProfilePage: React.FC = () => {
             >
               Editar
             </EditButton>
-            <SectionContent>
-              <Paragraph>
-                <strong>Empresa: </strong>Empresa exemplo
-              </Paragraph>
-              <Paragraph>
-                <strong>Data de início: </strong>01/01/2020
-              </Paragraph>
-              <Paragraph>
-                <strong>Data de fim: </strong>31/12/2021
-              </Paragraph>
-              <Paragraph>
-                <strong>Descrição: </strong>Descrição exemplo
-              </Paragraph>
-            </SectionContent>
+            {data.data.experiencias.map(exp => (
+              <SectionContent key={exp.empresa}>
+                <Paragraph>
+                  <strong>Empresa: </strong>
+                  {exp.empresa}
+                </Paragraph>
+                <Paragraph>
+                  <strong>Data de início: </strong>
+                  {format(parseISO(exp.dataInicio), 'dd/MM/yyyy')}
+                </Paragraph>
+                <Paragraph>
+                  <strong>Data de fim: </strong>
+                  {format(parseISO(exp.dataFim), 'dd/MM/yyyy')}
+                </Paragraph>
+                <Paragraph>
+                  <strong>Descrição: </strong>
+                  {exp.descricao}
+                </Paragraph>
+              </SectionContent>
+            ))}
           </section>
           <section>
             <SectionTitle>Habilidades</SectionTitle>
@@ -238,15 +264,15 @@ const MyProfilePage: React.FC = () => {
               Editar
             </EditButton>
             <SectionContent>
-              {skills.map((skill, index) => (
-                <div key={index}>
+              {data.data.habilidades.map(skill => (
+                <div key={skill.habilidade}>
                   <Paragraph>
                     <strong>Habilidade: </strong>
-                    {skill.skill}
+                    {skill.habilidade}
                   </Paragraph>
                   <Paragraph>
                     <strong>Tempo de experiência: </strong>
-                    {skill.experienceTime}
+                    {skill.tempoExperiencia}
                   </Paragraph>
                 </div>
               ))}
