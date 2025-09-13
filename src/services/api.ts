@@ -3,6 +3,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
+import {
+  CandidatePublicRoutes,
+  EmployeePublicRoutes,
+} from '@/utils/routes/routes';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -26,11 +30,22 @@ const clearSessionStorage = () => {
 };
 
 const PUBLIC_ENDPOINTS = [
-  '/auth/login',
-  '/auth/refresh',
-  'usuario/novasenha',
-  'codigosenha',
-  'codigosenha/validar',
+  CandidatePublicRoutes.LOGIN,
+  CandidatePublicRoutes.EMAIL_VERIFICATION,
+  CandidatePublicRoutes.CODE_VERIFICATION,
+  CandidatePublicRoutes.PASSWORD_RESET,
+
+  CandidatePublicRoutes.REGISTER.STEP1,
+  CandidatePublicRoutes.REGISTER.STEP1_EMAIL,
+  CandidatePublicRoutes.REGISTER.STEP2,
+  CandidatePublicRoutes.REGISTER.STEP3,
+  CandidatePublicRoutes.REGISTER.STEP4,
+  CandidatePublicRoutes.REGISTER.STEP5,
+
+  EmployeePublicRoutes.LOGIN,
+  EmployeePublicRoutes.EMAIL_VERIFICATION,
+  EmployeePublicRoutes.CODE_VERIFICATION,
+  EmployeePublicRoutes.PASSWORD_RESET,
 ];
 
 api.interceptors.request.use(
@@ -46,7 +61,7 @@ api.interceptors.request.use(
       if (token) {
         if (config.headers) {
           config.headers = config.headers || {};
-          config.headers['Authorization'] = `Bearer ${token}`;
+          config.headers['Authorization'] = `Bearer ${JSON.parse(token)}`;
         }
       }
     }
@@ -69,7 +84,6 @@ export async function refreshAccessToken(): Promise<string> {
   // If no refresh token is found, or it's a security measure to ensure the user is authenticated.
   if (!refreshToken) {
     // Redirect to login or handle as a session end.
-    // In a real application, you'd have a more robust logout process here.
     window.location.href = '/';
     return Promise.reject(
       new Error('No refresh token found. User must log in again.'),
@@ -77,7 +91,7 @@ export async function refreshAccessToken(): Promise<string> {
   }
 
   try {
-    const refreshPayload = refreshToken;
+    const refreshPayload = JSON.parse(refreshToken);
     // The returned data is the new access token.
     const { data } = await api.post('/auth/refresh', {
       token: refreshPayload,
@@ -86,7 +100,7 @@ export async function refreshAccessToken(): Promise<string> {
     console.log('New access token received:', data);
 
     if (data) {
-      localStorage.setItem('accessToken', data);
+      localStorage.setItem(LOCAL_STORAGE_KEYS.token, data);
       return data;
     }
 
