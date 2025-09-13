@@ -86,6 +86,7 @@ const MyProfilePage: React.FC = () => {
       <EditAcademicBackgroundForm
         isOpen={academicFormVisible}
         onClose={() => setAcademicFormVisible(false)}
+        refetch={refetch}
         data={data.data || ({} as ICandidateDetailsResponse)}
         defaultValues={{
           languages:

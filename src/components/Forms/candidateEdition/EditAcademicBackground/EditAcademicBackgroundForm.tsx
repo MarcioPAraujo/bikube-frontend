@@ -24,15 +24,18 @@ import RemoveButton from '../Elements/RemoveButton/RemoveButton';
 
 interface EditAcademicBackgroundFormProps {
   isOpen: boolean;
-  onClose: () => void;
   defaultValues: AcademicDataSchemaType;
   data: ICandidateDetailsResponse;
+  onClose: () => void;
+  refetch: VoidFunction;
 }
 
 const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
   isOpen,
-  onClose,
   defaultValues,
+  data,
+  onClose,
+  refetch,
 }) => {
   const {
     handleClose,
@@ -46,7 +49,7 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
     hookform: { control, register, handleSubmit, errors, isSubmitting },
     educationFieldArray: { appendEducation, removeEducation, educationArray },
     languageFieldArray: { addLanguage, removeLanguage, languagesArray },
-  } = useEditAcademicBackgroundForm(defaultValues, onClose);
+  } = useEditAcademicBackgroundForm(defaultValues, onClose, data);
 
   if (!isOpen) return null;
 
@@ -57,7 +60,10 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
         title="Formação acadêmica atualizada com sucesso!"
         message="As suas informações de formação acadêmica foram atualizadas com sucesso."
         buttonText="Ok"
-        onClose={handleClose}
+        onClose={() => {
+          handleClose();
+          refetch();
+        }}
       />
     );
   }

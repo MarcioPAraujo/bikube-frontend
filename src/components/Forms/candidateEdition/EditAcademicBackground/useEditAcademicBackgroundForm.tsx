@@ -1,12 +1,17 @@
+import { useCandidateAuth } from '@/hooks/usecandidateAuth';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
+import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
 import { IOption } from '@/interfaces/option';
+import { editCandidateById } from '@/services/candidate/candidateService';
+import { getLanguages } from '@/services/language/languageService';
 import { notifyError } from '@/utils/handleToast';
-import languages from '@/utils/languages';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import {
   AcademicDataSchema,
   AcademicDataSchemaType,
 } from '@/validation/candidateRegister/AcademicData';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { format, parse } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
@@ -19,7 +24,9 @@ const levels: IOption[] = [
 const useEditAcademicBackgroundForm = (
   defaultValues: AcademicDataSchemaType,
   onClose: VoidFunction,
+  candidateData: ICandidateDetailsResponse,
 ) => {
+  const { candidate } = useCandidateAuth();
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [warningModalOpen, setWarningModalOpen] = useState(false);
   const [languagesList, setLanguagesList] = useState<IOption[]>([]);
@@ -59,7 +66,6 @@ const useEditAcademicBackgroundForm = (
   });
 
   useEffect(() => {
-    /*
     const retrieveLanguages = async () => {
       const result = await getLanguages();
       if (result.error) {
@@ -75,8 +81,6 @@ const useEditAcademicBackgroundForm = (
       }
     };
     retrieveLanguages();
-    */
-    setLanguagesList(languages);
   }, []);
 
   const handleClose = () => {
@@ -108,7 +112,35 @@ const useEditAcademicBackgroundForm = (
     }
   };
 
-  const onFormSubmit = (data: AcademicDataSchemaType) => {
+  const buildBody = (data: AcademicDataSchemaType) => {
+    const candidateId = candidate?.id || '0';
+    const body: ICandidateProfileEditBodyRequest = {
+      ...candidateData,
+      id: Number(candidateId),
+      formacaoAcademica: data.education
+        ? data.education.map(edu => {
+            const start = parse(edu.startDate, 'dd/MM/yyyy', new Date());
+            const end = parse(edu.endDate, 'dd/MM/yyyy', new Date());
+            return {
+              curso: edu.course,
+              instituicao: edu.instituition,
+              dataFim: format(end, 'yyyy-MM-dd'),
+              dataInicio: format(start, 'yyyy-MM-dd'),
+              situacao: start > end ? 'Cursando' : 'Concluído',
+            };
+          })
+        : [],
+      idiomas: data.languages
+        ? data.languages.map(lang => ({
+            idioma: lang.language,
+            nivel: lang.level,
+          }))
+        : [],
+    };
+    return body;
+  };
+
+  const onFormSubmit = async (data: AcademicDataSchemaType) => {
     if (data.education?.length === 0) {
       notifyError('Adicione ao menos uma formação acadêmica para prosseguir');
       return;
@@ -125,7 +157,14 @@ const useEditAcademicBackgroundForm = (
       notifyError('Você adicionou idiomas duplicados, por favor verifique.');
       return;
     }
-    console.log('Submitted data:', data);
+
+    const body = buildBody(data);
+
+    const result = await editCandidateById(body);
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
     setSuccessModalOpen(true);
   };
 
