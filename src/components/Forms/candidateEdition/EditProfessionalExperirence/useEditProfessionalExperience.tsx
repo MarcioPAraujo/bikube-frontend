@@ -1,13 +1,29 @@
+import { useCandidateAuth } from '@/hooks/usecandidateAuth';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
+import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
+import { editCandidateById } from '@/services/candidate/candidateService';
+import { notifyError } from '@/utils/handleToast';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import {
   ProfessionalSchema,
   ProfessionalSchemaType,
 } from '@/validation/candidateRegister/ProfessionalExperience';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { format, parse } from 'date-fns';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-const useProfessionalExperience = (defaultValues: ProfessionalSchemaType) => {
+interface UseProfessionalExperienceProps {
+  defaultValues: ProfessionalSchemaType;
+  refetch: VoidFunction;
+  candidateData: ICandidateDetailsResponse;
+}
+const useProfessionalExperience = ({
+  defaultValues,
+  refetch,
+  candidateData,
+}: UseProfessionalExperienceProps) => {
+  const { candidate } = useCandidateAuth();
   const [warningModal, setWarningModal] = useState<boolean>(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const {
@@ -62,8 +78,37 @@ const useProfessionalExperience = (defaultValues: ProfessionalSchemaType) => {
     if (startDateErrors) trigger(`experiences.${index}.startDate`);
   };
 
-  const onFormSubmit = (data: ProfessionalSchemaType) => {
-    console.log(data);
+  const buildBody = (data: ProfessionalSchemaType) => {
+    const candidateId = candidate?.id || '0';
+
+    const body: ICandidateProfileEditBodyRequest = {
+      ...candidateData,
+      id: Number(candidateId),
+      experiencias: data.isFirstJob
+        ? []
+        : data.experiences.map(exp => {
+            const startDate = parse(exp.startDate, 'dd/MM/yyyy', new Date());
+            const endDate = parse(exp.endDate, 'dd/MM/yyyy', new Date());
+            return {
+              empresa: exp.company,
+              descricao: exp.description,
+              dataInicio: format(startDate, 'yyyy-MM-dd'),
+              dataFim: format(endDate, 'yyyy-MM-dd'),
+            };
+          }),
+    };
+    return body;
+  };
+
+  const onFormSubmit = async (data: ProfessionalSchemaType) => {
+    const body = buildBody(data);
+
+    const result = await editCandidateById(body);
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+    refetch();
     setSuccessModal(true);
   };
 

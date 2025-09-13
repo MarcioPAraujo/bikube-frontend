@@ -15,21 +15,28 @@ import useProfessionalExperience from './useEditProfessionalExperience';
 
 interface EditProfessionalExperienceProps {
   isOpen: boolean;
-  onClose: () => void;
   defaultValues: ProfessionalSchemaType;
   data: ICandidateDetailsResponse;
+  onClose: () => void;
+  refetch: VoidFunction;
 }
 const EditProfessionalExperience: React.FC<EditProfessionalExperienceProps> = ({
   isOpen,
   onClose,
   defaultValues,
+  data,
+  refetch,
 }) => {
   const {
     hookform: { errors, register, handleSubmit, isSubmitting, watch },
     fieldArray: { fields, append, remove },
     modals: { warningModal, setWarningModal, successModal, setSuccessModal },
     handlers: { onFistJobChange, onDateChange, onFormSubmit },
-  } = useProfessionalExperience(defaultValues);
+  } = useProfessionalExperience({
+    defaultValues,
+    refetch,
+    candidateData: data,
+  });
 
   if (!isOpen) return null;
 

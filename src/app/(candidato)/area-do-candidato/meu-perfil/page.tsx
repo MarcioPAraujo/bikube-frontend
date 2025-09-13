@@ -106,6 +106,7 @@ const MyProfilePage: React.FC = () => {
       <EditProfessionalExperience
         isOpen={experienceFormVisible}
         onClose={() => setExperienceFormVisible(false)}
+        refetch={refetch}
         data={data.data || ({} as ICandidateDetailsResponse)}
         defaultValues={{
           isFirstJob: data.data?.experiencias.length === 0,
