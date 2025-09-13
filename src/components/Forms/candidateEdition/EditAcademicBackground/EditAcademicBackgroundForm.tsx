@@ -6,6 +6,7 @@ import { Controller } from 'react-hook-form';
 import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSelect';
 import RadioInput from '@/components/Inputs/Radio/Radio';
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import {
   EducationContainer,
   EducationWrapper,
@@ -25,6 +26,7 @@ interface EditAcademicBackgroundFormProps {
   isOpen: boolean;
   onClose: () => void;
   defaultValues: AcademicDataSchemaType;
+  data: ICandidateDetailsResponse;
 }
 
 const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({

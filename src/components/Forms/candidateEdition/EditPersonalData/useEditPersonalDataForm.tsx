@@ -1,6 +1,11 @@
+import { useCandidateAuth } from '@/hooks/usecandidateAuth';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
+import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
 import { IOption } from '@/interfaces/option';
+import { editCandidateById } from '@/services/candidate/candidateService';
 import { City, fetchCitiesByState } from '@/services/citiesAPI';
 import { fetchBrazilianStates } from '@/services/statesAPI';
+import { notifyError } from '@/utils/handleToast';
 import {
   PersonalDataSchema,
   PersonalDataSchemaType,
@@ -12,9 +17,15 @@ import { useForm } from 'react-hook-form';
 interface IHookProps {
   defaultValues: PersonalDataSchemaType;
   onClose: () => void;
+  cadidateData: ICandidateDetailsResponse;
 }
 
-const useEditPersonalDataForm = ({ defaultValues, onClose }: IHookProps) => {
+const useEditPersonalDataForm = ({
+  defaultValues,
+  cadidateData,
+  onClose,
+}: IHookProps) => {
+  const { candidate } = useCandidateAuth();
   const {
     control,
     register,
@@ -82,7 +93,25 @@ const useEditPersonalDataForm = ({ defaultValues, onClose }: IHookProps) => {
     onClose();
   };
 
-  const onFormSubmit = (data: PersonalDataSchemaType) => {
+  const onFormSubmit = async (data: PersonalDataSchemaType) => {
+    const candidateId = candidate?.id || '0';
+    const body: ICandidateProfileEditBodyRequest = {
+      ...cadidateData,
+      id: Number(candidateId),
+      cidade: data.city,
+      estado: data.state,
+      telefone: data.phoneNumber,
+      linkedin: data.linkedin,
+      github: data.github,
+    };
+
+    const result = await editCandidateById(body);
+
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+
     console.log(data);
     setSuccessModalOpen(true);
   };

@@ -5,6 +5,7 @@ import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSele
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import AddButton from '../Elements/AddButton/AddButton';
 import RemoveButton from '../Elements/RemoveButton/RemoveButton';
 import { Description, Field, Form } from './editSkillsStyles';
@@ -16,6 +17,7 @@ interface EditSkillsFormProps {
   isOpen: boolean;
   onClose: () => void;
   defaultValues: SkillsSchemaType;
+  data: ICandidateDetailsResponse;
 }
 
 const EditSkillsForm: React.FC<EditSkillsFormProps> = ({

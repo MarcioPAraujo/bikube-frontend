@@ -42,7 +42,7 @@ const MyProfilePage: React.FC = () => {
   const [skillsFormVisible, setSkillsFormVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
 
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending, isError, refetch } = useQuery({
     queryKey: ['candidateProfile'],
     queryFn: () => getCandidateById(Number(candidate?.id) || 0),
     placeholderData: keepPreviousData,
@@ -71,6 +71,7 @@ const MyProfilePage: React.FC = () => {
       <EditPersonalDataForm
         isOpen={personalDataFormVisible}
         onClose={() => setPersonalDataFormVisible(false)}
+        refetch={refetch}
         data={data.data || ({} as ICandidateDetailsResponse)}
         defaultValues={{
           name: data.data?.nome || '',
@@ -85,6 +86,7 @@ const MyProfilePage: React.FC = () => {
       <EditAcademicBackgroundForm
         isOpen={academicFormVisible}
         onClose={() => setAcademicFormVisible(false)}
+        data={data.data || ({} as ICandidateDetailsResponse)}
         defaultValues={{
           languages:
             data.data?.idiomas.map(lang => ({
@@ -103,6 +105,7 @@ const MyProfilePage: React.FC = () => {
       <EditProfessionalExperience
         isOpen={experienceFormVisible}
         onClose={() => setExperienceFormVisible(false)}
+        data={data.data || ({} as ICandidateDetailsResponse)}
         defaultValues={{
           isFirstJob: data.data?.experiencias.length === 0,
           experiences:
@@ -117,6 +120,7 @@ const MyProfilePage: React.FC = () => {
       <EditSkillsForm
         isOpen={skillsFormVisible}
         onClose={() => setSkillsFormVisible(false)}
+        data={data.data || ({} as ICandidateDetailsResponse)}
         defaultValues={{
           skills:
             data.data?.habilidades.map(skill => ({

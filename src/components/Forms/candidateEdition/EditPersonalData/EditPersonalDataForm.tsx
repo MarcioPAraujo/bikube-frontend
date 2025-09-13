@@ -19,12 +19,15 @@ interface EditPersonalDataFormProps {
   defaultValues: PersonalDataSchemaType;
   isOpen: boolean;
   onClose: () => void;
+  refetch: VoidFunction;
 }
 
 const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({
   defaultValues,
   isOpen,
+  data,
   onClose,
+  refetch,
 }) => {
   const {
     cities,
@@ -41,7 +44,7 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({
       isSubmitting,
     },
     modals: { setWarningModalOpen, warningModalOpen, successModalOpen },
-  } = useEditPersonalDataForm({ defaultValues, onClose });
+  } = useEditPersonalDataForm({ defaultValues, onClose, cadidateData: data });
 
   if (!isOpen) return null;
 
@@ -52,7 +55,10 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({
         title="Dados atualizados com sucesso!"
         message="As suas informações pessoais foram atualizadas com sucesso."
         buttonText="Ok"
-        onClose={hanldleClose}
+        onClose={() => {
+          hanldleClose();
+          refetch();
+        }}
       />
     );
   }
@@ -80,6 +86,7 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({
             id="name"
             labelText="Nome completo"
             placeholder="Insira seu nome"
+            disabled
             register={register('name')}
             errorType={errors.name}
           />

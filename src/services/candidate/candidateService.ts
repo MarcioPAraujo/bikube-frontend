@@ -10,6 +10,7 @@ import { format, parse } from 'date-fns';
 import { AxiosError, AxiosResponse } from 'axios';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import handleError from '@/utils/handleError';
+import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
 import { api } from '../api';
 
 export interface ICreateCandidateRequest {
@@ -84,6 +85,19 @@ export const registerNewCandidate = async (
       return { data: null, error: axiosError.response.data as string };
     }
     return { data: null, error: 'falha ao cadastrar o perfil' };
+  }
+};
+
+export const editCandidateById = async (
+  body: ICandidateProfileEditBodyRequest,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = '/candidato/atualizar';
+
+  try {
+    await api.put(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'falha ao editar o candidato');
   }
 };
 

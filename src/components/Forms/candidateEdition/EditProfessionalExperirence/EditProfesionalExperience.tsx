@@ -5,6 +5,7 @@ import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput
 import Textarea from '@/components/Inputs/Textarea/Textarea';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import { Description, Field, Form } from './editProfessionalExperienceStyles';
 import RemoveButton from '../Elements/RemoveButton/RemoveButton';
 import AddButton from '../Elements/AddButton/AddButton';
@@ -16,6 +17,7 @@ interface EditProfessionalExperienceProps {
   isOpen: boolean;
   onClose: () => void;
   defaultValues: ProfessionalSchemaType;
+  data: ICandidateDetailsResponse;
 }
 const EditProfessionalExperience: React.FC<EditProfessionalExperienceProps> = ({
   isOpen,
