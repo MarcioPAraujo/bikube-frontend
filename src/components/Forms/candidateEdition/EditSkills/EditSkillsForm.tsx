@@ -15,15 +15,18 @@ import useEditSkillsForm from './useEditSkillsForm';
 
 interface EditSkillsFormProps {
   isOpen: boolean;
-  onClose: () => void;
   defaultValues: SkillsSchemaType;
   data: ICandidateDetailsResponse;
+  onClose: VoidFunction;
+  refetch: VoidFunction;
 }
 
 const EditSkillsForm: React.FC<EditSkillsFormProps> = ({
   isOpen,
   onClose,
   defaultValues,
+  data,
+  refetch,
 }) => {
   const {
     hookform: { control, register, handleSubmit, isSubmitting, errors },
@@ -37,7 +40,12 @@ const EditSkillsForm: React.FC<EditSkillsFormProps> = ({
     skillsArray: { fields, append, remove },
     onPeriodChange,
     onSubmit,
-  } = useEditSkillsForm(defaultValues);
+  } = useEditSkillsForm({
+    candidateData: data,
+    defaultValues,
+
+    refetch,
+  });
 
   if (!isOpen) return null;
 

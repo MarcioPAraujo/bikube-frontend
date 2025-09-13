@@ -121,6 +121,7 @@ const MyProfilePage: React.FC = () => {
       />
       <EditSkillsForm
         isOpen={skillsFormVisible}
+        refetch={refetch}
         onClose={() => setSkillsFormVisible(false)}
         data={data.data || ({} as ICandidateDetailsResponse)}
         defaultValues={{
