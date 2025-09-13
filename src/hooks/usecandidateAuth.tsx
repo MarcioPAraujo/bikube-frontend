@@ -51,9 +51,11 @@ export const CandidateAuthProvider = ({ children }: ChildrenProps) => {
   const isAuthenticated = !!candidate?.id;
 
   useEffect(() => {
-    let storedCandidate = sessionStorage.getItem(SESSION_STORAGE_KEYS.user);
+    let storedCandidate = sessionStorage.getItem(
+      SESSION_STORAGE_KEYS.candidate,
+    );
     if (!storedCandidate) {
-      storedCandidate = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
+      storedCandidate = localStorage.getItem(LOCAL_STORAGE_KEYS.candidate);
     }
 
     if (storedCandidate) {
@@ -67,7 +69,7 @@ export const CandidateAuthProvider = ({ children }: ChildrenProps) => {
   const logout = () => {
     setCandidate(undefined);
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.token);
-    sessionStorage.removeItem(SESSION_STORAGE_KEYS.user);
+    sessionStorage.removeItem(SESSION_STORAGE_KEYS.candidate);
 
     localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
   };

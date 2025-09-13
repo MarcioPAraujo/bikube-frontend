@@ -58,9 +58,9 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   console.log(user);
 
   useEffect(() => {
-    let storedUser = sessionStorage.getItem(SESSION_STORAGE_KEYS.user);
+    let storedUser = sessionStorage.getItem(SESSION_STORAGE_KEYS.employee);
     if (!storedUser) {
-      storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
+      storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.employee);
     }
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
@@ -72,9 +72,9 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.user);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.employee);
 
-    sessionStorage.removeItem(SESSION_STORAGE_KEYS.user);
+    sessionStorage.removeItem(SESSION_STORAGE_KEYS.employee);
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.token);
     setUser(undefined);
   };

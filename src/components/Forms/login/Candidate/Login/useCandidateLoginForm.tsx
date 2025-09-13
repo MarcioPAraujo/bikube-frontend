@@ -38,12 +38,11 @@ const useCandidateLoginForm = () => {
     }
     if (result.data) {
       sessionStorage.setItem(
-        SESSION_STORAGE_KEYS.user,
+        SESSION_STORAGE_KEYS.candidate,
         JSON.stringify({ id: result.data.id }),
       );
       setCandidate({ id: result.data.id });
     }
-    console.log(data);
   };
 
   const hookform = {

@@ -104,7 +104,7 @@ const useEmployeeLoginForm = () => {
 
   const stayedLoggedIn = () => {
     setUser(userData);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(userData));
+    localStorage.setItem(LOCAL_STORAGE_KEYS.employee, JSON.stringify(userData));
     localStorage.setItem(
       LOCAL_STORAGE_KEYS.token,
       JSON.stringify(tokens.accessToken),
@@ -117,7 +117,10 @@ const useEmployeeLoginForm = () => {
   };
   const doNotStayLoggedIn = () => {
     setUser(userData);
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.user, JSON.stringify(userData));
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.employee,
+      JSON.stringify(userData),
+    );
     sessionStorage.setItem(
       SESSION_STORAGE_KEYS.token,
       JSON.stringify(tokens.accessToken),

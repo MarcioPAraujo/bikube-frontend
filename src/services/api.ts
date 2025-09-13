@@ -20,12 +20,14 @@ export const api = axios.create({
 const clearLocalStorage = () => {
   localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
   localStorage.removeItem(LOCAL_STORAGE_KEYS.refreshToken);
-  localStorage.removeItem(LOCAL_STORAGE_KEYS.user);
+  localStorage.removeItem(LOCAL_STORAGE_KEYS.candidate);
+  localStorage.removeItem(LOCAL_STORAGE_KEYS.employee);
   localStorage.removeItem(LOCAL_STORAGE_KEYS.email);
 };
 const clearSessionStorage = () => {
   sessionStorage.removeItem(SESSION_STORAGE_KEYS.token);
-  sessionStorage.removeItem(SESSION_STORAGE_KEYS.user);
+  sessionStorage.removeItem(SESSION_STORAGE_KEYS.candidate);
+  sessionStorage.removeItem(SESSION_STORAGE_KEYS.employee);
   sessionStorage.removeItem(SESSION_STORAGE_KEYS.email);
 };
 
@@ -84,6 +86,8 @@ export async function refreshAccessToken(): Promise<string> {
   // If no refresh token is found, or it's a security measure to ensure the user is authenticated.
   if (!refreshToken) {
     // Redirect to login or handle as a session end.
+    clearLocalStorage();
+    clearSessionStorage();
     window.location.href = '/';
     return Promise.reject(
       new Error('No refresh token found. User must log in again.'),
@@ -116,33 +120,6 @@ export async function refreshAccessToken(): Promise<string> {
     return Promise.reject(error);
   }
 }
-/*
-export const refreshAccessToken = async () => {
-  const refreshToken = localStorage.getItem(LOCAL_STORAGE_KEYS.refreshToken);
-  if (!refreshToken) {
-    clearLocalStorage();
-    clearSessionStorage();
-    window.location.href = '/';
-    return '';
-  }
-  try {
-    const refresh = JSON.parse(refreshToken);
-    // the returned data is the new access token
-    const { data } = await api.post('/auth/refresh', {
-      token: refresh,
-    });
-    console.log('New access token received:', data);
-    if (data) {
-      localStorage.setItem(LOCAL_STORAGE_KEYS.token, data);
-      return data;
-    }
-  } catch (error) {
-    clearLocalStorage();
-    clearSessionStorage();
-    window.location.href = '/';
-  }
-};
-*/
 
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach(prom => {
@@ -224,26 +201,3 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-/*
-api.interceptors.response.use(
-  response => response,
-  async error => {
-    const originalRequest = error.config;
-
-    if (
-      error.response?.status === 401 &&
-      !originalRequest.retry &&
-      originalRequest.url !== '/auth/refresh'
-    ) {
-      originalRequest.retry = true;
-      const newAccessToken = await refreshAccessToken();
-      if (newAccessToken) {
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
-      }
-    }
-    return Promise.reject(error);
-  },
-);
-*/
