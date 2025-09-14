@@ -12,7 +12,7 @@ interface IVancancyCardProps {
   title: string;
   description: string;
   location: string;
-  salary: string;
+  constractType: string;
 }
 
 enum Routes {
@@ -26,7 +26,7 @@ const mockedvacancies: IVancancyCardProps[] = Array.from(
     description:
       'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore inventore odio, autem suscipit obcaecati voluptates nulla mollitia reiciendis molestiae magni illo perferendis iure impedit nam alias natus culpa tempora ab.',
     location: 'São Paulo, SP',
-    salary: 'R$ 3.000,00',
+    constractType: 'PJ',
   }),
 );
 const HistoryPage: React.FC = () => {
@@ -58,7 +58,7 @@ const HistoryPage: React.FC = () => {
             title={vacancy.title}
             description={vacancy.description}
             location={vacancy.location}
-            salary={vacancy.salary}
+            contractType={vacancy.constractType}
           />
         ))}
       </CardsContainer>
