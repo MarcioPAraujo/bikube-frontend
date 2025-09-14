@@ -6,6 +6,14 @@ import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 import { Icon } from '@/components/Icons/Icons';
 import { useState } from 'react';
 import VacancyCard from '@/components/VacancyCard/VacancyCard';
+import { useCandidateAuth } from '@/hooks/usecandidateAuth';
+import { useQuery } from '@tanstack/react-query';
+import {
+  getAllVacancies,
+  getAppliedVacancies,
+} from '@/services/vacancy/vacancyService';
+import RenderIf from '@/components/RenderIf/RenderIf';
+import MessagesBar from '../MessagesBar/MessagesBar';
 import {
   CustomLink,
   H2,
@@ -14,28 +22,35 @@ import {
   Subtitle,
   VacanciesSection,
 } from './candidateHomeMainStyles';
-import MessagesBar from '../MessagesBar/MessagesBar';
-
-interface IVancancyCardProps {
-  title: string;
-  description: string;
-  location: string;
-  salary: string;
-}
-
-const mockedvacancies: IVancancyCardProps[] = Array.from(
-  { length: 20 },
-  (_, index) => ({
-    title: `Vaga ${index + 1}`,
-    description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore inventore odio, autem suscipit obcaecati voluptates nulla mollitia reiciendis molestiae magni illo perferendis iure impedit nam alias natus culpa tempora ab.',
-    location: 'São Paulo, SP',
-    salary: 'R$ 3.000,00',
-  }),
-);
 
 const CandidateHomeMain: React.FC = () => {
+  const { candidate } = useCandidateAuth();
   const [openNotifications, setOpenNotifications] = useState(false);
+
+  const candidateId = candidate ? Number(candidate.id) : 0;
+
+  const {
+    data: candidateVacancies,
+    isError: isCandidateVacanciesError,
+    isPending: isCandidateVacanciesPending,
+  } = useQuery({
+    queryKey: ['appliedVacancies', candidate?.id],
+    queryFn: () => getAppliedVacancies(candidateId),
+    enabled: candidateId > 0,
+  });
+
+  const {
+    data: allVacancies,
+    isError: isAllVacanciesError,
+    isPending: isAllVacanciesPending,
+  } = useQuery({
+    queryKey: ['allVacancies'],
+    queryFn: () => getAllVacancies(),
+  });
+
+  if (isCandidateVacanciesPending || isAllVacanciesPending) return null;
+  if (isCandidateVacanciesError || isAllVacanciesError) return null;
+
   return (
     <MainContainer>
       <MessagesBar
@@ -76,16 +91,16 @@ const CandidateHomeMain: React.FC = () => {
               padding: '3rem 0.5rem',
             }}
           >
-            {mockedvacancies.map((vacancy, index) => (
+            {allVacancies?.data?.map((vacancy, index) => (
               <SwiperSlide key={index}>
                 <CustomLink
-                  href={`/area-do-candidato/vagas/abertas?id=${index + 1}`}
+                  href={`/area-do-candidato/vagas/abertas?id=${vacancy.id}`}
                 >
                   <VacancyCard
-                    title={vacancy.title}
-                    description={vacancy.description}
-                    location={vacancy.location}
-                    salary={vacancy.salary}
+                    title={vacancy.titulo}
+                    description={vacancy.descricao}
+                    location={vacancy.localizacao}
+                    contractType={vacancy.tipoContrato}
                   />
                 </CustomLink>
               </SwiperSlide>
@@ -99,41 +114,46 @@ const CandidateHomeMain: React.FC = () => {
               Veja as vagas que você já se candidatou
             </CustomLink>
           </Subtitle>
-          <Swiper
-            modules={[Navigation, Autoplay, Pagination]}
-            pagination={{ clickable: true }}
-            spaceBetween={10}
-            autoplay={{ delay: 4000 }}
-            loop
-            slidesPerView={1}
-            breakpoints={{
-              768: { slidesPerView: 2 },
-              960: { slidesPerView: 3 },
-              1230: { slidesPerView: 4 },
-              1630: { slidesPerView: 5 },
-              1940: { slidesPerView: 6 },
-              2560: { slidesPerView: 7 },
-            }}
-            style={{
-              width: 'clamp(760px, 90vw, 2400px)',
-              padding: '3rem 0.5rem',
-            }}
-          >
-            {mockedvacancies.map((vacancy, index) => (
-              <SwiperSlide key={index}>
-                <CustomLink
-                  href={`/area-do-candidato/vagas/aplicadas?id=${index + 1}`}
-                >
-                  <VacancyCard
-                    title={vacancy.title}
-                    description={vacancy.description}
-                    location={vacancy.location}
-                    salary={vacancy.salary}
-                  />
-                </CustomLink>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <RenderIf isTrue={candidateVacancies?.data?.length !== 0}>
+            <Swiper
+              modules={[Navigation, Autoplay, Pagination]}
+              pagination={{ clickable: true }}
+              spaceBetween={10}
+              autoplay={{ delay: 4000 }}
+              loop
+              slidesPerView={1}
+              breakpoints={{
+                768: { slidesPerView: 2 },
+                960: { slidesPerView: 3 },
+                1230: { slidesPerView: 4 },
+                1630: { slidesPerView: 5 },
+                1940: { slidesPerView: 6 },
+                2560: { slidesPerView: 7 },
+              }}
+              style={{
+                width: 'clamp(760px, 90vw, 2400px)',
+                padding: '3rem 0.5rem',
+              }}
+            >
+              {candidateVacancies?.data?.map((vacancy, index) => (
+                <SwiperSlide key={index}>
+                  <CustomLink
+                    href={`/area-do-candidato/vagas/aplicadas?id=${vacancy.vaga.id}`}
+                  >
+                    <VacancyCard
+                      title={vacancy.vaga.titulo}
+                      description={vacancy.vaga.descricao}
+                      location={vacancy.vaga.localizacao}
+                      contractType={vacancy.vaga.tipoContrato}
+                    />
+                  </CustomLink>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </RenderIf>
+          <RenderIf isTrue={candidateVacancies?.data?.length === 0}>
+            <p>Você ainda não se candidatou a nenhuma vaga.</p>
+          </RenderIf>
         </VacanciesSection>
       </div>
     </MainContainer>

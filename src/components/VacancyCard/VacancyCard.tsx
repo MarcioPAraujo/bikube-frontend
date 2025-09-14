@@ -10,13 +10,13 @@ interface IVancancyCardProps {
   title: string;
   description: string;
   location: string;
-  salary: string;
+  contractType: string;
 }
 const VacancyCard: React.FC<IVancancyCardProps> = ({
   title,
   description,
   location,
-  salary,
+  contractType,
 }) => {
   return (
     <CardContainer>
@@ -35,7 +35,7 @@ const VacancyCard: React.FC<IVancancyCardProps> = ({
           <strong>Local:</strong> {location}
         </p>
         <p>
-          <strong>Salário:</strong> {salary}
+          <strong>Contrato:</strong> {contractType}
         </p>
         <Description>{description}</Description>
       </CardContent>
