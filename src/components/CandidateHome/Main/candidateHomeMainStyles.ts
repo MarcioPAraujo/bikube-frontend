@@ -5,21 +5,6 @@ export const MainContainer = styled.main`
   padding: 2rem;
 `;
 
-export const NotificationButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-
-  display: grid;
-  place-items: center;
-
-  margin-bottom: 2rem;
-
-  svg > :last-child {
-    fill: ${props => props.theme.colors.YELLOW.hex_F6B31B};
-  }
-`;
 export const VacanciesSection = styled.section`
   display: flex;
   flex-direction: column;

@@ -3,8 +3,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Autoplay, Pagination } from 'swiper/modules';
-import { Icon } from '@/components/Icons/Icons';
-import { useState } from 'react';
 import VacancyCard from '@/components/VacancyCard/VacancyCard';
 import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { useQuery } from '@tanstack/react-query';
@@ -13,19 +11,16 @@ import {
   getAppliedVacancies,
 } from '@/services/vacancy/vacancyService';
 import RenderIf from '@/components/RenderIf/RenderIf';
-import MessagesBar from '../MessagesBar/MessagesBar';
 import {
   CustomLink,
   H2,
   MainContainer,
-  NotificationButton,
   Subtitle,
   VacanciesSection,
 } from './candidateHomeMainStyles';
 
 const CandidateHomeMain: React.FC = () => {
   const { candidate } = useCandidateAuth();
-  const [openNotifications, setOpenNotifications] = useState(false);
 
   const candidateId = candidate ? Number(candidate.id) : 0;
 
@@ -53,16 +48,6 @@ const CandidateHomeMain: React.FC = () => {
 
   return (
     <MainContainer>
-      <MessagesBar
-        isOpen={openNotifications}
-        onClose={() => setOpenNotifications(false)}
-      />
-      <NotificationButton
-        type="button"
-        onClick={() => setOpenNotifications(true)}
-      >
-        <Icon name="NotificationOn" size={25} />
-      </NotificationButton>
       <div>
         <VacanciesSection>
           <H2>Vagas abertas</H2>
