@@ -5,7 +5,7 @@ import {
   MessagesContainer,
   Textarea,
   Title,
-} from './messageDetailsModal';
+} from './styles';
 
 interface IMessageDetailsModal {
   isOpen: boolean;

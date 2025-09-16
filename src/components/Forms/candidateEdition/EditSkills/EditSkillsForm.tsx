@@ -8,7 +8,7 @@ import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import AddButton from '../Elements/AddButton/AddButton';
 import RemoveButton from '../Elements/RemoveButton/RemoveButton';
-import { Description, Field, Form } from './editSkillsStyles';
+import { Description, Field, Form } from './styles';
 import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';
 import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import useEditSkillsForm from './useEditSkillsForm';

@@ -11,7 +11,7 @@ import {
   Fields,
   Form,
   RemoveButton,
-} from './professionalExperieceFormStyle';
+} from './styles';
 import FormTitle from '../FormTitle/FormTitle';
 import useProfessionalExperienceForm from './useProfessionalExperienceForm';
 

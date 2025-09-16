@@ -1,4 +1,4 @@
-import { Title } from './editFormTitleStyles';
+import { Title } from './styles';
 
 interface EditFormTitleProps {
   title: string;

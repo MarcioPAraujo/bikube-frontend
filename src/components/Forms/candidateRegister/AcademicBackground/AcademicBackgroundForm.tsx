@@ -17,7 +17,7 @@ import {
   RadioOptions,
   OptionsWrapper,
   RadioErrorMessage,
-} from './academicBackgroundFormStyles';
+} from './styles';
 import FormTitle from '../FormTitle/FormTitle';
 import useAcademicBackgroundForm from './useAcademicBackgroundForm';
 

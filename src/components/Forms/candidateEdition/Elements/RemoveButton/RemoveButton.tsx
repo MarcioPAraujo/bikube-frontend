@@ -1,5 +1,5 @@
 import { Icon } from '@/components/Icons/Icons';
-import { Button } from './removeButtonStyles';
+import { Button } from './styles';
 
 interface RemoveButtonProps {
   onClick: () => void;

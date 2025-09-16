@@ -1,8 +1,4 @@
-import {
-  ButtonsContainer,
-  CancelButton,
-  SubmitButton,
-} from './editSubmitButtonsStyles';
+import { ButtonsContainer, CancelButton, SubmitButton } from './styles';
 
 interface ISubmitButton {
   labelText: string;

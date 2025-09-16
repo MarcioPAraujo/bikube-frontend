@@ -6,7 +6,7 @@ import Textarea from '@/components/Inputs/Textarea/Textarea';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
-import { Description, Field, Form } from './editProfessionalExperienceStyles';
+import { Description, Field, Form } from './styles';
 import RemoveButton from '../Elements/RemoveButton/RemoveButton';
 import AddButton from '../Elements/AddButton/AddButton';
 import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';

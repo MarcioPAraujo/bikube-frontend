@@ -15,7 +15,7 @@ import {
   LanguagesContainer,
   OptionsWrapper,
   Section,
-} from './editAcademicBackgroundFormStyles';
+} from './styles';
 import EditSubmitButtons from '../Elements/EditSubmitButtons/EditSubmitButtons';
 import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import useEditAcademicBackgroundForm from './useEditAcademicBackgroundForm';

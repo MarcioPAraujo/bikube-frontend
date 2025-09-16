@@ -1,11 +1,6 @@
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import FormTitle from '../FormTitle/FormTitle';
-import {
-  Content,
-  Description,
-  Form,
-  ResedCodeButton,
-} from './emailVerificationFormStyles';
+import { Content, Description, Form, ResedCodeButton } from './styles';
 import useEmailVerificationForm from './useEmailVerificationForm';
 
 const EmailVerificationForm: React.FC = () => {

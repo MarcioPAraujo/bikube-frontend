@@ -17,7 +17,7 @@ import {
   MainContainer,
   Subtitle,
   VacanciesSection,
-} from './candidateHomeMainStyles';
+} from './styles';
 
 const CandidateHomeMain: React.FC = () => {
   const { candidate } = useCandidateAuth();

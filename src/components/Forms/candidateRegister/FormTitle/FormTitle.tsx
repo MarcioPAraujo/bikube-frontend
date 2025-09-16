@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Button, ButtonsContainer, Container, Title } from './formTitleStyles';
+import { Button, ButtonsContainer, Container, Title } from './styles';
 
 interface IFormTitleProps {
   title: string;

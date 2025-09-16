@@ -13,7 +13,7 @@ import {
   Placeholder,
   SelectArea,
   SelectedOption,
-} from './underlinedSelectStyles';
+} from './styles';
 import OptionsSelect from './Options';
 
 interface ISelectProps {

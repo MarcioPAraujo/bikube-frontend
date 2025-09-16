@@ -10,7 +10,7 @@ import {
   Message,
   MessageButton,
   MessageWrapper,
-} from './messageBarStyles';
+} from './styles';
 
 interface IMessageBar {
   isOpen: boolean;

@@ -5,11 +5,7 @@ import { Icon } from '@/components/Icons/Icons';
 import { useState } from 'react';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import { useCandidateAuth } from '@/hooks/usecandidateAuth';
-import {
-  ButtonProfile,
-  ButtonWrapper,
-  Header,
-} from './candidateHomeHeaderStyles';
+import { ButtonProfile, ButtonWrapper, Header } from './styles';
 
 enum Routes {
   CANDIDATE_PROFILE = '/area-do-candidato/meu-perfil',

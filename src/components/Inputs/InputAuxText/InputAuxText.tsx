@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Paragraph } from './inputAuxtextStyles';
+import { Paragraph } from './styles';
 
 type Variant = 'NONE' | 'ERROR-MESSAGE';
 interface IInputAuxTextProps {

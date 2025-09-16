@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Footer, Topic, TopicsWrapper } from './candidateHomeFooterStyles';
+import { Footer, Topic, TopicsWrapper } from './styles.';
 
 const topics = [
   {

@@ -7,7 +7,7 @@ import {
   Header,
   StepPhase,
   VancancyName,
-} from './vacancyStyles';
+} from './styles';
 
 interface IVacancyDetailsProps {
   id?: string;

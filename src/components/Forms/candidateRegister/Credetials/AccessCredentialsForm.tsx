@@ -1,7 +1,7 @@
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import LoadingScreen from '@/components/LoadingScreen';
 import FormTitle from '../FormTitle/FormTitle';
-import { Content, Form } from './accessCredentialsFormStyles';
+import { Content, Form } from './styles';
 import useAccessCredentialsForm from './useAccessCredentialsForm';
 
 const AccessCredentialsForm: React.FC = () => {

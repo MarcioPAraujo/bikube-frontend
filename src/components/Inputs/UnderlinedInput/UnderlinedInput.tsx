@@ -3,7 +3,7 @@ import { Icon } from '@/components/Icons/Icons';
 import { theme } from '@/styles/theme';
 import { useState } from 'react';
 import RenderIf from '@/components/RenderIf/RenderIf';
-import { EyButton, Field, Label, Undelined } from './undelinedInputStyles';
+import { EyButton, Field, Label, Undelined } from './styles';
 import InputAuxTextProps from '../InputAuxText/InputAuxText';
 
 interface IProps {

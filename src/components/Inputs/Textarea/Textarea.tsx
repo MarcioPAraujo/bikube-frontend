@@ -1,6 +1,6 @@
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 import InputAuxTextProps from '../InputAuxText/InputAuxText';
-import { FieldContainer, Label, TextareaStyled } from './textareaStyles';
+import { FieldContainer, Label, TextareaStyled } from './styles';
 
 interface TextareaProps {
   id: string;

@@ -10,11 +10,7 @@ import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { IAppliedVacanciesListResponse } from '@/interfaces/vacancy/appliedVacanciesListResponse';
 import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
 import VacancyItem from '../VacancyItem/VacancyItem';
-import {
-  HistoryButton,
-  TitleContainer,
-  VacancyListContainer,
-} from './vacancyListStyles';
+import { HistoryButton, TitleContainer, VacancyListContainer } from './styles';
 
 interface IVacancyListProps {
   type: 'aplicadas' | 'abertas';

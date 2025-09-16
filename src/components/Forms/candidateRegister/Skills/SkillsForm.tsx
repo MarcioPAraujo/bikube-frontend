@@ -12,7 +12,7 @@ import {
   FieldWrapper,
   Form,
   RemoveButton,
-} from './skillsFormStyles';
+} from './styles';
 import FormTitle from '../FormTitle/FormTitle';
 import useSkillsForm from './useSkillsForm';
 

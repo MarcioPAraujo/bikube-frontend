@@ -5,7 +5,7 @@ import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSele
 import { Controller } from 'react-hook-form';
 import { stateNames } from '@/utils/statesNames';
 import usePersonalDataForm from './usePersonalDataForm';
-import { Content, Form } from './personalDataFormStyles';
+import { Content, Form } from './styles';
 import FormTitle from '../FormTitle/FormTitle';
 
 const PersonalDataForm: React.FC = () => {

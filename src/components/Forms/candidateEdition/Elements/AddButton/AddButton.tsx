@@ -1,4 +1,4 @@
-import { Button } from './addButtonStyles';
+import { Button } from './styles';
 
 interface AddButtonProps {
   onClick: () => void;

@@ -9,7 +9,7 @@ import { PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalD
 import { Controller } from 'react-hook-form';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
-import { FieldsWrapper, Form } from './editPersonalDataForm';
+import { FieldsWrapper, Form } from './styles';
 import EditFormTitle from '../Elements/EditFormTitle/EditFormTitle';
 import EditSubmitButton from '../Elements/EditSubmitButtons/EditSubmitButtons';
 import useEditPersonalDataForm from './useEditPersonalDataForm';
