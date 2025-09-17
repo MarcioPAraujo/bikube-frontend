@@ -42,13 +42,26 @@ export const getAllVacancies = async (): Promise<
 export const applyToVacancy = async (
   body: ApplyVacancyBody,
 ): Promise<Result<boolean>> => {
-  const ENDPOINT = '/candidato/candidatar';
+  const ENDPOINT = '/vaga/candidatura';
 
   try {
     await api.post(ENDPOINT, body);
     return { data: true, error: null };
   } catch (error) {
     return handleError(error, 'Erro ao candidatar-se à vaga');
+  }
+};
+
+export const giveUpVacancy = async (
+  body: ApplyVacancyBody,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = '/vaga/desistencia';
+
+  try {
+    await api.post(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao desistir da vaga');
   }
 };
 

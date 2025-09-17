@@ -1,5 +1,4 @@
 import { Icon } from '@/components/Icons/Icons';
-import { Dispatch, SetStateAction } from 'react';
 import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
 import {
   Description,
@@ -9,7 +8,7 @@ import {
 } from './styles';
 
 interface IVacancyItemProps {
-  selectVacancy: Dispatch<SetStateAction<string | undefined>>;
+  selectVacancy: (vacancyId: string) => void;
   vacancy: IVacancyListResponse;
 }
 const VacancyItem: React.FC<IVacancyItemProps> = ({

@@ -15,6 +15,8 @@ import { HistoryButton, TitleContainer, VacancyListContainer } from './styles';
 interface IVacancyListProps {
   type: 'aplicadas' | 'abertas';
   setSelectedVacancyId: Dispatch<SetStateAction<string | undefined>>;
+  setVacancy: Dispatch<SetStateAction<IVacancyListResponse | undefined>>;
+  setVacancyStep?: Dispatch<SetStateAction<string>>;
 }
 
 enum Routes {
@@ -24,6 +26,8 @@ enum Routes {
 const VacancyList: React.FC<IVacancyListProps> = ({
   type,
   setSelectedVacancyId,
+  setVacancy,
+  setVacancyStep,
 }) => {
   const { candidate } = useCandidateAuth();
   const router = useRouter();
@@ -58,6 +62,17 @@ const VacancyList: React.FC<IVacancyListProps> = ({
     return <div>Nenhuma vaga encontrada.</div>;
   }
 
+  const handleSelectVacancy = async (vacancyId: string) => {
+    const result = await getAllVacancies();
+    if (result.error) {
+      return;
+    }
+    const vacancy = result.data?.find(v => v.id.toString() === vacancyId);
+    if (!vacancy) return;
+    setSelectedVacancyId(vacancyId);
+    setVacancy(vacancy);
+  };
+
   if ('candidato' in data[0]) {
     const appliedVacancies = data as IAppliedVacanciesListResponse[];
 
@@ -73,10 +88,15 @@ const VacancyList: React.FC<IVacancyListProps> = ({
           </HistoryButton>
         </TitleContainer>
         <VacancyListContainer>
-          {appliedVacancies.map(item => (
+          {appliedVacancies.map((item, idx) => (
             <VacancyItem
               key={item.id}
-              selectVacancy={setSelectedVacancyId}
+              selectVacancy={id => {
+                handleSelectVacancy(id);
+                if (setVacancyStep) {
+                  setVacancyStep(appliedVacancies[idx].etapa);
+                }
+              }}
               vacancy={item.vaga}
             />
           ))}
@@ -96,7 +116,7 @@ const VacancyList: React.FC<IVacancyListProps> = ({
         {vacancies.map(item => (
           <VacancyItem
             key={item.id}
-            selectVacancy={setSelectedVacancyId}
+            selectVacancy={handleSelectVacancy}
             vacancy={item}
           />
         ))}
