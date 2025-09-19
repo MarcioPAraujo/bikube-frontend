@@ -1,13 +1,5 @@
 import { FC } from 'react';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
-import { termsOfUseService } from '@/services/termsOfUse/termsofUseService';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  TermsOfUseSchema,
-  ITermsOfUseSchema,
-} from '@/validation/TermsOfUse/TermsOfUseSchema';
-import { notifyError } from '@/utils/handleToast';
 import {
   BlurBackground,
   ButtonContainer,
@@ -21,40 +13,15 @@ import {
 interface IProps {
   isOpen: boolean;
   onClose: () => void;
-  onAccept: () => void;
-  onReject: () => void;
-  email: string;
+  onSubmit: (e: React.FormEvent) => void;
+  type: 'candidate' | 'employee';
 }
-const TermsOfUseModal: FC<IProps> = ({
-  isOpen,
-  onClose,
-  onAccept,
-  onReject,
-  email,
-}) => {
-  const { handleSubmit, setValue } = useForm<ITermsOfUseSchema>({
-    resolver: yupResolver(TermsOfUseSchema),
-    mode: 'onChange',
-    defaultValues: {
-      email,
-    },
-  });
-  setValue('email', email);
-  const onFormSubmit = async (data: ITermsOfUseSchema) => {
-    const response = await termsOfUseService(data.email);
-    if (response.error) {
-      notifyError(response.error);
-      return;
-    }
-
-    onAccept();
-    onClose();
-  };
+const TermsOfUseModal: FC<IProps> = ({ isOpen, onClose, onSubmit, type }) => {
   if (!isOpen) return null;
   return (
     <Container>
       <BlurBackground />
-      <Form onSubmit={handleSubmit(onFormSubmit)}>
+      <Form onSubmit={onSubmit}>
         <Title>Termos de uso</Title>
         <TextContainer>
           <TextArea
@@ -104,10 +71,7 @@ const TermsOfUseModal: FC<IProps> = ({
             text="Recusar"
             type="button"
             classname="bordered"
-            onClick={() => {
-              onReject();
-              onClose();
-            }}
+            onClick={onClose}
           />
         </ButtonContainer>
       </Form>

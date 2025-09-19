@@ -1,6 +1,7 @@
 import { useAuth, User } from '@/hooks/useAuth';
 import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
 import { loginAuth } from '@/services/login/loginService';
+import { termsOfUseService } from '@/services/termsOfUse/termsofUseService';
 import { notifyError } from '@/utils/handleToast';
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { registerMask } from '@/utils/masks/registerMask';
@@ -98,6 +99,14 @@ const useEmployeeLoginForm = () => {
     setKeepLoggedInModal(true);
   };
 
+  const onAcceptterms = async () => {
+    const response = await termsOfUseService(userEmail);
+    if (response.error) {
+      notifyError(response.error);
+    }
+    setAcceptTermsModal(false);
+  };
+
   const goToEmailVerification = () => {
     router.push('/email');
   };
@@ -151,7 +160,7 @@ const useEmployeeLoginForm = () => {
     goToEmailVerification,
     doNotStayLoggedIn,
     stayedLoggedIn,
-    userEmail,
+    onAcceptterms,
   };
 };
 export default useEmployeeLoginForm;

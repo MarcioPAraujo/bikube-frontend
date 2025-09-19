@@ -17,10 +17,10 @@ const EmployeeLoginForm: React.FC = () => {
     },
     onFormSubmit,
     onRegisterFieldChange,
-    userEmail,
     goToEmailVerification,
     doNotStayLoggedIn,
     stayedLoggedIn,
+    onAcceptterms,
   } = useEmployeeLoginForm();
 
   return (
@@ -35,12 +35,12 @@ const EmployeeLoginForm: React.FC = () => {
       />
       <TermsOfUseModal
         isOpen={acceptTermsModal}
-        email={userEmail}
-        onClose={() => setAcceptTermsModal(false)}
-        onAccept={() => {
-          setAcceptTermsModal(false);
+        onSubmit={e => {
+          e.preventDefault();
+          onAcceptterms();
         }}
-        onReject={() => setAcceptTermsModal(false)}
+        type="employee"
+        onClose={() => setAcceptTermsModal(false)}
       />
       <KeepLoggedInModal
         isOpen={keepLoggedInModal}

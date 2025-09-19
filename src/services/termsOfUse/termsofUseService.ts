@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import handleError from '@/utils/handleError';
+import { Result } from '@/interfaces/apiResult';
 import { api } from '../api';
-
-type Result<T> = { data: T; error: null } | { data: null; error: string };
 
 export const termsOfUseService = async (
   email: string,
@@ -24,5 +24,18 @@ export const termsOfUseService = async (
       }
     }
     return { data: null, error: 'Erro ao aceitar termos de uso' };
+  }
+};
+
+export const candidateAcceptTerms = async (
+  id: number,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = `candidato/aceitartermo/${id}`;
+
+  try {
+    await api.post(ENDPOINT);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Erro ao aceitar termos de uso');
   }
 };
