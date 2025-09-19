@@ -28,6 +28,7 @@ import {
   SectionContent,
   SectionsContainer,
   SectionTitle,
+  Subsection,
   Subtitle,
   Title,
   TitleWrapper,
@@ -156,7 +157,7 @@ const MyProfilePage: React.FC = () => {
           Deletar conta
         </DeleteButton>
         <SectionsContainer>
-          <section>
+          <Subsection className="edge">
             <SectionTitle>Dados Pessoais</SectionTitle>
             <EditButton
               type="button"
@@ -188,8 +189,8 @@ const MyProfilePage: React.FC = () => {
                 <strong>Github: </strong> {data.data?.github}
               </Paragraph>
             </SectionContent>
-          </section>
-          <section>
+          </Subsection>
+          <Subsection className="edge">
             <SectionTitle>Formação acadêmica</SectionTitle>
             <EditButton
               type="button"
@@ -198,10 +199,10 @@ const MyProfilePage: React.FC = () => {
               Editar
             </EditButton>
             <SectionContent className="academic">
-              <div>
+              <Subsection>
                 <Subtitle>Idiomas</Subtitle>
                 {data.data?.idiomas?.map(lang => (
-                  <div key={lang.idioma}>
+                  <Subsection key={lang.idioma}>
                     <Paragraph>
                       <strong>Idioma: </strong>
                       {lang.idioma}
@@ -210,13 +211,13 @@ const MyProfilePage: React.FC = () => {
                       <strong>Nível: </strong>
                       {languageLevels[lang.nivel]}
                     </Paragraph>
-                  </div>
+                  </Subsection>
                 ))}
-              </div>
-              <div>
+              </Subsection>
+              <Subsection>
                 <Subtitle>Formações</Subtitle>
                 {data.data.formacaoAcademica.map(edu => (
-                  <div key={edu.instituicao}>
+                  <Subsection key={edu.instituicao}>
                     <Paragraph>
                       <strong>Curso: </strong>
                       {edu.curso}
@@ -229,12 +230,12 @@ const MyProfilePage: React.FC = () => {
                       <strong>Ano de conclusão: </strong>
                       {format(parseISO(edu.dataFim), 'dd/MM/yyyy')}
                     </Paragraph>
-                  </div>
+                  </Subsection>
                 ))}
-              </div>
+              </Subsection>
             </SectionContent>
-          </section>
-          <section>
+          </Subsection>
+          <Subsection className="edge">
             <SectionTitle>Experiência profissional</SectionTitle>
             <EditButton
               type="button"
@@ -244,26 +245,28 @@ const MyProfilePage: React.FC = () => {
             </EditButton>
             {data.data.experiencias.map(exp => (
               <SectionContent key={exp.empresa}>
-                <Paragraph>
-                  <strong>Empresa: </strong>
-                  {exp.empresa}
-                </Paragraph>
-                <Paragraph>
-                  <strong>Data de início: </strong>
-                  {format(parseISO(exp.dataInicio), 'dd/MM/yyyy')}
-                </Paragraph>
-                <Paragraph>
-                  <strong>Data de fim: </strong>
-                  {format(parseISO(exp.dataFim), 'dd/MM/yyyy')}
-                </Paragraph>
-                <Paragraph>
-                  <strong>Descrição: </strong>
-                  {exp.descricao}
-                </Paragraph>
+                <Subsection>
+                  <Paragraph>
+                    <strong>Empresa: </strong>
+                    {exp.empresa}
+                  </Paragraph>
+                  <Paragraph>
+                    <strong>Data de início: </strong>
+                    {format(parseISO(exp.dataInicio), 'dd/MM/yyyy')}
+                  </Paragraph>
+                  <Paragraph>
+                    <strong>Data de fim: </strong>
+                    {format(parseISO(exp.dataFim), 'dd/MM/yyyy')}
+                  </Paragraph>
+                  <Paragraph>
+                    <strong>Descrição: </strong>
+                    {exp.descricao}
+                  </Paragraph>
+                </Subsection>
               </SectionContent>
             ))}
-          </section>
-          <section>
+          </Subsection>
+          <Subsection className="edge">
             <SectionTitle>Habilidades</SectionTitle>
             <EditButton
               type="button"
@@ -273,7 +276,7 @@ const MyProfilePage: React.FC = () => {
             </EditButton>
             <SectionContent>
               {data.data.habilidades.map(skill => (
-                <div key={skill.habilidade}>
+                <Subsection key={skill.habilidade}>
                   <Paragraph>
                     <strong>Habilidade: </strong>
                     {skill.habilidade}
@@ -282,10 +285,10 @@ const MyProfilePage: React.FC = () => {
                     <strong>Tempo de experiência: </strong>
                     {skill.tempoExperiencia}
                   </Paragraph>
-                </div>
+                </Subsection>
               ))}
             </SectionContent>
-          </section>
+          </Subsection>
         </SectionsContainer>
       </PageContainer>
     </>

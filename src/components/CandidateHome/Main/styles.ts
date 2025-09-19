@@ -3,12 +3,15 @@ import styled from 'styled-components';
 
 export const MainContainer = styled.main`
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 `;
 
 export const VacanciesSection = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   .swipper-pagination-horizontal {
     bottom: 0 !important;
   }

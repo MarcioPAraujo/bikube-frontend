@@ -67,6 +67,19 @@ export const SectionContent = styled.div`
     gap: 5rem;
   }
 `;
+export const Subsection = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
+  padding: 1rem;
+  flex: 1;
+
+  &.edge {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      scale: 1.02;
+    }
+  }
+`;
 export const Subtitle = styled.h3`
   font-size: 1.8rem;
   margin-top: 1rem;
