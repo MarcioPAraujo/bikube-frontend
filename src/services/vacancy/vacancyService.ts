@@ -11,6 +11,11 @@ interface ApplyVacancyBody {
   idvaga: number;
 }
 
+interface GiveUpVacancyBody {
+  candidatoid: number;
+  vagaid: number;
+}
+
 export const createNewVancancy = async (
   body: IVacancyBodyRequest,
 ): Promise<Result<boolean>> => {
@@ -53,7 +58,7 @@ export const applyToVacancy = async (
 };
 
 export const giveUpVacancy = async (
-  body: ApplyVacancyBody,
+  body: GiveUpVacancyBody,
 ): Promise<Result<boolean>> => {
   const ENDPOINT = '/vaga/desistencia';
 

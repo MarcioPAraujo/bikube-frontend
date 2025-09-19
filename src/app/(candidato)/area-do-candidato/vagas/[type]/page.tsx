@@ -15,6 +15,7 @@ import {
 } from '@/services/vacancy/vacancyService';
 import { notifyError } from '@/utils/handleToast';
 import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import {
   BackButton,
   LeftContainer,
@@ -36,6 +37,7 @@ const Vacancies: React.FC = () => {
   const [vacancyId, setVacancyId] = useState<string | undefined>(undefined);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [successGiveUpModalOpen, setSuccessGiveUpModalOpen] = useState(false);
+  const [warningModalOpen, setWarningModalOpen] = useState(false);
 
   const candidateId = candidate?.id ? Number(candidate.id) : 0;
 
@@ -65,7 +67,7 @@ const Vacancies: React.FC = () => {
       }
     };
     handleSelectedVacancy();
-  }, []);
+  }, [successGiveUpModalOpen]);
 
   const onApply = async () => {
     const candidateId = candidate ? Number(candidate.id) : 0;
@@ -88,8 +90,8 @@ const Vacancies: React.FC = () => {
     const vacancy = Number(vacancyId) || 0;
 
     const resutl = await giveUpVacancy({
-      idcandidato: candidateId,
-      idvaga: vacancy,
+      candidatoid: candidateId,
+      vagaid: vacancy,
     });
 
     if (resutl.error) {
@@ -105,8 +107,23 @@ const Vacancies: React.FC = () => {
         isOpen={successGiveUpModalOpen}
         title="Você desistiu da vaga"
         message="Lamentamos que você tenha decidido desistir desta oportunidade. Se mudar de ideia, estaremos aqui para ajudar você a encontrar a vaga ideal."
-        onClose={() => setSuccessGiveUpModalOpen(false)}
+        onClose={() => {
+          setSuccessGiveUpModalOpen(false);
+          router.refresh();
+        }}
         buttonText="Fechar"
+      />
+      <WarningModal
+        isOpen={warningModalOpen}
+        title="Tem certeza que deseja desistir da vaga?"
+        message="Ao desistir, você não poderá mais participar do processo seletivo desta vaga."
+        cancelText="Cancelar"
+        confirmText="Desistir"
+        onCancel={() => setWarningModalOpen(false)}
+        onConfirm={() => {
+          setWarningModalOpen(false);
+          onGiveUp();
+        }}
       />
       <SuccessModal
         isOpen={successModalOpen}
@@ -136,7 +153,7 @@ const Vacancies: React.FC = () => {
           id={vacancyId}
           isApplyed={type === 'aplicadas'}
           onApply={onApply}
-          onGiveUp={onGiveUp}
+          onGiveUp={() => setWarningModalOpen(true)}
           vacancy={vacancy}
           vacancyStep={vacancyStep}
         />
