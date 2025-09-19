@@ -4,6 +4,7 @@ export const Footer = styled.footer`
   background-color: ${({ theme }) => theme.colors.GRAY.hex_2e2e2e};
   padding: 1.6rem 3.2rem;
   display: flex;
+  margin-top: auto;
 `;
 export const TopicsWrapper = styled.div`
   display: flex;

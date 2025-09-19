@@ -15,6 +15,7 @@ import {
   CustomLink,
   H2,
   MainContainer,
+  Messages,
   Subtitle,
   VacanciesSection,
 } from './styles';
@@ -46,6 +47,10 @@ const CandidateHomeMain: React.FC = () => {
   if (isCandidateVacanciesPending || isAllVacanciesPending) return null;
   if (isCandidateVacanciesError || isAllVacanciesError) return null;
 
+  const filteredOpenVacancies = allVacancies?.data?.filter(av => {
+    return !candidateVacancies?.data?.some(cv => cv.vaga.id === av.id);
+  });
+
   return (
     <MainContainer>
       <div>
@@ -56,41 +61,46 @@ const CandidateHomeMain: React.FC = () => {
               Veja as vagas que estão abertas para você se candidatar
             </CustomLink>
           </Subtitle>
-          <Swiper
-            modules={[Navigation, Autoplay, Pagination]}
-            pagination={{ clickable: true }}
-            spaceBetween={10}
-            autoplay={{ delay: 4000 }}
-            loop
-            slidesPerView={1}
-            breakpoints={{
-              768: { slidesPerView: 2 },
-              960: { slidesPerView: 3 },
-              1230: { slidesPerView: 4 },
-              1630: { slidesPerView: 5 },
-              1940: { slidesPerView: 6 },
-              2560: { slidesPerView: 7 },
-            }}
-            style={{
-              width: 'clamp(760px, 90vw, 2400px)',
-              padding: '3rem 0.5rem',
-            }}
-          >
-            {allVacancies?.data?.map((vacancy, index) => (
-              <SwiperSlide key={index}>
-                <CustomLink
-                  href={`/area-do-candidato/vagas/abertas?id=${vacancy.id}`}
-                >
-                  <VacancyCard
-                    title={vacancy.titulo}
-                    description={vacancy.descricao}
-                    location={vacancy.localizacao}
-                    contractType={vacancy.tipoContrato}
-                  />
-                </CustomLink>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <RenderIf isTrue={filteredOpenVacancies?.length !== 0}>
+            <Swiper
+              modules={[Navigation, Autoplay, Pagination]}
+              pagination={{ clickable: true }}
+              spaceBetween={10}
+              autoplay={{ delay: 4000 }}
+              loop
+              slidesPerView={1}
+              breakpoints={{
+                768: { slidesPerView: 2 },
+                960: { slidesPerView: 3 },
+                1230: { slidesPerView: 4 },
+                1630: { slidesPerView: 5 },
+                1940: { slidesPerView: 6 },
+                2560: { slidesPerView: 7 },
+              }}
+              style={{
+                width: 'clamp(760px, 90vw, 2400px)',
+                padding: '3rem 0.5rem',
+              }}
+            >
+              {filteredOpenVacancies?.map((vacancy, index) => (
+                <SwiperSlide key={index}>
+                  <CustomLink
+                    href={`/area-do-candidato/vagas/abertas?id=${vacancy.id}`}
+                  >
+                    <VacancyCard
+                      title={vacancy.titulo}
+                      description={vacancy.descricao}
+                      location={vacancy.localizacao}
+                      contractType={vacancy.tipoContrato}
+                    />
+                  </CustomLink>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </RenderIf>
+          <RenderIf isTrue={filteredOpenVacancies?.length === 0}>
+            <Messages>Não há novas vagas abertas no momento.</Messages>
+          </RenderIf>
         </VacanciesSection>
         <VacanciesSection>
           <H2>Vagas em andamento</H2>
@@ -137,7 +147,7 @@ const CandidateHomeMain: React.FC = () => {
             </Swiper>
           </RenderIf>
           <RenderIf isTrue={candidateVacancies?.data?.length === 0}>
-            <p>Você ainda não se candidatou a nenhuma vaga.</p>
+            <Messages>Você ainda não se candidatou a nenhuma vaga.</Messages>
           </RenderIf>
         </VacanciesSection>
       </div>

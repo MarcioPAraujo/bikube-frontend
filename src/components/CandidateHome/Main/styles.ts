@@ -33,6 +33,12 @@ export const Subtitle = styled.p`
   }
 `;
 
+export const Messages = styled.p`
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.GRAY.hex_454545};
+`;
+
 export const CustomLink = styled(Link)`
   text-decoration: none;
   color: inherit;
