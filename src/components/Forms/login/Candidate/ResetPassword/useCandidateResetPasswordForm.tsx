@@ -1,3 +1,6 @@
+import { resetCandidatePassword } from '@/services/login/passwordResetService';
+import { notifyError } from '@/utils/handleToast';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import {
   ResetPasswordSchema,
   ResetPasswordSchemaType,
@@ -19,8 +22,17 @@ const useCandidateResetPasswordForm = () => {
     resolver: yupResolver(ResetPasswordSchema),
   });
 
-  const onFormSubmit = (data: ResetPasswordSchemaType) => {
-    console.log(data);
+  const onFormSubmit = async (data: ResetPasswordSchemaType) => {
+    const result = await resetCandidatePassword({
+      novasenha: data.newPassword,
+    });
+
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+
+    sessionStorage.removeItem(SESSION_STORAGE_KEYS.email);
     setSuccessModal(true);
   };
 

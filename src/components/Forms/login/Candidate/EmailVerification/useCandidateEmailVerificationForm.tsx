@@ -1,4 +1,8 @@
+import { senEmailCode } from '@/services/login/sentCodeService';
+import { encryptPassword } from '@/utils/encryptPassword';
+import { notifyError } from '@/utils/handleToast';
 import { emailMask } from '@/utils/masks/emailMask';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import {
   SendCodeSchema,
   SendCodeSchemaType,
@@ -19,8 +23,16 @@ const useCandidateEmailVerificationForm = () => {
     resolver: yupResolver(SendCodeSchema),
   });
 
-  const onFormSubmit = (data: SendCodeSchemaType) => {
-    console.log(data);
+  const onFormSubmit = async (data: SendCodeSchemaType) => {
+    const result = await senEmailCode(data.email);
+
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+
+    const encryptedEmail = await encryptPassword(data.email);
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.email, encryptedEmail);
     router.push('/candidato-codigo');
   };
 

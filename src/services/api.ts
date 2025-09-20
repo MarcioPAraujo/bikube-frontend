@@ -135,6 +135,12 @@ const processQueue = (error: any, token: string | null = null) => {
 api.interceptors.response.use(
   response => response,
   async error => {
+    const isPublicEndpoint = PUBLIC_ENDPOINTS.some(endpoint =>
+      error.config.url?.startsWith(endpoint),
+    );
+    if (isPublicEndpoint) {
+      return Promise.reject(error);
+    }
     const originalRequest = error.config as AxiosRequestConfig & {
       retry?: boolean;
     };

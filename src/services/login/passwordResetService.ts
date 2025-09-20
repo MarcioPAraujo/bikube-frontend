@@ -1,4 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { Result } from '@/interfaces/apiResult';
+import handleError from '@/utils/handleError';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
+import { decryptPassword } from '@/utils/encryptPassword';
 import { api } from '../api';
 
 interface IResetpasswordBody {
@@ -6,7 +10,9 @@ interface IResetpasswordBody {
   senha: string;
 }
 
-type Result<T> = { data: T; error: null } | { data: null; error: string };
+interface IResetCandidatePasswordBody {
+  novasenha: string;
+}
 
 export const resetPassword = async (
   body: IResetpasswordBody,
@@ -26,5 +32,30 @@ export const resetPassword = async (
       }
     }
     return { data: null, error: 'Falha ao redefinir a senha' };
+  }
+};
+
+export const resetCandidatePassword = async (
+  newPassword: IResetCandidatePasswordBody,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = 'candidato/trocarSenhaCandidato';
+
+  const email = sessionStorage.getItem(SESSION_STORAGE_KEYS.email);
+  if (!email) {
+    return { data: null, error: 'Email do candidato inexistente' };
+  }
+
+  const decryptedEmail = await decryptPassword(email);
+
+  const body = {
+    novasenha: newPassword.novasenha,
+    email: decryptedEmail,
+  };
+
+  try {
+    await api.put(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Falha ao redefinir a senha do candidato');
   }
 };

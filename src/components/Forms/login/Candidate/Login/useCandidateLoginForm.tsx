@@ -60,7 +60,15 @@ const useCandidateLoginForm = () => {
       notifyError(result.error);
       return;
     }
+    // proceed to login
     setTermsAccepted(false);
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.candidate,
+      JSON.stringify({ id: candidateId }),
+    );
+    if (candidateId) {
+      setCandidate({ id: candidateId.toString() });
+    }
   };
 
   const hookform = {

@@ -1,5 +1,9 @@
-import { notifySuccess } from '@/utils/handleToast';
+import { senEmailCode } from '@/services/login/sentCodeService';
+import { confirmCode } from '@/services/login/validateCodeService';
+import { decryptPassword } from '@/utils/encryptPassword';
+import { notifyError, notifySuccess } from '@/utils/handleToast';
 import codeMask from '@/utils/masks/codeMask';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { CodeSchema, CodeSchemaType } from '@/validation/Login/CodeSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
@@ -39,13 +43,41 @@ const useCandidateCodeVerificationForm = () => {
 
     tick(time);
   };
-  const resendCode = () => {
+
+  const getEmailFromStorage = async (): Promise<string | null> => {
+    const encryptedEmail = sessionStorage.getItem(SESSION_STORAGE_KEYS.email);
+
+    if (!encryptedEmail) {
+      notifyError('Informe o email novamente na página anterior.');
+      return null;
+    }
+    const decryptedEmail = await decryptPassword(encryptedEmail);
+    return decryptedEmail;
+  };
+
+  const resendCode = async () => {
+    const decryptedEmail = await getEmailFromStorage();
+    if (!decryptedEmail) return;
+
+    const result = await senEmailCode(decryptedEmail);
+
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+
     notifySuccess('Um novo código foi enviado ao seu email!');
     startCountdown(RESEND_TIMEOUT);
   };
 
-  const onFormSubmit = (data: CodeSchemaType) => {
-    console.log(data);
+  const onFormSubmit = async (data: CodeSchemaType) => {
+    const result = await confirmCode(data.code);
+
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+
     router.push('/candidato-redefinir-senha');
   };
 
