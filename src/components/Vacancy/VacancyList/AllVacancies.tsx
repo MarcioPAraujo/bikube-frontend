@@ -1,8 +1,11 @@
 import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { IAppliedVacanciesListResponse } from '@/interfaces/vacancy/appliedVacanciesListResponse';
+import SearchBarComponent from '@/components/Inputs/SearchBar';
+import { normalizeString } from '@/utils/normalizeString';
+import RenderIf from '@/components/RenderIf/RenderIf';
 import VacancyItem from '../VacancyItem/VacancyItem';
-import { TitleContainer, VacancyListContainer } from './styles';
+import { EmptyState, TitleContainer, VacancyListContainer } from './styles';
 
 interface IAllVacancyListProps {
   allVacancies: IVacancyListResponse[] | undefined;
@@ -23,16 +26,22 @@ const AllVacancies: React.FC<IAllVacancyListProps> = ({
   setSelectedVacancyId,
   setVacancy,
 }) => {
+  const [search, setSearch] = useState<string>('');
+
   if (isPending) {
-    return <div>Carregando...</div>;
+    return <EmptyState>Carregando...</EmptyState>;
   }
 
   if (isError) {
-    return <div>Erro ao carregar vagas. Tente novamente mais tarde.</div>;
+    return (
+      <EmptyState>
+        Erro ao carregar vagas. Tente novamente mais tarde.
+      </EmptyState>
+    );
   }
 
   if (!allVacancies || allVacancies.length === 0) {
-    return <div>Nenhuma vaga encontrada.</div>;
+    return <EmptyState>Nenhuma vaga encontrada.</EmptyState>;
   }
 
   // Filter out vacancies that the candidate has already applied to
@@ -46,28 +55,54 @@ const AllVacancies: React.FC<IAllVacancyListProps> = ({
       )
     : [];
 
-  if (filteredVacancies.length === 0) {
-    return <div>Nenhuma vaga encontrada.</div>;
-  }
+  const normalizedSearch = normalizeString(search);
+  const searchedVacancies = !normalizedSearch
+    ? filteredVacancies
+    : filteredVacancies
+        .filter(vacancy =>
+          normalizeString(vacancy.titulo).includes(normalizedSearch),
+        )
+        .sort((a, b) => {
+          const normalizedA = normalizeString(a.titulo);
+          const normalizedB = normalizeString(b.titulo);
+
+          const aStartsWith = normalizedA.startsWith(normalizedSearch);
+          const bStartsWith = normalizedB.startsWith(normalizedSearch);
+
+          if (aStartsWith && !bStartsWith) return -1;
+          if (!aStartsWith && bStartsWith) return 1;
+
+          return normalizedA.localeCompare(normalizedB);
+        });
 
   return (
     <div>
       <TitleContainer>
         <h2>Vagas</h2>
+        <SearchBarComponent
+          placeholder="Buscar vaga..."
+          value={search}
+          onSearch={e => setSearch(e.target.value)}
+        />
       </TitleContainer>
-      <VacancyListContainer>
-        {filteredVacancies.map(item => (
-          <VacancyItem
-            key={item.id}
-            vacancyId={vacancyId}
-            selectVacancy={() => {
-              setSelectedVacancyId(item.id.toString());
-              setVacancy(item);
-            }}
-            vacancy={item}
-          />
-        ))}
-      </VacancyListContainer>
+      <RenderIf isTrue={searchedVacancies.length > 0}>
+        <VacancyListContainer>
+          {searchedVacancies.map(item => (
+            <VacancyItem
+              key={item.id}
+              vacancyId={vacancyId}
+              selectVacancy={() => {
+                setSelectedVacancyId(item.id.toString());
+                setVacancy(item);
+              }}
+              vacancy={item}
+            />
+          ))}
+        </VacancyListContainer>
+      </RenderIf>
+      <RenderIf isTrue={searchedVacancies.length === 0}>
+        <EmptyState>Nenhuma vaga encontrada.</EmptyState>
+      </RenderIf>
     </div>
   );
 };

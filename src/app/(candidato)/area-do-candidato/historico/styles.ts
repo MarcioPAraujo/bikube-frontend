@@ -44,3 +44,10 @@ export const CardsContainer = styled.div`
   justify-content: center;
   padding-bottom: 4rem;
 `;
+
+export const EmptyState = styled.div`
+  text-align: center;
+  color: ${({ theme }) => theme.colors.GRAY.hex_747474};
+  font-size: 1.6rem;
+  margin-top: 2rem;
+`;

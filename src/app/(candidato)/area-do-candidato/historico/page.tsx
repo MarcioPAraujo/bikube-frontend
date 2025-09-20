@@ -11,7 +11,14 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { getAppliedVacancies } from '@/services/vacancy/vacancyService';
 import { VacancyStage } from '@/utils/vacanciesStages';
-import { ButtonsContainer, CardsContainer, Page, TitleSection } from './styles';
+import RenderIf from '@/components/RenderIf/RenderIf';
+import {
+  ButtonsContainer,
+  CardsContainer,
+  EmptyState,
+  Page,
+  TitleSection,
+} from './styles';
 
 enum Routes {
   HOME = '/area-do-candidato/inicio',
@@ -67,33 +74,6 @@ const HistoryPage: React.FC = () => {
           return normalizedA.localeCompare(normalizedB);
         });
 
-  if (filteredVacancies?.length === 0) {
-    return (
-      <Page>
-        <TitleSection>
-          <ButtonsContainer>
-            <IconButton
-              onClick={() => router.push(Routes.HOME)}
-              iconNode={<Icon name="Home" />}
-            />
-            <div>
-              <h1>Histórico</h1>
-              <p>Veja as vagas que você se candidatou</p>
-            </div>
-          </ButtonsContainer>
-          <SearchBarComponent
-            value={search}
-            placeholder="Pesquisar vaga"
-            onSearch={e => setSearch(e.target.value)}
-          />
-        </TitleSection>
-        <CardsContainer>
-          <p>Nenhuma vaga encontrada.</p>
-        </CardsContainer>
-      </Page>
-    );
-  }
-
   return (
     <Page>
       <TitleSection>
@@ -113,18 +93,23 @@ const HistoryPage: React.FC = () => {
           onSearch={e => setSearch(e.target.value)}
         />
       </TitleSection>
-      <CardsContainer>
-        {filteredVacancies &&
-          filteredVacancies.map((vacancy, index) => (
-            <VacancyCard
-              key={index}
-              title={vacancy?.vaga?.titulo}
-              description={vacancy?.vaga?.descricao}
-              location={vacancy?.vaga?.localizacao}
-              contractType={vacancy?.vaga?.tipoContrato}
-            />
-          ))}
-      </CardsContainer>
+      <RenderIf isTrue={filteredVacancies.length > 0}>
+        <CardsContainer>
+          {filteredVacancies &&
+            filteredVacancies.map((vacancy, index) => (
+              <VacancyCard
+                key={index}
+                title={vacancy?.vaga?.titulo}
+                description={vacancy?.vaga?.descricao}
+                location={vacancy?.vaga?.localizacao}
+                contractType={vacancy?.vaga?.tipoContrato}
+              />
+            ))}
+        </CardsContainer>
+      </RenderIf>
+      <RenderIf isTrue={filteredVacancies.length === 0}>
+        <EmptyState>Nenhuma vaga encontrada.</EmptyState>
+      </RenderIf>
     </Page>
   );
 };

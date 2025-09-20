@@ -40,3 +40,8 @@ export const HistoryButton = styled.button`
     box-shadow: none;
   }
 `;
+export const EmptyState = styled.div`
+  margin-top: 2rem;
+  font-size: 1.6rem;
+  color: ${({ theme }) => theme.colors.GRAY.hex_747474};
+`;
