@@ -8,4 +8,5 @@ export interface IVacancyListResponse {
   informacoes: string;
   palavrasChave: string;
   nivel: string;
+  status: string;
 }

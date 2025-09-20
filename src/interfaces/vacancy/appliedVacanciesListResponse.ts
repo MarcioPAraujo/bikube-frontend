@@ -47,6 +47,7 @@ export interface Vaga {
   informacoes: string;
   palavrasChave: string;
   nivel: string;
+  status: string;
 }
 
 export interface IExperiecias {

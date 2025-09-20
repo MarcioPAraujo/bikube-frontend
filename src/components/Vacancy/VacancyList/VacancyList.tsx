@@ -133,13 +133,26 @@ const VacancyList: React.FC<IVacancyListProps> = ({
     return <div>Nenhuma vaga encontrada.</div>;
   }
 
+  // Filter out vacancies that the candidate has already applied to
+  const appliedVacanciesIds = Array.isArray(applied)
+    ? new Set(applied.map(item => item.vaga.id))
+    : new Set<number>();
+  const filteredVacancies = allVacancies.filter(
+    vacancy =>
+      !appliedVacanciesIds.has(vacancy.id) && vacancy.status === 'ativo',
+  );
+
+  if (filteredVacancies.length === 0) {
+    return <div>Nenhuma vaga encontrada.</div>;
+  }
+
   return (
     <div>
       <TitleContainer>
         <h2>Vagas</h2>
       </TitleContainer>
       <VacancyListContainer>
-        {allVacancies.map(item => (
+        {filteredVacancies.map(item => (
           <VacancyItem
             key={item.id}
             vacancyId={vacancyId}
