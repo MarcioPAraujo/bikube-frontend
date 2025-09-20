@@ -45,12 +45,12 @@ const Vacancies: React.FC = () => {
     const id = searchParmas.get('id') || undefined;
     setVacancyId(id);
     const handleSelectedVacancy = async () => {
+      if (!id) return;
+
       const appliedResult = await getAppliedVacancies(candidateId);
       const applied = appliedResult.data || [];
       const vacanciesResult = await getAllVacancies();
       const vacancies = vacanciesResult.data || [];
-
-      if (!id) return;
 
       if (type === 'abertas') {
         const vacancy = vacancies.find(v => v.id.toString() === id);
@@ -98,6 +98,9 @@ const Vacancies: React.FC = () => {
       notifyError(resutl.error);
       return;
     }
+
+    setVacancy(undefined);
+    setVacancyId(undefined);
     setSuccessGiveUpModalOpen(true);
   };
 

@@ -11,6 +11,7 @@ import {
   getAppliedVacancies,
 } from '@/services/vacancy/vacancyService';
 import RenderIf from '@/components/RenderIf/RenderIf';
+import { VacancyStage } from '@/utils/vacanciesStages';
 import {
   CustomLink,
   H2,
@@ -50,6 +51,10 @@ const CandidateHomeMain: React.FC = () => {
   const filteredOpenVacancies = allVacancies?.data?.filter(av => {
     return !candidateVacancies?.data?.some(cv => cv.vaga.id === av.id);
   });
+
+  const candidateAppliedVacancies = candidateVacancies?.data?.filter(
+    v => v.etapa !== VacancyStage.DESISTENCIA,
+  );
 
   return (
     <MainContainer>
@@ -108,7 +113,7 @@ const CandidateHomeMain: React.FC = () => {
             Veja as vagas que você já se candidatou
           </CustomLink>
         </Subtitle>
-        <RenderIf isTrue={candidateVacancies?.data?.length !== 0}>
+        <RenderIf isTrue={candidateAppliedVacancies?.length !== 0}>
           <Swiper
             modules={[Navigation, Autoplay, Pagination]}
             pagination={{ clickable: true }}
@@ -145,7 +150,7 @@ const CandidateHomeMain: React.FC = () => {
             ))}
           </Swiper>
         </RenderIf>
-        <RenderIf isTrue={candidateVacancies?.data?.length === 0}>
+        <RenderIf isTrue={candidateAppliedVacancies?.length === 0}>
           <Messages>Você ainda não se candidatou a nenhuma vaga.</Messages>
         </RenderIf>
       </VacanciesSection>

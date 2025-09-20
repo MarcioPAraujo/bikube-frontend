@@ -1,5 +1,6 @@
 import { Icon } from '@/components/Icons/Icons';
 import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
+import { VacancyStage } from '@/utils/vacanciesStages';
 import {
   ApplyButton,
   Container,
@@ -27,7 +28,6 @@ const VacancyDetails: React.FC<IVacancyDetailsProps> = ({
   vacancy,
   vacancyStep,
 }) => {
-  console.log(id);
   const handleAction = () => {
     if (isApplyed) {
       onGiveUp?.();
@@ -75,9 +75,11 @@ const VacancyDetails: React.FC<IVacancyDetailsProps> = ({
           Modelo: <strong>{vacancy.modelo}</strong>
         </p>
       </Details>
-      <ApplyButton type="button" onClick={handleAction}>
-        {isApplyed ? 'Desistir' : 'Candidatar-se'}
-      </ApplyButton>
+      {vacancyStep !== VacancyStage.DESISTENCIA && (
+        <ApplyButton type="button" onClick={handleAction}>
+          {isApplyed ? 'Desistir' : 'Candidatar-se'}
+        </ApplyButton>
+      )}
     </Container>
   );
 };
