@@ -143,6 +143,7 @@ const Vacancies: React.FC = () => {
           </BackButton>
           <VacancyList
             type={type}
+            vacancyId={vacancyId}
             setSelectedVacancyId={setVacancyId}
             setVacancy={setVacancy}
             setVacancyStep={setVacancyStep}

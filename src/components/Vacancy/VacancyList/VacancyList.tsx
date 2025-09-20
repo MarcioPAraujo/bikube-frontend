@@ -14,6 +14,7 @@ import { HistoryButton, TitleContainer, VacancyListContainer } from './styles';
 
 interface IVacancyListProps {
   type: 'aplicadas' | 'abertas';
+  vacancyId: string | undefined;
   setSelectedVacancyId: Dispatch<SetStateAction<string | undefined>>;
   setVacancy: Dispatch<SetStateAction<IVacancyListResponse | undefined>>;
   setVacancyStep?: Dispatch<SetStateAction<string>>;
@@ -25,6 +26,7 @@ enum Routes {
 
 const VacancyList: React.FC<IVacancyListProps> = ({
   type,
+  vacancyId,
   setSelectedVacancyId,
   setVacancy,
   setVacancyStep,
@@ -91,6 +93,7 @@ const VacancyList: React.FC<IVacancyListProps> = ({
           {appliedVacancies.map((item, idx) => (
             <VacancyItem
               key={item.id}
+              vacancyId={vacancyId}
               selectVacancy={id => {
                 handleSelectVacancy(id);
                 if (setVacancyStep) {
@@ -116,6 +119,7 @@ const VacancyList: React.FC<IVacancyListProps> = ({
         {vacancies.map(item => (
           <VacancyItem
             key={item.id}
+            vacancyId={vacancyId}
             selectVacancy={handleSelectVacancy}
             vacancy={item}
           />

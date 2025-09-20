@@ -7,6 +7,10 @@ export const VacancyItemContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
   margin-right: 1rem;
+
+  &.selected {
+    border: 2px solid ${({ theme }) => theme.colors.YELLOW.hex_FFB936};
+  }
 `;
 
 export const VacancyHeader = styled.div`

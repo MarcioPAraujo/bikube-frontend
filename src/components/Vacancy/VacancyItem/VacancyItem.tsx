@@ -8,15 +8,19 @@ import {
 } from './styles';
 
 interface IVacancyItemProps {
+  vacancyId: string | undefined;
   selectVacancy: (vacancyId: string) => void;
   vacancy: IVacancyListResponse;
 }
 const VacancyItem: React.FC<IVacancyItemProps> = ({
   selectVacancy,
   vacancy,
+  vacancyId,
 }) => {
   return (
-    <VacancyItemContainer>
+    <VacancyItemContainer
+      className={vacancyId === vacancy.id.toString() ? 'selected' : ''}
+    >
       <VacancyHeader>
         <h3>{vacancy.titulo}</h3>
         <Icon name="Briefcase" size={20} />
