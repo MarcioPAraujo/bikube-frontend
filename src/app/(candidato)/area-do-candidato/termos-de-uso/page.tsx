@@ -1,8 +1,11 @@
 'use client';
 
+import { DefaultButton } from '@/components/Buttons/DefaultButton';
+import { useRouter } from 'next/navigation';
 import { Main, Paragraph, Ul } from './styles';
 
 const TermsOfUsePageCandidate: React.FC = () => {
+  const router = useRouter();
   return (
     <Main>
       <h1>Termos de Uso - Área do Candidato</h1>
@@ -128,6 +131,12 @@ const TermsOfUsePageCandidate: React.FC = () => {
           República Federativa do Brasil.
         </p>
       </section>
+      <DefaultButton
+        type="button"
+        variant="bordered"
+        text="Voltar para a Área do Candidato"
+        onClick={() => router.push('/area-do-candidato/inicio')}
+      />
     </Main>
   );
 };

@@ -10,6 +10,7 @@ interface DefaultButtonProps {
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
   classname?: string;
+  variant?: 'bordered' | 'default';
   styles?: CSSProperties;
 }
 export const DefaultButton: FC<DefaultButtonProps> = ({
@@ -20,6 +21,7 @@ export const DefaultButton: FC<DefaultButtonProps> = ({
   classname,
   icon: Icon,
   iconPosition,
+  variant = 'default',
   styles,
 }) => {
   return (
@@ -27,7 +29,7 @@ export const DefaultButton: FC<DefaultButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={classname}
+      className={`${classname} ${variant}`}
       style={styles}
     >
       {Icon && iconPosition === 'left' && <Icon />}
