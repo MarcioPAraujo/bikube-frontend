@@ -7,8 +7,8 @@ import {
 } from '@/services/vacancy/vacancyService';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useCandidateAuth } from '@/hooks/usecandidateAuth';
-import { IAppliedVacanciesListResponse } from '@/interfaces/vacancy/appliedVacanciesListResponse';
 import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
+import { VacancyStage } from '@/utils/vacanciesStages';
 import VacancyItem from '../VacancyItem/VacancyItem';
 import { HistoryButton, TitleContainer, VacancyListContainer } from './styles';
 
@@ -36,47 +36,60 @@ const VacancyList: React.FC<IVacancyListProps> = ({
 
   const candidateId = candidate?.id ? Number(candidate.id) : 0;
 
-  const { data, isError, isPending } = useQuery({
-    queryKey: ['vacancies', type],
+  const {
+    data: allVacancies,
+    isError: allVacanciesError,
+    isPending: allVacanciesPending,
+  } = useQuery({
+    queryKey: ['vacancies'],
     queryFn: async () => {
-      if (type === 'aplicadas') {
-        const result = await getAppliedVacancies(candidateId);
-        return result.data || [];
-      }
-      if (type === 'abertas') {
-        const result = await getAllVacancies();
-        return result.data || [];
-      }
-      return [];
+      const result = await getAllVacancies();
+      return result.data || [];
+    },
+    placeholderData: keepPreviousData,
+  });
+  const {
+    data: applied,
+    isError: appliedError,
+    isPending: appliedPending,
+  } = useQuery({
+    queryKey: ['appliedVacancies', candidateId],
+    queryFn: async () => {
+      const result = await getAppliedVacancies(candidateId);
+      return result.data || [];
     },
     placeholderData: keepPreviousData,
   });
 
-  if (isPending) {
-    return <div>Carregando...</div>;
-  }
-
-  if (isError) {
-    return <div>Erro ao carregar vagas. Tente novamente mais tarde.</div>;
-  }
-
-  if (!data || data.length === 0) {
-    return <div>Nenhuma vaga encontrada.</div>;
-  }
-
-  const handleSelectVacancy = async (vacancyId: string) => {
-    const result = await getAllVacancies();
-    if (result.error) {
-      return;
-    }
-    const vacancy = result.data?.find(v => v.id.toString() === vacancyId);
+  const handleSelectVacancy = (vacancyId: string) => {
+    if (!vacancyId) return;
+    if (!allVacancies || allVacancies.length === 0) return;
+    const vacancy = allVacancies.find(v => v.id.toString() === vacancyId);
     if (!vacancy) return;
     setSelectedVacancyId(vacancyId);
     setVacancy(vacancy);
   };
 
-  if ('candidato' in data[0]) {
-    const appliedVacancies = data as IAppliedVacanciesListResponse[];
+  if (type === 'aplicadas') {
+    if (appliedPending) {
+      return <div>Carregando...</div>;
+    }
+
+    if (appliedError) {
+      return <div>Erro ao carregar vagas. Tente novamente mais tarde.</div>;
+    }
+
+    if (!applied || applied.length === 0) {
+      return <div>Nenhuma vaga encontrada.</div>;
+    }
+
+    const filteredVacancies = Array.isArray(applied)
+      ? applied.filter(item => item.etapa !== VacancyStage.DESISTENCIA)
+      : [];
+
+    if (filteredVacancies.length === 0) {
+      return <div>Nenhuma vaga encontrada.</div>;
+    }
 
     return (
       <div>
@@ -90,14 +103,14 @@ const VacancyList: React.FC<IVacancyListProps> = ({
           </HistoryButton>
         </TitleContainer>
         <VacancyListContainer>
-          {appliedVacancies.map((item, idx) => (
+          {filteredVacancies.map((item, idx) => (
             <VacancyItem
               key={item.id}
               vacancyId={vacancyId}
               selectVacancy={id => {
                 handleSelectVacancy(id);
                 if (setVacancyStep) {
-                  setVacancyStep(appliedVacancies[idx].etapa);
+                  setVacancyStep(filteredVacancies[idx].etapa);
                 }
               }}
               vacancy={item.vaga}
@@ -108,7 +121,17 @@ const VacancyList: React.FC<IVacancyListProps> = ({
     );
   }
 
-  const vacancies = data as IVacancyListResponse[];
+  if (allVacanciesPending) {
+    return <div>Carregando...</div>;
+  }
+
+  if (allVacanciesError) {
+    return <div>Erro ao carregar vagas. Tente novamente mais tarde.</div>;
+  }
+
+  if (!allVacancies || allVacancies.length === 0) {
+    return <div>Nenhuma vaga encontrada.</div>;
+  }
 
   return (
     <div>
@@ -116,7 +139,7 @@ const VacancyList: React.FC<IVacancyListProps> = ({
         <h2>Vagas</h2>
       </TitleContainer>
       <VacancyListContainer>
-        {vacancies.map(item => (
+        {allVacancies.map(item => (
           <VacancyItem
             key={item.id}
             vacancyId={vacancyId}

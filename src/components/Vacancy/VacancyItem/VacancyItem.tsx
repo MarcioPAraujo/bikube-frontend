@@ -19,7 +19,7 @@ const VacancyItem: React.FC<IVacancyItemProps> = ({
 }) => {
   return (
     <VacancyItemContainer
-      className={vacancyId === vacancy.id.toString() ? 'selected' : ''}
+      className={vacancyId === vacancy?.id.toString() ? 'selected' : ''}
     >
       <VacancyHeader>
         <h3>{vacancy.titulo}</h3>
