@@ -1,5 +1,3 @@
-import { Icon } from '@/components/Icons/Icons';
-import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
 import {
   getAllVacancies,
@@ -8,20 +6,15 @@ import {
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
-import { VacancyStage } from '@/utils/vacanciesStages';
-import VacancyItem from '../VacancyItem/VacancyItem';
-import { HistoryButton, TitleContainer, VacancyListContainer } from './styles';
+import AppliedVacancies from './AppliedVacancies';
+import AllVacancies from './AllVacancies';
 
 interface IVacancyListProps {
   type: 'aplicadas' | 'abertas';
   vacancyId: string | undefined;
   setSelectedVacancyId: Dispatch<SetStateAction<string | undefined>>;
   setVacancy: Dispatch<SetStateAction<IVacancyListResponse | undefined>>;
-  setVacancyStep?: Dispatch<SetStateAction<string>>;
-}
-
-enum Routes {
-  APPLICATION_HISTORY = '/area-do-candidato/historico',
+  setVacancyStep: Dispatch<SetStateAction<string>>;
 }
 
 const VacancyList: React.FC<IVacancyListProps> = ({
@@ -32,7 +25,6 @@ const VacancyList: React.FC<IVacancyListProps> = ({
   setVacancyStep,
 }) => {
   const { candidate } = useCandidateAuth();
-  const router = useRouter();
 
   const candidateId = candidate?.id ? Number(candidate.id) : 0;
 
@@ -61,122 +53,30 @@ const VacancyList: React.FC<IVacancyListProps> = ({
     placeholderData: keepPreviousData,
   });
 
-  const handleSelectVacancy = (vacancyId: string) => {
-    if (!vacancyId) return;
-    if (!allVacancies || allVacancies.length === 0) return;
-    const vacancy = allVacancies.find(v => v.id.toString() === vacancyId);
-    if (!vacancy) return;
-    setSelectedVacancyId(vacancyId);
-    setVacancy(vacancy);
-  };
-
   if (type === 'aplicadas') {
-    if (appliedPending) {
-      return <div>Carregando...</div>;
-    }
-
-    if (appliedError) {
-      return <div>Erro ao carregar vagas. Tente novamente mais tarde.</div>;
-    }
-
-    if (!applied || applied.length === 0) {
-      return <div>Nenhuma vaga encontrada.</div>;
-    }
-
-    const filteredVacancies = Array.isArray(applied)
-      ? applied.filter(item => item.etapa !== VacancyStage.DESISTENCIA)
-      : [];
-
-    if (filteredVacancies.length === 0) {
-      return (
-        <div>
-          <TitleContainer>
-            <h2>Vagas</h2>
-            <HistoryButton
-              type="button"
-              onClick={() => router.push(Routes.APPLICATION_HISTORY)}
-            >
-              <Icon name="History" size={20} /> Histórico de candidaturas
-            </HistoryButton>
-          </TitleContainer>
-          Nenhuma vaga encontrada.
-        </div>
-      );
-    }
-
     return (
-      <div>
-        <TitleContainer>
-          <h2>Vagas</h2>
-          <HistoryButton
-            type="button"
-            onClick={() => router.push(Routes.APPLICATION_HISTORY)}
-          >
-            <Icon name="History" size={20} /> Histórico de candidaturas
-          </HistoryButton>
-        </TitleContainer>
-        <VacancyListContainer>
-          {filteredVacancies.map((item, idx) => (
-            <VacancyItem
-              key={item.id}
-              vacancyId={vacancyId}
-              selectVacancy={id => {
-                handleSelectVacancy(id);
-                if (setVacancyStep) {
-                  setVacancyStep(filteredVacancies[idx].etapa);
-                }
-              }}
-              vacancy={item.vaga}
-            />
-          ))}
-        </VacancyListContainer>
-      </div>
+      <AppliedVacancies
+        applied={applied}
+        isError={appliedError}
+        isPending={appliedPending}
+        vacancyId={vacancyId}
+        setSelectedVacancyId={setSelectedVacancyId}
+        setVacancy={setVacancy}
+        setVacancyStep={setVacancyStep}
+      />
     );
   }
 
-  if (allVacanciesPending) {
-    return <div>Carregando...</div>;
-  }
-
-  if (allVacanciesError) {
-    return <div>Erro ao carregar vagas. Tente novamente mais tarde.</div>;
-  }
-
-  if (!allVacancies || allVacancies.length === 0) {
-    return <div>Nenhuma vaga encontrada.</div>;
-  }
-
-  // Filter out vacancies that the candidate has already applied to
-  const appliedVacanciesIds = Array.isArray(applied)
-    ? new Set(applied.map(item => item.vaga.id))
-    : new Set<number>();
-  const filteredVacancies = Array.isArray(allVacancies)
-    ? allVacancies.filter(
-        vacancy =>
-          !appliedVacanciesIds.has(vacancy.id) && vacancy.status === 'ativo',
-      )
-    : [];
-
-  if (filteredVacancies.length === 0) {
-    return <div>Nenhuma vaga encontrada.</div>;
-  }
-
   return (
-    <div>
-      <TitleContainer>
-        <h2>Vagas</h2>
-      </TitleContainer>
-      <VacancyListContainer>
-        {filteredVacancies.map(item => (
-          <VacancyItem
-            key={item.id}
-            vacancyId={vacancyId}
-            selectVacancy={handleSelectVacancy}
-            vacancy={item}
-          />
-        ))}
-      </VacancyListContainer>
-    </div>
+    <AllVacancies
+      allVacancies={allVacancies}
+      applied={applied}
+      isError={allVacanciesError}
+      isPending={allVacanciesPending}
+      vacancyId={vacancyId}
+      setSelectedVacancyId={setSelectedVacancyId}
+      setVacancy={setVacancy}
+    />
   );
 };
 export default VacancyList;
