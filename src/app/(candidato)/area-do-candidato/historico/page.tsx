@@ -6,32 +6,95 @@ import { useState } from 'react';
 import IconButton from '@/components/Buttons/IconButton';
 import { useRouter } from 'next/navigation';
 import { Icon } from '@/components/Icons/Icons';
+import { normalizeString } from '@/utils/normalizeString';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useCandidateAuth } from '@/hooks/usecandidateAuth';
+import { getAppliedVacancies } from '@/services/vacancy/vacancyService';
+import { VacancyStage } from '@/utils/vacanciesStages';
 import { ButtonsContainer, CardsContainer, Page, TitleSection } from './styles';
-
-interface IVancancyCardProps {
-  title: string;
-  description: string;
-  location: string;
-  constractType: string;
-}
 
 enum Routes {
   HOME = '/area-do-candidato/inicio',
 }
 
-const mockedvacancies: IVancancyCardProps[] = Array.from(
-  { length: 20 },
-  (_, index) => ({
-    title: `Vaga ${index + 1}`,
-    description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore inventore odio, autem suscipit obcaecati voluptates nulla mollitia reiciendis molestiae magni illo perferendis iure impedit nam alias natus culpa tempora ab.',
-    location: 'São Paulo, SP',
-    constractType: 'PJ',
-  }),
-);
 const HistoryPage: React.FC = () => {
+  const { candidate } = useCandidateAuth();
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
+
+  const candidateId = candidate ? Number(candidate.id) : 0;
+
+  const {
+    data: vacancies,
+    isError,
+    isPending,
+    isPlaceholderData,
+  } = useQuery({
+    queryKey: ['vacancies'],
+    queryFn: async () => {
+      const result = await getAppliedVacancies(candidateId);
+      if (!result.data) return [];
+      return result.data.filter(
+        v =>
+          v.etapa === VacancyStage.DESISTENCIA ||
+          v.etapa === VacancyStage.FINALIZADO,
+      );
+    },
+    enabled: candidateId > 0,
+    placeholderData: keepPreviousData,
+  });
+
+  if (!vacancies && !isPlaceholderData) return null;
+  if (isPending) return null;
+  if (isError) return null;
+
+  const normalizedSearch = normalizeString(search);
+  const filteredVacancies = !normalizedSearch
+    ? vacancies
+    : vacancies
+        .filter(vacancy =>
+          normalizeString(vacancy.vaga.titulo).includes(normalizedSearch),
+        )
+        .sort((a, b) => {
+          const normalizedA = normalizeString(a.vaga.titulo);
+          const normalizedB = normalizeString(b.vaga.titulo);
+
+          const aStartsWith = normalizedA.startsWith(normalizedSearch);
+          const bStartsWith = normalizedB.startsWith(normalizedSearch);
+
+          if (aStartsWith && !bStartsWith) return -1;
+          if (!aStartsWith && bStartsWith) return 1;
+
+          return normalizedA.localeCompare(normalizedB);
+        });
+
+  if (filteredVacancies?.length === 0) {
+    return (
+      <Page>
+        <TitleSection>
+          <ButtonsContainer>
+            <IconButton
+              onClick={() => router.push(Routes.HOME)}
+              iconNode={<Icon name="Home" />}
+            />
+            <div>
+              <h1>Histórico</h1>
+              <p>Veja as vagas que você se candidatou</p>
+            </div>
+          </ButtonsContainer>
+          <SearchBarComponent
+            value={search}
+            placeholder="Pesquisar vaga"
+            onSearch={e => setSearch(e.target.value)}
+          />
+        </TitleSection>
+        <CardsContainer>
+          <p>Nenhuma vaga encontrada.</p>
+        </CardsContainer>
+      </Page>
+    );
+  }
+
   return (
     <Page>
       <TitleSection>
@@ -52,13 +115,13 @@ const HistoryPage: React.FC = () => {
         />
       </TitleSection>
       <CardsContainer>
-        {mockedvacancies.map((vacancy, index) => (
+        {filteredVacancies?.map((vacancy, index) => (
           <VacancyCard
             key={index}
-            title={vacancy.title}
-            description={vacancy.description}
-            location={vacancy.location}
-            contractType={vacancy.constractType}
+            title={vacancy.vaga.titulo}
+            description={vacancy.vaga.descricao}
+            location={vacancy.vaga.localizacao}
+            contractType={vacancy.vaga.tipoContrato}
           />
         ))}
       </CardsContainer>

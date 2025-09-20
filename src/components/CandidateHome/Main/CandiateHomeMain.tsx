@@ -48,14 +48,18 @@ const CandidateHomeMain: React.FC = () => {
   if (isCandidateVacanciesPending || isAllVacanciesPending) return null;
   if (isCandidateVacanciesError || isAllVacanciesError) return null;
 
+  const candidateVacanciesIds = candidateVacancies
+    ? new Set(candidateVacancies?.data?.map(v => v.vaga.id))
+    : new Set<number>();
   const filteredOpenVacancies = allVacancies?.data?.filter(av => {
-    return !candidateVacancies?.data?.some(cv => cv.vaga.id === av.id);
+    return !candidateVacanciesIds.has(av.id);
   });
 
-  const candidateAppliedVacancies = candidateVacancies?.data?.filter(
-    v => v.etapa !== VacancyStage.DESISTENCIA,
+  const candidateVacanciesFiltered = candidateVacancies?.data?.filter(
+    cv =>
+      cv.etapa !== VacancyStage.DESISTENCIA &&
+      cv.etapa !== VacancyStage.FINALIZADO,
   );
-
   return (
     <MainContainer>
       <VacanciesSection>
@@ -113,7 +117,7 @@ const CandidateHomeMain: React.FC = () => {
             Veja as vagas que você já se candidatou
           </CustomLink>
         </Subtitle>
-        <RenderIf isTrue={candidateAppliedVacancies?.length !== 0}>
+        <RenderIf isTrue={candidateVacanciesFiltered?.length !== 0}>
           <Swiper
             modules={[Navigation, Autoplay, Pagination]}
             pagination={{ clickable: true }}
@@ -134,7 +138,7 @@ const CandidateHomeMain: React.FC = () => {
               padding: '3rem 0.5rem',
             }}
           >
-            {candidateVacancies?.data?.map((vacancy, index) => (
+            {candidateVacanciesFiltered?.map((vacancy, index) => (
               <SwiperSlide key={index}>
                 <CustomLink
                   href={`/area-do-candidato/vagas/aplicadas?id=${vacancy.vaga.id}`}
@@ -150,7 +154,7 @@ const CandidateHomeMain: React.FC = () => {
             ))}
           </Swiper>
         </RenderIf>
-        <RenderIf isTrue={candidateAppliedVacancies?.length === 0}>
+        <RenderIf isTrue={candidateVacanciesFiltered?.length === 0}>
           <Messages>Você ainda não se candidatou a nenhuma vaga.</Messages>
         </RenderIf>
       </VacanciesSection>

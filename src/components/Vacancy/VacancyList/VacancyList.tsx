@@ -88,7 +88,20 @@ const VacancyList: React.FC<IVacancyListProps> = ({
       : [];
 
     if (filteredVacancies.length === 0) {
-      return <div>Nenhuma vaga encontrada.</div>;
+      return (
+        <div>
+          <TitleContainer>
+            <h2>Vagas</h2>
+            <HistoryButton
+              type="button"
+              onClick={() => router.push(Routes.APPLICATION_HISTORY)}
+            >
+              <Icon name="History" size={20} /> Histórico de candidaturas
+            </HistoryButton>
+          </TitleContainer>
+          Nenhuma vaga encontrada.
+        </div>
+      );
     }
 
     return (
@@ -137,10 +150,12 @@ const VacancyList: React.FC<IVacancyListProps> = ({
   const appliedVacanciesIds = Array.isArray(applied)
     ? new Set(applied.map(item => item.vaga.id))
     : new Set<number>();
-  const filteredVacancies = allVacancies.filter(
-    vacancy =>
-      !appliedVacanciesIds.has(vacancy.id) && vacancy.status === 'ativo',
-  );
+  const filteredVacancies = Array.isArray(allVacancies)
+    ? allVacancies.filter(
+        vacancy =>
+          !appliedVacanciesIds.has(vacancy.id) && vacancy.status === 'ativo',
+      )
+    : [];
 
   if (filteredVacancies.length === 0) {
     return <div>Nenhuma vaga encontrada.</div>;
