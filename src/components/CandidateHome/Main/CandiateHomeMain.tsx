@@ -48,8 +48,8 @@ const CandidateHomeMain: React.FC = () => {
   if (isCandidateVacanciesPending || isAllVacanciesPending) return null;
   if (isCandidateVacanciesError || isAllVacanciesError) return null;
 
-  const candidateVacanciesIds = candidateVacancies
-    ? new Set(candidateVacancies?.data?.map(v => v.vaga.id))
+  const candidateVacanciesIds = candidateVacancies.data
+    ? new Set(candidateVacancies.data.map(v => v.vaga.id))
     : new Set<number>();
   const filteredOpenVacancies = allVacancies?.data?.filter(av => {
     return !candidateVacanciesIds.has(av.id);

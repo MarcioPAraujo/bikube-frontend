@@ -9,6 +9,7 @@ import { ButtonProfile, ButtonWrapper, Header } from './styles';
 
 enum Routes {
   CANDIDATE_PROFILE = '/area-do-candidato/meu-perfil',
+  HISTORY = '/area-do-candidato/historico',
 }
 
 const CandidateHomeHeader: React.FC = () => {
@@ -36,10 +37,18 @@ const CandidateHomeHeader: React.FC = () => {
           priority
         />
         <ButtonWrapper>
-          <IconButton
-            onClick={() => setWarningModal(true)}
-            iconNode={<Icon name="Logout" />}
-          />
+          <abbr title="histórico de candidaturas">
+            <IconButton
+              onClick={() => router.push(Routes.HISTORY)}
+              iconNode={<Icon name="History" />}
+            />
+          </abbr>
+          <abbr title="sair da conta">
+            <IconButton
+              onClick={() => setWarningModal(true)}
+              iconNode={<Icon name="Logout" />}
+            />
+          </abbr>
           <ButtonProfile
             type="button"
             onClick={() => router.push(Routes.CANDIDATE_PROFILE)}

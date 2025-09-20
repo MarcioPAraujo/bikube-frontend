@@ -40,7 +40,6 @@ const HistoryPage: React.FC = () => {
           v.etapa === VacancyStage.FINALIZADO,
       );
     },
-    enabled: candidateId > 0,
     placeholderData: keepPreviousData,
   });
 
@@ -115,15 +114,16 @@ const HistoryPage: React.FC = () => {
         />
       </TitleSection>
       <CardsContainer>
-        {filteredVacancies?.map((vacancy, index) => (
-          <VacancyCard
-            key={index}
-            title={vacancy.vaga.titulo}
-            description={vacancy.vaga.descricao}
-            location={vacancy.vaga.localizacao}
-            contractType={vacancy.vaga.tipoContrato}
-          />
-        ))}
+        {filteredVacancies &&
+          filteredVacancies.map((vacancy, index) => (
+            <VacancyCard
+              key={index}
+              title={vacancy?.vaga?.titulo}
+              description={vacancy?.vaga?.descricao}
+              location={vacancy?.vaga?.localizacao}
+              contractType={vacancy?.vaga?.tipoContrato}
+            />
+          ))}
       </CardsContainer>
     </Page>
   );
