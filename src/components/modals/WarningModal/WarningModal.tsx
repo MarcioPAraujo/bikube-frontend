@@ -16,9 +16,9 @@ interface WarningModalProps {
   message: string;
   title: string;
   confirmText: string;
-  cancelText: string;
+  cancelText?: string;
   onConfirm: () => void;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 const WarningModal: React.FC<WarningModalProps> = ({
   isOpen,
@@ -41,9 +41,11 @@ const WarningModal: React.FC<WarningModalProps> = ({
           <Title>{title}</Title>
           <Message>{message}</Message>
           <ButtonContainer>
-            <Button type="button" onClick={onCancel}>
-              {cancelText}
-            </Button>
+            {onCancel && (
+              <Button type="button" onClick={onCancel}>
+                {cancelText}
+              </Button>
+            )}
             <Button type="button" onClick={onConfirm} className="filled">
               {confirmText}
             </Button>

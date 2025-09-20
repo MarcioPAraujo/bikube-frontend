@@ -25,6 +25,8 @@ const useCandidateLoginForm = () => {
   });
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [candidateId, setCandidateId] = useState<number | null>(null);
+  const [temporaryBlocked, setTemporaryBlocked] = useState(false);
+  const [blocked, setBlocked] = useState(false);
 
   const onEmailChange = (value: string) => {
     const formattedEmail = emailMask(value);
@@ -37,9 +39,18 @@ const useCandidateLoginForm = () => {
       password: data.password,
     });
     if (result.error) {
+      if (result.error === 'candidato bloqueado temporariamente') {
+        setTemporaryBlocked(true);
+        return;
+      }
+      if (result.error === 'candidato desativado') {
+        setBlocked(true);
+        return;
+      }
       notifyError(result.error);
       return;
     }
+
     if (result.data) {
       if (result.data.termo !== 'true') {
         setCandidateId(Number(result.data.id));
@@ -79,8 +90,16 @@ const useCandidateLoginForm = () => {
     errors,
   };
 
+  const modalStates = {
+    temporaryBlocked,
+    setTemporaryBlocked,
+    blocked,
+    setBlocked,
+  };
+
   return {
     hookform,
+    modalStates,
     onFormSubmit,
     onEmailChange,
     termsAccepted,

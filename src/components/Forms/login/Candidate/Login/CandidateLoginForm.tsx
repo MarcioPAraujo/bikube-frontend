@@ -1,12 +1,15 @@
 import InputComponent from '@/components/Inputs/InputComponent';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
 import TermsOfUseModal from '@/components/modals/TermsOfUsemodal/TermsOfUseModal';
+import AlertModal from '@/components/modals/AlertModal/AlertModal';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import { CustomLink, Form, SubmitButton, Title } from '../styles';
 import useCandidateLoginForm from './useCandidateLoginForm';
 
 const CandidateLoginForm: React.FC = () => {
   const {
     hookform: { errors, isValid, isSubmitting, handleSubmit, register },
+    modalStates: { temporaryBlocked, setTemporaryBlocked, blocked, setBlocked },
     onEmailChange,
     onFormSubmit,
     onAcceptterms,
@@ -16,6 +19,21 @@ const CandidateLoginForm: React.FC = () => {
 
   return (
     <>
+      <AlertModal
+        isOpen={temporaryBlocked}
+        title="Atenção"
+        message="Sua conta foi bloqueada temporariamente devido a múltiplas tentativas de login falhadas. Por favor, tente novamente mais tarde ou entre em contato com o suporte."
+        confirmText="OK"
+        onConfirm={() => setTemporaryBlocked(false)}
+      />
+      <WarningModal
+        isOpen={blocked}
+        title="Conta Desativada"
+        message="Sua conta foi desativada. Por favor, entre em contato com o suporte para mais informações."
+        confirmText="OK"
+        onConfirm={() => setBlocked(false)}
+      />
+
       <TermsOfUseModal
         isOpen={termsAccepted}
         onSubmit={e => {

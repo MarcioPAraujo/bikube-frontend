@@ -78,6 +78,7 @@ export const Button = styled.button`
   font-size: 1.6rem;
   margin-top: auto;
   margin-bottom: 2rem;
+  width: 100%;
 
   height: 4.2rem;
 

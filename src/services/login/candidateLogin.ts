@@ -34,7 +34,10 @@ export const candidateLogin = async (
   } catch (error: any) {
     const axiosError = error as AxiosError;
     if (axiosError.response) {
-      return { data: null, error: axiosError.response.data as string };
+      if (isNaN(Number(axiosError.response.data))) {
+        return { data: null, error: axiosError.response.data as string };
+      }
+      return { data: null, error: 'Usuário ou senha inválidos' };
     }
     return { data: null, error: 'falha ao realizar login' };
   }
