@@ -38,6 +38,12 @@ const tabs: Tab[] = [
     baseUrl: '/funcionarios',
   },
   {
+    name: 'Recrutamento',
+    url: '/recrutamento',
+    allowedRoles: accessLevel.medium,
+    baseUrl: '/recrutamento',
+  },
+  {
     name: 'Relatórios',
     url: '/relatorios',
     allowedRoles: accessLevel.high,

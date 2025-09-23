@@ -55,8 +55,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const isAuthenticated = !!user?.id;
   const isRH = user?.role === 'RH';
   const isOnlyEmployee = user?.role === 'FUNCIONARIO';
-  console.log(user);
-
   useEffect(() => {
     let storedUser = sessionStorage.getItem(SESSION_STORAGE_KEYS.employee);
     if (!storedUser) {
@@ -107,7 +105,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   if (isAuthenticated && isRH && !allowedMenus(rhRoutes)) {
     redirect('/home');
   }
-
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

@@ -17,9 +17,6 @@ import {
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { user, logout } = useAuth();
-  if (!user) {
-    return <>{children}</>;
-  }
 
   return (
     <div>
