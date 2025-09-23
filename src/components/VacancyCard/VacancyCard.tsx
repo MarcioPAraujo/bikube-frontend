@@ -6,7 +6,7 @@ import {
   ImageContainer,
 } from './vacancyCardStyles';
 
-interface IVancancyCardProps {
+export interface IVancancyCardProps {
   title: string;
   description: string;
   location: string;
