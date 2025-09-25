@@ -11,7 +11,12 @@ import VacancyCard, {
 import { normalizeString } from '@/utils/normalizeString';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import Pagination from '@/components/Pagination/Pagination';
-import { ActionsContainer, CardsContainer } from './styles';
+import { ActionsContainer, CardsContainer, CustomLink } from './styles';
+
+enum Routes {
+  NEW_VACANCY = '/recrutamento/nova-vaga',
+  VACANCY = '/recrutamento',
+}
 
 const tabs: ITab[] = [
   {
@@ -68,19 +73,24 @@ const RecutamentoPage: React.FC = () => {
         <SecondaryButton
           text="Criar nova vaga"
           onClick={() => {
-            router.push('/recrutamento/criar-vaga');
+            router.push(Routes.NEW_VACANCY);
           }}
         />
       </ActionsContainer>
       <CardsContainer>
         {pagination.currentRows.map((vacancy, index) => (
-          <VacancyCard
+          <CustomLink
             key={index}
-            title={vacancy.title}
-            description={vacancy.description}
-            location={vacancy.location}
-            contractType={vacancy.contractType}
-          />
+            href={`${Routes.VACANCY}/${index + 1}/etapas?nome=${vacancy.title}`}
+          >
+            <VacancyCard
+              key={index}
+              title={vacancy.title}
+              description={vacancy.description}
+              location={vacancy.location}
+              contractType={vacancy.contractType}
+            />
+          </CustomLink>
         ))}
       </CardsContainer>
       <Pagination

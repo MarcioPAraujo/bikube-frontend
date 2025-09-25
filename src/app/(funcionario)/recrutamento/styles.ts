@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 
 export const ActionsContainer = styled.div`
@@ -15,4 +16,10 @@ export const CardsContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   padding-bottom: 4rem;
+`;
+
+export const CustomLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  width: clamp(20rem, 100%, 40rem);
 `;
