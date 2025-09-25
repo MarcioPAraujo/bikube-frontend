@@ -27,7 +27,13 @@ const Layout: React.FC<IChildrenProps> = ({ children }) => {
   if (pathname.includes('candidatos')) {
     return (
       <div>
-        <PageTitle>{vacancyName}</PageTitle>
+        <SubtitleContainer style={{ alignItems: 'baseline' }}>
+          <IconButton
+            onClick={() => router.back()}
+            iconNode={<Icon name="ArrowLeft" />}
+          />
+          <PageTitle>{vacancyName}</PageTitle>
+        </SubtitleContainer>
         {children}
       </div>
     );
