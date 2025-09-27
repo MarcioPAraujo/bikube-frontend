@@ -1,22 +1,51 @@
 import styled from 'styled-components';
 
-export const CardContainer = styled.div`
+export const FlipCard = styled.div`
+  background-color: transparent;
   height: 30rem;
   width: clamp(20rem, 100%, 25rem);
+  perspective: 1200px;
+`;
+export const FlipCardInner = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+
+  &:hover {
+    transform: rotateY(180deg);
+  }
+`;
+
+export const Front = styled.div`
+  height: 100%;
+  width: 100%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
-  transition: all 0.2s ease-in-out;
-  will-change: transform, box-shadow, scale;
-  &:hover {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.35);
-    cursor: pointer;
-    scale: 1.02;
-  }
+  position: absolute;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+`;
+
+export const Back = styled.div`
+  position: absolute;
+  background-color: #f0f0f0;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
 `;
 
 export const ImageContainer = styled.div`
   position: relative;
-  height: clamp(20rem, 100%, 25rem);
+  height: 70%;
+  width: 100%;
   aspect-ratio: 1 / 1;
 `;
 

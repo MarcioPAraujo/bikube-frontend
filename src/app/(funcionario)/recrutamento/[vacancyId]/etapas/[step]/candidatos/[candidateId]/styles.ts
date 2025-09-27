@@ -18,6 +18,10 @@ export const SectionTitle = styled.h3`
   font-weight: 600;
   margin-bottom: 1.6rem;
 `;
+export const CandidateCardContainer = styled.div`
+  height: 30rem;
+  width: clamp(20rem, 100%, 25rem);
+`;
 export const PersonalDataSection = styled.div`
   display: flex;
   width: 100%;

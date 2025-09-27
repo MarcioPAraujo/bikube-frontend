@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import GivingUpChart from '@/components/Charts/GivingUpChart/GivingUpChart';
 import VacancyMatchesChart from '@/components/Charts/VacancyMatchesChart/VacancyMatchesChart';
 import ApplicantByStep from '@/components/Charts/ApplicantByStep/ApplicantByStep';
+import CandidateVacancyMatch from '@/components/Charts/CandidateVacancyMatch/CandidateVacacnyMatch';
 import {
   CardsContainer,
   CustomLink,
@@ -60,6 +61,7 @@ const VacancyDashboardPage: React.FC = () => {
         <GivingUpChart />
         <VacancyMatchesChart />
       </DoughnutContainer>
+      <CandidateVacancyMatch matchPercentage={75} />
       <ApplicantByStep />
     </PageWrapper>
   );

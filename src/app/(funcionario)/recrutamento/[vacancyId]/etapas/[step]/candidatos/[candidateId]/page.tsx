@@ -22,6 +22,7 @@ import {
   SkillsWrapper,
   SectionsContainer,
   TitleContainer,
+  CandidateCardContainer,
 } from './styles';
 
 interface IAcademicFormation {
@@ -129,7 +130,9 @@ const CandidateDetailsPage: React.FC = () => {
         <section>
           <SectionTitle>Dados pessoais</SectionTitle>
           <PersonalDataSection>
-            <CandidateCard name="Candidato Exemplo" />
+            <CandidateCardContainer>
+              <CandidateCard name="Candidato Exemplo" />
+            </CandidateCardContainer>
             <PersonalDataFields>
               <UnderlinedInput
                 id="name"

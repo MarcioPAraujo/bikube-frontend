@@ -27,6 +27,9 @@ export const CardsContainer = styled.div`
 export const CustomLink = styled(Link)`
   text-decoration: none;
   color: inherit;
+
+  height: 30rem;
+  width: clamp(20rem, 100%, 25rem);
 `;
 export const DoughnutContainer = styled.div`
   display: flex;
