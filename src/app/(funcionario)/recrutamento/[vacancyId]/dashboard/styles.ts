@@ -28,3 +28,14 @@ export const CustomLink = styled(Link)`
   text-decoration: none;
   color: inherit;
 `;
+export const DoughnutContainer = styled.div`
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+
+  & > div {
+    flex: 1;
+  }
+`;

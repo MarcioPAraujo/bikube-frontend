@@ -3,9 +3,13 @@
 import CandidateCard from '@/components/CandidateCard/CandidateCard';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import GivingUpChart from '@/components/Charts/GivingUpChart/GivingUpChart';
+import VacancyMatchesChart from '@/components/Charts/VacancyMatchesChart/VacancyMatchesChart';
+import ApplicantByStep from '@/components/Charts/ApplicantByStep/ApplicantByStep';
 import {
   CardsContainer,
   CustomLink,
+  DoughnutContainer,
   PageWrapper,
   Subtitle,
   Title,
@@ -52,6 +56,11 @@ const VacancyDashboardPage: React.FC = () => {
           ))}
         </CardsContainer>
       </div>
+      <DoughnutContainer>
+        <GivingUpChart />
+        <VacancyMatchesChart />
+      </DoughnutContainer>
+      <ApplicantByStep />
     </PageWrapper>
   );
 };
