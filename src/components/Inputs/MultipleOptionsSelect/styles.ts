@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -16,7 +15,7 @@ export const Label = styled.p`
 export const SelectArea = styled.div`
   position: relative;
 `;
-export const InputContainer = styled.button`
+export const InputContainer = styled.div`
   position: relative;
   z-index: 9999;
   width: 100%;
@@ -31,17 +30,17 @@ export const InputContainer = styled.button`
   color: ${({ theme }) => theme.colors.BLACK};
   height: 3.6rem;
 
-  &:disabled {
+  &.disabled {
     cursor: default;
   }
 
   svg.opened {
-    transform: rotate(0deg);
+    transform: rotate(180deg);
     transition: transform 0.3s ease;
     margin-right: 1rem;
   }
   svg.closed {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
     transition: transform 0.3s ease;
     margin-right: 1rem;
   }

@@ -20,7 +20,7 @@ export const Label = styled.p`
 export const SelectArea = styled.div`
   position: relative;
 `;
-export const InputContainer = styled.button`
+export const InputContainer = styled.div`
   width: 100%;
   height: 4rem;
   display: flex;
@@ -37,7 +37,7 @@ export const InputContainer = styled.button`
   padding-left: 0.8rem;
   color: ${({ theme }) => theme.colors.BLACK};
 
-  &:disabled {
+  &.disabled {
     cursor: default;
   }
 

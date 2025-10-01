@@ -5,7 +5,7 @@ import { OptionLabel, Options, OptionsContainer, RadioInput } from './styles';
 interface Option {
   options: IOption[];
   handleOptionClick: (option: IOption) => void;
-  selectedOption: IOption;
+  selectedOption: IOption | undefined;
   id: string;
 }
 const OptionsSelect: FC<Option> = ({
@@ -15,6 +15,7 @@ const OptionsSelect: FC<Option> = ({
   id,
 }) => {
   const isSelected = (option: IOption) => {
+    if (!selectedOption) return false;
     return selectedOption.value === option.value;
   };
   return (

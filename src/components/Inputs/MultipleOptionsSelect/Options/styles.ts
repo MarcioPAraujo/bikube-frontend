@@ -8,9 +8,17 @@ export const Options = styled.div`
   align-items: center;
   justify-content: center;
   padding: 0.5rem;
-  border-radius: 0px 0px 0.5rem 0.5rem;
+  border-radius: 0.5rem;
   border: none;
   background-color: ${({ theme }) => theme.colors.WHITE};
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+
+  top: 100%;
+  &.open-up {
+    bottom: 100%;
+    top: auto;
+    margin-bottom: 0.25rem;
+  }
 `;
 export const OptionsContainer = styled.div`
   width: 100%;

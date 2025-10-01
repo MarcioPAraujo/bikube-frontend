@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { IOption } from '@/interfaces/option';
 import { Icon } from '@/components/Icons/Icons';
@@ -25,8 +18,7 @@ import {
 interface ISelectProps {
   id: string;
   options: IOption[];
-  selectedOption: IOption;
-  setSelectedOption: Dispatch<SetStateAction<IOption>>;
+  selectedOption: IOption | undefined;
   onChange: (option: IOption) => void;
   placeholder: string;
   disabled?: boolean;
@@ -40,7 +32,6 @@ const SelectComponent: FC<ISelectProps> = ({
   id,
   options,
   selectedOption,
-  setSelectedOption,
   onChange,
   placeholder,
   label,
@@ -56,12 +47,12 @@ const SelectComponent: FC<ISelectProps> = ({
     option.label.toLowerCase().includes(searchValue.toLowerCase()),
   );
   const handleOptionClick = (option: IOption) => {
-    setSelectedOption(option);
     onChange(option);
     setIsOpen(false);
   };
 
   const toggleSelect = () => {
+    if (disabled) return;
     if (isOpen) {
       setSearchValue('');
     }
@@ -82,22 +73,26 @@ const SelectComponent: FC<ISelectProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [setIsOpen]);
+
+  const disabledClass = disabled ? 'disabled' : '';
+  const openedClass = isOpen ? 'opened' : '';
+
   return (
     <Container id="select-component" className={fieldClassName}>
       {label && <Label>{label}</Label>}
       <SelectArea ref={selectRef}>
         <InputContainer
           id="input-container"
-          type="button"
           onClick={toggleSelect}
-          disabled={disabled}
-          className={isOpen ? 'opened' : ''}
+          className={`${disabledClass} ${openedClass}`.trim()}
+          role="button"
+          tabIndex={0}
         >
           <RenderIf isFalse={enableSearch && isOpen}>
-            {selectedOption.label && (
+            {selectedOption?.label && (
               <SelectedOption>{selectedOption.label}</SelectedOption>
             )}
-            {!selectedOption.label && <Placeholder>{placeholder}</Placeholder>}
+            {!selectedOption?.label && <Placeholder>{placeholder}</Placeholder>}
           </RenderIf>
           <RenderIf isTrue={isOpen && enableSearch}>
             <InputWrapper onClick={e => e.stopPropagation()}>

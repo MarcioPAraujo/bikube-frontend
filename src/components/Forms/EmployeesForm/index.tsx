@@ -1,5 +1,5 @@
 import InputComponent from '@/components/Inputs/InputComponent';
-import SelectComponent from '@/components/Inputs/Select';
+import SelectComponent from '@/components/Inputs/Select/Select';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -302,7 +302,6 @@ const EmployeeForm = () => {
               fieldClassName="cargo"
               options={positions}
               selectedOption={selectedPosition}
-              setSelectedOption={setSelectedPosition}
               onChange={handlePositionChange}
               placeholder="Selecione um cargo"
               label="Cargo"
@@ -314,7 +313,6 @@ const EmployeeForm = () => {
               fieldClassName="setor"
               options={sectorsOptions}
               selectedOption={selectedSector}
-              setSelectedOption={setSelectedSector}
               onChange={handleSectorChange}
               placeholder="Selecione um setor"
               disabled={isFetching}

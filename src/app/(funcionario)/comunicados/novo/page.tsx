@@ -77,7 +77,6 @@ const NewAnnouncementPage = () => {
               label="Setores"
               options={sectorsOptions}
               selectedOption={selectedSectors}
-              setSelectedOption={setSelectedSectors}
               placeholder="Selecione os setores"
               onChange={setSelectedSectors}
               enableSearch

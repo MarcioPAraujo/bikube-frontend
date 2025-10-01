@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -16,7 +15,7 @@ export const Label = styled.p`
 export const SelectArea = styled.div`
   position: relative;
 `;
-export const InputContainer = styled.button`
+export const InputContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -29,7 +28,7 @@ export const InputContainer = styled.button`
   color: ${({ theme }) => theme.colors.BLACK};
   height: 3.6rem;
 
-  &:disabled {
+  &.disabled {
     cursor: default;
   }
 

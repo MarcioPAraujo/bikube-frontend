@@ -77,8 +77,9 @@ const UnderlinedSelect: FC<ISelectProps> = ({
   const filledClassname = selectedOption ? 'filled' : '';
   const errorClassname = error ? 'has-error' : '';
   const openClassname = isOpen ? 'opened' : '';
+  const disabledClass = disabled ? 'disabled' : '';
   const inpuytClassname =
-    `${errorClassname} ${openClassname} ${filledClassname}`.trim();
+    `${errorClassname} ${openClassname} ${filledClassname} ${disabledClass}`.trim();
 
   return (
     <Container
@@ -89,9 +90,9 @@ const UnderlinedSelect: FC<ISelectProps> = ({
       <SelectArea ref={selectRef}>
         <InputContainer
           id="input-container"
-          type="button"
           onClick={toggleSelect}
-          disabled={disabled}
+          role="button"
+          tabIndex={0}
           className={inpuytClassname}
         >
           <RenderIf isFalse={enableSearch && isOpen}>

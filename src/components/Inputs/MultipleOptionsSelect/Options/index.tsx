@@ -7,11 +7,13 @@ interface Option {
   handleOptionClick: (option: IOption) => void;
   selectedOption: IOption[];
   id: string;
+  openDirection: 'up' | 'down';
 }
 const OptionsSelect: FC<Option> = ({
   options,
   selectedOption,
   handleOptionClick,
+  openDirection,
   id,
 }) => {
   const isSelected = (option: IOption) => {
@@ -20,7 +22,7 @@ const OptionsSelect: FC<Option> = ({
     );
   };
   return (
-    <Options>
+    <Options className={openDirection === 'up' ? 'open-up' : 'open-down'}>
       <OptionsContainer>
         {options.map(option => (
           <OptionLabel
