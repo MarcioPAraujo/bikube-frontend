@@ -18,6 +18,8 @@ import { notifyError } from '@/utils/handleToast';
 import { getSkills } from '@/services/skilss/skilssService';
 import { Icon } from '@/components/Icons/Icons';
 import MultipleOptionsSelect from '@/components/Inputs/MultipleOptionsSelect';
+import { IVacancyBodyRequest } from '@/interfaces/vacancy/vacancyBodyRequest';
+import { createNewVancancy } from '@/services/vacancy/vacancyService';
 import {
   GridContainer,
   Input,
@@ -125,8 +127,30 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
     getCities();
   }, [selectedState]);
 
-  const onFormSubmit = (data: NewVacancySchemaType) => {
-    console.log('Form Data:', data);
+  const onFormSubmit = async (data: NewVacancySchemaType) => {
+    const skillsForBody = skills
+      ? skills.map((skill, index) => ({
+          habilidade: skill,
+          peso: skills.length - index,
+        }))
+      : [];
+    const body: IVacancyBodyRequest = {
+      titulo: data.title,
+      modelo: data.workModel,
+      descricao: data.description,
+      tipoContrato: data.contractType.value,
+      localizacao: `${data.city.label} - ${data.state.value}`,
+      informacoes: data.aditionalInfo || '',
+      palavrasChave: data.keyWords ? data.keyWords.join(' ') : '',
+      nivel: data.level.value,
+      habilidades: skillsForBody,
+    };
+
+    const result = await createNewVancancy(body);
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
     setSucessModalOpen(true);
   };
 
@@ -141,7 +165,7 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
     const currentKeywords = watch('keyWords') || [];
     if (currentKeywords.includes(inputValue)) return;
 
-    setValue('keyWords', [...currentKeywords, inputValue]);
+    setValue('keyWords', [...currentKeywords, inputValue.toLowerCase()]);
     e.currentTarget.value = '';
     trigger('keyWords');
   };
