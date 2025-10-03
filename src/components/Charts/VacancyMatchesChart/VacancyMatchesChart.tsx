@@ -9,7 +9,13 @@ import {
   Plugin,
 } from 'chart.js';
 import { theme } from '@/styles/theme';
+import { useQuery } from '@tanstack/react-query';
+import { getApplicantThatMatchWithSkills } from '@/services/vacancy/vacancyService';
 import { ChartContainer, ChartWrapper } from './styles';
+
+interface IVacancyMatchesChartProps {
+  vacancyId: number;
+}
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -29,12 +35,30 @@ const doughnutCenterText: Plugin<'doughnut'> = {
   },
 };
 
-const VacancyMatchesChart: React.FC = () => {
+const VacancyMatchesChart: React.FC<IVacancyMatchesChartProps> = ({
+  vacancyId,
+}) => {
+  const { data: aplicantsMatchers } = useQuery({
+    queryKey: ['vacancyMatches', vacancyId],
+    queryFn: () => getApplicantThatMatchWithSkills(vacancyId),
+  });
+
+  const matchersPercentage = aplicantsMatchers?.data
+    ? aplicantsMatchers.data
+    : '0';
+
+  const matchers = parseInt(matchersPercentage, 10);
+  const nonMatchers = 100 - matchers;
+
+  if (isNaN(matchers) || isNaN(nonMatchers)) {
+    return <div>Dados indisponíveis</div>;
+  }
+
   const data: ChartData<'doughnut'> = {
     labels: ['Pussuem', 'Não possuem'],
     datasets: [
       {
-        data: [90, 10],
+        data: [matchers, nonMatchers],
         backgroundColor: ['#36A2EB', '#FF6384'],
         borderWidth: 0,
       },

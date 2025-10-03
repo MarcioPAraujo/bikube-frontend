@@ -83,3 +83,20 @@ export const getAppliedVacancies = async (
     return handleError(error, 'Erro ao buscar vagas candidatas');
   }
 };
+
+export const getApplicantThatMatchWithSkills = async (
+  vacancyId: number,
+): Promise<Result<string>> => {
+  const ENDPOINT = `/vaga/teste/${vacancyId}`;
+
+  try {
+    const response: AxiosResponse<string> = await api.get(ENDPOINT);
+    const percentage = response.data.replace(/[^\d]/g, '');
+    return { data: percentage, error: null };
+  } catch (error) {
+    return handleError(
+      error,
+      'Erro ao buscar candidatos que combinam com as habilidades',
+    );
+  }
+};

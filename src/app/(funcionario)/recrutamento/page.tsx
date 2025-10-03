@@ -124,15 +124,13 @@ const RecutamentoPage: React.FC = () => {
         />
       </ActionsContainer>
       <CardsContainer>
-        {pagination.currentRows.map((vacancy, index) => (
+        {pagination.currentRows.map(vacancy => (
           <CustomLink
-            key={index}
-            href={`${Routes.VACANCY}/${index + 1}/etapas?nome=${
-              vacancy.titulo
-            }`}
+            key={vacancy.id}
+            href={`${Routes.VACANCY}/${vacancy.id}/etapas?nome=${vacancy.titulo}`}
           >
             <VacancyCard
-              key={index}
+              key={vacancy.id}
               title={vacancy.titulo}
               description={vacancy.descricao}
               location={vacancy.localizacao}

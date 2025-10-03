@@ -1,7 +1,7 @@
 'use client';
 
 import CandidateCard from '@/components/CandidateCard/CandidateCard';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import GivingUpChart from '@/components/Charts/GivingUpChart/GivingUpChart';
 import VacancyMatchesChart from '@/components/Charts/VacancyMatchesChart/VacancyMatchesChart';
@@ -23,6 +23,7 @@ const TopApplicants: string[] = Array.from(
 const VacancyDashboardPage: React.FC = () => {
   const pathanme = usePathname();
   const searchParams = useSearchParams();
+  const { vacancyId } = useParams<{ vacancyId: string }>();
   const [vacancyName, setVacancyName] = useState<string>('');
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const VacancyDashboardPage: React.FC = () => {
       </div>
       <DoughnutContainer>
         <GivingUpChart />
-        <VacancyMatchesChart />
+        <VacancyMatchesChart vacancyId={Number(vacancyId)} />
       </DoughnutContainer>
       <ApplicantByStep />
     </PageWrapper>
