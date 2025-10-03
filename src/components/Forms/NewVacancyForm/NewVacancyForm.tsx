@@ -44,8 +44,7 @@ const contractTypeOptions: IOption[] = [
   { label: 'Freelancer', value: 'freelancer' },
 ];
 const levelOptions: IOption[] = [
-  { label: 'Estágio', value: 'iniciante' },
-  { label: 'Júnior', value: 'junior' },
+  { label: 'Júnior', value: 'iniciante' },
   { label: 'Pleno', value: 'intermediário' },
   { label: 'Sênior', value: 'avançado' },
 ];
@@ -84,7 +83,7 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
       }));
       setStatesOptions(formattedStates);
     };
-    /*
+
     const retrieveSkills = async () => {
       const result = await getSkills();
       if (result.error) {
@@ -101,13 +100,8 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
     };
 
     retrieveSkills();
-    */
+
     getStates();
-    const skills = Array.from({ length: 20 }, (_, i) => ({
-      label: `Habilidade ${i + 1}`,
-      value: `habilidade_${i + 1}`,
-    }));
-    setSkillsOptions(skills);
   }, []);
 
   useEffect(() => {

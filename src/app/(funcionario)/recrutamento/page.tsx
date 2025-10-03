@@ -5,12 +5,12 @@ import SearchBarComponent from '@/components/Inputs/SearchBar';
 import Tabs, { ITab } from '@/components/Tabs/Tabs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import VacancyCard, {
-  IVancancyCardProps,
-} from '@/components/VacancyCard/VacancyCard';
+import VacancyCard from '@/components/VacancyCard/VacancyCard';
 import { normalizeString } from '@/utils/normalizeString';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import Pagination from '@/components/Pagination/Pagination';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { getAllVacancies } from '@/services/vacancy/vacancyService';
 import { ActionsContainer, CardsContainer, CustomLink } from './styles';
 
 enum Routes {
@@ -27,29 +27,31 @@ const tabs: ITab[] = [
   },
 ];
 
-const vacanciesMock: IVancancyCardProps[] = Array.from(
-  { length: 20 },
-  (_, i) => ({
-    title: `Vaga ${i + 1}`,
-    description: 'Descrição da vaga',
-    location: 'Localização da vaga',
-    contractType: 'Tipo de contrato',
-  }),
-);
-
 const PAGE_SIZE = 9;
 const RecutamentoPage: React.FC = () => {
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
 
+  const { data, isPlaceholderData } = useQuery({
+    queryKey: ['vacancies'],
+    queryFn: async () => {
+      const result = await getAllVacancies();
+      if (!result.data) return [];
+      return result.data;
+    },
+    placeholderData: keepPreviousData,
+  });
+
+  const listOfVacancies = data || [];
+
   const normalizedSearch = normalizeString(search);
-  const filteredVacancies = vacanciesMock
+  const filteredVacancies = listOfVacancies
     .filter(vacancy =>
-      normalizeString(vacancy.title).includes(normalizedSearch),
+      normalizeString(vacancy.titulo).includes(normalizedSearch),
     )
     .sort((a, b) => {
-      const normalizedA = normalizeString(a.title);
-      const normalizedB = normalizeString(b.title);
+      const normalizedA = normalizeString(a.titulo);
+      const normalizedB = normalizeString(b.titulo);
 
       const aStartsWithSearch = normalizedA.startsWith(normalizedSearch);
       const bStartsWithSearch = normalizedB.startsWith(normalizedSearch);
@@ -61,6 +63,50 @@ const RecutamentoPage: React.FC = () => {
     });
 
   const pagination = usePaginationRange(filteredVacancies, PAGE_SIZE);
+
+  if (!data && !isPlaceholderData) {
+    return (
+      <div>
+        <Tabs tabs={tabs} />
+        <ActionsContainer>
+          <SearchBarComponent
+            placeholder="Buscar vaga"
+            value={search}
+            onSearch={e => setSearch(e.target.value)}
+          />
+          <SecondaryButton
+            text="Criar nova vaga"
+            onClick={() => {
+              router.push(Routes.NEW_VACANCY);
+            }}
+          />
+        </ActionsContainer>
+      </div>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <div>
+        <Tabs tabs={tabs} />
+        <ActionsContainer>
+          <SearchBarComponent
+            placeholder="Buscar vaga"
+            value={search}
+            onSearch={e => setSearch(e.target.value)}
+          />
+          <SecondaryButton
+            text="Criar nova vaga"
+            onClick={() => {
+              router.push(Routes.NEW_VACANCY);
+            }}
+          />
+        </ActionsContainer>
+        <h2>Nenhuma vaga encontrada</h2>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Tabs tabs={tabs} />
@@ -81,14 +127,16 @@ const RecutamentoPage: React.FC = () => {
         {pagination.currentRows.map((vacancy, index) => (
           <CustomLink
             key={index}
-            href={`${Routes.VACANCY}/${index + 1}/etapas?nome=${vacancy.title}`}
+            href={`${Routes.VACANCY}/${index + 1}/etapas?nome=${
+              vacancy.titulo
+            }`}
           >
             <VacancyCard
               key={index}
-              title={vacancy.title}
-              description={vacancy.description}
-              location={vacancy.location}
-              contractType={vacancy.contractType}
+              title={vacancy.titulo}
+              description={vacancy.descricao}
+              location={vacancy.localizacao}
+              contractType={vacancy.tipoContrato}
             />
           </CustomLink>
         ))}
@@ -97,7 +145,7 @@ const RecutamentoPage: React.FC = () => {
         currentPage={pagination.currentPage}
         totalPages={pagination.totalPages}
         setCurrentPage={pagination.setCurrentPage}
-        totalOfData={vacanciesMock.length}
+        totalOfData={listOfVacancies.length}
         totalPaginatedData={pagination.paginatedRows}
       />
     </div>
