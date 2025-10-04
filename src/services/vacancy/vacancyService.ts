@@ -4,6 +4,7 @@ import handleError from '@/utils/handleError';
 import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
 import { AxiosResponse } from 'axios';
 import { IAppliedVacanciesListResponse } from '@/interfaces/vacancy/appliedVacanciesListResponse';
+import { ITopApplicantsListResponse } from '@/interfaces/vacancy/topApplicantListResponse';
 import { api } from '../api';
 
 interface ApplyVacancyBody {
@@ -98,5 +99,19 @@ export const getApplicantThatMatchWithSkills = async (
       error,
       'Erro ao buscar candidatos que combinam com as habilidades',
     );
+  }
+};
+export const getTopApplicantsForVacancy = async (
+  vacancyId: number,
+): Promise<Result<ITopApplicantsListResponse[]>> => {
+  const ENDPOINT = `/vaga/melhores/${vacancyId}`;
+
+  try {
+    const response: AxiosResponse<ITopApplicantsListResponse[]> = await api.get(
+      ENDPOINT,
+    );
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao buscar os melhores candidatos');
   }
 };
