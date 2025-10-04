@@ -7,7 +7,10 @@ import { IAppliedVacanciesListResponse } from '@/interfaces/vacancy/appliedVacan
 import { ITopApplicantsListResponse } from '@/interfaces/vacancy/topApplicantListResponse';
 import { IAmountOfApplicantByStepResponse } from '@/interfaces/vacancy/amountOfApplicantsByStepResponse';
 import { IVacancyApplicantsByStepResponse } from '@/interfaces/vacancy/vacancyApplicantsByStepResponse';
+import { IAllApplicantsListResponse } from '@/interfaces/vacancy/allApplicantsListResponse';
+import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import { api } from '../api';
+import { getCandidateById } from '../candidate/candidateService';
 
 interface ApplyVacancyBody {
   idcandidato: number;
@@ -151,5 +154,64 @@ export const getVacancyApplicants = async (
     return { data: response.data, error: null };
   } catch (error) {
     return handleError(error, 'Erro ao buscar candidatos por etapa');
+  }
+};
+
+export const getCandidateDetailsInVacancy = async (
+  candidateId: number,
+  vacancyId: number,
+): Promise<
+  Result<{ profile: ICandidateDetailsResponse; matchPercentage: number }>
+> => {
+  const ENDPOINT = `/vaga/listaCompatibilidades/${vacancyId}`;
+
+  try {
+    // Fetch all applicants for the vacancy
+    const response: AxiosResponse<IAllApplicantsListResponse[]> = await api.get(
+      ENDPOINT,
+    );
+
+    // Fetch candidate profile
+    const candidateProfile = await getCandidateById(candidateId);
+    if (!candidateProfile.data) {
+      return { data: null, error: candidateProfile.error };
+    }
+
+    // Find the candidate in the list of applicants for the vacancy
+    const candidateInVacancy = response.data.find(
+      item => item.candidato.id === candidateId,
+    );
+
+    // If the candidate is not found in the vacancy applicants
+    if (!candidateInVacancy) {
+      return { data: null, error: 'Candidato não encontrado na vaga' };
+    }
+
+    // Return both candidate profile and match percentage
+    return {
+      data: {
+        profile: candidateProfile.data,
+        matchPercentage: candidateInVacancy.compatibilidadeEmPorcentagem,
+      },
+      error: null,
+    };
+  } catch (error) {
+    return handleError(error, 'Erro ao buscar detalhes do candidato na vaga');
+  }
+};
+
+export const advanceCadidateToNextStep = async (
+  vacancyId: number,
+  candidateId: number,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = '/vaga/avancarEtapa';
+
+  const body = { vagaid: vacancyId, candidatoid: candidateId };
+
+  try {
+    await api.post(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao avançar candidato para a próxima etapa');
   }
 };

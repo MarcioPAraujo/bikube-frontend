@@ -7,8 +7,16 @@ import { IOption } from '@/interfaces/option';
 import Textarea from '@/components/Inputs/Textarea/Textarea';
 import SecondaryButton from '@/components/Buttons/SecondaryButton/SecondaryButton';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {
+  advanceCadidateToNextStep,
+  getCandidateDetailsInVacancy,
+} from '@/services/vacancy/vacancyService';
+import { Idioma } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
+import { format, parseISO } from 'date-fns';
+import { notifyError } from '@/utils/handleToast';
 import {
   Section,
   EducationFields,
@@ -46,69 +54,89 @@ interface ISkill {
   time: string;
 }
 
-const academicFormations: IAcademicFormation[] = [
-  {
-    institution: 'Universidade de São Paulo',
-    degree: 'Bacharelado em Ciência da Computação',
-    startDate: '01/01/2015',
-    endDate: '31/12/2019',
-  },
-  {
-    institution: 'Instituto Tecnológico de Aeronáutica',
-    degree: 'Mestrado em Engenharia de Software',
-    startDate: '01/01/2020',
-    endDate: '31/12/2022',
-  },
-];
 const levels: IOption[] = [
   { label: 'Básico', value: '1' },
   { label: 'Intermediário', value: '2' },
   { label: 'Avançado', value: '3' },
 ];
-const languages: ILanguages[] = [
-  {
-    level: '3',
-    language: 'Inglês',
-  },
-  {
-    level: '2',
-    language: 'Espanho',
-  },
-];
-const professionalXperiences: IProfessionalExperience[] = [
-  {
-    company: 'Google',
-    startDate: '01/01/2020',
-    endDate: '31/12/2021',
-    description:
-      'Atuei como desenvolvedor front-end, criando interfaces responsivas e otimizadas para diversos dispositivos. Trabalhei em colaboração com designers e outros desenvolvedores para garantir a melhor experiência do usuário.',
-  },
-  {
-    company: 'Microsoft',
-    startDate: '01/01/2022',
-    endDate: '31/12/2023',
-    description:
-      'Liderei uma equipe de desenvolvedores em projetos de grande escala, focando na implementação de novas funcionalidades e na melhoria do desempenho das aplicações. Utilizei metodologias ágeis para gerenciar o fluxo de trabalho e garantir a entrega dentro dos prazos estabelecidos.',
-  },
-];
-const skills: ISkill[] = [
-  {
-    name: 'JavaScript',
-    time: '36',
-  },
-  {
-    name: 'React',
-    time: '24',
-  },
-  {
-    name: 'TypeScript',
-    time: '18',
-  },
-];
 
 const CandidateDetailsPage: React.FC = () => {
   const router = useRouter();
+  const { candidateId, vacancyId, step } = useParams<{
+    candidateId: string;
+    vacancyId: string;
+    step: string;
+  }>();
   const [successModalOpen, setSuccessModalOpen] = useState<boolean>(false);
+
+  const { data, isPlaceholderData } = useQuery({
+    queryKey: ['candidateDetails', candidateId, vacancyId],
+    queryFn: () =>
+      getCandidateDetailsInVacancy(Number(candidateId), Number(vacancyId)),
+    enabled: !!candidateId && !!vacancyId,
+    placeholderData: keepPreviousData,
+  });
+
+  const advanceCandidate = async () => {
+    const result = await advanceCadidateToNextStep(
+      Number(vacancyId),
+      Number(candidateId),
+    );
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+    setSuccessModalOpen(true);
+  };
+
+  if (!data && !isPlaceholderData) {
+    return (
+      <SectionsContainer>
+        <TitleContainer>
+          <Title>Detalhes do Candidato</Title>
+        </TitleContainer>
+      </SectionsContainer>
+    );
+  }
+
+  if (!data || !data.data || !data.data.profile) {
+    return (
+      <SectionsContainer>
+        <TitleContainer>
+          <Title>Detalhes do Candidato</Title>
+        </TitleContainer>
+        <SectionTitle>
+          Não foi possível carregar os detalhes do candidato.
+        </SectionTitle>
+      </SectionsContainer>
+    );
+  }
+
+  const languages: ILanguages[] = data.data.profile.idiomas.map(
+    (lang: Idioma) => ({
+      level: lang.nivel.toString(),
+      language: lang.idioma,
+    }),
+  );
+  const skills: ISkill[] = data.data.profile.habilidades.map(skill => ({
+    name: skill.habilidade,
+    time: skill.tempoExperiencia.toString(),
+  }));
+  const professionalXperiences: IProfessionalExperience[] =
+    data.data.profile.experiencias.map(exp => ({
+      company: exp.empresa,
+      description: exp.descricao,
+      endDate: format(parseISO(exp.dataFim), 'dd/MM/yyyy'),
+      startDate: format(parseISO(exp.dataInicio), 'dd/MM/yyyy'),
+    }));
+  const academicFormations: IAcademicFormation[] =
+    data.data.profile.formacaoAcademica.map(formation => ({
+      institution: formation.instituicao,
+      degree: formation.curso,
+      endDate: format(parseISO(formation.dataFim), 'dd/MM/yyyy'),
+      startDate: format(parseISO(formation.dataInicio), 'dd/MM/yyyy'),
+    }));
+
   return (
     <>
       <SuccessModal
@@ -122,43 +150,50 @@ const CandidateDetailsPage: React.FC = () => {
       <SectionsContainer>
         <TitleContainer>
           <Title>Detalhes do Candidato</Title>
-          <SecondaryButton
-            text="Avançar para a próxima fase"
-            onClick={() => setSuccessModalOpen(true)}
-          />
+          {step !== 'oferta' && (
+            <SecondaryButton
+              text="Avançar para a próxima fase"
+              onClick={advanceCandidate}
+            />
+          )}
         </TitleContainer>
         <section>
           <SectionTitle>Dados pessoais</SectionTitle>
           <PersonalDataSection>
             <CandidateCardContainer>
-              <CandidateCard name="Candidato Exemplo" />
+              <CandidateCard
+                name={data.data.profile.nome}
+                matchPercentage={data.data.matchPercentage}
+              />
             </CandidateCardContainer>
             <PersonalDataFields>
               <UnderlinedInput
                 id="name"
                 labelText="Nome completo"
                 placeholder=""
-                value="Candidato Exemplo"
+                value={data.data.profile.nome}
                 disabled
               />
               <UnderlinedInput
                 id="email"
                 labelText="Email"
                 placeholder=""
-                value="johnkramer@email.com"
+                value={data.data.profile.email}
                 disabled
               />
               <UnderlinedInput
                 id="phone"
                 labelText="Telefone"
                 placeholder=""
-                value="(11) 99999-9999"
+                value={data.data.profile.telefone}
                 disabled
               />
-              <Link href="https://www.linkedin.com/company/embraer/">
+              <Link href={data.data.profile.linkedin} target="_blank">
                 Linkedin
               </Link>
-              <Link href="https://github.com/torvalds/linux">Github</Link>
+              <Link href={data.data.profile.github} target="_blank">
+                Github
+              </Link>
             </PersonalDataFields>
           </PersonalDataSection>
         </section>
