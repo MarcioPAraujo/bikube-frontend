@@ -75,16 +75,17 @@ const VacancyDashboardPage: React.FC = () => {
               <CandidateCard
                 key={candidate.candidato.id}
                 name={candidate.candidato.nome}
+                pontuation={candidate.pontuacao}
               />
             </CustomLink>
           ))}
         </CardsContainer>
       </div>
       <DoughnutContainer>
-        <GivingUpChart />
+        <GivingUpChart vacancyId={Number(vacancyId)} />
         <VacancyMatchesChart vacancyId={Number(vacancyId)} />
       </DoughnutContainer>
-      <ApplicantByStep />
+      <ApplicantByStep vacancyId={Number(vacancyId)} />
     </PageWrapper>
   );
 };

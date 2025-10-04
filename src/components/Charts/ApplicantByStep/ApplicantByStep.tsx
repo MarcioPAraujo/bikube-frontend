@@ -11,7 +11,13 @@ import {
   ChartOptions,
 } from 'chart.js';
 import { theme } from '@/styles/theme';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { getAmountOfApplicantsByStep } from '@/services/vacancy/vacancyService';
 import { ChartContainer, ChartInner, ChartTitle } from './styles';
+
+interface ApplicantByStepProps {
+  vacancyId: number;
+}
 
 ChartJS.register(
   CategoryScale,
@@ -22,11 +28,26 @@ ChartJS.register(
   Legend,
 );
 
-const values = [50, 30, 20];
+const ApplicantByStep: React.FC<ApplicantByStepProps> = ({ vacancyId }) => {
+  const { data: amount, isPlaceholderData } = useQuery({
+    queryKey: ['applicants-by-step', vacancyId],
+    queryFn: () => getAmountOfApplicantsByStep(vacancyId),
+    placeholderData: keepPreviousData,
+  });
 
-const ApplicantByStep: React.FC = () => {
+  const values = [
+    amount?.data?.etapas.TRIAGEM || 0,
+    amount?.data?.etapas.ENTREVISTA || 0,
+    amount?.data?.etapas.OFERTA || 0,
+  ];
+
+  if (!amount && !isPlaceholderData) return null;
+
+  const maxValue = Math.max(...values);
+  const stepSize = maxValue > 10 ? Math.ceil(maxValue / 10) : 1;
+
   const data: ChartData<'bar'> = {
-    labels: ['Triagem', 'Entrevista', 'Proposta'],
+    labels: ['Triagem', 'Entrevista', 'Oferta'],
     datasets: [
       {
         label: 'Candidatos',
@@ -35,9 +56,6 @@ const ApplicantByStep: React.FC = () => {
       },
     ],
   };
-
-  const maxValue = Math.max(...values);
-  const stepSize = maxValue > 10 ? Math.ceil(maxValue / 10) : 1;
 
   const options: ChartOptions<'bar'> = {
     responsive: true,

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const ChartWrapper = styled.div`
   display: grid;
   place-items: center;
-  width: clamp(30rem, 40%, 100%);
+  width: clamp(30rem, 40%, 60rem);
 
   h3 {
     font-size: 1.6rem;
@@ -23,5 +23,5 @@ export const ChartWrapper = styled.div`
 
 export const ChartContainer = styled.div`
   width: clamp(30rem, 100%, 60rem);
-  aspect-ratio: 1/1;
+  aspect-ratio: 3/2.5;
 `;

@@ -23,5 +23,5 @@ export const ChartWrapper = styled.div`
 
 export const ChartContainer = styled.div`
   width: clamp(30rem, 100%, 60rem);
-  aspect-ratio: 1/1;
+  aspect-ratio: 3/2.5;
 `;

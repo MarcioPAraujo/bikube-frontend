@@ -9,8 +9,13 @@ import {
   Plugin,
 } from 'chart.js';
 import { theme } from '@/styles/theme';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { getAmountOfApplicantsByStep } from '@/services/vacancy/vacancyService';
 import { ChartContainer, ChartWrapper } from './styles';
 
+interface IGivingUpChartProps {
+  vacancyId: number;
+}
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const doughnutCenterText: Plugin<'doughnut'> = {
@@ -29,12 +34,26 @@ const doughnutCenterText: Plugin<'doughnut'> = {
   },
 };
 
-const GivingUpChart: React.FC = () => {
+const GivingUpChart: React.FC<IGivingUpChartProps> = ({ vacancyId }) => {
+  const { data: amount } = useQuery({
+    queryKey: ['applicants-by-step', vacancyId],
+    queryFn: () => getAmountOfApplicantsByStep(vacancyId),
+    placeholderData: keepPreviousData,
+  });
+
+  const totalApplicants =
+    (amount?.data?.etapas.TRIAGEM || 0) +
+    (amount?.data?.etapas.ENTREVISTA || 0) +
+    (amount?.data?.etapas.OFERTA || 0);
+
+  const dropouts = amount?.data?.etapas.DESISTENCIA || 0;
+  const continuing = totalApplicants - dropouts;
+
   const data: ChartData<'doughnut'> = {
     labels: ['Desistentes', 'Continuam'],
     datasets: [
       {
-        data: [10, 90],
+        data: [dropouts, continuing],
         backgroundColor: ['#FF6384', '#36A2EB'],
         borderColor: ['#FF6384', '#36A2EB'],
         borderWidth: 0,

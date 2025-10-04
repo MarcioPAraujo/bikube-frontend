@@ -5,6 +5,7 @@ import { IVacancyListResponse } from '@/interfaces/vacancy/vacancyListResponse';
 import { AxiosResponse } from 'axios';
 import { IAppliedVacanciesListResponse } from '@/interfaces/vacancy/appliedVacanciesListResponse';
 import { ITopApplicantsListResponse } from '@/interfaces/vacancy/topApplicantListResponse';
+import { IAmountOfApplicantByStepResponse } from '@/interfaces/vacancy/amountOfApplicantsByStepResponse';
 import { api } from '../api';
 
 interface ApplyVacancyBody {
@@ -39,6 +40,7 @@ export const getAllVacancies = async (): Promise<
     const response: AxiosResponse<IVacancyListResponse[]> = await api.get(
       ENDPOINT,
     );
+
     return { data: response.data, error: null };
   } catch (error) {
     return handleError(error, 'Erro ao buscar vagas');
@@ -79,6 +81,7 @@ export const getAppliedVacancies = async (
   try {
     const response: AxiosResponse<IAppliedVacanciesListResponse[]> =
       await api.get(ENDPOINT);
+    // TODO: filter active vacancies only
     return { data: response.data, error: null };
   } catch (error) {
     return handleError(error, 'Erro ao buscar vagas candidatas');
@@ -113,5 +116,21 @@ export const getTopApplicantsForVacancy = async (
     return { data: response.data, error: null };
   } catch (error) {
     return handleError(error, 'Erro ao buscar os melhores candidatos');
+  }
+};
+export const getAmountOfApplicantsByStep = async (
+  vacancyId: number,
+): Promise<Result<IAmountOfApplicantByStepResponse>> => {
+  const ENDPOINT = `/vaga/etapas/${vacancyId}`;
+
+  try {
+    const response: AxiosResponse<IAmountOfApplicantByStepResponse> =
+      await api.get(ENDPOINT);
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(
+      error,
+      'Erro ao buscar a quantidade de candidatos por etapa',
+    );
   }
 };

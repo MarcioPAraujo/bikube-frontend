@@ -36,9 +36,6 @@ export const DoughnutContainer = styled.div`
   gap: 2rem;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   width: 100%;
-
-  & > div {
-    flex: 1;
-  }
 `;

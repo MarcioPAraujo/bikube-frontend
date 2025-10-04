@@ -13,10 +13,12 @@ import CandidateVacancyMatch from '../Charts/CandidateVacancyMatch/CandidateVaca
 interface ICandidateCardProps {
   name: string;
   matchPercentage?: number;
+  pontuation?: number;
 }
 const CandidateCard: React.FC<ICandidateCardProps> = ({
   name,
-  matchPercentage = 50,
+  matchPercentage,
+  pontuation,
 }) => {
   return (
     <FlipCard>
@@ -35,7 +37,10 @@ const CandidateCard: React.FC<ICandidateCardProps> = ({
           </Content>
         </Front>
         <Back>
-          <CandidateVacancyMatch matchPercentage={matchPercentage} />
+          {matchPercentage && (
+            <CandidateVacancyMatch matchPercentage={matchPercentage} />
+          )}
+          {pontuation !== undefined && <Name>Pontuação: {pontuation}</Name>}
         </Back>
       </FlipCardInner>
     </FlipCard>
