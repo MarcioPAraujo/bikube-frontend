@@ -20,6 +20,8 @@ const CandidateCard: React.FC<ICandidateCardProps> = ({
   matchPercentage,
   pontuation,
 }) => {
+  const matchClassname = matchPercentage === 0 ? 'no-match' : '';
+
   return (
     <FlipCard>
       <FlipCardInner>
@@ -36,10 +38,11 @@ const CandidateCard: React.FC<ICandidateCardProps> = ({
             <Name>{name}</Name>
           </Content>
         </Front>
-        <Back>
-          {matchPercentage && (
+        <Back className={matchClassname}>
+          {matchPercentage && matchPercentage > 0 && (
             <CandidateVacancyMatch matchPercentage={matchPercentage} />
           )}
+          {matchPercentage === 0 && <Name>Compatibilidade: 0%</Name>}
           {pontuation !== undefined && <Name>Pontuação: {pontuation}</Name>}
         </Back>
       </FlipCardInner>

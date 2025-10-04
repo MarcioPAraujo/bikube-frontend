@@ -6,7 +6,7 @@ interface IVacancyStep {
   description: string;
   photUrl: string;
   detailsLink: string;
-  step: 'triagem' | 'entrevista' | 'proposta';
+  step: 'triagem' | 'entrevista' | 'oferta';
 }
 
 const VacancyStep: React.FC<IVacancyStep> = ({

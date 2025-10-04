@@ -9,7 +9,7 @@ interface IStep {
   title: string;
   description: string;
   photUrl: string;
-  step: 'triagem' | 'entrevista' | 'proposta';
+  step: 'triagem' | 'entrevista' | 'oferta';
 }
 
 const steps: IStep[] = [
@@ -28,8 +28,8 @@ const steps: IStep[] = [
     photUrl: '/images/interview.jpg',
   },
   {
-    step: 'proposta',
-    title: 'Proposta',
+    step: 'oferta',
+    title: 'Oferta',
     description:
       'Envie propostas para os candidatos aprovados e gerencie as respostas.',
     photUrl: '/images/accepted.jpg',

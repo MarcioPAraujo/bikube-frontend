@@ -6,6 +6,7 @@ import { AxiosResponse } from 'axios';
 import { IAppliedVacanciesListResponse } from '@/interfaces/vacancy/appliedVacanciesListResponse';
 import { ITopApplicantsListResponse } from '@/interfaces/vacancy/topApplicantListResponse';
 import { IAmountOfApplicantByStepResponse } from '@/interfaces/vacancy/amountOfApplicantsByStepResponse';
+import { IVacancyApplicantsByStepResponse } from '@/interfaces/vacancy/vacancyApplicantsByStepResponse';
 import { api } from '../api';
 
 interface ApplyVacancyBody {
@@ -16,6 +17,11 @@ interface ApplyVacancyBody {
 interface GiveUpVacancyBody {
   candidatoid: number;
   vagaid: number;
+}
+
+interface IApplicantsByStepRequestParams {
+  idvaga: number;
+  etapa: string; // TRIAGEM, ENTREVISTA, OFERTA, DESISTENCIA, FINALIZADO
 }
 
 export const createNewVancancy = async (
@@ -132,5 +138,18 @@ export const getAmountOfApplicantsByStep = async (
       error,
       'Erro ao buscar a quantidade de candidatos por etapa',
     );
+  }
+};
+export const getVacancyApplicants = async (
+  params: IApplicantsByStepRequestParams,
+): Promise<Result<IVacancyApplicantsByStepResponse[]>> => {
+  const ENDPOINT = '/vaga/listarPorUmaEtapa';
+
+  try {
+    const response: AxiosResponse<IVacancyApplicantsByStepResponse[]> =
+      await api.get(ENDPOINT, { params });
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao buscar candidatos por etapa');
   }
 };

@@ -8,25 +8,30 @@ import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
 import { normalizeString } from '@/utils/normalizeString';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, usePathname, useSearchParams } from 'next/navigation';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { getVacancyApplicants } from '@/services/vacancy/vacancyService';
 import { CardsContainer, CustomLink, Subtitle } from './styles';
-
-interface ICadidate {
-  id: string;
-  name: string;
-}
-
-const candidates: ICadidate[] = Array.from({ length: 100 }, (_, index) => ({
-  id: `candidate-${index + 1}`,
-  name: `Candidato ${index + 1}`,
-}));
 
 const VacancyCandidatesPage: React.FC = () => {
   const pathname = usePathname();
   const [search, setSearch] = useState<string>('');
-  const { step } = useParams<{ step: string }>();
+  const { step, vacancyId } = useParams<{ step: string; vacancyId: string }>();
 
   const searchParams = useSearchParams();
   const [vacancyName, setVacancyName] = useState<string>('');
+
+  const { data: candidates } = useQuery({
+    queryKey: ['vacancyApplicants', step, vacancyId],
+    queryFn: () =>
+      getVacancyApplicants({
+        idvaga: Number(vacancyId),
+        etapa: step.toUpperCase(),
+      }),
+    enabled: !!vacancyId && !!step,
+    placeholderData: keepPreviousData,
+  });
+
+  const applicants = candidates?.data || [];
 
   useEffect(() => {
     const name = searchParams.get('nome');
@@ -37,14 +42,14 @@ const VacancyCandidatesPage: React.FC = () => {
 
   const normalizedSearch = normalizeString(search);
   const filteredCandidates = useMemo(() => {
-    if (!search) return candidates;
-    return candidates
+    if (!search) return applicants;
+    return applicants
       .filter(candidate =>
-        normalizeString(candidate.name).includes(normalizedSearch),
+        normalizeString(candidate.candidato.nome).includes(normalizedSearch),
       )
       .sort((a, b) => {
-        const nameA = normalizeString(a.name);
-        const nameB = normalizeString(b.name);
+        const nameA = normalizeString(a.candidato.nome);
+        const nameB = normalizeString(b.candidato.nome);
         if (nameA < nameB) return -1;
         if (nameA > nameB) return 1;
         return nameA.localeCompare(nameB);
@@ -67,10 +72,14 @@ const VacancyCandidatesPage: React.FC = () => {
       <CardsContainer>
         {pagination.currentRows.map(candidate => (
           <CustomLink
-            key={candidate.id}
-            href={`${pathname}/${candidate.id}?nome=${vacancyName}`}
+            key={candidate.candidato.id}
+            href={`${pathname}/${candidate.candidato.id}?nome=${vacancyName}`}
           >
-            <CandidateCard key={candidate.id} name={candidate.name} />
+            <CandidateCard
+              key={candidate.candidato.id}
+              name={candidate.candidato.nome}
+              matchPercentage={candidate.compatibilidadeEmPorcentagem}
+            />
           </CustomLink>
         ))}
       </CardsContainer>
@@ -78,7 +87,7 @@ const VacancyCandidatesPage: React.FC = () => {
         currentPage={pagination.currentPage}
         totalPages={pagination.totalPages}
         setCurrentPage={pagination.setCurrentPage}
-        totalOfData={candidates.length}
+        totalOfData={candidates?.data?.length || 0}
         totalPaginatedData={pagination.paginatedRows}
       />
     </div>

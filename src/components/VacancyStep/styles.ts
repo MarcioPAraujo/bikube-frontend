@@ -25,7 +25,7 @@ export const Container = styled.div`
   &.entrevista {
     animation: ${appearfromLeft('0', '0')} 0.6s ease-in-out;
   }
-  &.proposta {
+  &.oferta {
     animation: ${appearfromLeft('10rem', '0')} 0.6s ease-in-out;
   }
 `;

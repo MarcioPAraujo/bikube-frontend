@@ -3,7 +3,6 @@ import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
-  Legend,
   ChartData,
   ChartOptions,
   Plugin,
@@ -11,7 +10,7 @@ import {
 import { theme } from '@/styles/theme';
 import { ChartContainer } from './styles';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip);
 
 const annotation: Plugin<'doughnut'> = {
   id: 'annotation',
@@ -38,11 +37,13 @@ interface CandidateVacancyMatchProps {
 const CandidateVacancyMatch: React.FC<CandidateVacancyMatchProps> = ({
   matchPercentage,
 }) => {
+  const lackOfCompatibility = 100 - matchPercentage;
+
   const data: ChartData<'doughnut'> = {
     labels: ['Possui', 'Não possui'],
     datasets: [
       {
-        data: [matchPercentage, 100 - matchPercentage],
+        data: [matchPercentage, lackOfCompatibility],
         backgroundColor: [theme.colors.YELLOW.hex_F6B31B, '#e1e1e1'],
         hoverBackgroundColor: [theme.colors.YELLOW.hex_FFB936, '#e1e1e1'],
         borderWidth: 0,

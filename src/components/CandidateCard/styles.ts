@@ -40,6 +40,12 @@ export const Back = styled.div`
 
   display: grid;
   place-items: center;
+
+  &.no-match {
+    &:not(h3) {
+      color: transparent;
+    }
+  }
 `;
 
 export const ImageContainer = styled.div`
