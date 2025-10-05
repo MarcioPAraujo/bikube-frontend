@@ -72,7 +72,11 @@ const CandidateDetailsPage: React.FC = () => {
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['candidateDetails', candidateId, vacancyId],
     queryFn: () =>
-      getCandidateDetailsInVacancy(Number(candidateId), Number(vacancyId)),
+      getCandidateDetailsInVacancy(
+        Number(candidateId),
+        Number(vacancyId),
+        step.toUpperCase(),
+      ),
     enabled: !!candidateId && !!vacancyId,
     placeholderData: keepPreviousData,
   });

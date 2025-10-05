@@ -45,8 +45,8 @@ const contractTypeOptions: IOption[] = [
 ];
 const levelOptions: IOption[] = [
   { label: 'Júnior', value: 'iniciante' },
-  { label: 'Pleno', value: 'intermediário' },
-  { label: 'Sênior', value: 'avançado' },
+  { label: 'Pleno', value: 'intermediario' },
+  { label: 'Sênior', value: 'avancado' },
 ];
 
 const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {

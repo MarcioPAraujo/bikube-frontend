@@ -7,7 +7,6 @@ import { IAppliedVacanciesListResponse } from '@/interfaces/vacancy/appliedVacan
 import { ITopApplicantsListResponse } from '@/interfaces/vacancy/topApplicantListResponse';
 import { IAmountOfApplicantByStepResponse } from '@/interfaces/vacancy/amountOfApplicantsByStepResponse';
 import { IVacancyApplicantsByStepResponse } from '@/interfaces/vacancy/vacancyApplicantsByStepResponse';
-import { IAllApplicantsListResponse } from '@/interfaces/vacancy/allApplicantsListResponse';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import { api } from '../api';
 import { getCandidateById } from '../candidate/candidateService';
@@ -160,44 +159,43 @@ export const getVacancyApplicants = async (
 export const getCandidateDetailsInVacancy = async (
   candidateId: number,
   vacancyId: number,
+  step: string,
 ): Promise<
   Result<{ profile: ICandidateDetailsResponse; matchPercentage: number }>
 > => {
-  const ENDPOINT = `/vaga/listaCompatibilidades/${vacancyId}`;
-
-  try {
-    // Fetch all applicants for the vacancy
-    const response: AxiosResponse<IAllApplicantsListResponse[]> = await api.get(
-      ENDPOINT,
-    );
-
-    // Fetch candidate profile
-    const candidateProfile = await getCandidateById(candidateId);
-    if (!candidateProfile.data) {
-      return { data: null, error: candidateProfile.error };
-    }
-
-    // Find the candidate in the list of applicants for the vacancy
-    const candidateInVacancy = response.data.find(
-      item => item.candidato.id === candidateId,
-    );
-
-    // If the candidate is not found in the vacancy applicants
-    if (!candidateInVacancy) {
-      return { data: null, error: 'Candidato não encontrado na vaga' };
-    }
-
-    // Return both candidate profile and match percentage
-    return {
-      data: {
-        profile: candidateProfile.data,
-        matchPercentage: candidateInVacancy.compatibilidadeEmPorcentagem,
-      },
-      error: null,
-    };
-  } catch (error) {
-    return handleError(error, 'Erro ao buscar detalhes do candidato na vaga');
+  // Fetch candidate profile
+  const candidateProfile = await getCandidateById(candidateId);
+  if (!candidateProfile.data) {
+    return { data: null, error: candidateProfile.error };
   }
+
+  const vacancyApplicants = await getVacancyApplicants({
+    idvaga: vacancyId,
+    etapa: step,
+  });
+
+  if (!vacancyApplicants.data) {
+    return { data: null, error: vacancyApplicants.error };
+  }
+
+  // Find the candidate in the list of applicants for the vacancy
+  const candidateInVacancy = vacancyApplicants.data.find(
+    item => item.candidato.id === candidateId,
+  );
+
+  // If the candidate is not found in the vacancy applicants
+  if (!candidateInVacancy) {
+    return { data: null, error: 'Candidato não encontrado na vaga' };
+  }
+
+  // Return both candidate profile and match percentage
+  return {
+    data: {
+      profile: candidateProfile.data,
+      matchPercentage: candidateInVacancy.compatibilidadeEmPorcentagem,
+    },
+    error: null,
+  };
 };
 
 export const advanceCadidateToNextStep = async (
