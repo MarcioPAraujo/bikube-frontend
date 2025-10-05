@@ -50,6 +50,12 @@ const tabs: Tab[] = [
     baseUrl: '/relatorios',
   },
   {
+    name: 'Férias',
+    url: '/ferias',
+    allowedRoles: accessLevel.none,
+    baseUrl: '/ferias',
+  },
+  {
     name: 'Comunicados',
     url: '/comunicados',
     allowedRoles: accessLevel.none,
