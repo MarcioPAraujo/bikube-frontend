@@ -10,6 +10,7 @@ import {
   Container,
   Day,
   Header,
+  ShowEmployeesButton,
   WeekDay,
   Year,
 } from './styles ';
@@ -40,6 +41,7 @@ const VacationsPage: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const { calendarDaysDate, handleNextMonth, handlePrevMonth, month, year } =
     useMonthCalendar(currentDate, setCurrentDate);
+  const [isOpen, setIsOpen] = useState(false);
 
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -70,10 +72,16 @@ const VacationsPage: React.FC = () => {
   return (
     <Container>
       <EmployeesList
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
         selectedEmployeeId={selectedEmployeeId}
         onSelectEmployee={handleSelectEmployee}
+        month={monthNames[month]}
       />
       <CalendarWrapper>
+        <ShowEmployeesButton type="button" onClick={() => setIsOpen(true)}>
+          Ver funcionários
+        </ShowEmployeesButton>
         <h1>férias</h1>
         <Header>
           <Button type="button" onClick={handlePrevMonth}>

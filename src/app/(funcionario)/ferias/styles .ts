@@ -10,7 +10,13 @@ export const CalendarWrapper = styled.div`
   gap: 1.6rem;
   flex: 1;
 `;
-
+export const ShowEmployeesButton = styled.button`
+  border: none;
+  background-color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+  color: ${({ theme }) => theme.colors.BLACK};
+  padding: 1rem;
+  width: fit-content;
+`;
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
