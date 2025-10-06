@@ -46,14 +46,22 @@ const GivingUpChart: React.FC<IGivingUpChartProps> = ({ vacancyId }) => {
     (amount?.data?.etapas.ENTREVISTA || 0) +
     (amount?.data?.etapas.OFERTA || 0);
 
+  const totalWithDropouts =
+    totalApplicants + (amount?.data?.etapas.DESISTENCIA || 0);
+
   const dropouts = amount?.data?.etapas.DESISTENCIA || 0;
-  const continuing = totalApplicants - dropouts;
+
+  const dropoutRate = totalWithDropouts
+    ? Math.round((dropouts / totalWithDropouts) * 100)
+    : 0;
+
+  const continuing = 100 - dropoutRate;
 
   const data: ChartData<'doughnut'> = {
     labels: ['Desistentes', 'Continuam'],
     datasets: [
       {
-        data: [dropouts, continuing],
+        data: [dropoutRate, continuing],
         backgroundColor: ['#FF6384', '#36A2EB'],
         borderColor: ['#FF6384', '#36A2EB'],
         borderWidth: 0,

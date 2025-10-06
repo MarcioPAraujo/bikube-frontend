@@ -52,7 +52,7 @@ const VacancyDashboardPage: React.FC = () => {
     );
   }
 
-  if (!data || !data.data || data.data.length === 0) {
+  if (!data || !data.data) {
     return (
       <PageWrapper>
         <Title>Relatórios</Title>
