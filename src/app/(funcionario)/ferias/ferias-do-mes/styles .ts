@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
+  margin-top: 2.4rem;
 `;
 
 export const CalendarWrapper = styled.div`

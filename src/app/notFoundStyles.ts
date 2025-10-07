@@ -8,7 +8,7 @@ const jump = keyframes`
 
 export const Container = styled.div`
   height: 100dvh;
-  width: 100dvw;
+  width: 100%;
 
   display: grid;
   place-items: center;

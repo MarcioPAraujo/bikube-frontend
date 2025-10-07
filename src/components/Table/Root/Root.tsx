@@ -5,7 +5,8 @@ type TableClass =
   | 'logs'
   | 'employees'
   | 'announcements'
-  | 'default';
+  | 'default'
+  | 'vacations';
 
 interface IGridTableProps {
   children: React.ReactNode;
