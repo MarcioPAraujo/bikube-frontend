@@ -43,7 +43,7 @@ const usePagination = (currentPage: number, totalPages: number) => {
     return [
       1,
       '...',
-      ...getRange(currentPage - 1, currentPage + 1),
+      ...getRange(currentPage - 2, currentPage + 2),
       '...',
       totalPages,
     ];

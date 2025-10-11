@@ -1,8 +1,15 @@
 'use client';
 
 import Tabs, { ITab } from '@/components/Tabs/Tabs';
+import { useAuth } from '@/hooks/useAuth';
 
 const tabs: ITab[] = [
+  {
+    label: 'Minhas férias',
+    baseUrl: '/ferias/minhas-ferias',
+    url: '/ferias/minhas-ferias',
+    description: 'Aqui se encontram as suas férias',
+  },
   {
     label: 'Férias do mês',
     baseUrl: '/ferias/ferias-do-mes',
@@ -20,9 +27,15 @@ const tabs: ITab[] = [
 const VacationLayout: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const { user } = useAuth();
+
+  const isEmployee = user?.role === 'FUNCIONARIO';
+
+  const filteredTabs = isEmployee ? [tabs[0]] : tabs;
+
   return (
     <div>
-      <Tabs tabs={tabs} />
+      <Tabs tabs={filteredTabs} />
       {children}
     </div>
   );

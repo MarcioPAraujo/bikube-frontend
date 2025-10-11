@@ -38,13 +38,19 @@ interface ChildrenProps {
 const AuthContext = createContext({} as IUserProvider);
 
 const publicRoutes = ['/', '/email', '/codigo', '/redefinir-senha'];
-const employeeRoutes = ['/home', '/minhas-informacoes', '/comunicados'];
+const employeeRoutes = [
+  '/home',
+  '/minhas-informacoes',
+  '/comunicados',
+  '/ferias',
+];
 const rhRoutes = [
   '/setores',
   '/home',
   '/funcionarios',
   '/minhas-informacoes',
   '/comunicados',
+  '/ferias',
 ];
 
 const AuthProvider = ({ children }: ChildrenProps) => {

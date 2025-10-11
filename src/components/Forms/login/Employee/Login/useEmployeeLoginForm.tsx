@@ -51,7 +51,7 @@ const useEmployeeLoginForm = () => {
       nome: 'Usuário de Teste',
       email: 'aaaaa2aa.com',
       register: data.register,
-      role: 'ADMIN',
+      role: 'FUNCIONARIO',
       setor: 'TI',
     };
     sessionStorage.setItem(

@@ -36,7 +36,6 @@ const monthNames = [
 ];
 
 const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-// TODO: add monht and year select functionality
 const CalendarInput: React.FC<ICalendarInputProps> = ({
   date,
   setDate,

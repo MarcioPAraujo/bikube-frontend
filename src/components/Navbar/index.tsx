@@ -51,7 +51,7 @@ const tabs: Tab[] = [
   },
   {
     name: 'Férias',
-    url: '/ferias/ferias-do-mes',
+    url: '/ferias/minhas-ferias',
     allowedRoles: accessLevel.none,
     baseUrl: '/ferias',
   },

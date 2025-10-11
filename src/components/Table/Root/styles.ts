@@ -50,4 +50,13 @@ export const Table = styled.div`
       border-radius: 0 0 1rem 1rem;
     }
   }
+  &.my-vacations {
+    .table-header,
+    .table-row {
+      grid-template-columns: 2fr 2fr 1fr;
+    }
+    .table-body > :last-child > div {
+      border-radius: 0 0 1rem 1rem;
+    }
+  }
 `;
