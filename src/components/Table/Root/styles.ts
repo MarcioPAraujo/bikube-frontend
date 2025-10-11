@@ -44,7 +44,7 @@ export const Table = styled.div`
   &.vacations {
     .table-header,
     .table-row {
-      grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 2fr;
+      grid-template-columns: 2.5fr 2fr 2fr 2fr 2fr 2fr;
     }
     .table-body > :last-child > div {
       border-radius: 0 0 1rem 1rem;

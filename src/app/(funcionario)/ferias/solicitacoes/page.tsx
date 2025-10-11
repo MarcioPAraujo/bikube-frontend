@@ -6,10 +6,17 @@ import { Table } from '@/components/Table/Index/Index';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { IOption } from '@/interfaces/option';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Pagination from '@/components/Pagination/Pagination';
 import AlertModal from '@/components/modals/AlertModal/AlertModal';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {
+  approveRefuseVacation,
+  getPendingVacations,
+} from '@/services/vacations/vacationService';
+import { format } from 'date-fns';
+import { notifyError } from '@/utils/handleToast';
 import {
   ApproveButton,
   Container,
@@ -17,39 +24,12 @@ import {
   RejectButton,
 } from './styles';
 
-interface IVacationPerid {
-  employeeId: string;
-  initialDate: string;
-  endDate: string;
-  sector: string;
-  position: string;
-  employeeName: string;
-}
-const employeesRequests: IVacationPerid[] = Array.from({ length: 10 }).map(
-  (_, index) => ({
-    employeeId: `emp-${index + 1}`,
-    initialDate: '10/10/2023',
-    endDate: '20/10/2023',
-    sector: 'Desenvolvimento',
-    position: 'Desenvolvedor',
-    employeeName: `Funcionário ${index + 1}`,
-  }),
-);
-
 const sectorOptions: IOption[] = Array.from({ length: 5 }).map((_, index) => ({
   label: `Setor ${index + 1}`,
   value: `setor-${index + 1}`,
 }));
 
-const columns = [
-  'Registro',
-  'Nome',
-  'Setor',
-  'Cargo',
-  'Data Início',
-  'Data Fim',
-  'Ações',
-];
+const columns = ['Nome', 'Cargo', 'Setor', 'Data Início', 'Data Fim', 'Ações'];
 
 const VacationsRequestsPage: React.FC = () => {
   const [sector, setSector] = useState<IOption>({} as IOption);
@@ -57,10 +37,39 @@ const VacationsRequestsPage: React.FC = () => {
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [action, setAction] = useState<'aprovar' | 'reprovar' | null>(null);
-  const filteredRequests = employeesRequests.filter(request =>
-    request.employeeName.toLowerCase().includes(search.toLowerCase()),
+  const vacationId = useRef<number | null>(null);
+
+  const { data, isPlaceholderData, refetch } = useQuery({
+    queryKey: ['pending-vacations'],
+    queryFn: () => getPendingVacations(),
+    placeholderData: keepPreviousData,
+  });
+
+  const employeessList = data?.data || [];
+
+  const filteredRequests = employeessList.filter(request =>
+    request.funcionario.nome.toLowerCase().includes(search.toLowerCase()),
   );
   const pagination = usePaginationRange(filteredRequests, DEFAULT_PAGE_SIZE);
+
+  const updateVacationStatus = async () => {
+    if (!action || !vacationId.current) return;
+    const response = await approveRefuseVacation({
+      idferias: vacationId.current,
+      novoStatus: action,
+    });
+    if (response.error) {
+      notifyError(response.error);
+      setAlertModalOpen(false);
+      return;
+    }
+    setAlertModalOpen(false);
+    setSuccessModalOpen(true);
+    refetch();
+  };
+
+  if (!isPlaceholderData && !data) return null;
+
   return (
     <div>
       <AlertModal
@@ -71,11 +80,12 @@ const VacationsRequestsPage: React.FC = () => {
         } esta solicitação de férias? Esta ação não poderá ser desfeita.`}
         confirmText="Confirmar"
         cancelText="Cancelar"
-        onCancel={() => setAlertModalOpen(false)}
-        onConfirm={() => {
+        onCancel={() => {
           setAlertModalOpen(false);
-          setSuccessModalOpen(true);
+          vacationId.current = null;
+          setAction(null);
         }}
+        onConfirm={updateVacationStatus}
       />
       <SuccessModal
         isOpen={successModalOpen}
@@ -84,7 +94,11 @@ const VacationsRequestsPage: React.FC = () => {
           action === 'aprovar' ? 'aprovada' : 'reprovada'
         } com sucesso.`}
         buttonText="Ok"
-        onClose={() => setSuccessModalOpen(false)}
+        onClose={() => {
+          setSuccessModalOpen(false);
+          vacationId.current = null;
+          setAction(null);
+        }}
       />
 
       <FiltersContainer>
@@ -107,19 +121,23 @@ const VacationsRequestsPage: React.FC = () => {
         <Table.Header columns={columns} />
         <Table.Body>
           {pagination.currentRows.map(request => (
-            <Table.Row key={request.employeeId}>
-              <Table.BodyCell>{request.employeeId}</Table.BodyCell>
-              <Table.BodyCell>{request.employeeName}</Table.BodyCell>
-              <Table.BodyCell>{request.sector}</Table.BodyCell>
-              <Table.BodyCell>{request.position}</Table.BodyCell>
-              <Table.BodyCell>{request.initialDate}</Table.BodyCell>
-              <Table.BodyCell>{request.endDate}</Table.BodyCell>
+            <Table.Row key={request.id}>
+              <Table.BodyCell>{request.funcionario.nome}</Table.BodyCell>
+              <Table.BodyCell>{request.funcionario.cargo}</Table.BodyCell>
+              <Table.BodyCell>{request.setorfuncionario}</Table.BodyCell>
+              <Table.BodyCell>
+                {format(request.dataInicio, 'dd/MM/yyyy')}
+              </Table.BodyCell>
+              <Table.BodyCell>
+                {format(request.dataFim, 'dd/MM/yyyy')}
+              </Table.BodyCell>
               <Table.BodyCell>
                 <Container>
                   <ApproveButton
                     type="button"
                     onClick={() => {
                       setAction('aprovar');
+                      vacationId.current = request.id;
                       setAlertModalOpen(true);
                     }}
                   >
@@ -128,6 +146,7 @@ const VacationsRequestsPage: React.FC = () => {
                   <RejectButton
                     type="button"
                     onClick={() => {
+                      vacationId.current = request.id;
                       setAction('reprovar');
                       setAlertModalOpen(true);
                     }}
@@ -141,7 +160,7 @@ const VacationsRequestsPage: React.FC = () => {
         </Table.Body>
       </Table.Root>
       <Pagination
-        totalOfData={employeesRequests.length}
+        totalOfData={employeessList.length}
         currentPage={pagination.currentPage}
         setCurrentPage={pagination.setCurrentPage}
         totalPages={pagination.totalPages}

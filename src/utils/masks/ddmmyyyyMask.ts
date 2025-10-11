@@ -5,7 +5,9 @@ const monthsWith31Days = ['01', '03', '05', '07', '08', '10', '12'];
 const february = '02';
 const currentYear = format(new Date(), 'yyyy');
 
-const ddmmyyyyMask = (value: string) => {
+type Limit = 'present' | 'any';
+
+const ddmmyyyyMask = (value: string, limit: Limit = 'present') => {
   // Remove all non-digit characters
   const cleanedValue = value.replace(/\D/g, '');
 
@@ -38,7 +40,7 @@ const ddmmyyyyMask = (value: string) => {
       if (monthsWith31Days.includes(p2) && p1 > 31) {
         return `31/${p2}/${p3}`;
       }
-      if (p3 > currentYear) {
+      if (p3 > currentYear && limit === 'present') {
         return `${p1}/${p2}/${currentYear}`;
       }
       return p3 ? `${p1}/${p2}/${p3}` : `${p1}/${p2}`;

@@ -10,6 +10,13 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
+import { useAuth } from '@/hooks/useAuth';
+import {
+  IVacationBodyRequest,
+  requestVacation,
+} from '@/services/vacations/vacationService';
+import { format, parse } from 'date-fns';
+import { notifyError } from '@/utils/handleToast';
 import { VacationForm } from './styles';
 
 interface IRequestVacationFormProps {
@@ -32,10 +39,27 @@ const RequestVacationForm: React.FC<IRequestVacationFormProps> = ({
     mode: 'onTouched',
     resolver: yupResolver(VacationRequestSchema),
   });
+  const { user } = useAuth();
   const [successModal, setSuccessModal] = useState<boolean>(false);
 
   const onSubmit = async (data: VacationRequestData) => {
-    console.log(data);
+    const parsedStartDate = parse(data.startDate, 'dd/MM/yyyy', new Date());
+    const parsedEndDate = parse(data.endDate, 'dd/MM/yyyy', new Date());
+
+    const body: IVacationBodyRequest = {
+      idfuncionario: user?.id || '',
+      dataInicio: format(parsedStartDate, 'yyyy-MM-dd'),
+      dataFim: format(parsedEndDate, 'yyyy-MM-dd'),
+    };
+
+    console.log(body);
+
+    const response = await requestVacation(body);
+    if (response.error) {
+      notifyError(response.error);
+      return;
+    }
+
     setSuccessModal(true);
   };
 
@@ -46,7 +70,7 @@ const RequestVacationForm: React.FC<IRequestVacationFormProps> = ({
   };
 
   const handleDateChange = (date: string, field: keyof VacationRequestData) => {
-    const formatedDate = ddmmyyyyMask(date);
+    const formatedDate = ddmmyyyyMask(date, 'any');
     setValue(field, formatedDate);
     trigger(field);
   };

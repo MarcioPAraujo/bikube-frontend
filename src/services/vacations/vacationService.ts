@@ -1,0 +1,53 @@
+import { Result } from '@/interfaces/apiResult';
+import handleError from '@/utils/handleError';
+import { IPendingVacationsListResponse } from '@/interfaces/vacation/pendingVacationListResponse';
+import { api } from '../api';
+
+export interface IVacationBodyRequest {
+  idfuncionario: string;
+  dataInicio: string;
+  dataFim: string;
+}
+export interface IVacationApproveRefuse {
+  idferias: number;
+  novoStatus: 'aprovar' | 'reprovar';
+}
+
+export const requestVacation = async (
+  body: IVacationBodyRequest,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = '/ferias';
+
+  try {
+    await api.post(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao solicitar férias');
+  }
+};
+
+export const getPendingVacations = async (): Promise<
+  Result<IPendingVacationsListResponse[]>
+> => {
+  const ENDPOINT = '/ferias';
+
+  try {
+    const response = await api.get<IPendingVacationsListResponse[]>(ENDPOINT);
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao buscar férias pendentes');
+  }
+};
+
+export const approveRefuseVacation = async (
+  body: IVacationApproveRefuse,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = '/ferias';
+
+  try {
+    await api.put(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao aprovar/reprovar férias');
+  }
+};
