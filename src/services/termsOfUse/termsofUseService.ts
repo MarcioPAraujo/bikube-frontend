@@ -4,15 +4,15 @@ import { Result } from '@/interfaces/apiResult';
 import { api } from '../api';
 
 export const termsOfUseService = async (
-  email: string,
+  idfuncionario: string,
 ): Promise<Result<string>> => {
-  const url = 'funcionario/aceitartermo';
+  const url = '/funcionario/aceitartermo';
   const body = {
-    email,
+    idfuncionario,
   };
 
   try {
-    const response: AxiosResponse<string> = await api.post(url, body);
+    const response: AxiosResponse<string> = await api.put(url, body);
 
     const { data } = response;
     return { data, error: null };

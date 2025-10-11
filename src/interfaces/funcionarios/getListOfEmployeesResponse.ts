@@ -8,23 +8,16 @@ export interface IEmployeeResponse {
   salario: number;
   contabancaria: string;
   dataentrada: string;
-  datasaida: string;
+  datasaida: null;
   funcao: string;
-  idusuario: Idusuario;
+  status: string;
   id_telefone: IDTelefone;
-  id_setor: IDSetor;
+  idsetor: Idsetor;
   id_endereco: IDEndereco;
-  password: string;
-  username: string;
-  authorities: Authority[];
   accountNonExpired: boolean;
   accountNonLocked: boolean;
   credentialsNonExpired: boolean;
   enabled: boolean;
-}
-
-export interface Authority {
-  authority: string;
 }
 
 export interface IDEndereco {
@@ -38,21 +31,12 @@ export interface IDEndereco {
   complemento: string;
 }
 
-export interface IDSetor {
-  id: number;
-  nome: string;
-}
-
 export interface IDTelefone {
   id: number;
   numero: string;
 }
 
-export interface Idusuario {
-  id: string;
-  registro: string;
-  senha: string;
-  status: string;
-  tentativas: number;
-  databloqueio: string;
+export interface Idsetor {
+  id: number;
+  nome: string;
 }
