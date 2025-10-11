@@ -7,20 +7,29 @@ import Pagination from '@/components/Pagination/Pagination';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import { useState } from 'react';
 import RequestVacationForm from '@/components/Forms/RequestVacationForm/RequestVacationForm';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { getEmployeeVacations } from '@/services/vacations/vacationService';
+import { useAuth } from '@/hooks/useAuth';
+import { format } from 'date-fns';
 import { PageContainer, Status } from './styles';
-
-const vactions = Array.from({ length: 100 }).map((_, index) => ({
-  id: `vacation-${index + 1}`,
-  startDate: '01/01/2024',
-  endDate: '15/01/2024',
-  status: index % 2 === 0,
-}));
 
 const columns = ['Data Início', 'Data Fim', 'Status'];
 
 const MyVacationsPage: React.FC = () => {
-  const pagination = usePaginationRange(vactions, DEFAULT_PAGE_SIZE);
+  const { user } = useAuth();
+  const { data, isPlaceholderData } = useQuery({
+    queryKey: ['employee-vacations'],
+    queryFn: () => getEmployeeVacations(user?.id || ''),
+    placeholderData: keepPreviousData,
+  });
+
+  const vacationsList = data?.data || [];
+
   const [showRequestModal, setShowRequestModal] = useState<boolean>(false);
+  const pagination = usePaginationRange(vacationsList, DEFAULT_PAGE_SIZE);
+
+  if (!isPlaceholderData && !data) return null;
+
   return (
     <PageContainer>
       <RequestVacationForm
@@ -42,12 +51,14 @@ const MyVacationsPage: React.FC = () => {
         <Table.Body>
           {pagination.currentRows.map(vacation => (
             <Table.Row key={vacation.id}>
-              <Table.BodyCell>{vacation.startDate}</Table.BodyCell>
-              <Table.BodyCell>{vacation.endDate}</Table.BodyCell>
               <Table.BodyCell>
-                <Status className={vacation.status ? 'approved' : 'pending'}>
-                  {vacation.status ? 'Aprovado' : 'Pendente'}
-                </Status>
+                {format(vacation.dataInicio, 'dd/MM/yyyy')}
+              </Table.BodyCell>
+              <Table.BodyCell>
+                {format(vacation.dataFim, 'dd/MM/yyyy')}
+              </Table.BodyCell>
+              <Table.BodyCell>
+                <Status className={vacation.status}>{vacation.status}</Status>
               </Table.BodyCell>
             </Table.Row>
           ))}
@@ -57,7 +68,7 @@ const MyVacationsPage: React.FC = () => {
         currentPage={pagination.currentPage}
         totalPages={pagination.totalPages}
         setCurrentPage={pagination.setCurrentPage}
-        totalOfData={vactions.length}
+        totalOfData={vacationsList.length}
         totalPaginatedData={pagination.paginatedRows}
       />
     </PageContainer>

@@ -1,6 +1,7 @@
 import { Result } from '@/interfaces/apiResult';
 import handleError from '@/utils/handleError';
 import { IPendingVacationsListResponse } from '@/interfaces/vacation/pendingVacationListResponse';
+import { IEmployeeVacationsListResponse } from '@/interfaces/vacation/employeeVacationsListResponse';
 import { api } from '../api';
 
 export interface IVacationBodyRequest {
@@ -10,7 +11,7 @@ export interface IVacationBodyRequest {
 }
 export interface IVacationApproveRefuse {
   idferias: number;
-  novoStatus: 'aprovar' | 'reprovar';
+  novoStatus: 'aprovado' | 'reprovado';
 }
 
 export const requestVacation = async (
@@ -49,5 +50,18 @@ export const approveRefuseVacation = async (
     return { data: true, error: null };
   } catch (error) {
     return handleError(error, 'Erro ao aprovar/reprovar férias');
+  }
+};
+
+export const getEmployeeVacations = async (
+  employeeID: string,
+): Promise<Result<IEmployeeVacationsListResponse[]>> => {
+  const ENDPOINT = `/ferias/funcionario/${employeeID}`;
+
+  try {
+    const response = await api.get<IEmployeeVacationsListResponse[]>(ENDPOINT);
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao buscar férias do funcionário');
   }
 };

@@ -36,7 +36,7 @@ const VacationsRequestsPage: React.FC = () => {
   const [search, setSearch] = useState<string>('');
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const [action, setAction] = useState<'aprovar' | 'reprovar' | null>(null);
+  const [action, setAction] = useState<'aprovado' | 'reprovado' | null>(null);
   const vacationId = useRef<number | null>(null);
 
   const { data, isPlaceholderData, refetch } = useQuery({
@@ -76,7 +76,7 @@ const VacationsRequestsPage: React.FC = () => {
         isOpen={alertModalOpen}
         title="Atenção!"
         message={`Tem certeza que deseja ${
-          action === 'aprovar' ? 'aprovar' : 'reprovar'
+          action === 'aprovado' ? 'aprovar' : 'reprovar'
         } esta solicitação de férias? Esta ação não poderá ser desfeita.`}
         confirmText="Confirmar"
         cancelText="Cancelar"
@@ -91,7 +91,7 @@ const VacationsRequestsPage: React.FC = () => {
         isOpen={successModalOpen}
         title="Sucesso!"
         message={`A solicitação de férias foi ${
-          action === 'aprovar' ? 'aprovada' : 'reprovada'
+          action === 'aprovado' ? 'aprovada' : 'reprovada'
         } com sucesso.`}
         buttonText="Ok"
         onClose={() => {
@@ -136,7 +136,7 @@ const VacationsRequestsPage: React.FC = () => {
                   <ApproveButton
                     type="button"
                     onClick={() => {
-                      setAction('aprovar');
+                      setAction('aprovado');
                       vacationId.current = request.id;
                       setAlertModalOpen(true);
                     }}
@@ -147,7 +147,7 @@ const VacationsRequestsPage: React.FC = () => {
                     type="button"
                     onClick={() => {
                       vacationId.current = request.id;
-                      setAction('reprovar');
+                      setAction('reprovado');
                       setAlertModalOpen(true);
                     }}
                   >
