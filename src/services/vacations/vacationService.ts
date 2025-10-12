@@ -2,6 +2,7 @@ import { Result } from '@/interfaces/apiResult';
 import handleError from '@/utils/handleError';
 import { IPendingVacationsListResponse } from '@/interfaces/vacation/pendingVacationListResponse';
 import { IEmployeeVacationsListResponse } from '@/interfaces/vacation/employeeVacationsListResponse';
+import { IVacationByMonthResponse } from '@/interfaces/vacation/vacationsByMonthReponse';
 import { api } from '../api';
 
 export interface IVacationBodyRequest {
@@ -63,5 +64,19 @@ export const getEmployeeVacations = async (
     return { data: response.data, error: null };
   } catch (error) {
     return handleError(error, 'Erro ao buscar férias do funcionário');
+  }
+};
+
+// Note: month is 1-12
+export const getVacationsByMonth = async (
+  month: number,
+): Promise<Result<IVacationByMonthResponse[]>> => {
+  const ENDPOINT = `/ferias/feriasporsetor/${month}`;
+
+  try {
+    const response = await api.get<IVacationByMonthResponse[]>(ENDPOINT);
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao buscar férias por mês');
   }
 };

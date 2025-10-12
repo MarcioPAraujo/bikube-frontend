@@ -22,6 +22,7 @@ import {
   Container,
   FiltersContainer,
   RejectButton,
+  SectorContainer,
 } from './styles';
 
 const sectorOptions: IOption[] = Array.from({ length: 5 }).map((_, index) => ({
@@ -47,9 +48,15 @@ const VacationsRequestsPage: React.FC = () => {
 
   const employeessList = data?.data || [];
 
-  const filteredRequests = employeessList.filter(request =>
-    request.funcionario.nome.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredRequests = employeessList.filter(request => {
+    const matchesSearch = request.funcionario.nome
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesSector =
+      !sector.label || request.funcionario.idsetor.nome === sector.label;
+    return matchesSearch && matchesSector;
+  });
+  console.log(filteredRequests);
   const pagination = usePaginationRange(filteredRequests, DEFAULT_PAGE_SIZE);
 
   const updateVacationStatus = async () => {
@@ -69,6 +76,8 @@ const VacationsRequestsPage: React.FC = () => {
   };
 
   if (!isPlaceholderData && !data) return null;
+
+  console.log(sector);
 
   return (
     <div>
@@ -107,15 +116,24 @@ const VacationsRequestsPage: React.FC = () => {
           value={search}
           placeholder="Buscar funcionário"
         />
-        <div>
+        <SectorContainer>
           <SelectComponent
             id="sector"
             options={sectorOptions}
             selectedOption={sector}
             onChange={setSector}
             placeholder="Filtrar por setor"
+            enableSearch
           />
-        </div>
+          <button
+            type="button"
+            onClick={() => {
+              setSector({} as IOption);
+            }}
+          >
+            Limpar
+          </button>
+        </SectorContainer>
       </FiltersContainer>
       <Table.Root tableClassName="vacations">
         <Table.Header columns={columns} />

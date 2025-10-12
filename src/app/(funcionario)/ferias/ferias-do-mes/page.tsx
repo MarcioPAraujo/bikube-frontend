@@ -18,7 +18,7 @@ import {
 interface IVacationPerid {
   initialDate: string;
   endDate: string;
-  employeeId: string;
+  employeeId: number;
 }
 
 const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
@@ -43,7 +43,7 @@ const VacationsPage: React.FC = () => {
     useMonthCalendar(currentDate, setCurrentDate);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number>(-1);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -51,23 +51,20 @@ const VacationsPage: React.FC = () => {
     setSelectedEmployeeId(period.employeeId);
     const startDate = period.initialDate;
     const { endDate } = period;
-    const formattedStartDate = new Date(
-      startDate.split('/').reverse().join('-'),
-    );
-    const formattedEndDate = new Date(endDate.split('/').reverse().join('-'));
+    const formattedEndDate = new Date(endDate);
+    const formattedStartDate = new Date(startDate);
     setStartDate(formattedStartDate);
     setEndDate(formattedEndDate);
   };
 
   const isDateInRange = (date: Date) => {
+    console.log({ date, startDate, endDate });
     if (startDate && endDate) {
       const isInRange = date >= startDate && date <= endDate;
       return isInRange ? 'inRange' : '';
     }
     return '';
   };
-
-  console.log({ startDate, endDate });
 
   return (
     <Container>
@@ -76,7 +73,7 @@ const VacationsPage: React.FC = () => {
         onClose={() => setIsOpen(false)}
         selectedEmployeeId={selectedEmployeeId}
         onSelectEmployee={handleSelectEmployee}
-        month={monthNames[month]}
+        month={month}
       />
       <CalendarWrapper>
         <ShowEmployeesButton type="button" onClick={() => setIsOpen(true)}>

@@ -11,6 +11,21 @@ export const FiltersContainer = styled.div`
   }
 `;
 
+export const SectorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  & > button {
+    border: none;
+    background-color: ${({ theme }) => theme.colors.YELLOW.hex_FFB936};
+    color: ${({ theme }) => theme.colors.YELLOW.hex_9E4A00};
+    font-weight: 600;
+    font-size: 1.4rem;
+    padding: 0.6rem 1.6rem;
+  }
+`;
+
 const Button = styled.button`
   border: none;
   border-radius: 0.5rem;

@@ -10,6 +10,13 @@ export const EmployeeListContainer = styled.div`
   top: 0;
   height: 100vh;
   background-color: ${({ theme }) => theme.colors.WHITE};
+
+  display: flex;
+  flex-direction: column;
+
+  & > :last-child {
+    align-self: center;
+  }
 `;
 
 export const Title = styled.h3`
@@ -23,7 +30,7 @@ export const MonthName = styled.span`
 export const CardsContainer = styled.div`
   display: grid;
   gap: 0.8rem;
-  height: calc(100vh - 9.5rem);
+  height: calc(100vh - 13.5rem);
   margin-top: 1.6rem;
   overflow-y: auto;
 `;

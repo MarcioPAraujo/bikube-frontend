@@ -40,13 +40,11 @@ api.interceptors.request.use(
     const isPublicEndpoint = PUBLIC_ENDPOINTS.some(endpoint =>
       config.url?.startsWith(endpoint),
     );
-    console.log({ isPublicEndpoint });
     if (!isPublicEndpoint) {
       const token =
         sessionStorage.getItem(SESSION_STORAGE_KEYS.token) ||
         localStorage.getItem(LOCAL_STORAGE_KEYS.token);
 
-      console.log('Using token for request:', token);
       if (token) {
         if (config.headers) {
           config.headers = config.headers || {};
@@ -83,6 +81,7 @@ export async function refreshAccessToken(): Promise<string> {
 
   try {
     const refreshPayload = JSON.parse(refreshToken);
+    console.log('Using refresh token:', refreshPayload);
     // The returned data is the new access token.
     const { data } = await api.post('/auth/refresh', {
       token: refreshPayload,

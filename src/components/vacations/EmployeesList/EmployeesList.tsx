@@ -1,6 +1,11 @@
-import { format, addMonths } from 'date-fns';
 import ModalBackground from '@/components/modals/elements/ModalBackground';
 import { useEffect, useRef } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { getVacationsByMonth } from '@/services/vacations/vacationService';
+import { IVacationByMonthResponse } from '@/interfaces/vacation/vacationsByMonthReponse';
+import RenderIf from '@/components/RenderIf/RenderIf';
+import { format } from 'date-fns';
+import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import {
   CardsContainer,
   EmployeeCard,
@@ -12,23 +17,31 @@ import {
 interface IVacationPerid {
   initialDate: string;
   endDate: string;
-  employeeId: string;
+  employeeId: number;
 }
 
 interface EmployeeVacationListProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedEmployeeId: string;
+  selectedEmployeeId: number;
   onSelectEmployee: (period: IVacationPerid) => void;
-  month: string;
+  month: number;
 }
 
-const employees = Array.from({ length: 10 }, (_, idx) => ({
-  id: `emp-${idx + 1}`,
-  name: `Luiz ${idx + 1}`,
-  initialDate: format(new Date(), 'dd/MM/yyyy'),
-  endDate: format(addMonths(new Date(), 1), 'dd/MM/yyyy'),
-}));
+const monthNames = [
+  'Janeiro',
+  'Fevereiro',
+  'Março',
+  'Abril',
+  'Maio',
+  'Junho',
+  'Julho',
+  'Agosto',
+  'Setembro',
+  'Outubro',
+  'Novembro',
+  'Dezembro',
+];
 
 const EmployeesList: React.FC<EmployeeVacationListProps> = ({
   onSelectEmployee,
@@ -38,12 +51,18 @@ const EmployeesList: React.FC<EmployeeVacationListProps> = ({
   onClose,
 }) => {
   const listRef = useRef<HTMLDivElement>(null);
-  const isEmployeeSelected = (id: string) => {
+  const isEmployeeSelected = (id: number) => {
     if (id === selectedEmployeeId) {
       return 'selected';
     }
     return '';
   };
+
+  const { data, isPlaceholderData } = useQuery({
+    queryKey: ['vacations-by-month', month],
+    queryFn: () => getVacationsByMonth(month + 1),
+    placeholderData: keepPreviousData,
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,32 +77,59 @@ const EmployeesList: React.FC<EmployeeVacationListProps> = ({
     };
   }, [onClose]);
 
+  let employees: IVacationByMonthResponse[] = [];
+
   if (!isOpen) return null;
+  if (!isPlaceholderData && !data) return null;
+
+  if (data && data.data) {
+    employees = data.data;
+  }
 
   return (
     <ModalBackground>
       <EmployeeListContainer ref={listRef}>
         <Title>Funcionários</Title>
-        <MonthName>mês: {month}</MonthName>
-        <CardsContainer>
-          {employees.map(emp => (
-            <EmployeeCard
-              key={emp.id}
-              className={isEmployeeSelected(emp.id)}
-              onClick={() =>
-                onSelectEmployee({
-                  initialDate: emp.initialDate,
-                  endDate: emp.endDate,
-                  employeeId: emp.id,
-                })
-              }
-            >
-              <strong>{emp.name}</strong>
-              <div>Início: {emp.initialDate}</div>
-              <div>Fim: {emp.endDate}</div>
-            </EmployeeCard>
-          ))}
-        </CardsContainer>
+        <MonthName>mês: {monthNames[month]}</MonthName>
+        <RenderIf isTrue={employees.length === 0}>
+          <div>Nenhum funcionário com férias nesse mês</div>
+        </RenderIf>
+        <RenderIf isTrue={employees.length > 0}>
+          <CardsContainer>
+            {employees.map(sec => (
+              <div key={sec.setor}>
+                <h2>Setor: {sec.setor}</h2>
+                {sec.solicitacoes.map(vocationRequest => (
+                  <EmployeeCard
+                    key={vocationRequest.id}
+                    className={isEmployeeSelected(vocationRequest.id)}
+                    onClick={() =>
+                      onSelectEmployee({
+                        initialDate: vocationRequest.dataInicio,
+                        endDate: vocationRequest.dataFim,
+                        employeeId: vocationRequest.id,
+                      })
+                    }
+                  >
+                    <strong>{vocationRequest.funcionario.nome}</strong>
+                    <div>
+                      Início: {format(vocationRequest.dataInicio, 'dd/MM/yyyy')}
+                    </div>
+                    <div>
+                      Fim: {format(vocationRequest.dataFim, 'dd/MM/yyyy')}
+                    </div>
+                  </EmployeeCard>
+                ))}
+              </div>
+            ))}
+          </CardsContainer>
+        </RenderIf>
+        <DefaultButton
+          type="button"
+          text="Limpar"
+          onClick={() => onSelectEmployee({} as IVacationPerid)}
+          variant="bordered"
+        />
       </EmployeeListContainer>
     </ModalBackground>
   );
