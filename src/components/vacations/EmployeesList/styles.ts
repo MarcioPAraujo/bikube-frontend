@@ -16,6 +16,7 @@ export const EmployeeListContainer = styled.div`
 
   & > :last-child {
     align-self: center;
+    margin-top: auto;
   }
 `;
 
@@ -26,6 +27,12 @@ export const Title = styled.h3`
 export const MonthName = styled.span`
   font-size: 1.6rem;
   color: ${({ theme }) => theme.colors.GRAY.hex_2e2e2e};
+`;
+export const EmptyListMessage = styled.p`
+  margin-top: 2.4rem;
+  font-size: 1.6rem;
+  color: ${({ theme }) => theme.colors.GRAY.hex_696969};
+  text-align: center;
 `;
 export const CardsContainer = styled.div`
   display: grid;

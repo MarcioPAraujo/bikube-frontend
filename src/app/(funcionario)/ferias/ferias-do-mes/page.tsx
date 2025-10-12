@@ -58,7 +58,6 @@ const VacationsPage: React.FC = () => {
   };
 
   const isDateInRange = (date: Date) => {
-    console.log({ date, startDate, endDate });
     if (startDate && endDate) {
       const isInRange = date >= startDate && date <= endDate;
       return isInRange ? 'inRange' : '';

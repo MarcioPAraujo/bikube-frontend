@@ -22,11 +22,13 @@ import { VacationForm } from './styles';
 interface IRequestVacationFormProps {
   isOpen: boolean;
   onClose: () => void;
+  refetchVacations: () => void;
 }
 
 const RequestVacationForm: React.FC<IRequestVacationFormProps> = ({
   isOpen,
   onClose,
+  refetchVacations,
 }) => {
   const {
     register,
@@ -59,7 +61,7 @@ const RequestVacationForm: React.FC<IRequestVacationFormProps> = ({
       notifyError(response.error);
       return;
     }
-
+    refetchVacations();
     setSuccessModal(true);
   };
 

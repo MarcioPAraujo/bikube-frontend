@@ -56,7 +56,6 @@ const VacationsRequestsPage: React.FC = () => {
       !sector.label || request.funcionario.idsetor.nome === sector.label;
     return matchesSearch && matchesSector;
   });
-  console.log(filteredRequests);
   const pagination = usePaginationRange(filteredRequests, DEFAULT_PAGE_SIZE);
 
   const updateVacationStatus = async () => {
@@ -76,8 +75,6 @@ const VacationsRequestsPage: React.FC = () => {
   };
 
   if (!isPlaceholderData && !data) return null;
-
-  console.log(sector);
 
   return (
     <div>

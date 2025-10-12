@@ -213,7 +213,10 @@ const EmployeeForm = () => {
           <DefaultButton
             text="Cancelar"
             type="button"
-            onClick={() => setWarningModal(true)}
+            onClick={() => {
+              setWarningModal(true);
+              router.push('/funcionarios');
+            }}
             classname="bordered"
           />
         </ButtonContainer>

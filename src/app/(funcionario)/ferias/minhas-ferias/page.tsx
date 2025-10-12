@@ -17,7 +17,7 @@ const columns = ['Data Início', 'Data Fim', 'Status'];
 
 const MyVacationsPage: React.FC = () => {
   const { user } = useAuth();
-  const { data, isPlaceholderData } = useQuery({
+  const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['employee-vacations'],
     queryFn: () => getEmployeeVacations(user?.id || ''),
     placeholderData: keepPreviousData,
@@ -35,6 +35,7 @@ const MyVacationsPage: React.FC = () => {
       <RequestVacationForm
         isOpen={showRequestModal}
         onClose={() => setShowRequestModal(false)}
+        refetchVacations={refetch}
       />
 
       <div>

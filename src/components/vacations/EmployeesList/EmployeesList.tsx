@@ -10,6 +10,7 @@ import {
   CardsContainer,
   EmployeeCard,
   EmployeeListContainer,
+  EmptyListMessage,
   MonthName,
   Title,
 } from './styles';
@@ -92,7 +93,9 @@ const EmployeesList: React.FC<EmployeeVacationListProps> = ({
         <Title>Funcionários</Title>
         <MonthName>mês: {monthNames[month]}</MonthName>
         <RenderIf isTrue={employees.length === 0}>
-          <div>Nenhum funcionário com férias nesse mês</div>
+          <EmptyListMessage>
+            Nenhum funcionário com férias nesse mês
+          </EmptyListMessage>
         </RenderIf>
         <RenderIf isTrue={employees.length > 0}>
           <CardsContainer>
