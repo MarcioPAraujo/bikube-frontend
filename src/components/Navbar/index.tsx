@@ -56,6 +56,12 @@ const tabs: Tab[] = [
     baseUrl: '/ferias',
   },
   {
+    name: 'Gestão do ponto',
+    url: '/gestao-do-ponto/registro',
+    allowedRoles: accessLevel.none,
+    baseUrl: '/gestao-do-ponto',
+  },
+  {
     name: 'Comunicados',
     url: '/comunicados',
     allowedRoles: accessLevel.none,

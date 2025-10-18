@@ -4,7 +4,7 @@
 
 import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
-import { redirect, usePathname } from 'next/navigation';
+import { redirect, usePathname, useRouter } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
@@ -42,18 +42,41 @@ const employeeRoutes = [
   '/home',
   '/minhas-informacoes',
   '/comunicados',
-  '/ferias',
+
+  '/ferias/minhas-ferias',
+
+  '/gestao-do-ponto/registro',
+  '/gestao-do-ponto/historico',
+  '/gestao-do-ponto/solicitacoes',
 ];
 const rhRoutes = [
   '/setores',
   '/home',
+
   '/funcionarios',
+  '/funcionarios/detalhes/',
+  '/funcionarios/cadastrar',
+
   '/minhas-informacoes',
+
   '/comunicados',
-  '/ferias',
+  '/comunicados/novo',
+
+  '/ferias/minhas-ferias',
+  '/ferias/solicitacoes',
+  '/ferias/ferias-do-mes',
+
+  '/gestao-do-ponto/registro',
+  '/gestao-do-ponto/historico',
+  '/gestao-do-ponto/solicitacoes',
+  '/gestao-do-ponto/colaboradores',
+
+  // all recrutation routes are allowed for RH
+  '/recrutamento',
 ];
 
 const AuthProvider = ({ children }: ChildrenProps) => {
+  const router = useRouter();
   const [user, setUser] = useState<User | undefined>();
   const pathName = usePathname();
   const [loading, setLoading] = useState(true);
@@ -106,10 +129,10 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     redirect('/home');
   }
   if (isAuthenticated && isOnlyEmployee && !allowedMenus(employeeRoutes)) {
-    redirect('/home');
+    router.back();
   }
   if (isAuthenticated && isRH && !allowedMenus(rhRoutes)) {
-    redirect('/home');
+    router.back();
   }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
