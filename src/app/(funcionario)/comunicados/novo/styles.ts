@@ -22,6 +22,7 @@ export const ButtonsWrapper = styled.div`
   }
 `;
 export const InputWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -53,6 +54,10 @@ export const TextArea = styled.textarea`
     font-weight: 400;
     font-size: 1.6rem;
   }
+`;
+export const AnnouncementTypeField = styled.div`
+  position: relative;
+  margin: 1.6rem 0rem;
 `;
 export const CheckboxWrapper = styled.div`
   display: flex;

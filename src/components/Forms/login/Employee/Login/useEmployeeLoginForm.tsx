@@ -47,7 +47,7 @@ const useEmployeeLoginForm = () => {
 
   const onFormSubmit = async (data: IEmployeeLoginSchema) => {
     console.log(data);
-    /*
+
     const mockedUser: User = {
       id: '1',
       nome: 'Usuário de Teste',
@@ -61,8 +61,8 @@ const useEmployeeLoginForm = () => {
       JSON.stringify(mockedUser),
     );
     setUser(mockedUser);
-    */
 
+    /*
     const result = await loginAuth({
       registro: data.register,
       senha: data.password,
@@ -115,6 +115,7 @@ const useEmployeeLoginForm = () => {
     });
 
     setKeepLoggedInModal(true);
+    */
   };
 
   const onAcceptterms = async () => {

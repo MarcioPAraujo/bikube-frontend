@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Modal = styled.div`
   width: 40rem;
-  max-height: 60rem;
+  max-height: 40rem;
   background: ${({ theme }) => theme.colors.WHITE};
   border-radius: 0.8rem;
   padding: 2.4rem 1rem 2.4rem 2.4rem;
