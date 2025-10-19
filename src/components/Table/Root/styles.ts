@@ -59,4 +59,13 @@ export const Table = styled.div`
       border-radius: 0 0 1rem 1rem;
     }
   }
+  &.points-history {
+    .table-header,
+    .table-row {
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr;
+    }
+    .table-body > :last-child > div {
+      border-radius: 0 0 1rem 1rem;
+    }
+  }
 `;

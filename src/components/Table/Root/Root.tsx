@@ -7,7 +7,8 @@ type TableClass =
   | 'announcements'
   | 'default'
   | 'vacations'
-  | 'my-vacations';
+  | 'my-vacations'
+  | 'points-history';
 
 interface IGridTableProps {
   children: React.ReactNode;
