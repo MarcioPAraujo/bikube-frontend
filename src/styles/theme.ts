@@ -24,6 +24,7 @@ const green = {
   hex_78C841: '#78C841',
   hex_018D1F: '#018D1F',
   hex_4A9782: '#4A9782',
+  hex_A3DC9A: '#A3DC9A',
 };
 const blue = {
   darker: '#2F80ED',

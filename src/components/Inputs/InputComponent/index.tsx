@@ -4,7 +4,7 @@ import { ErrorMessage, Field, Input, Label } from './styles';
 interface IProps {
   id: string;
   labelText: string;
-  placeholder: string;
+  placeholder?: string;
   value?: string;
   disabled?: boolean;
   errorMessage?: string;
