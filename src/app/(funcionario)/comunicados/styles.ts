@@ -39,4 +39,5 @@ export const FiltersContainer = styled.div`
 export const ButtonRow = styled.button`
   border: none;
   background: none;
+  width: 100%;
 `;

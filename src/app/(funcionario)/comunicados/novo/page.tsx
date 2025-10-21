@@ -1,7 +1,7 @@
 'use client';
 
 import InputComponent from '@/components/Inputs/InputComponent';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IOption } from '@/interfaces/option';
 import CheckboxComponent from '@/components/Inputs/Checkbox';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
@@ -18,6 +18,12 @@ import { useRouter } from 'next/navigation';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import InputAuxTextProps from '@/components/Inputs/InputAuxText/InputAuxText';
 import SelectComponent from '@/components/Inputs/Select/Select';
+import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
+import { getsectors } from '@/services/setor/setorService';
+import { IEmployeeResponse } from '@/interfaces/funcionarios/getListOfEmployeesResponse';
+import { IAnnouncementBodyRequest } from '@/interfaces/anouncement/announcementsBodyRequest';
+import { sendAnnouncement } from '@/services/announcementsService';
+import { notifyError } from '@/utils/handleToast';
 import {
   AnnouncementTypeField,
   ButtonsWrapper,
@@ -28,6 +34,9 @@ import {
   InputWrapper,
   TextArea,
 } from './styles';
+
+// LHOFGC98
+// SF91PL33
 
 enum DestinataryOption {
   TODOS = 'todos',
@@ -40,27 +49,16 @@ const destinataryOptions: IOption[] = [
   { label: 'Setores', value: DestinataryOption.SETORES },
   { label: 'Colaborador Específico', value: DestinataryOption.DIRECIONADO },
 ];
-const sectorsOptions: IOption[] = [
-  { value: 'Administrativo', label: 'Administrativo' },
-  { value: 'Financeiro', label: 'Financeiro' },
-  { value: 'RH', label: 'RH' },
-  { value: 'Operacional', label: 'Operacional' },
-  { value: 'Comercial', label: 'Comercial' },
-  { value: 'Marketing', label: 'Marketing' },
-  { value: 'TI', label: 'TI' },
-  { value: 'Logística', label: 'Logística' },
-  { value: 'Suporte', label: 'Suporte' },
-];
-const emplyessoptions: IOption[] = Array.from({ length: 50 }, (_, i) => ({
-  value: `employee-${i + 1}`,
-  label: `Funcionário ${i + 1}`,
-}));
 const NewAnnouncementPage = () => {
   const router = useRouter();
   const [destinataryOption, setDestinataryOption] = useState('');
   const [selectedSectors, setSelectedSectors] = useState<IOption[]>([]);
   const [warningModal, setWarningModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
+  const [sectorsOptions, setSectorsOptions] = useState<IOption[]>([]);
+  const [employeesOptions, setEmployeesOptions] = useState<IOption[]>([]);
+
+  const allEmployeesRef = useRef<IEmployeeResponse[]>([]);
 
   const {
     control,
@@ -74,12 +72,66 @@ const NewAnnouncementPage = () => {
     resolver: yupResolver(AnnouncementSchema),
   });
 
-  const onSubmit = (data: AnnouncementFormData) => {
-    console.log(data);
+  useEffect(() => {
+    const initialLoad = async () => {
+      const sectorsResult = await getsectors();
+      if (sectorsResult.data) {
+        const sectorsOpts = sectorsResult.data.map(sector => ({
+          label: sector.nome,
+          value: sector.id.toString(),
+        }));
+        setSectorsOptions(sectorsOpts);
+      }
+
+      const employeesResult = await getListOfEmployees();
+      if (employeesResult.data) {
+        allEmployeesRef.current = employeesResult.data;
+        const employeesOpts = employeesResult.data.map(employee => ({
+          label: employee.nome,
+          value: employee.id,
+        }));
+        setEmployeesOptions(employeesOpts);
+      }
+    };
+    initialLoad();
+  }, []);
+
+  const onSubmit = async (data: AnnouncementFormData) => {
+    let employees: IEmployeeResponse[] = [];
+    if (data.type === DestinataryOption.SETORES) {
+      const sectorsIds = new Set(data.sectors as string[]);
+
+      employees = allEmployeesRef.current.filter(employee =>
+        sectorsIds.has(employee.idsetor.id.toString()),
+      );
+    }
+    if (data.type === DestinataryOption.DIRECIONADO) {
+      const directedEmployeeId = data.directedEmployees?.value;
+      const directedEmployee = allEmployeesRef.current.find(
+        emp => emp.id === directedEmployeeId,
+      );
+      if (directedEmployee) {
+        employees = [directedEmployee];
+      }
+    }
+    if (data.type === DestinataryOption.TODOS) {
+      employees = allEmployeesRef.current;
+    }
+
+    const payload: IAnnouncementBodyRequest = {
+      titulo: data.title,
+      texto: data.content,
+      funcionarios: employees,
+    };
+
+    const response = await sendAnnouncement(payload);
+    if (response.error) {
+      notifyError(response.error);
+      return;
+    }
+
     setSuccessModal(true);
   };
-
-  console.log('errors', errors);
 
   return (
     <>
@@ -173,7 +225,7 @@ const NewAnnouncementPage = () => {
                   <SelectComponent
                     id="directedEmployee"
                     label="Colaborador"
-                    options={emplyessoptions}
+                    options={employeesOptions}
                     placeholder="Selecione um funcionário"
                     selectedOption={field.value as IOption}
                     onChange={field.onChange}

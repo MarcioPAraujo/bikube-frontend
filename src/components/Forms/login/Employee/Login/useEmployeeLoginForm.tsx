@@ -46,6 +46,7 @@ const useEmployeeLoginForm = () => {
   };
 
   const onFormSubmit = async (data: IEmployeeLoginSchema) => {
+    /*
     console.log(data);
 
     const isAdmin = data.password === 'a';
@@ -68,8 +69,8 @@ const useEmployeeLoginForm = () => {
       JSON.stringify(mockedUser),
     );
     setUser(mockedUser);
+    */
 
-    /*
     const result = await loginAuth({
       registro: data.register,
       senha: data.password,
@@ -96,6 +97,7 @@ const useEmployeeLoginForm = () => {
     }
     userId.current = employee.id;
 
+    /*
     let proceedWithLogin = true;
     if (result.data.termo === 'false') {
       setAcceptTermsModal(true);
@@ -107,6 +109,7 @@ const useEmployeeLoginForm = () => {
     }
 
     if (!proceedWithLogin) return;
+    */
 
     setUserData({
       email: result.data.email,
@@ -122,7 +125,6 @@ const useEmployeeLoginForm = () => {
     });
 
     setKeepLoggedInModal(true);
-    */
   };
 
   const onAcceptterms = async () => {

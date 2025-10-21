@@ -1,6 +1,5 @@
 'use client';
 
-import { announcements } from '@/components/MOCK/annoucements';
 import SearchBarComponent from '@/components/Inputs/SearchBar';
 import { useEffect, useState } from 'react';
 import { Table } from '@/components/Table/Index/Index';
@@ -13,23 +12,49 @@ import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import RenderIf from '@/components/RenderIf/RenderIf';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { getMyNotifications } from '@/services/announcementsService';
+import { IAnnouncementsResponse } from '@/interfaces/anouncement/annoucementsResponse';
 import { ButtonRow, Content, FiltersContainer, Header, Page } from './styles';
+
+// VH84GB82
+// JFWOWY17
 
 const columns = ['Titulo', 'Conteúdo', 'Data'];
 const AnnouncementsPage = () => {
   const router = useRouter();
   const { user } = useAuth();
   const [search, setSearch] = useState('');
+  const [detailsModal, setDetailsModal] = useState(false);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
+  const userId = user?.id || '';
+
+  const { data } = useQuery({
+    queryKey: ['announcemnts'],
+    queryFn: async () => {
+      const result = await getMyNotifications(userId);
+      if (result.data) {
+        return result.data;
+      }
+    },
+    placeholderData: keepPreviousData,
+  });
+
+  let announcements: IAnnouncementsResponse[] = [];
+  if (data) {
+    announcements = data;
+  }
+
   const filteredAnnouncements = announcements.filter(announcement =>
-    announcement.title.toLowerCase().includes(search.toLowerCase()),
+    announcement.comunicado.titulo.toLowerCase().includes(search.toLowerCase()),
   );
   const pagination = usePaginationRange(
     filteredAnnouncements,
     DEFAULT_PAGE_SIZE,
   );
-  const [detailsModal, setDetailsModal] = useState(false);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
 
   useEffect(() => {
     pagination.setCurrentPage(1);
@@ -88,12 +113,14 @@ const AnnouncementsPage = () => {
               onClick={() => setDetailsModal(true)}
             >
               <Table.Row>
-                <Table.BodyCell>{announcement.title}</Table.BodyCell>
+                <Table.BodyCell>
+                  {announcement.comunicado.titulo}
+                </Table.BodyCell>
                 <Table.BodyCell className="content">
-                  <Content>{announcement.content}</Content>
+                  <Content>{announcement.comunicado.texto}</Content>
                 </Table.BodyCell>
                 <Table.BodyCell>
-                  {new Date(announcement.date).toLocaleDateString()}
+                  {format(announcement.comunicado.datacriacao, 'dd/MM/yyyy')}
                 </Table.BodyCell>
               </Table.Row>
             </ButtonRow>
