@@ -1,7 +1,7 @@
 'use client';
 
 import SearchBarComponent from '@/components/Inputs/SearchBar';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Table } from '@/components/Table/Index/Index';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
@@ -13,9 +13,13 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { getMyNotifications } from '@/services/announcementsService';
+import { format, parseISO } from 'date-fns';
+import {
+  getMyNotifications,
+  updateAnnouncement,
+} from '@/services/announcementsService';
 import { IAnnouncementsResponse } from '@/interfaces/anouncement/annoucementsResponse';
+import { notifyError } from '@/utils/handleToast';
 import { ButtonRow, Content, FiltersContainer, Header, Page } from './styles';
 
 // VH84GB82
@@ -29,6 +33,7 @@ const AnnouncementsPage = () => {
   const [detailsModal, setDetailsModal] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const announcementIdRef = useRef<number>(-1);
 
   const userId = user?.id || '';
 
@@ -48,9 +53,31 @@ const AnnouncementsPage = () => {
     announcements = data;
   }
 
-  const filteredAnnouncements = announcements.filter(announcement =>
-    announcement.comunicado.titulo.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredAnnouncements = announcements.filter(announcement => {
+    const annoucementDate = announcement.comunicado.datacriacao;
+    const parsedDate = parseISO(annoucementDate);
+
+    if (!search.trim() && startDate && endDate) {
+      return startDate <= parsedDate && endDate >= parsedDate;
+    }
+    if (!search.trim() && startDate && !endDate) {
+      return startDate <= parsedDate;
+    }
+    if (!search.trim() && !startDate && endDate) {
+      return endDate >= parsedDate;
+    }
+    if (search.trim() && startDate && endDate) {
+      const hasName = announcement.comunicado.titulo
+        .toLowerCase()
+        .includes(search.toLowerCase());
+      const isInStartDateRange = startDate <= parsedDate;
+      const isInEndDateRange = endDate >= parsedDate;
+      return hasName && isInEndDateRange && isInStartDateRange;
+    }
+    return announcement.comunicado.titulo
+      .toLowerCase()
+      .includes(search.toLowerCase());
+  });
   const pagination = usePaginationRange(
     filteredAnnouncements,
     DEFAULT_PAGE_SIZE,
@@ -60,12 +87,20 @@ const AnnouncementsPage = () => {
     pagination.setCurrentPage(1);
   }, [search]);
 
+  const updateViewStatus = async () => {
+    const response = await updateAnnouncement(announcementIdRef.current);
+    if (response.error) {
+      notifyError(response.error);
+    }
+    setDetailsModal(true);
+  };
+
   return (
     <Page>
       <AnnouncementDetailsModal
         isOpen={detailsModal}
         onClose={() => setDetailsModal(false)}
-        announcementId=""
+        announcementId={announcementIdRef.current}
       />
 
       <Header>
@@ -110,7 +145,10 @@ const AnnouncementsPage = () => {
             <ButtonRow
               type="button"
               key={announcement.id}
-              onClick={() => setDetailsModal(true)}
+              onClick={() => {
+                announcementIdRef.current = announcement.id;
+                updateViewStatus();
+              }}
             >
               <Table.Row>
                 <Table.BodyCell>
@@ -120,7 +158,10 @@ const AnnouncementsPage = () => {
                   <Content>{announcement.comunicado.texto}</Content>
                 </Table.BodyCell>
                 <Table.BodyCell>
-                  {format(announcement.comunicado.datacriacao, 'dd/MM/yyyy')}
+                  {format(
+                    parseISO(announcement.comunicado.datacriacao),
+                    'dd/MM/yyyy',
+                  )}
                 </Table.BodyCell>
               </Table.Row>
             </ButtonRow>

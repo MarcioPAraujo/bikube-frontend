@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import handleError from '@/utils/handleError';
 import { IAnnouncementsResponse } from '@/interfaces/anouncement/annoucementsResponse';
 import { IAnnouncementBodyRequest } from '@/interfaces/anouncement/announcementsBodyRequest';
+import { IAnnouncementsDetailsResponse } from '@/interfaces/anouncement/announcementDetailsResponse';
 import { api } from './api';
 
 export const getMyNotifications = async (
@@ -30,5 +31,39 @@ export const sendAnnouncement = async (
     return { data: true, error: null };
   } catch (error) {
     return handleError(error, 'Falha ao enviar o comunicado');
+  }
+};
+
+export const updateAnnouncement = async (
+  announcementId: number,
+): Promise<Result<boolean>> => {
+  const END_POINT = '/comunicado/alterarVisto';
+
+  const body = {
+    idcomunicadotabelaaxuiliar: announcementId,
+  };
+
+  try {
+    await api.post(END_POINT, body);
+    return { data: true, error: null };
+  } catch (error) {
+    return handleError(error, 'falha ao atualizar status do comunicado');
+  }
+};
+
+export const getAnnouncementsDetails = async (
+  announcementId: number,
+): Promise<Result<IAnnouncementsDetailsResponse>> => {
+  const END_POINT = `/comunicado/buscar/${announcementId}`;
+
+  try {
+    const response: AxiosResponse<IAnnouncementsDetailsResponse> =
+      await api.get(END_POINT);
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(
+      error,
+      'falha ao buscar as informações desse comunicado',
+    );
   }
 };
