@@ -1,20 +1,24 @@
 import { format } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { getCurrentTimestamp } from '@/services/pointManagement';
+import { useQuery } from '@tanstack/react-query';
+import useLiveTime from '@/hooks/useLiveTime';
 import { SaveButton, TimeDisplay, WatchContainer } from './styles';
 
 interface WatchProps {
   onSaveTime: (time: Date) => void;
 }
 const Watch: React.FC<WatchProps> = ({ onSaveTime }) => {
-  const [time, setTime] = useState<Date>(new Date());
+  const { data } = useQuery({
+    queryKey: ['current-timestamp'],
+    queryFn: getCurrentTimestamp,
+    // cache for 24 hours, avoid refetching on remount
+    staleTime: 1000 * 60 * 60 * 24, // 24 hours
+    // every 3 minutes, refetch the server time to keep it accurate
+    refetchInterval: 1000 * 60 * 3, // 3 minutes
+    select: result => result.data,
+  });
 
-  useEffect(() => {
-    const intervalID = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(intervalID);
-  }, []);
+  const time = useLiveTime(data || '');
 
   return (
     <WatchContainer>

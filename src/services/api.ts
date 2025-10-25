@@ -161,7 +161,6 @@ api.interceptors.response.use(
       const newAccessToken = await refreshAccessToken();
 
       if (newAccessToken) {
-        api.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
         // If succsss, update the token in the headers for the original request.
         originalRequest.headers!.Authorization = `Bearer ${newAccessToken}`;
 
