@@ -1,5 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { Result } from '@/interfaces/apiResult';
+import handleError from '@/utils/handleError';
 import { api } from '../api';
 
 export interface ISkillsListResponse {
@@ -21,5 +22,18 @@ export const getSkills = async (): Promise<Result<ISkillsListResponse[]>> => {
       return { data: null, error: axiosError.response.data as string };
     }
     return { data: null, error: 'falha ao buscar habilidades' };
+  }
+};
+
+export const createSkill = async (skill: string): Promise<Result<boolean>> => {
+  const ENDPOINT = '/habilidade';
+
+  const body = { habilidade: skill };
+
+  try {
+    await api.post(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'falha ao criar habilidade');
   }
 };
