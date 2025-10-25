@@ -11,6 +11,8 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import handleError from '@/utils/handleError';
 import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
+import { ISendNewVacancyEmailBodyRequest } from '@/interfaces/vacation/sendNewVacancyEmailBodyRequest';
+import { ICandidateBySkillsResponse } from '@/interfaces/candidate/candidateySkillsresponse';
 import { api } from '../api';
 
 export interface ICreateCandidateRequest {
@@ -125,5 +127,59 @@ export const DeleteCandidateById = async (
     return { data: true, error: null };
   } catch (error: any) {
     return handleError(error, 'falha ao deletar o candidato');
+  }
+};
+
+export const getCandidatesBySkills = async (
+  skills: string[],
+): Promise<Result<ICandidateBySkillsResponse[]>> => {
+  const ENDPOINT = '/candidato/filtrar';
+
+  try {
+    const response = await Promise.all(
+      skills.map(async skill => {
+        const res: AxiosResponse<ICandidateBySkillsResponse[]> = await api.post(
+          ENDPOINT,
+          { habilidades: [skill] },
+        );
+        return res.data;
+      }),
+    );
+    // flatten the array of arrays and remove duplicates
+    const candidatesMap: { [key: number]: ICandidateBySkillsResponse } = {};
+    response.flat().forEach(candidate => {
+      candidatesMap[candidate.id] = candidate;
+    });
+    const uniqueCandidates = Object.values(candidatesMap);
+    return { data: uniqueCandidates, error: null };
+  } catch (error) {
+    return handleError(error, 'falha ao buscar candidatos');
+  }
+
+  /*
+  const body = {
+    habilidades: skills,
+  };
+
+  try {
+    const response: AxiosResponse<ICandidateBySkillsResponse[]> =
+      await api.post(ENDPOINT, body);
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(error, 'falha ao buscar candidatos');
+  }
+  */
+};
+
+export const sendEmailNewVacancy = async (
+  body: ISendNewVacancyEmailBodyRequest,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = '/candidato/enviarEmailNovaVaga';
+
+  try {
+    await api.post(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error) {
+    return handleError(error, 'falha ao enviar email sobre nova vaga');
   }
 };

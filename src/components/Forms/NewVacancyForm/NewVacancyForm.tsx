@@ -21,6 +21,10 @@ import MultipleOptionsSelect from '@/components/Inputs/MultipleOptionsSelect';
 import { IVacancyBodyRequest } from '@/interfaces/vacancy/vacancyBodyRequest';
 import { createNewVancancy } from '@/services/vacancy/vacancyService';
 import {
+  getCandidatesBySkills,
+  sendEmailNewVacancy,
+} from '@/services/candidate/candidateService';
+import {
   GridContainer,
   Input,
   KeyWords,
@@ -145,6 +149,31 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
       notifyError(result.error);
       return;
     }
+
+    const skillsLabels = data.skills
+      ? data.skills.map(skill => skill.label)
+      : [];
+
+    const cadidatesBySkillsResult = await getCandidatesBySkills(skillsLabels);
+
+    if (cadidatesBySkillsResult.error) {
+      notifyError(cadidatesBySkillsResult.error);
+      return;
+    }
+
+    const candidates = cadidatesBySkillsResult.data || [];
+
+    if (candidates.length > 0) {
+      const emailBody = {
+        tituloVaga: data.title,
+        candidatos: candidates,
+      };
+
+      // send email to candidates about new vacancy
+      // since it's a background task, we don't wait for its result
+      sendEmailNewVacancy(emailBody);
+    }
+
     setSucessModalOpen(true);
   };
 
