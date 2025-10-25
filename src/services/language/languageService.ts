@@ -1,5 +1,6 @@
 import { Result } from '@/interfaces/apiResult';
 import { AxiosError, AxiosResponse } from 'axios';
+import handleError from '@/utils/handleError';
 import { api } from '../api';
 
 export interface ILanguagesListResponse {
@@ -23,5 +24,20 @@ export const getLanguages = async (): Promise<
       return { data: null, error: axiosError.response.data as string };
     }
     return { data: null, error: 'falha ao buscar idiomas' };
+  }
+};
+
+export const createLanguage = async (
+  language: string,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = '/idioma';
+
+  const body = { idioma: language };
+
+  try {
+    await api.post(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'falha ao criar idioma');
   }
 };

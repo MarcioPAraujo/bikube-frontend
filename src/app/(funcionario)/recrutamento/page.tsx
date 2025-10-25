@@ -2,7 +2,6 @@
 
 import SecondaryButton from '@/components/Buttons/SecondaryButton/SecondaryButton';
 import SearchBarComponent from '@/components/Inputs/SearchBar';
-import Tabs, { ITab } from '@/components/Tabs/Tabs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import VacancyCard from '@/components/VacancyCard/VacancyCard';
@@ -17,15 +16,6 @@ enum Routes {
   NEW_VACANCY = '/recrutamento/nova-vaga',
   VACANCY = '/recrutamento',
 }
-
-const tabs: ITab[] = [
-  {
-    label: 'Vagas',
-    url: '/recrutamento',
-    baseUrl: '/recrutamento',
-    description: 'Aqui se encontra todas as vagas abertas atualmente',
-  },
-];
 
 const PAGE_SIZE = 9;
 const RecutamentoPage: React.FC = () => {
@@ -67,7 +57,6 @@ const RecutamentoPage: React.FC = () => {
   if (!data && !isPlaceholderData) {
     return (
       <div>
-        <Tabs tabs={tabs} />
         <ActionsContainer>
           <SearchBarComponent
             placeholder="Buscar vaga"
@@ -88,7 +77,6 @@ const RecutamentoPage: React.FC = () => {
   if (!data || data.length === 0) {
     return (
       <div>
-        <Tabs tabs={tabs} />
         <ActionsContainer>
           <SearchBarComponent
             placeholder="Buscar vaga"
@@ -109,7 +97,6 @@ const RecutamentoPage: React.FC = () => {
 
   return (
     <div>
-      <Tabs tabs={tabs} />
       <ActionsContainer>
         <SearchBarComponent
           placeholder="Buscar vaga"
