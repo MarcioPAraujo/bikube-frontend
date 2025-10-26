@@ -11,10 +11,17 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
-import { Message, PageContainer } from './styles';
+import {
+  CardsContainer,
+  ContentWrapper,
+  Message,
+  PageContainer,
+  Sidebar,
+} from './styles';
 
 const EmployeesPointManagementPage: React.FC = () => {
   const [selectedector, setSelectedector] = useState<IOption>({} as IOption);
+  const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const [employees, setEmployees] = useState<IEmployeeResponse[]>([]);
 
   let sectorsOptions: IOption[] = [];
@@ -69,15 +76,27 @@ const EmployeesPointManagementPage: React.FC = () => {
         </Message>
       </RenderIf>
       <RenderIf isTrue={hasSelectedSector && !isEmployeesEmpty}>
-        <div>
-          {pagination.currentRows.map(employee => (
-            <EmployeeCard
-              key={employee.id}
-              name={employee.nome}
-              employeeData={employee}
-            />
-          ))}
-        </div>
+        <ContentWrapper>
+          <CardsContainer>
+            {pagination.currentRows.map(employee => {
+              return (
+                <EmployeeCard
+                  key={employee.id}
+                  name={employee.nome}
+                  employeeData={employee}
+                  onClick={() => setSelectedEmployee(employee.id)}
+                  isSelected={selectedEmployee === employee.id}
+                />
+              );
+            })}
+          </CardsContainer>
+          <Sidebar className={selectedEmployee ? 'selected' : ''}>
+            <button onClick={() => setSelectedEmployee(null)} type="button">
+              linpar
+            </button>
+            sidebar
+          </Sidebar>
+        </ContentWrapper>
       </RenderIf>
       <RenderIf isTrue={hasSelectedSector && isEmployeesEmpty}>
         <Message>Nenhum colaborador encontrado para este setor.</Message>

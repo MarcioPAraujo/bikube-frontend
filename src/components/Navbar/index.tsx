@@ -67,12 +67,6 @@ const tabs: Tab[] = [
     allowedRoles: accessLevel.none,
     baseUrl: '/comunicados',
   },
-  {
-    name: 'Minhas informações',
-    url: '/minhas-informacoes',
-    allowedRoles: accessLevel.none,
-    baseUrl: '/minhas-informacoes',
-  },
 ];
 
 export const Navbar = () => {

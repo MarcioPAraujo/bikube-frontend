@@ -5,6 +5,7 @@ export const FlipCard = styled.div`
   height: 30rem;
   width: clamp(20rem, 100%, 25rem);
   perspective: 1200px;
+  cursor: pointer;
 `;
 export const FlipCardInner = styled.div`
   position: relative;
@@ -26,6 +27,10 @@ export const Front = styled.div`
   position: absolute;
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
+
+  &.selected {
+    border: 2px solid ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+  }
 `;
 
 export const Back = styled.div`
@@ -36,6 +41,10 @@ export const Back = styled.div`
   transform: rotateY(180deg);
   width: 100%;
   height: 100%;
+
+  &.selected {
+    border: 2px solid ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+  }
 
   display: flex;
   flex-direction: column;

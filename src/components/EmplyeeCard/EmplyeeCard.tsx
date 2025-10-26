@@ -14,12 +14,20 @@ import {
 interface IEmployeeCardProps {
   name: string;
   employeeData: IEmployeeResponse;
+  onClick?: () => void;
+  isSelected: boolean;
 }
-const EmployeeCard: React.FC<IEmployeeCardProps> = ({ name, employeeData }) => {
+const EmployeeCard: React.FC<IEmployeeCardProps> = ({
+  name,
+  employeeData,
+  onClick,
+  isSelected,
+}) => {
+  const classname = isSelected ? 'selected' : '';
   return (
-    <FlipCard>
+    <FlipCard onClick={onClick}>
       <FlipCardInner>
-        <Front>
+        <Front className={classname}>
           <ImageContainer>
             <Image
               src="/images/user-profile-placeholder.jpg"
@@ -32,7 +40,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({ name, employeeData }) => {
             <Name>{name}</Name>
           </Content>
         </Front>
-        <Back>
+        <Back className={classname}>
           <Description>
             <span>Função</span>: {employeeData.funcao}
           </Description>
