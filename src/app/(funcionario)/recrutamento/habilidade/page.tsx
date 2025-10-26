@@ -9,6 +9,9 @@ import {
 } from '@/services/skilss/skilssService';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
+import usePaginationRange from '@/hooks/usePaginationRange';
+import Pagination from '@/components/Pagination/Pagination';
 import { Page } from './styles';
 
 const SkillsPage: React.FC = () => {
@@ -24,6 +27,8 @@ const SkillsPage: React.FC = () => {
   if (data) {
     skills = data;
   }
+
+  const pagination = usePaginationRange(skills, DEFAULT_PAGE_SIZE);
 
   if (skills.length === 0 && !isPlaceholderData) {
     return (
@@ -80,13 +85,20 @@ const SkillsPage: React.FC = () => {
         <Table.Root tableClassName="default">
           <Table.Header columns={['nome']} />
           <Table.Body>
-            {skills.map(skill => (
+            {pagination.currentRows.map(skill => (
               <Table.Row key={skill.id}>
                 <Table.BodyCell>{skill.habilidade}</Table.BodyCell>
               </Table.Row>
             ))}
           </Table.Body>
         </Table.Root>
+        <Pagination
+          currentPage={pagination.currentPage}
+          setCurrentPage={pagination.setCurrentPage}
+          totalOfData={skills.length}
+          totalPages={pagination.totalPages}
+          totalPaginatedData={pagination.paginatedRows}
+        />
       </Page>
     </>
   );

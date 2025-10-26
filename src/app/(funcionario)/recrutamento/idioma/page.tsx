@@ -9,6 +9,9 @@ import {
 } from '@/services/language/languageService';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import Pagination from '@/components/Pagination/Pagination';
+import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
+import usePaginationRange from '@/hooks/usePaginationRange';
 import { Page } from './styles';
 
 const LanguagesPage: React.FC = () => {
@@ -24,6 +27,8 @@ const LanguagesPage: React.FC = () => {
   if (data) {
     languages = data;
   }
+
+  const pagination = usePaginationRange(languages, DEFAULT_PAGE_SIZE);
 
   if (languages.length === 0 && !isPlaceholderData) {
     return (
@@ -82,13 +87,20 @@ const LanguagesPage: React.FC = () => {
         <Table.Root tableClassName="default">
           <Table.Header columns={['nome']} />
           <Table.Body>
-            {languages.map(language => (
+            {pagination.currentRows.map(language => (
               <Table.Row key={language.id}>
                 <Table.BodyCell>{language.idioma}</Table.BodyCell>
               </Table.Row>
             ))}
           </Table.Body>
         </Table.Root>
+        <Pagination
+          currentPage={pagination.currentPage}
+          setCurrentPage={pagination.setCurrentPage}
+          totalOfData={languages.length}
+          totalPages={pagination.totalPages}
+          totalPaginatedData={pagination.paginatedRows}
+        />
       </Page>
     </>
   );
