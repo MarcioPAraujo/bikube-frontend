@@ -8,6 +8,15 @@ export const ModalContent = styled.div`
   background-color: #ffffff;
   padding: 2.4rem;
   width: clamp(32rem, 90vw, 40rem);
+
+  position: relative;
+  z-index: 1;
+`;
+
+export const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const Title = styled.h2`

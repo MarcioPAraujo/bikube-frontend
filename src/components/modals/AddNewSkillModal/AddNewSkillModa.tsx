@@ -38,6 +38,8 @@ const AddNewSkillModal: React.FC<AddNewSkillModalProps> = ({
   const handleClose = () => {
     reset();
     onClose();
+    setSuccessModal(false);
+    setWarningModal(false);
   };
 
   const onFormSubmit = async (data: SkillFormData) => {

@@ -26,11 +26,43 @@ const SkillsPage: React.FC = () => {
   }
 
   if (skills.length === 0 && !isPlaceholderData) {
-    return <div>Nenhuma habilidade encontrada.</div>;
+    return (
+      <>
+        <AddNewSkillModal
+          isOpen={skillsModal}
+          onClose={() => setSkillsModal(false)}
+          refetch={refetch}
+        />
+        <Page>
+          <DefaultButton
+            type="button"
+            onClick={() => setSkillsModal(true)}
+            text="Adicionar habilidade"
+          />
+          Nenhuma habilidade encontrada.
+        </Page>
+      </>
+    );
   }
 
   if (skills.length === 0) {
-    return <div>Nenhuma habilidade encontrada.</div>;
+    return (
+      <>
+        <AddNewSkillModal
+          isOpen={skillsModal}
+          onClose={() => setSkillsModal(false)}
+          refetch={refetch}
+        />
+        <Page>
+          <DefaultButton
+            type="button"
+            onClick={() => setSkillsModal(true)}
+            text="Adicionar habilidade"
+          />
+          Nenhuma habilidade encontrada.
+        </Page>
+      </>
+    );
   }
 
   return (
