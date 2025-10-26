@@ -8,9 +8,21 @@ const RecruitmentLayout: React.FC<{ children: React.ReactNode }> = ({
   const tabs: ITab[] = [
     {
       label: 'Vagas',
-      url: '/recrutamento',
-      baseUrl: '/recrutamento',
+      url: '/recrutamento/vagas',
+      baseUrl: '/recrutamento/vagas',
       description: 'Aqui se encontra todas as vagas abertas atualmente',
+    },
+    {
+      label: 'Habilidades',
+      url: '/recrutamento/habilidade',
+      baseUrl: '/recrutamento/habilidade',
+      description: 'Gerencie as habilidades necessárias para as vagas',
+    },
+    {
+      label: 'Idiomas',
+      url: '/recrutamento/idioma',
+      baseUrl: '/recrutamento/idioma',
+      description: 'Gerencie os idiomas necessários para as vagas',
     },
   ];
 
