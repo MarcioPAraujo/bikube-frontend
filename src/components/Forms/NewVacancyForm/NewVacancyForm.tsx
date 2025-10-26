@@ -24,6 +24,7 @@ import {
   getCandidatesBySkills,
   sendEmailNewVacancy,
 } from '@/services/candidate/candidateService';
+import AddNewSkillModal from '@/components/modals/AddNewSkillModal/AddNewSkillModa';
 import {
   GridContainer,
   Input,
@@ -36,6 +37,7 @@ import {
   DragSection,
   DragBox,
   DragItem,
+  AddButton,
 } from './styles';
 
 interface NewVacancyFormProps {
@@ -72,6 +74,7 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
   const [citiesOptions, setCitiesOptions] = useState<IOption[]>([]);
   const [skills, setSkills] = useState<string[] | null>(null);
   const [sucessModalOpen, setSucessModalOpen] = useState(false);
+  const [skillModalOpen, setSkillModalOpen] = useState(false);
 
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
@@ -124,6 +127,21 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
     };
     getCities();
   }, [selectedState]);
+
+  const refetchSkillsOptions = async () => {
+    const result = await getSkills();
+    if (result.error) {
+      notifyError(result.error);
+      return;
+    }
+    if (result.data) {
+      const options = result.data.map(skill => ({
+        label: skill.habilidade,
+        value: skill.habilidade,
+      }));
+      setSkillsOptions(options);
+    }
+  };
 
   const onFormSubmit = async (data: NewVacancySchemaType) => {
     const skillsForBody = skills
@@ -248,6 +266,14 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
         onClose={() => router.back()}
         buttonText="OK"
         message="A nova vaga foi criada e publicada com sucesso."
+      />
+
+      <AddNewSkillModal
+        isOpen={skillModalOpen}
+        onClose={() => {
+          setSkillModalOpen(false);
+        }}
+        refetch={refetchSkillsOptions}
       />
 
       <form id={formId} onSubmit={handleSubmit(onFormSubmit)}>
@@ -388,6 +414,9 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
             {errors.keyWords && <p>{errors.keyWords.message}</p>}
           </KeywordsBox>
         </KeyWordsWrapper>
+        <AddButton type="button" onClick={() => setSkillModalOpen(true)}>
+          Adiconar habilidade
+        </AddButton>
         <DragSection>
           <Controller
             control={control}

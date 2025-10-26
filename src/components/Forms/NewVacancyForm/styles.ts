@@ -84,10 +84,22 @@ export const KeyWordItem = styled.button`
   }
 `;
 
+export const AddButton = styled.button`
+  border: none;
+  background-color: ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
+  color: white;
+  font-size: 1.4rem;
+  padding: 0.8rem 1.6rem;
+
+  margin-top: 1.6rem;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+  }
+`;
 export const DragSection = styled.div`
   display: flex;
   gap: 0.8rem;
-  margin-top: 1.6rem;
 
   & > :first-child,
   & > :last-child {
