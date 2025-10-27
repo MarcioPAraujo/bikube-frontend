@@ -67,7 +67,7 @@ const Layout: React.FC<IChildrenProps> = ({ children }) => {
       <PageTitle>{vacancyName}</PageTitle>
       <SubtitleContainer>
         <IconButton
-          onClick={() => router.push('/recrutamento')}
+          onClick={() => router.push('/recrutamento/vagas')}
           iconNode={<Icon name="ArrowLeft" />}
         />
         <p>Fases do processo seletivo</p>

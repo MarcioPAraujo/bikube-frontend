@@ -39,5 +39,15 @@ export const FiltersContainer = styled.div`
 export const ButtonRow = styled.button`
   border: none;
   background: none;
+  position: relative;
   width: 100%;
+`;
+export const NotSeenIndicator = styled.span`
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  background-color: ${({ theme }) => theme.colors.BLUE.normal};
+  border-radius: 50%;
+  top: 0.5rem;
+  right: 1rem;
 `;

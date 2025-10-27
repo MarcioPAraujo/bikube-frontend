@@ -20,7 +20,14 @@ import {
 } from '@/services/announcementsService';
 import { IAnnouncementsResponse } from '@/interfaces/anouncement/annoucementsResponse';
 import { notifyError } from '@/utils/handleToast';
-import { ButtonRow, Content, FiltersContainer, Header, Page } from './styles';
+import {
+  ButtonRow,
+  Content,
+  FiltersContainer,
+  Header,
+  NotSeenIndicator,
+  Page,
+} from './styles';
 
 // VH84GB82
 // JFWOWY17
@@ -37,7 +44,7 @@ const AnnouncementsPage = () => {
 
   const userId = user?.id || '';
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['announcemnts'],
     queryFn: async () => {
       const result = await getMyNotifications(userId);
@@ -92,6 +99,7 @@ const AnnouncementsPage = () => {
     if (response.error) {
       notifyError(response.error);
     }
+    refetch();
     setDetailsModal(true);
   };
 
@@ -164,6 +172,7 @@ const AnnouncementsPage = () => {
                   )}
                 </Table.BodyCell>
               </Table.Row>
+              {!announcement.visto && <NotSeenIndicator />}
             </ButtonRow>
           ))}
         </Table.Body>
