@@ -59,3 +59,15 @@ export const getEmployeeById = async (
     return handleError(error, 'Erro ao buscar detalhes do funcionário');
   }
 };
+
+export const deleteEmployeeById = async (
+  id: string,
+): Promise<Result<boolean>> => {
+  const url = `/funcionario/${id}`;
+  try {
+    await api.delete(url);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Erro ao deletar funcionário');
+  }
+};

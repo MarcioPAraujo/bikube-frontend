@@ -8,8 +8,7 @@ import {
 } from '@/validation/Employees/EmployeesForm';
 import { IOption } from '@/interfaces/option';
 import { getsectors } from '@/services/setor/setorService';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import cpfMask from '@/utils/masks/cpfMask';
 import mobileMask from '@/utils/masks/mobileMask';
@@ -60,18 +59,42 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
   const [selectedPosition, setSelectedPosition] = useState<IOption>(
     {} as IOption,
   );
+  const [sectorsOptions, setSectorsOptions] = useState<IOption[]>([]);
   const [gettingAddress, setGettingAddress] = useState(false);
 
-  const { data: sectors, isFetching } = useQuery({
-    queryKey: ['sectors'],
-    queryFn: () => getsectors(),
-  });
+  useEffect(() => {
+    if (!defaultValues || mode === 'create') return;
+    const initializeForm = async () => {
+      const response = await getsectors();
+      if (!response.data) return;
+      const sectorsOptions: IOption[] = response.data.map(sector => ({
+        value: sector.id.toString(),
+        label: sector.nome,
+      }));
+      setSectorsOptions(sectorsOptions);
 
-  const sectorsOptions: IOption[] =
-    sectors?.data?.map(sector => ({
-      value: sector.id.toString(),
-      label: sector.nome,
-    })) || [];
+      Object.entries(defaultValues).forEach(([key, value]) => {
+        setValue(key as keyof EmployeesFormValues, value);
+      });
+
+      const sectorOption = sectorsOptions.find(
+        option => option.value === defaultValues.numerosetor,
+      );
+      if (sectorOption) {
+        setSelectedSector(sectorOption);
+      }
+
+      const positionOption = positions.find(
+        option => option.value === defaultValues.cargo,
+      );
+      if (positionOption) {
+        setSelectedPosition(positionOption);
+      }
+    };
+    initializeForm();
+  }, []);
+
+  const isEditMode = mode === 'edit';
 
   const handleSectorChange = (option: IOption) => {
     setSelectedSector(option);
@@ -146,6 +169,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             placeholder="Digite o nome do funcionário"
             register={register('nome')}
             errorMessage={errors.nome?.message}
+            disabled={isEditMode}
           />
           <InputComponent
             id="birthday"
@@ -156,6 +180,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
                 handleDateChange(e.target.value, 'data_nascimento'),
             })}
             errorMessage={errors.data_nascimento?.message}
+            disabled={isEditMode}
           />
           <InputComponent
             id="admission-date"
@@ -165,6 +190,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
               onChange: e => handleDateChange(e.target.value, 'dataentrada'),
             })}
             errorMessage={errors.dataentrada?.message}
+            disabled={isEditMode}
           />
           <InputComponent
             id="cpf"
@@ -174,6 +200,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
               onChange: e => handleCPFChange(e.target.value),
             })}
             errorMessage={errors.cpf?.message}
+            disabled={isEditMode}
           />
           <InputComponent
             id="email"
@@ -226,6 +253,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             label="Cargo"
             enableSearch
             errorMessage={errors.cargo?.message}
+            disabled={isEditMode}
           />
           <SelectComponent
             id="sector-select"
@@ -234,7 +262,6 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             selectedOption={selectedSector}
             onChange={handleSectorChange}
             placeholder="Selecione um setor"
-            disabled={isFetching}
             label="Setor"
             enableSearch
             errorMessage={errors.numerosetor?.message}
@@ -252,6 +279,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
               onChange: e => handleCepChange(e.target.value),
             })}
             errorMessage={errors.cep?.message}
+            disabled={gettingAddress || isEditMode}
           />
 
           <InputComponent
@@ -264,6 +292,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             }
             register={register('estado')}
             errorMessage={errors.estado?.message}
+            disabled={gettingAddress || isEditMode}
           />
 
           <InputComponent
@@ -276,6 +305,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             }
             register={register('cidade')}
             errorMessage={errors.cidade?.message}
+            disabled={gettingAddress || isEditMode}
           />
 
           <InputComponent
@@ -286,6 +316,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             }
             register={register('logradouro')}
             errorMessage={errors.logradouro?.message}
+            disabled={gettingAddress || isEditMode}
           />
 
           <InputComponent
@@ -298,6 +329,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             }
             register={register('bairro')}
             errorMessage={errors.bairro?.message}
+            disabled={gettingAddress || isEditMode}
           />
 
           <InputComponent
@@ -306,6 +338,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             placeholder="Digite o número da residência"
             register={register('numero')}
             errorMessage={errors.numero?.message}
+            disabled={isEditMode}
           />
 
           <InputComponent
@@ -315,6 +348,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             placeholder="Digite o complemento (opcional)"
             register={register('complemento')}
             errorMessage={errors.complemento?.message}
+            disabled={isEditMode}
           />
         </GridContainer>
       </Fieldset>

@@ -26,6 +26,10 @@ export const Input = styled.input`
     color: ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
     font-size: 1.6rem;
   }
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
+    cursor: not-allowed;
+  }
 `;
 export const ErrorMessage = styled.span`
   position: absolute;
