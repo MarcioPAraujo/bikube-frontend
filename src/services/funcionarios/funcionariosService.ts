@@ -1,9 +1,11 @@
 import { IEmployeeResponse } from '@/interfaces/funcionarios/getListOfEmployeesResponse';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { IEmployeeBody } from '@/interfaces/funcionarios/registerEmployee';
+import { IEmployeeDetailsResponse } from '@/interfaces/funcionarios/employeeDetailsResponse';
+import { Result } from '@/interfaces/apiResult';
+import handleError from '@/utils/handleError';
 import { api } from '../api';
 
-type Result<T> = { data: T; error: null } | { data: null; error: string };
 export const getListOfEmployees = async (): Promise<
   Result<IEmployeeResponse[]>
 > => {
@@ -41,5 +43,19 @@ export const createEmployee = async (
       }
     }
     return { data: null, error: 'Erro ao cadastrar funcionário' };
+  }
+};
+
+export const getEmployeeById = async (
+  id: string,
+): Promise<Result<IEmployeeDetailsResponse>> => {
+  const url = `/funcionario/${id}`;
+  try {
+    const response: AxiosResponse<IEmployeeDetailsResponse> = await api.get(
+      url,
+    );
+    return { data: response.data, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Erro ao buscar detalhes do funcionário');
   }
 };

@@ -29,8 +29,3 @@ export const GridContainer = styled.div`
     grid-column: span 2;
   }
 `;
-export const ButtonContainer = styled.div`
-  display: flex;
-  gap: 1.6rem;
-  justify-content: flex-end;
-`;

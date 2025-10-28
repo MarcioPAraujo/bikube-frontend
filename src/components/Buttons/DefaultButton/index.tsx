@@ -12,6 +12,7 @@ interface DefaultButtonProps {
   classname?: string;
   variant?: 'bordered' | 'default';
   styles?: CSSProperties;
+  formId?: string;
 }
 export const DefaultButton: FC<DefaultButtonProps> = ({
   text,
@@ -23,6 +24,7 @@ export const DefaultButton: FC<DefaultButtonProps> = ({
   iconPosition,
   variant = 'default',
   styles,
+  formId,
 }) => {
   return (
     <Button
@@ -31,6 +33,7 @@ export const DefaultButton: FC<DefaultButtonProps> = ({
       disabled={disabled}
       className={`${classname} ${variant}`}
       style={styles}
+      form={formId}
     >
       {Icon && iconPosition === 'left' && <Icon />}
       {text}

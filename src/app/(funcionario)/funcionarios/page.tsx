@@ -1,17 +1,17 @@
 'use client';
 
-import { employees } from '@/components/MOCK/employees';
 import { Table } from '@/components/Table/Index/Index';
 import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import { useRouter } from 'next/navigation';
 import SearchBarComponent from '@/components/Inputs/SearchBar';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
 import Pagination from '@/components/Pagination/Pagination';
+import { IEmployeeResponse } from '@/interfaces/funcionarios/getListOfEmployeesResponse';
 import { CustomLink, TopTitle } from './styles';
 
 const columns = ['Nome', 'Cargo', 'Setor', 'Função', 'Data de Admissão'];
@@ -19,31 +19,52 @@ const columns = ['Nome', 'Cargo', 'Setor', 'Função', 'Data de Admissão'];
 const EmployeesPage = () => {
   const { push } = useRouter();
   const [search, setSearch] = useState<string>('');
-  const filteredSearch = employees.filter(employee =>
-    employee.name.toLowerCase().includes(search.toLowerCase()),
-  );
-  const pagination = usePaginationRange(filteredSearch, DEFAULT_PAGE_SIZE);
-  useEffect(() => {
-    pagination.setCurrentPage(1);
-  }, [search]);
-  /*
-  // WHEN INTEGRATES
-  const { data: employees, isFetching } = useQuery({
+
+  let employees: IEmployeeResponse[] = [];
+  const { data, isPlaceholderData } = useQuery({
     queryKey: ['employees'],
     queryFn: () => getListOfEmployees(),
+    select: response => response.data,
+    placeholderData: keepPreviousData,
   });
 
-  if (isFetching) return null;
+  if (data) {
+    employees = data;
+  }
 
-  if (employees?.error) {
+  const filteredSearch = employees.filter(employee =>
+    employee.nome.toLowerCase().includes(search.toLowerCase()),
+  );
+  const pagination = usePaginationRange(filteredSearch, DEFAULT_PAGE_SIZE);
+
+  if (!data && !isPlaceholderData) return null;
+
+  if (!data) {
     return (
       <div>
         <h1>Funcionários</h1>
-        <p>Ocorreu um erro ao buscar a lista de funcionários</p>
+        <p>Carregando...</p>
       </div>
     );
   }
-  */
+
+  if (employees.length === 0) {
+    return (
+      <div>
+        <TopTitle>
+          <h1>Funcionários</h1>
+          <div>
+            <DefaultButton
+              text="Cadastrar funcionário"
+              onClick={() => push('/funcionarios/cadastrar')}
+            />
+          </div>
+        </TopTitle>
+        <p>Nenhum funcionário cadastrado.</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <TopTitle>
@@ -55,7 +76,10 @@ const EmployeesPage = () => {
           />
           <SearchBarComponent
             value={search}
-            onSearch={e => setSearch(e.target.value)}
+            onSearch={e => {
+              setSearch(e.target.value);
+              pagination.setCurrentPage(1);
+            }}
             placeholder="Buscar funcionário"
           />
         </div>
@@ -69,12 +93,12 @@ const EmployeesPage = () => {
               key={employee.id}
             >
               <Table.Row>
-                <Table.BodyCell>{employee.name}</Table.BodyCell>
-                <Table.BodyCell>{employee.duty}</Table.BodyCell>
-                <Table.BodyCell>{employee.sector}</Table.BodyCell>
-                <Table.BodyCell>{employee.position}</Table.BodyCell>
+                <Table.BodyCell>{employee.nome}</Table.BodyCell>
+                <Table.BodyCell>{employee.funcao}</Table.BodyCell>
+                <Table.BodyCell>{employee.idsetor.nome}</Table.BodyCell>
+                <Table.BodyCell>{employee.cargo}</Table.BodyCell>
                 <Table.BodyCell>
-                  {format(parseISO(employee.joined), 'dd/MM/yyyy')}
+                  {format(parseISO(employee.dataentrada), 'dd/MM/yyyy')}
                 </Table.BodyCell>
               </Table.Row>
             </CustomLink>
