@@ -20,12 +20,6 @@ const accessLevel = {
 };
 const tabs: Tab[] = [
   {
-    name: 'Home',
-    url: '/home',
-    allowedRoles: accessLevel.none,
-    baseUrl: '/home',
-  },
-  {
     name: 'Setores',
     url: '/setores',
     allowedRoles: accessLevel.medium,
