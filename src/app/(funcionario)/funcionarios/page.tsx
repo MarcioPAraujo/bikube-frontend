@@ -12,18 +12,32 @@ import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
 import Pagination from '@/components/Pagination/Pagination';
 import { IEmployeeResponse } from '@/interfaces/funcionarios/getListOfEmployeesResponse';
+import { useAuth } from '@/hooks/useAuth';
 import { CustomLink, TopTitle } from './styles';
 
 const columns = ['Nome', 'Cargo', 'Setor', 'Função', 'Data de Admissão'];
 
 const EmployeesPage = () => {
+  const { user } = useAuth();
   const { push } = useRouter();
   const [search, setSearch] = useState<string>('');
 
   let employees: IEmployeeResponse[] = [];
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['employees'],
-    queryFn: () => getListOfEmployees(),
+    queryFn: async () => {
+      const result = await getListOfEmployees();
+      if (!user?.id) return result;
+      if (result.error) return result;
+      // Filter out the logged-in user from the list
+      if (result.data) {
+        const filteredData = result.data.filter(
+          employee => employee.id !== user.id,
+        );
+        return { ...result, data: filteredData };
+      }
+      return result;
+    },
     select: response => response.data,
     placeholderData: keepPreviousData,
   });

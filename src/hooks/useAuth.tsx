@@ -126,7 +126,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     redirect('/');
   }
   if (isAuthenticated && pathName === '/') {
-    redirect('/gestao-do-ponto/registro');
+    redirect('/home');
   }
   if (isAuthenticated && isOnlyEmployee && !allowedMenus(employeeRoutes)) {
     router.back();

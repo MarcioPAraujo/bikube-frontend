@@ -19,8 +19,6 @@ export const getsectors = async (): Promise<Result<ISectorResponse[]>> => {
   try {
     const response: AxiosResponse<ISectorResponse[]> = await api.get(url);
 
-    console.log('Get sectors response:', response);
-
     const { data } = response;
 
     return { data, error: null };

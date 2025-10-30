@@ -29,7 +29,11 @@ export const InputContainer = styled.div`
   height: 3.6rem;
 
   &.disabled {
-    cursor: default;
+    cursor: not-allowed;
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_d7d7d7};
+    span {
+      color: ${({ theme }) => theme.colors.GRAY.hex_696969};
+    }
   }
 
   &.opened {
