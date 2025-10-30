@@ -3,7 +3,6 @@ import { getListOfEmployees } from '@/services/funcionarios/funcionariosService'
 import { loginAuth } from '@/services/login/loginService';
 import { termsOfUseService } from '@/services/termsOfUse/termsofUseService';
 import { notifyError } from '@/utils/handleToast';
-import { LOCAL_STORAGE_KEYS } from '@/utils/localStorageKeys';
 import { registerMask } from '@/utils/masks/registerMask';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import {
@@ -14,11 +13,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
-interface ITokens {
-  accessToken: string;
-  refreshToken: string;
-}
 
 const useEmployeeLoginForm = () => {
   const router = useRouter();
@@ -34,9 +28,6 @@ const useEmployeeLoginForm = () => {
   });
   const [acceptTermsModal, setAcceptTermsModal] = useState<boolean>(false);
   const [isFIrstAccess, setIsFirstAccess] = useState<boolean>(false);
-  const [keepLoggedInModal, setKeepLoggedInModal] = useState<boolean>(false);
-  const [userData, setUserData] = useState<User>({} as User);
-  const [tokens, setTokens] = useState<ITokens>({} as ITokens);
 
   const userId = useRef<string>('');
 
@@ -111,20 +102,24 @@ const useEmployeeLoginForm = () => {
     if (!proceedWithLogin) return;
     */
 
-    setUserData({
+    const userData: User = {
       email: result.data.email,
       id: employee.id,
       nome: employee.nome,
       register: data.register,
       role: result.data.role,
       setor: employee.idsetor.nome,
-    });
-    setTokens({
-      accessToken: result.data.access_token,
-      refreshToken: result.data.refresh_token,
-    });
+    };
 
-    setKeepLoggedInModal(true);
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.employee,
+      JSON.stringify(userData),
+    );
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.token,
+      JSON.stringify(result.data.access_token),
+    );
+    setUser(userData);
   };
 
   const onAcceptterms = async () => {
@@ -139,32 +134,6 @@ const useEmployeeLoginForm = () => {
     router.push('/email');
   };
 
-  const stayedLoggedIn = () => {
-    setUser(userData);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.employee, JSON.stringify(userData));
-    localStorage.setItem(
-      LOCAL_STORAGE_KEYS.token,
-      JSON.stringify(tokens.accessToken),
-    );
-    localStorage.setItem(
-      LOCAL_STORAGE_KEYS.refreshToken,
-      JSON.stringify(tokens.refreshToken),
-    );
-    setKeepLoggedInModal(false);
-  };
-  const doNotStayLoggedIn = () => {
-    setUser(userData);
-    sessionStorage.setItem(
-      SESSION_STORAGE_KEYS.employee,
-      JSON.stringify(userData),
-    );
-    sessionStorage.setItem(
-      SESSION_STORAGE_KEYS.token,
-      JSON.stringify(tokens.accessToken),
-    );
-    setKeepLoggedInModal(false);
-  };
-
   const hookform = {
     register,
     handleSubmit,
@@ -174,7 +143,6 @@ const useEmployeeLoginForm = () => {
   };
 
   const modals = {
-    keepLoggedInModal,
     acceptTermsModal,
     setAcceptTermsModal,
     isFIrstAccess,
@@ -186,8 +154,6 @@ const useEmployeeLoginForm = () => {
     onFormSubmit,
     onRegisterFieldChange,
     goToEmailVerification,
-    doNotStayLoggedIn,
-    stayedLoggedIn,
     onAcceptterms,
   };
 };

@@ -63,7 +63,6 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
   const [gettingAddress, setGettingAddress] = useState(false);
 
   useEffect(() => {
-    if (!defaultValues || mode === 'create') return;
     const initializeForm = async () => {
       const response = await getsectors();
       if (!response.data) return;
@@ -72,6 +71,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
         label: sector.nome,
       }));
       setSectorsOptions(sectorsOptions);
+      if (!defaultValues) return;
 
       Object.entries(defaultValues).forEach(([key, value]) => {
         setValue(key as keyof EmployeesFormValues, value);

@@ -67,6 +67,9 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
   } = useForm<NewVacancySchemaType>({
     resolver: yupResolver(NewVacancySchema),
     mode: 'onTouched',
+    defaultValues: {
+      contractType: contractTypeOptions[0],
+    },
   });
   const router = useRouter();
   const [skillsOptions, setSkillsOptions] = useState<IOption[]>([]);
@@ -304,6 +307,7 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
                 placeholder="Selecione o tipo de contrato"
                 options={contractTypeOptions}
                 errorMessage={errors.contractType?.label?.message}
+                disabled
               />
             )}
           />

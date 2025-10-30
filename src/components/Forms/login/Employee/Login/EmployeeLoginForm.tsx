@@ -2,24 +2,16 @@ import InputComponent from '@/components/Inputs/InputComponent';
 import PasswordInput from '@/components/Inputs/PasswordInput/PasswordInput';
 import AlertModal from '@/components/modals/AlertModal/AlertModal';
 import TermsOfUseModal from '@/components/modals/TermsOfUsemodal/TermsOfUseModal';
-import { KeepLoggedInModal } from '@/components/modals/KeepLoggedInModal/KeepLoggedInModal';
 import { CustomLink, Form, SubmitButton, Title } from '../commonStyles';
 import useEmployeeLoginForm from './useEmployeeLoginForm';
 
 const EmployeeLoginForm: React.FC = () => {
   const {
     hookform: { errors, handleSubmit, isSubmitting, isValid, register },
-    modals: {
-      acceptTermsModal,
-      setAcceptTermsModal,
-      isFIrstAccess,
-      keepLoggedInModal,
-    },
+    modals: { acceptTermsModal, setAcceptTermsModal, isFIrstAccess },
     onFormSubmit,
     onRegisterFieldChange,
     goToEmailVerification,
-    doNotStayLoggedIn,
-    stayedLoggedIn,
     onAcceptterms,
   } = useEmployeeLoginForm();
 
@@ -41,11 +33,6 @@ const EmployeeLoginForm: React.FC = () => {
         }}
         type="employee"
         onClose={() => setAcceptTermsModal(false)}
-      />
-      <KeepLoggedInModal
-        isOpen={keepLoggedInModal}
-        onJustLogin={doNotStayLoggedIn}
-        onStayLoggedIn={stayedLoggedIn}
       />
 
       <Form onSubmit={handleSubmit(onFormSubmit)}>
