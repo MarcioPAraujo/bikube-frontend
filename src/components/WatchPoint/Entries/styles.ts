@@ -30,6 +30,7 @@ export const Description = styled.span`
   font-size: 1.4rem;
   color: ${({ theme }) => theme.colors.GRAY.hex_353535};
   font-weight: 500;
+  text-transform: Capitalize;
 `;
 export const Time = styled.span`
   font-size: 1.8rem;
