@@ -42,18 +42,14 @@ export const Title = styled.h1`
   font-weight: 700;
 `;
 export const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+
   width: 100%;
   height: 45rem;
-`;
-export const TextArea = styled.textarea`
-  width: 100%;
-  height: 100%;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_1b1b1b};
-  font-size: 1.6rem;
-  color: ${({ theme }) => theme.colors.BLACK};
-  resize: none;
+  overflow-y: auto;
+  padding: 0rem 1rem;
 `;
 export const ButtonContainer = styled.div`
   display: flex;
