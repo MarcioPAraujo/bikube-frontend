@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import CandidateTermsOfUse from '@/components/terms/CandidateTermsOfUse/CandidateTermsOfUse';
 import CandidatePrivacyPolicy from '@/components/terms/CandidatePrivacyPolicy/CandidatePrivacyPolicy';
+import EmployeeTermsOfUse from '@/components/terms/EmployeeTermsOfUse/EmployeeTermsOfUse';
+import EmployeePrivacyPolicy from '@/components/terms/EmployeePrivacyPolicy/EmployeePrivacyPolicy';
 import {
   BlurBackground,
   ButtonContainer,
@@ -32,6 +34,12 @@ const TermsOfUseModal: FC<IProps> = ({ isOpen, onClose, onSubmit, type }) => {
             <>
               <CandidateTermsOfUse />
               <CandidatePrivacyPolicy />
+            </>
+          )}
+          {isEmployee && (
+            <>
+              <EmployeeTermsOfUse />
+              <EmployeePrivacyPolicy />
             </>
           )}
         </TextContainer>

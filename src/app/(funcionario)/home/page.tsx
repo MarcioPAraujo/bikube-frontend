@@ -8,7 +8,6 @@ import { EmployeesFormValues } from '@/validation/Employees/EmployeesForm';
 import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import { Title } from './styles';
-import TermsOfUseModal from '@/components/modals/TermsOfUsemodal/TermsOfUseModal';
 
 const HomePage: React.FC = () => {
   const { user } = useAuth();
@@ -54,12 +53,6 @@ const HomePage: React.FC = () => {
 
   return (
     <main>
-      <TermsOfUseModal
-        isOpen
-        onClose={() => console.log('aa')}
-        onSubmit={() => console.log('aaa')}
-        type="candidate"
-      />
       <Title>Minhas informações</Title>
       <EmployeeForm
         formId="viewEmployeeDetailsForm"
