@@ -29,9 +29,6 @@ import {
   Page,
 } from './styles';
 
-// VH84GB82
-// JFWOWY17
-
 const columns = ['Titulo', 'Conteúdo', 'Data'];
 const AnnouncementsPage = () => {
   const router = useRouter();
