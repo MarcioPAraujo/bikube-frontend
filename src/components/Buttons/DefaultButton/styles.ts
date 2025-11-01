@@ -28,4 +28,14 @@ export const Button = styled.button`
     border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_353535};
     color: ${({ theme }) => theme.colors.GRAY.hex_353535};
   }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    &:hover {
+      box-shadow: none;
+    }
+    &:active {
+      box-shadow: none;
+    }
+  }
 `;

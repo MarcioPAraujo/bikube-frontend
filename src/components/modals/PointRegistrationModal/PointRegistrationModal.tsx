@@ -166,28 +166,28 @@ const PointRegistrationModal: React.FC<IPointRegistrationModalProps> = ({
               <InputComponent
                 id="entry_a"
                 labelText="Entrada-A"
-                value="08:00:00"
+                defaultValue="08:00:00"
                 disabled
                 classname={newEntryA !== originalEntryA ? 'change' : 'keep'}
               />
               <InputComponent
                 id="exit_a"
                 labelText="Saída-A"
-                value="12:00:00"
+                defaultValue="12:00:00"
                 disabled
                 classname={newExitA !== originalExitA ? 'change' : 'keep'}
               />
               <InputComponent
                 id="entry_b"
                 labelText="Entrada-B"
-                value="13:00:00"
+                defaultValue="13:00:00"
                 disabled
                 classname={newEntryB !== originalEntryB ? 'change' : 'keep'}
               />
               <InputComponent
                 id="exit_b"
                 labelText="Saída-B"
-                value="17:00:00"
+                defaultValue="17:00:00"
                 disabled
                 classname={newExitB !== originalExitB ? 'change' : 'keep'}
               />

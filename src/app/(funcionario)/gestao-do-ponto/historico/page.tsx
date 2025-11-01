@@ -10,7 +10,14 @@ import { Table } from '@/components/Table/Index/Index';
 import Pagination from '@/components/Pagination/Pagination';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
-import { Header } from './styles';
+import InputComponent from '@/components/Inputs/InputComponent';
+import { ListaEntrada } from '@/interfaces/mirror/employeeMirrorResponse';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/hooks/useAuth';
+import { getEmployeeMirrors } from '@/services/mirror/mirrorService';
+import { format } from 'date-fns';
+import RenderIf from '@/components/RenderIf/RenderIf';
+import { FilterButton, FiltersContainer, Header } from './styles';
 
 const monthsOptions: IOption[] = [
   { label: 'Janeiro', value: '1' },
@@ -35,21 +42,49 @@ const columns = [
   'Saída - B',
 ];
 
-const rows = Array.from({ length: 10 }, (_, index) => ({
-  id: `row-${index + 1}`,
-  data: '01/01/2023',
-  entradaA: '08:00',
-  saidaA: '12:00',
-  entradaB: '13:00',
-  saidaB: '17:00',
-}));
+const emptyEntries = Array.from({ length: 4 }, () => '-- : -- : --');
 
 const HistoryPointPage: React.FC = () => {
+  const { user } = useAuth();
+
+  const employeeId = user?.id || '';
+  const [mirrorId, setMirrorId] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<IOption>({} as IOption);
+  const [year, setYear] = useState<string>('');
+  const [filterdDate, setFilteredDate] = useState<Date | null>(null);
+
+  let marksOfMonth: ListaEntrada[] = [];
+  const { data } = useQuery({
+    queryKey: ['mirror-history', filterdDate],
+    queryFn: async () => {
+      const mirrors = await getEmployeeMirrors(employeeId);
+      if (!mirrors.data || !filterdDate) return [];
+      const parsedDate = format(filterdDate, 'yyyy-MM-dd');
+
+      const mirrorOfMonth = mirrors.data.filter(mirr => {
+        return mirr.periodoInicio === parsedDate;
+      });
+      if (mirrorOfMonth.length > 0) {
+        setMirrorId(mirrorOfMonth[0].id);
+        return mirrorOfMonth;
+      }
+      return [];
+    },
+  });
+
+  if (data) {
+    marksOfMonth = data[0]?.listaEntradas || [];
+  }
+
+  const pagination = usePaginationRange(marksOfMonth, DEFAULT_PAGE_SIZE);
 
   const handleGeneratePdf = async () => {
+    if (!mirrorId) {
+      notifyError('Nenhum espelho selecionado para gerar o PDF.');
+      return;
+    }
     try {
-      const response = await generatePaySlipPdf(1);
+      const response = await generatePaySlipPdf(mirrorId);
 
       if (response.error) {
         notifyError(response.error);
@@ -79,12 +114,67 @@ const HistoryPointPage: React.FC = () => {
     }
   };
 
-  const pagination = usePaginationRange(rows, DEFAULT_PAGE_SIZE);
+  const handleYearChange = (value: string) => {
+    // Allow only numbers
+    const numericValue = value.replace(/\D/g, '');
+    const slicedValue = numericValue.slice(0, 4); // Limit to 4 characters
+
+    // Prevent years in the future
+    const currentYear = new Date().getFullYear();
+    if (slicedValue && parseInt(slicedValue, 10) > currentYear) {
+      setYear(currentYear.toString());
+      return;
+    }
+
+    // Prevent years before 1970
+    if (
+      slicedValue &&
+      slicedValue.length === 4 &&
+      parseInt(slicedValue, 10) < 1970
+    ) {
+      setYear('1970');
+      return;
+    }
+
+    setYear(slicedValue);
+  };
+
+  const handleApplyFilters = () => {
+    if (!selectedMonth || !year) return;
+
+    const month = parseInt(selectedMonth.value, 10) - 1;
+    const date = new Date(parseInt(year, 10), month, 1);
+    setFilteredDate(date);
+  };
+  const handleClearFilters = () => {
+    setSelectedMonth({} as IOption);
+    setYear('');
+    setFilteredDate(null);
+  };
+
+  const isGenerateDisabled = () => {
+    if (!filterdDate) return true;
+    const currentDate = new Date();
+    if (filterdDate.getFullYear() > currentDate.getFullYear()) {
+      return true;
+    }
+    if (
+      filterdDate.getFullYear() === currentDate.getFullYear() &&
+      filterdDate.getMonth() >= currentDate.getMonth()
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const formatHour = (hour: string) => {
+    return hour.slice(0, 8);
+  };
 
   return (
     <div>
       <Header>
-        <div>
+        <FiltersContainer>
           <SelectComponent
             id="months"
             label="Selecione o mês que deseja visualizar:"
@@ -93,12 +183,30 @@ const HistoryPointPage: React.FC = () => {
             onChange={option => setSelectedMonth(option)}
             placeholder="Selecione o mês"
           />
-        </div>
+          <InputComponent
+            id="year"
+            labelText="Insira o ano"
+            placeholder="Ex: 2025"
+            value={year}
+            onChange={e => handleYearChange(e.target.value)}
+          />
+          <FilterButton
+            type="button"
+            onClick={handleApplyFilters}
+            disabled={!selectedMonth || year.length !== 4}
+          >
+            Filtrar
+          </FilterButton>
+          <FilterButton type="button" onClick={handleClearFilters}>
+            Limpar
+          </FilterButton>
+        </FiltersContainer>
         <DefaultButton
           text="Baixar espelho"
           variant="bordered"
           type="button"
           onClick={handleGeneratePdf}
+          disabled={isGenerateDisabled()}
         />
       </Header>
       <Table.Root tableClassName="points-history">
@@ -106,11 +214,19 @@ const HistoryPointPage: React.FC = () => {
         <Table.Body>
           {pagination.currentRows.map(row => (
             <Table.Row key={row.id}>
-              <Table.BodyCell>{row.data}</Table.BodyCell>
-              <Table.BodyCell>{row.entradaA}</Table.BodyCell>
-              <Table.BodyCell>{row.saidaA}</Table.BodyCell>
-              <Table.BodyCell>{row.entradaB}</Table.BodyCell>
-              <Table.BodyCell>{row.saidaB}</Table.BodyCell>
+              <Table.BodyCell>{format(row.data, 'dd/MM/yyyy')}</Table.BodyCell>
+              <RenderIf isTrue={row.entradas.length >= 1}>
+                {row.entradas.map(entry => (
+                  <Table.BodyCell key={entry.id}>
+                    {formatHour(entry.hora)}
+                  </Table.BodyCell>
+                ))}
+              </RenderIf>
+              <RenderIf isTrue={row.entradas.length === 0}>
+                {emptyEntries.map((entry, index) => (
+                  <Table.BodyCell key={index}>{entry}</Table.BodyCell>
+                ))}
+              </RenderIf>
             </Table.Row>
           ))}
         </Table.Body>
@@ -118,7 +234,7 @@ const HistoryPointPage: React.FC = () => {
       <Pagination
         currentPage={pagination.currentPage}
         setCurrentPage={pagination.setCurrentPage}
-        totalOfData={rows.length}
+        totalOfData={marksOfMonth.length}
         totalPages={pagination.totalPages}
         totalPaginatedData={pagination.paginatedRows}
       />
