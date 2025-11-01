@@ -43,11 +43,19 @@ const Layout: React.FC<IChildrenProps> = ({ children }) => {
   pathnameArr.pop();
   const dashboardPath = [...pathnameArr, 'dashboard'].join('/');
   const stepsPath = [...pathnameArr, 'etapas'].join('/');
+  const detailsPath = [...pathnameArr, 'detalhes'].join('/');
 
   const steps = `${stepsPath}?nome=${vacancyName}`;
   const dashboard = `${dashboardPath}?nome=${vacancyName}`;
+  const details = `${detailsPath}?nome=${vacancyName}`;
 
   const tabs: ITab[] = [
+    {
+      label: 'Detalhes',
+      baseUrl: detailsPath,
+      url: details,
+      description: 'aqui estão as informações da vaga',
+    },
     {
       label: 'Etapas',
       baseUrl: stepsPath,

@@ -114,7 +114,7 @@ const RecutamentoPage: React.FC = () => {
         {pagination.currentRows.map(vacancy => (
           <CustomLink
             key={vacancy.id}
-            href={`${Routes.VACANCY}/${vacancy.id}/etapas?nome=${vacancy.titulo}`}
+            href={`${Routes.VACANCY}/${vacancy.id}/detalhes?nome=${vacancy.titulo}`}
           >
             <VacancyCard
               key={vacancy.id}

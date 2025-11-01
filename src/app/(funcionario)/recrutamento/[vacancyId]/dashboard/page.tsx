@@ -12,6 +12,7 @@ import {
   CardsContainer,
   CustomLink,
   DoughnutContainer,
+  Message,
   PageWrapper,
   Subtitle,
   Title,
@@ -79,6 +80,9 @@ const VacancyDashboardPage: React.FC = () => {
               />
             </CustomLink>
           ))}
+          {data.data.length === 0 && (
+            <Message>Nenhum candidato aplicou para esta vaga</Message>
+          )}
         </CardsContainer>
       </div>
       <DoughnutContainer>

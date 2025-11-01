@@ -15,9 +15,15 @@ export const Subtitle = styled.h3`
   font-size: 1.6rem;
   font-weight: 500;
 `;
+export const Message = styled.p`
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  align-self: start;
+`;
 export const CardsContainer = styled.div`
   display: flex;
-  width: 100%
+  width: 100%;
   align-items: center;
   gap: 3rem;
   justify-content: center;
