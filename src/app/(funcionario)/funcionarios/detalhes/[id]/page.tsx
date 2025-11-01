@@ -45,8 +45,10 @@ const EmployeeDetailsPage = () => {
     const response = await deleteEmployeeById(id);
     if (response.error) {
       notifyError(response.error);
+      setWarningModal(false);
       return;
     }
+    setWarningModal(false);
     setSuccessFullRemoval(true);
   };
 

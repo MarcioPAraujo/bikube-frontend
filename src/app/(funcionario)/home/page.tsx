@@ -7,6 +7,7 @@ import formatCurrency from '@/utils/formatCurrency';
 import { EmployeesFormValues } from '@/validation/Employees/EmployeesForm';
 import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
+import cepMask from '@/utils/masks/cepMask';
 import { Title } from './styles';
 
 const HomePage: React.FC = () => {
@@ -40,7 +41,7 @@ const HomePage: React.FC = () => {
     cargo: data.data.cargo,
     contabancaria: data.data.contabancaria,
     dataentrada: format(parseISO(data.data.dataentrada), 'dd/MM/yyyy'),
-    cep: data.data.id_endereco.cep,
+    cep: cepMask(data.data.id_endereco.cep),
     logradouro: data.data.id_endereco.logradouro,
     bairro: data.data.id_endereco.bairro,
     cidade: data.data.id_endereco.cidade,
