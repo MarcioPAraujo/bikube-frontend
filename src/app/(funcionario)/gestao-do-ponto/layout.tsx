@@ -17,12 +17,6 @@ const tabs: ITab[] = [
     description: 'Veja o histórico dos seus registros de ponto.',
   },
   {
-    label: 'Solicitações de ajuste',
-    baseUrl: '/gestao-do-ponto/solicitacoes',
-    url: '/gestao-do-ponto/solicitacoes',
-    description: 'Gerencie suas solicitações de ajuste de ponto.',
-  },
-  {
     label: 'Gestão do ponto dos colaboradores',
     baseUrl: '/gestao-do-ponto/colaboradores',
     url: '/gestao-do-ponto/colaboradores',

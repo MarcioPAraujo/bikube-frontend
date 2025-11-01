@@ -10,8 +10,7 @@ import { Table } from '@/components/Table/Index/Index';
 import Pagination from '@/components/Pagination/Pagination';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
-import PointRegistrationModal from '@/components/modals/PointRegistrationModal/PointRegistrationModal';
-import { DetailsButton, Header } from './styles';
+import { Header } from './styles';
 
 const monthsOptions: IOption[] = [
   { label: 'Janeiro', value: '1' },
@@ -34,7 +33,6 @@ const columns = [
   'Saída - A',
   'Entrada - B',
   'Saída - B',
-  'Ações',
 ];
 
 const rows = Array.from({ length: 10 }, (_, index) => ({
@@ -48,7 +46,6 @@ const rows = Array.from({ length: 10 }, (_, index) => ({
 
 const HistoryPointPage: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState<IOption>({} as IOption);
-  const [showDetails, setShowDetails] = useState(false);
 
   const handleGeneratePdf = async () => {
     try {
@@ -86,12 +83,6 @@ const HistoryPointPage: React.FC = () => {
 
   return (
     <div>
-      <PointRegistrationModal
-        isOpen={showDetails}
-        onClose={() => setShowDetails(false)}
-        mode="edit"
-      />
-
       <Header>
         <div>
           <SelectComponent
@@ -104,7 +95,7 @@ const HistoryPointPage: React.FC = () => {
           />
         </div>
         <DefaultButton
-          text="Baixar holerite"
+          text="Baixar espelho"
           variant="bordered"
           type="button"
           onClick={handleGeneratePdf}
@@ -120,14 +111,6 @@ const HistoryPointPage: React.FC = () => {
               <Table.BodyCell>{row.saidaA}</Table.BodyCell>
               <Table.BodyCell>{row.entradaB}</Table.BodyCell>
               <Table.BodyCell>{row.saidaB}</Table.BodyCell>
-              <Table.BodyCell>
-                <DetailsButton
-                  type="button"
-                  onClick={() => setShowDetails(true)}
-                >
-                  Ver detalhes
-                </DetailsButton>
-              </Table.BodyCell>
             </Table.Row>
           ))}
         </Table.Body>

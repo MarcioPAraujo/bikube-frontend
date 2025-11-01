@@ -13,8 +13,11 @@ export const getListOfEmployees = async (): Promise<
   try {
     const response: AxiosResponse<IEmployeeResponse[]> = await api.get(url);
 
-    const { data } = response;
-    return { data, error: null };
+    const activeEmployees = response.data.filter(
+      employee => employee.status !== 'desligado',
+    );
+
+    return { data: activeEmployees, error: null };
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
