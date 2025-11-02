@@ -44,6 +44,8 @@ const Point: React.FC = () => {
     marksOfDay = data;
   }
 
+  const isRegisteredFullDay = marksOfDay.length === 4;
+
   const createMark = async () => {
     const response = await markMirror(employeeId);
     if (response.error) {
@@ -54,7 +56,10 @@ const Point: React.FC = () => {
 
   return (
     <PageContainer>
-      <Watch onSaveTime={() => createMark()} />
+      <Watch
+        onSaveTime={() => createMark()}
+        isRegisteredFullDay={isRegisteredFullDay}
+      />
       <Entries marks={marksOfDay} />
     </PageContainer>
   );
