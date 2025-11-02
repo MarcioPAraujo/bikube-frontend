@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { IEmployeeMirrorResponse } from '@/interfaces/mirror/employeeMirrorResponse';
+import { Entrada } from '@/interfaces/mirror/employeeMirrorResponse';
 import {
   BoxEntries,
   Description,
@@ -10,11 +10,10 @@ import {
 } from './styles';
 
 interface IEntriesProps {
-  marks: IEmployeeMirrorResponse;
+  marks: Entrada[];
 }
 const Entries: React.FC<IEntriesProps> = ({ marks }) => {
-  if (!marks?.listaEntradas) return;
-  const entries = marks.listaEntradas.map(m => m.entradas).flat();
+  if (!marks) return;
 
   const formatHour = (hour: string | undefined) => {
     if (!hour) return '-';
@@ -23,7 +22,7 @@ const Entries: React.FC<IEntriesProps> = ({ marks }) => {
     return time;
   };
 
-  if (entries.length === 0) {
+  if (marks.length === 0) {
     return (
       <EntriesContainer>
         <Title>Pontos de hoje: {format(new Date(), 'dd/MM/yyyy')}</Title>
@@ -35,7 +34,7 @@ const Entries: React.FC<IEntriesProps> = ({ marks }) => {
     <EntriesContainer>
       <Title>Pontos de hoje: {format(new Date(), 'dd/MM/yyyy')}</Title>
       <BoxEntries>
-        {entries.map((entry, index) => (
+        {marks.map((entry, index) => (
           <EntryRow key={index}>
             <Description>{entry.tipo}</Description>
             <Time>{formatHour(entry.hora)}</Time>

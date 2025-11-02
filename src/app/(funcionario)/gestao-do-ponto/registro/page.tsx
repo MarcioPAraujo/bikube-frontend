@@ -7,7 +7,7 @@ import { notifyError } from '@/utils/handleToast';
 import { useQuery } from '@tanstack/react-query';
 import { getCurrentTimestamp } from '@/services/pointManagement';
 import { format, parseISO } from 'date-fns';
-import { IEmployeeMirrorResponse } from '@/interfaces/mirror/employeeMirrorResponse';
+import { Entrada } from '@/interfaces/mirror/employeeMirrorResponse';
 import {
   getEmployeeMirrors,
   markMirror,
@@ -19,7 +19,7 @@ const Point: React.FC = () => {
 
   const employeeId = user?.id || '';
 
-  let marksOfDay: IEmployeeMirrorResponse[] = [];
+  let marksOfDay: Entrada[] = [];
   const { data, refetch } = useQuery({
     queryKey: ['mirror'],
     queryFn: async () => {
@@ -34,7 +34,9 @@ const Point: React.FC = () => {
       const mirrorOfDay = mirrors.data.filter(mirr => {
         return mirr.listaEntradas.some(e => e.data === date);
       });
-      return mirrorOfDay;
+      const entriesOfDay = mirrorOfDay.map(m => m.listaEntradas).flat();
+      const marks = entriesOfDay.filter(e => e.data === date);
+      return marks.map(m => m.entradas).flat();
     },
   });
 
@@ -53,7 +55,7 @@ const Point: React.FC = () => {
   return (
     <PageContainer>
       <Watch onSaveTime={() => createMark()} />
-      <Entries marks={marksOfDay[0]} />
+      <Entries marks={marksOfDay} />
     </PageContainer>
   );
 };
