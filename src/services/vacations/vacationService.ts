@@ -3,6 +3,7 @@ import handleError from '@/utils/handleError';
 import { IPendingVacationsListResponse } from '@/interfaces/vacation/pendingVacationListResponse';
 import { IEmployeeVacationsListResponse } from '@/interfaces/vacation/employeeVacationsListResponse';
 import { IVacationByMonthResponse } from '@/interfaces/vacation/vacationsByMonthReponse';
+import { IConflictVacationResponse } from '@/interfaces/vacation/conflictVacationsResponse';
 import { api } from '../api';
 
 export interface IVacationBodyRequest {
@@ -78,5 +79,25 @@ export const getVacationsByMonth = async (
     return { data: response.data, error: null };
   } catch (error) {
     return handleError(error, 'Erro ao buscar férias por mês');
+  }
+};
+
+export const getConflictVacations = async (
+  month: number,
+): Promise<Result<IConflictVacationResponse[]>> => {
+  const ENDPOINT = `/ferias/feriasConflitantes/${month}`;
+
+  try {
+    const response = await api.get<IConflictVacationResponse[] | string>(
+      ENDPOINT,
+    );
+
+    if (typeof response.data === 'string') {
+      return { data: [], error: null };
+    }
+
+    return { data: response.data, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao buscar férias conflitantes');
   }
 };

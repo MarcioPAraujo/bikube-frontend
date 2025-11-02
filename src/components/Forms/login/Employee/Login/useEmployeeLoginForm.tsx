@@ -37,31 +37,6 @@ const useEmployeeLoginForm = () => {
   };
 
   const onFormSubmit = async (data: IEmployeeLoginSchema) => {
-    /*
-    console.log(data);
-
-    const isAdmin = data.password === 'a';
-    const isRH = data.password === 'r';
-
-    let role = 'FUNCIONARIO';
-    if (isAdmin) role = 'ADMIN';
-    if (isRH) role = 'RH';
-
-    const mockedUser: User = {
-      id: '1',
-      nome: 'Usuário de Teste',
-      email: 'aaaaa2aa.com',
-      register: data.register,
-      role,
-      setor: 'TI',
-    };
-    sessionStorage.setItem(
-      SESSION_STORAGE_KEYS.employee,
-      JSON.stringify(mockedUser),
-    );
-    setUser(mockedUser);
-    */
-
     const result = await loginAuth({
       registro: data.register,
       senha: data.password,

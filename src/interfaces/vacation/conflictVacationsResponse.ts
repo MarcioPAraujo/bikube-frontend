@@ -1,15 +1,17 @@
-export interface IPendingVacationsListResponse {
+export interface IConflictVacationResponse {
   id: number;
-  funcionario: Funcionario;
+  funcionario: AtualizadoPor;
   dataInicio: string;
   dataFim: string;
   status: string;
+  diasParaDescontar: number;
+  alterar14dias: boolean;
   setorfuncionario: string;
-  motivoRecusa: null | string;
-  atualizadoPor: null | string;
+  motivoRecusa: null;
+  atualizadoPor: AtualizadoPor;
 }
 
-export interface Funcionario {
+export interface AtualizadoPor {
   id: string;
   nome: string;
   data_nascimento: string;
@@ -22,13 +24,16 @@ export interface Funcionario {
   datasaida: null;
   funcao: string;
   status: string;
+  feriasDisponiveis: number;
+  fracoesDisponiveis: number;
+  periodo14dias: boolean;
   id_telefone: IDTelefone;
   idsetor: Idsetor;
   id_endereco: IDEndereco;
-  accountNonExpired: boolean;
-  accountNonLocked: boolean;
-  credentialsNonExpired: boolean;
   enabled: boolean;
+  accountNonExpired: boolean;
+  credentialsNonExpired: boolean;
+  accountNonLocked: boolean;
 }
 
 export interface IDEndereco {

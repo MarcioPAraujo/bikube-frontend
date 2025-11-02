@@ -13,10 +13,13 @@ import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   approveRefuseVacation,
+  getConflictVacations,
   getPendingVacations,
 } from '@/services/vacations/vacationService';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { notifyError } from '@/utils/handleToast';
+import VacationConflictsModal from '@/components/modals/VacationConflictsModal/VacationConflictsModal';
+import { IConflictVacationResponse } from '@/interfaces/vacation/conflictVacationsResponse';
 import {
   ApproveButton,
   Container,
@@ -35,10 +38,14 @@ const columns = ['Nome', 'Cargo', 'Setor', 'Data Início', 'Data Fim', 'Ações'
 const VacationsRequestsPage: React.FC = () => {
   const [sector, setSector] = useState<IOption>({} as IOption);
   const [search, setSearch] = useState<string>('');
+  const [action, setAction] = useState<'aprovado' | 'reprovado' | null>(null);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const [action, setAction] = useState<'aprovado' | 'reprovado' | null>(null);
+  const [conflictModalOpen, setConflictModalOpen] = useState(false);
   const vacationId = useRef<number | null>(null);
+  const conflicts = useRef<IConflictVacationResponse[]>([]);
+  const vacationStartDate = useRef<string>('');
+  const vacationEndDate = useRef<string>('');
 
   const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['pending-vacations'],
@@ -58,8 +65,27 @@ const VacationsRequestsPage: React.FC = () => {
   });
   const pagination = usePaginationRange(filteredRequests, DEFAULT_PAGE_SIZE);
 
+  const isThereConflictInVacation = async (): Promise<boolean> => {
+    const month = new Date(vacationStartDate.current).getMonth() + 1;
+    const response = await getConflictVacations(month);
+    if (response.error) {
+      notifyError(response.error);
+      return false;
+    }
+    if (!response.data) return false;
+
+    conflicts.current = response.data;
+
+    const hasConflict = response.data.length > 0;
+    if (hasConflict) {
+      setConflictModalOpen(true);
+    }
+    return hasConflict;
+  };
+
   const updateVacationStatus = async () => {
     if (!action || !vacationId.current) return;
+
     const response = await approveRefuseVacation({
       idferias: vacationId.current,
       novoStatus: action,
@@ -78,6 +104,15 @@ const VacationsRequestsPage: React.FC = () => {
 
   return (
     <div>
+      <VacationConflictsModal
+        isOpen={conflictModalOpen}
+        onClose={() => setConflictModalOpen(false)}
+        onApproveAnyway={updateVacationStatus}
+        conflicts={conflicts.current}
+        currentVacationEndDate={parseISO(vacationEndDate.current)}
+        currentVacationStartDate={parseISO(vacationStartDate.current)}
+      />
+
       <AlertModal
         isOpen={alertModalOpen}
         title="Atenção!"
@@ -91,7 +126,16 @@ const VacationsRequestsPage: React.FC = () => {
           vacationId.current = null;
           setAction(null);
         }}
-        onConfirm={updateVacationStatus}
+        onConfirm={async () => {
+          if (action === 'reprovado') {
+            await updateVacationStatus();
+            return;
+          }
+          const hasConflict = await isThereConflictInVacation();
+          if (!hasConflict) {
+            await updateVacationStatus();
+          }
+        }}
       />
       <SuccessModal
         isOpen={successModalOpen}
@@ -153,6 +197,8 @@ const VacationsRequestsPage: React.FC = () => {
                     onClick={() => {
                       setAction('aprovado');
                       vacationId.current = request.id;
+                      vacationStartDate.current = request.dataInicio;
+                      vacationEndDate.current = request.dataFim;
                       setAlertModalOpen(true);
                     }}
                   >
