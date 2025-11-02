@@ -42,7 +42,9 @@ const EmployeeLoginForm: React.FC = () => {
           labelText="Registro do colaborador"
           placeholder="EX: AAAAAA00"
           register={register('register', {
-            onChange: e => onRegisterFieldChange(e.target.value),
+            onChange: e => {
+              onRegisterFieldChange(e.target.value);
+            },
           })}
           errorMessage={errors.register?.message}
         />

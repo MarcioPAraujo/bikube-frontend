@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
+import MirrorCalendar from '@/components/WatchPoint/MirrorCalendar/MirrorCalendar';
 import {
   CardsContainer,
   ContentWrapper,
@@ -91,10 +92,10 @@ const EmployeesPointManagementPage: React.FC = () => {
             })}
           </CardsContainer>
           <Sidebar className={selectedEmployee ? 'selected' : ''}>
-            <button onClick={() => setSelectedEmployee(null)} type="button">
-              linpar
-            </button>
-            sidebar
+            <MirrorCalendar
+              employeeId={selectedEmployee}
+              onClose={() => setSelectedEmployee(null)}
+            />
           </Sidebar>
         </ContentWrapper>
       </RenderIf>

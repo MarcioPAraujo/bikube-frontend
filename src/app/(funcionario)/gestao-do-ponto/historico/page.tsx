@@ -10,14 +10,20 @@ import { Table } from '@/components/Table/Index/Index';
 import Pagination from '@/components/Pagination/Pagination';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
-import InputComponent from '@/components/Inputs/InputComponent';
 import { ListaEntrada } from '@/interfaces/mirror/employeeMirrorResponse';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { getEmployeeMirrors } from '@/services/mirror/mirrorService';
 import { format } from 'date-fns';
 import RenderIf from '@/components/RenderIf/RenderIf';
-import { FilterButton, FiltersContainer, Header } from './styles';
+import {
+  Field,
+  FilterButton,
+  FiltersContainer,
+  Header,
+  Input,
+  Label,
+} from './styles';
 
 const monthsOptions: IOption[] = [
   { label: 'Janeiro', value: '1' },
@@ -184,13 +190,16 @@ const HistoryPointPage: React.FC = () => {
             onChange={option => setSelectedMonth(option)}
             placeholder="Selecione o mês"
           />
-          <InputComponent
-            id="year"
-            labelText="Insira o ano"
-            placeholder="Ex: 2025"
-            value={year}
-            onChange={e => handleYearChange(e.target.value)}
-          />
+          <Field>
+            <Label htmlFor="year">Insira o ano</Label>
+            <Input
+              id="year"
+              type="text"
+              placeholder="Ex: 2025"
+              value={year}
+              onChange={e => handleYearChange(e.target.value)}
+            />
+          </Field>
           <FilterButton
             type="button"
             onClick={handleApplyFilters}

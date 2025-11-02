@@ -9,10 +9,11 @@
  * @returns {string} The masked string in uppercase.
  *
  */
-export function registerMask(value: string) {
+export const registerMask = (value: string) => {
+  console.log('Original value:', value);
   return value
     .replace(/[^a-zA-Z]/g, (match, offset) => (offset < 6 ? '' : match))
     .replace(/[^0-9]/g, (match, offset) => (offset < 6 ? match : ''))
     .slice(0, 8)
     .toLocaleUpperCase();
-}
+};
