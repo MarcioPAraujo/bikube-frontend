@@ -4,6 +4,11 @@ import { AxiosResponse } from 'axios';
 import handleError from '@/utils/handleError';
 import { api } from '../api';
 
+export interface IJustificationRequest {
+  iditem: number;
+  descricao: string;
+}
+
 export const getEmployeeMirrors = async (
   employeeId: string,
 ): Promise<Result<IEmployeeMirrorResponse[]>> => {
@@ -29,5 +34,18 @@ export const markMirror = async (
     return { data: true, error: null };
   } catch (error: any) {
     return handleError(error, 'Falha ao bater o ponto');
+  }
+};
+
+export const createAbsencyJustification = async (
+  body: IJustificationRequest,
+): Promise<Result<boolean>> => {
+  const END_POINT = '/espelho/abono';
+
+  try {
+    await api.post(END_POINT, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Falha ao criar o abono de ausência');
   }
 };

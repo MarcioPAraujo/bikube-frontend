@@ -137,3 +137,18 @@ export const Li = styled.li`
     border-bottom: 1px solid ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
   }
 `;
+export const JustificationButton = styled.button`
+  border: none;
+  background-color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+  color: ${({ theme }) => theme.colors.BLACK};
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+`;
