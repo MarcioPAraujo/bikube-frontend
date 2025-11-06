@@ -48,6 +48,8 @@ const employeeRoutes = [
   '/gestao-do-ponto/registro',
   '/gestao-do-ponto/historico',
   '/gestao-do-ponto/solicitacoes',
+
+  '/gestao-do-ponto/feriados',
 ];
 const rhRoutes = [
   '/setores',
@@ -70,6 +72,7 @@ const rhRoutes = [
   '/gestao-do-ponto/historico',
   '/gestao-do-ponto/solicitacoes',
   '/gestao-do-ponto/colaboradores',
+  '/gestao-do-ponto/feriados',
 
   // all recrutation routes are allowed for RH
   '/recrutamento',

@@ -22,6 +22,12 @@ const tabs: ITab[] = [
     url: '/gestao-do-ponto/colaboradores',
     description: 'Gerencie os pontos dos colaboradores.',
   },
+  {
+    label: 'Feriados',
+    baseUrl: '/gestao-do-ponto/feriados',
+    url: '/gestao-do-ponto/feriados',
+    description: 'Visualize os feriados oficiais.',
+  },
 ];
 
 const PointLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {

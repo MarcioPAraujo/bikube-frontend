@@ -10,6 +10,8 @@ import {
   endOfMonth,
   subDays,
   addDays,
+  addYears,
+  subYears,
 } from 'date-fns';
 
 const today = new Date();
@@ -57,6 +59,25 @@ const useMonthCalendar = (
     setCurrentDate(nextMonth);
     return nextMonth;
   }, [currentDate, setCurrentDate]);
+
+  const handleAddyears = useCallback(
+    (yearsToAdd?: number): Date => {
+      const amount = yearsToAdd || 1;
+      const newDate = addYears(currentDate, amount);
+      setCurrentDate(newDate);
+      return newDate;
+    },
+    [currentDate, setCurrentDate],
+  );
+  const handleSubYears = useCallback(
+    (yearsToSub?: number): Date => {
+      const amount = yearsToSub || 1;
+      const newDate = subYears(currentDate, amount);
+      setCurrentDate(newDate);
+      return newDate;
+    },
+    [currentDate, setCurrentDate],
+  );
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -158,6 +179,8 @@ const useMonthCalendar = (
   return {
     handlePrevMonth,
     handleNextMonth,
+    handleAddyears,
+    handleSubYears,
     calendarDaysDate,
     year,
     month,

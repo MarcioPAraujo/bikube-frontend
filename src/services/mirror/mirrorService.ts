@@ -1,8 +1,14 @@
 import { Result } from '@/interfaces/apiResult';
 import { IEmployeeMirrorResponse } from '@/interfaces/mirror/employeeMirrorResponse';
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import handleError from '@/utils/handleError';
 import { api } from '../api';
+
+export interface IHolidayResponse {
+  date: string; // format: 'YYYY-MM-DD'
+  name: string;
+  type: string;
+}
 
 export interface IJustificationRequest {
   iditem: number;
@@ -47,5 +53,26 @@ export const createAbsencyJustification = async (
     return { data: true, error: null };
   } catch (error: any) {
     return handleError(error, 'Falha ao criar o abono de ausência');
+  }
+};
+
+export const getHolidaysOfYear = async (
+  year: number,
+): Promise<Result<Record<string, IHolidayResponse>>> => {
+  const END_POINT = `https://brasilapi.com.br/api/feriados/v1/${year}`;
+
+  try {
+    const response: AxiosResponse<IHolidayResponse[]> = await axios.get(
+      END_POINT,
+    );
+
+    const hashMap: Record<string, IHolidayResponse> = {};
+    response.data.forEach(holiday => {
+      hashMap[holiday.date] = holiday;
+    });
+
+    return { data: hashMap, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Falha ao recuperar os feriados');
   }
 };
