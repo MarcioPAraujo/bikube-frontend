@@ -44,7 +44,7 @@ const useMonthCalendar = (
 ) => {
   const currentDate = useMemo(() => {
     if (date) {
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      return date;
     }
     return new Date();
   }, [date]);

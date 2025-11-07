@@ -66,8 +66,8 @@ const VacationsRequestsPage: React.FC = () => {
   const pagination = usePaginationRange(filteredRequests, DEFAULT_PAGE_SIZE);
 
   const isThereConflictInVacation = async (): Promise<boolean> => {
-    const month = new Date(vacationStartDate.current).getMonth() + 1;
-    const response = await getConflictVacations(month);
+    if (!vacationId.current) return false;
+    const response = await getConflictVacations(vacationId.current);
     if (response.error) {
       notifyError(response.error);
       return false;

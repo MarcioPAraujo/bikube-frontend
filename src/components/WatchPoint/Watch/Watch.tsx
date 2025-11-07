@@ -12,8 +12,6 @@ const Watch: React.FC<WatchProps> = ({ onSaveTime, isRegisteredFullDay }) => {
   const { data } = useQuery({
     queryKey: ['current-timestamp'],
     queryFn: getCurrentTimestamp,
-    // cache for 24 hours, avoid refetching on remount
-    staleTime: 1000 * 60 * 60 * 24, // 24 hours
     // every 3 minutes, refetch the server time to keep it accurate
     refetchInterval: 1000 * 60 * 3, // 3 minutes
     select: result => result.data,

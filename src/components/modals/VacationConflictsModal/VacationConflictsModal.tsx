@@ -57,7 +57,7 @@ const VacationConflictsModal: React.FC<VocationConflictsModalProps> = ({
   currentVacationEndDate,
 }) => {
   const [calendarDate, setCalendarDate] = useState<Date | null>(
-    currentVacationStartDate,
+    new Date(currentVacationStartDate),
   );
   const { calendarDaysDate, handleNextMonth, handlePrevMonth, month, year } =
     useMonthCalendar(calendarDate, setCalendarDate);
