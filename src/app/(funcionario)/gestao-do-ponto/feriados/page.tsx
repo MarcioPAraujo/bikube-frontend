@@ -3,8 +3,13 @@
 import useMonthCalendar, { ICalendarDay } from '@/hooks/useMonthCalendar';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getHolidaysOfYear } from '@/services/mirror/mirrorService';
+import {
+  createHoliday,
+  getHolidaysOfYear,
+} from '@/services/mirror/mirrorService';
 import { format, parseISO } from 'date-fns';
+import { notifyError, notifySuccess } from '@/utils/handleToast';
+import AlertModal from '@/components/modals/AlertModal/AlertModal';
 import {
   Button,
   Calendar,
@@ -12,6 +17,7 @@ import {
   Container,
   Day,
   Header,
+  HolidayButton,
   HolidayName,
   Small,
   WeekDay,
@@ -36,15 +42,9 @@ const monthNames = [
 
 const HolidaysPage: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
-  const {
-    calendarDaysDate,
-    handleNextMonth,
-    handlePrevMonth,
-    month,
-    year,
-    handleAddyears,
-    handleSubYears,
-  } = useMonthCalendar(currentDate, setCurrentDate);
+  const { calendarDaysDate, handleNextMonth, handlePrevMonth, month, year } =
+    useMonthCalendar(currentDate, setCurrentDate);
+  const [warningModal, setWarningModal] = useState(false);
 
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['holidays', year],
@@ -58,6 +58,7 @@ const HolidaysPage: React.FC = () => {
 
     classes += dayDate.isCurrentMonth ? '' : ' not-current-month';
     classes += dayDate.isToday ? ' today' : '';
+    classes += dayDate.isSelected ? ' selected' : '';
     if (dayDate.dayOfWeek === 0 || dayDate.dayOfWeek === 6) {
       classes += ' weekend';
     }
@@ -70,40 +71,87 @@ const HolidaysPage: React.FC = () => {
     return classes;
   };
 
+  const markDayAsHoliday = async () => {
+    if (!currentDate) return;
+    const parsedDate = parseISO(format(currentDate, 'yyyy-MM-dd'));
+    const isAlreadyHoliday = data && data[format(parsedDate, 'yyyy-MM-dd')];
+    if (isAlreadyHoliday) {
+      return;
+    }
+    const response = await createHoliday(currentDate);
+    if (response.data) {
+      notifySuccess('Feriado criado com sucesso');
+    }
+    if (response.error) {
+      notifyError(response.error);
+    }
+  };
+
   if (!isPlaceholderData && !data) return null;
 
   return (
-    <Container>
-      <CalendarWrapper>
-        <Header>
-          <Button type="button" onClick={handlePrevMonth}>
-            Mês anterior
-          </Button>
-          <Year>
-            {monthNames[month]}/{year}
-          </Year>
-          <Button type="button" onClick={handleNextMonth}>
-            Próximo mês
-          </Button>
-        </Header>
-        <Calendar>
-          {weekDays.map(day => (
-            <WeekDay key={day}>{day}</WeekDay>
-          ))}
-          {calendarDaysDate.map(day => {
-            const formattedDate = format(day.dayDate, 'yyyy-MM-dd');
-            return (
-              <Day key={day.dayDate.toISOString()} className={getDayClass(day)}>
-                <Small>{day.dayDate.getDate()}</Small>
-                {data && data[formattedDate] && (
-                  <HolidayName>{data[formattedDate].name}</HolidayName>
-                )}
-              </Day>
-            );
-          })}
-        </Calendar>
-      </CalendarWrapper>
-    </Container>
+    <>
+      <AlertModal
+        isOpen={warningModal}
+        title="Confirmar ação"
+        message={`Tem certeza que deseja marcar o dia ${format(
+          currentDate || new Date(),
+          'dd/MM/yyyy',
+        )} como feriado?\nEssa ação não pode ser desfeita.`}
+        onConfirm={() => {
+          markDayAsHoliday();
+          setWarningModal(false);
+        }}
+        onCancel={() => setWarningModal(false)}
+        confirmText="Confirmar"
+        cancelText="Cancelar"
+      />
+
+      <Container>
+        <HolidayButton
+          type="button"
+          onClick={() => setWarningModal(true)}
+          disabled={!currentDate}
+        >
+          marcar{' '}
+          <strong>{format(currentDate || new Date(), 'dd/MM/yyyy')}</strong>{' '}
+          como feriado
+        </HolidayButton>
+        <CalendarWrapper>
+          <Header>
+            <Button type="button" onClick={handlePrevMonth}>
+              Mês anterior
+            </Button>
+            <Year>
+              {monthNames[month]}/{year}
+            </Year>
+            <Button type="button" onClick={handleNextMonth}>
+              Próximo mês
+            </Button>
+          </Header>
+          <Calendar>
+            {weekDays.map(day => (
+              <WeekDay key={day}>{day}</WeekDay>
+            ))}
+            {calendarDaysDate.map(day => {
+              const formattedDate = format(day.dayDate, 'yyyy-MM-dd');
+              return (
+                <Day
+                  key={day.dayDate.toISOString()}
+                  className={getDayClass(day)}
+                  onClick={() => setCurrentDate(day.dayDate)}
+                >
+                  <Small>{day.dayDate.getDate()}</Small>
+                  {data && data[formattedDate] && (
+                    <HolidayName>{data[formattedDate].name}</HolidayName>
+                  )}
+                </Day>
+              );
+            })}
+          </Calendar>
+        </CalendarWrapper>
+      </Container>
+    </>
   );
 };
 

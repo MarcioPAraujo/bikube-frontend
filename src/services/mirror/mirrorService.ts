@@ -76,3 +76,18 @@ export const getHolidaysOfYear = async (
     return handleError(error, 'Falha ao recuperar os feriados');
   }
 };
+
+export const createHoliday = async (date: Date): Promise<Result<boolean>> => {
+  const END_POINT = '/espelho/gerarFeriado';
+
+  const body = {
+    data: date,
+  };
+
+  try {
+    await api.post(END_POINT, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Falha ao criar o feriado');
+  }
+};

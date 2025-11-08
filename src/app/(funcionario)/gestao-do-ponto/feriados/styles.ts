@@ -9,6 +9,24 @@ export const Container = styled.div`
   margin: 2rem auto 0rem auto;
 `;
 
+export const HolidayButton = styled.button`
+  align-self: flex-start;
+  border: none;
+  background-color: ${({ theme }) => theme.colors.YELLOW.hex_F6B31B};
+  color: ${({ theme }) => theme.colors.BLACK};
+  padding: 1rem 2rem;
+
+  width: fit-content;
+
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
 export const CalendarWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,10 +76,14 @@ export const Day = styled.div`
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 
   &.today {
     background-color: ${({ theme }) => theme.colors.YELLOW.hex_FFB936};
     color: ${({ theme }) => theme.colors.YELLOW.hex_9E4A00};
+  }
+  &.selected {
+    border: 2px solid ${({ theme }) => theme.colors.BLUE.normal};
   }
   &.not-current-month {
     opacity: 0.4;
