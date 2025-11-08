@@ -1,48 +1,36 @@
 'use client';
 
 import EmployeeForm from '@/components/Forms/EmployeesForm';
-import {
-  deleteEmployeeById,
-  getEmployeeById,
-} from '@/services/funcionarios/funcionariosService';
+import { getEmployeeById } from '@/services/funcionarios/funcionariosService';
 import formatCurrency from '@/utils/formatCurrency';
 import { EmployeesFormValues } from '@/validation/Employees/EmployeesForm';
 import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import { useParams, useRouter } from 'next/navigation';
-import { notifyError } from '@/utils/handleToast';
 import { useState } from 'react';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import IconButton from '@/components/Buttons/IconButton';
 import { Icon } from '@/components/Icons/Icons';
-import { useAuth } from '@/hooks/useAuth';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
-import { ButtonContainer, RemoveButton, TitleWrapper } from './styles';
+import { ButtonContainer, TitleWrapper } from './styles';
 
 const formId = 'employeeDetailsForm';
 
 const EmployeeDetailsPage = () => {
-  const { user } = useAuth();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const [successFullRemoval, setSuccessFullRemoval] = useState(false);
-  const [warningModal, setWarningModal] = useState(false);
+  const [successfullEdition, setSuccessfullEdition] = useState(false);
+  const [warningModalEdit, setWarningModalEdit] = useState(false);
 
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['employeeDetails', id],
     queryFn: () => getEmployeeById(id),
   });
 
-  const handleRemoveEmployee = async () => {
-    const response = await deleteEmployeeById(id);
-    if (response.error) {
-      notifyError(response.error);
-      setWarningModal(false);
-      return;
-    }
-    setWarningModal(false);
-    setSuccessFullRemoval(true);
+  const onFormSubmit = (data: EmployeesFormValues) => {
+    console.log('Form submitted with data:', data);
+    setSuccessfullEdition(true);
   };
 
   if (!data && !isPlaceholderData) return null;
@@ -79,21 +67,21 @@ const EmployeeDetailsPage = () => {
 
   return (
     <div>
-      <SuccessModal
-        isOpen={successFullRemoval}
-        title="Successo!"
-        message="O processo de deligamento foi ininciado a partir de agora o funcionário não terá mais acesso ao sistema."
-        buttonText="Voltar"
-        onClose={() => router.push('/funcionarios')}
-      />
       <WarningModal
-        isOpen={warningModal}
+        isOpen={warningModalEdit}
         title="Atenção!"
-        message="Tem certeza que deseja iniciar o processo de desligamento deste funcionário?"
-        onCancel={() => setWarningModal(false)}
-        onConfirm={handleRemoveEmployee}
-        confirmText="Sim, iniciar desligamento"
-        cancelText="Cancelar"
+        message="Tem certeza que deseja cancelar as edições feitas nos dados do funcionário?"
+        onCancel={() => setWarningModalEdit(false)}
+        onConfirm={() => router.push('/funcionarios')}
+        confirmText="Sim, cancelar edições"
+        cancelText="Continuar editando"
+      />
+      <SuccessModal
+        isOpen={successfullEdition}
+        title="Successo!"
+        message="Os dados do funcionário foram editados com sucesso."
+        buttonText="Voltar para a lista de funcionários"
+        onClose={() => router.push('/funcionarios')}
       />
       <div>
         <TitleWrapper>
@@ -103,20 +91,22 @@ const EmployeeDetailsPage = () => {
           />
           <h1>Detalhes do Funcionário</h1>
         </TitleWrapper>
-        {user?.role === 'ADMIN' && (
-          <RemoveButton type="button" onClick={() => setWarningModal(true)}>
-            Dar inicio ao processo de desligamento
-          </RemoveButton>
-        )}
       </div>
       <ButtonContainer>
+        <DefaultButton type="submit" text="Salvar" formId={formId} />
         <DefaultButton
           type="button"
-          text="Editar funcionário"
-          onClick={() => router.push(`/funcionarios/editar/${id}`)}
+          text="Cancelar"
+          variant="bordered"
+          onClick={() => setWarningModalEdit(true)}
         />
       </ButtonContainer>
-      <EmployeeForm formId={formId} defaultValues={employee} mode="view" />
+      <EmployeeForm
+        formId={formId}
+        defaultValues={employee}
+        mode="edit"
+        onSubmit={onFormSubmit}
+      />
     </div>
   );
 };
