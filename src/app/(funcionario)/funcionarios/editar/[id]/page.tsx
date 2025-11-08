@@ -1,7 +1,11 @@
 'use client';
 
 import EmployeeForm from '@/components/Forms/EmployeesForm';
-import { getEmployeeById } from '@/services/funcionarios/funcionariosService';
+import {
+  getEmployeeById,
+  updateEmployee,
+  updateEmployeeAddress,
+} from '@/services/funcionarios/funcionariosService';
 import formatCurrency from '@/utils/formatCurrency';
 import { EmployeesFormValues } from '@/validation/Employees/EmployeesForm';
 import { useQuery } from '@tanstack/react-query';
@@ -13,6 +17,9 @@ import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import IconButton from '@/components/Buttons/IconButton';
 import { Icon } from '@/components/Icons/Icons';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
+import { EditEmployeeBodyRequest } from '@/interfaces/funcionarios/editEmployeeBodyRequest';
+import { notifyError } from '@/utils/handleToast';
+import { EditEmployeeAddressBodyRequest } from '@/interfaces/funcionarios/editEmployeeAddressBodyRequest';
 import { ButtonContainer, TitleWrapper } from './styles';
 
 const formId = 'employeeDetailsForm';
@@ -24,12 +31,57 @@ const EmployeeDetailsPage = () => {
   const [warningModalEdit, setWarningModalEdit] = useState(false);
 
   const { data, isPlaceholderData } = useQuery({
-    queryKey: ['employeeDetails', id],
+    queryKey: ['employeeEdition', id],
     queryFn: () => getEmployeeById(id),
   });
 
-  const onFormSubmit = (data: EmployeesFormValues) => {
-    console.log('Form submitted with data:', data);
+  const onFormSubmit = async (formData: EmployeesFormValues) => {
+    if (!data || !data.data) return;
+
+    const oldEmail = data.data.email;
+    const oldPhone = data.data.id_telefone.numero;
+
+    const newEmail = formData.email;
+    const newPhone = formData.telefone;
+
+    const emailChanged = oldEmail !== newEmail;
+    const phoneChanged = oldPhone !== newPhone;
+
+    const salary = Number(formData.salario.replace(/[R$,.]/g, '')) / 100;
+
+    const body: EditEmployeeBodyRequest = {
+      email: oldEmail,
+      funcao: formData.funcao,
+      salario: salary,
+      contabancaria: formData.contabancaria,
+      idsetor: Number(formData.numerosetor),
+      telefone: oldPhone,
+      emailnovo: emailChanged ? newEmail : undefined,
+      telefonenovo: phoneChanged ? newPhone : undefined,
+    };
+
+    const addressBody: EditEmployeeAddressBodyRequest = {
+      funcionarioid: id,
+      cep: formData.cep,
+      logradouro: formData.logradouro,
+      bairro: formData.bairro,
+      cidade: formData.cidade,
+      estado: formData.estado,
+      numero: formData.numero,
+      complemento: formData.complemento || '',
+    };
+
+    const response = await updateEmployee(body);
+    if (response.error) {
+      notifyError(response.error);
+      return;
+    }
+    const addressResponse = await updateEmployeeAddress(addressBody);
+    if (addressResponse.error) {
+      notifyError(addressResponse.error);
+      return;
+    }
+
     setSuccessfullEdition(true);
   };
 

@@ -4,6 +4,8 @@ import { IEmployeeBody } from '@/interfaces/funcionarios/registerEmployee';
 import { IEmployeeDetailsResponse } from '@/interfaces/funcionarios/employeeDetailsResponse';
 import { Result } from '@/interfaces/apiResult';
 import handleError from '@/utils/handleError';
+import { EditEmployeeBodyRequest } from '@/interfaces/funcionarios/editEmployeeBodyRequest';
+import { EditEmployeeAddressBodyRequest } from '@/interfaces/funcionarios/editEmployeeAddressBodyRequest';
 import { api } from '../api';
 
 export const getListOfEmployees = async (): Promise<
@@ -72,5 +74,30 @@ export const deleteEmployeeById = async (
     return { data: true, error: null };
   } catch (error: any) {
     return handleError(error, 'Erro ao deletar funcionário');
+  }
+};
+
+export const updateEmployee = async (
+  body: EditEmployeeBodyRequest,
+): Promise<Result<boolean>> => {
+  const url = '/funcionario';
+  try {
+    await api.put(url, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Erro ao atualizar funcionário');
+  }
+};
+
+export const updateEmployeeAddress = async (
+  body: EditEmployeeAddressBodyRequest,
+): Promise<Result<boolean>> => {
+  const url = '/funcionario/atualizarEndereco';
+
+  try {
+    await api.put(url, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Erro ao atualizar endereço do funcionário');
   }
 };

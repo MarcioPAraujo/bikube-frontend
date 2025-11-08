@@ -92,7 +92,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
       }
     };
     initializeForm();
-  }, []);
+  }, [defaultValues]);
 
   const isEditMode = mode === 'edit';
   const isViewMode = mode === 'view';
@@ -286,7 +286,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
               onChange: e => handleCepChange(e.target.value),
             })}
             errorMessage={errors.cep?.message}
-            disabled={gettingAddress || isEditMode || isViewMode}
+            disabled={isViewMode}
           />
 
           <InputComponent
@@ -299,7 +299,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             }
             register={register('estado')}
             errorMessage={errors.estado?.message}
-            disabled={gettingAddress || isEditMode || isViewMode}
+            disabled={isViewMode}
           />
 
           <InputComponent
@@ -312,7 +312,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             }
             register={register('cidade')}
             errorMessage={errors.cidade?.message}
-            disabled={gettingAddress || isEditMode || isViewMode}
+            disabled={isViewMode}
           />
 
           <InputComponent
@@ -323,7 +323,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             }
             register={register('logradouro')}
             errorMessage={errors.logradouro?.message}
-            disabled={gettingAddress || isEditMode || isViewMode}
+            disabled={isViewMode}
           />
 
           <InputComponent
@@ -336,7 +336,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             }
             register={register('bairro')}
             errorMessage={errors.bairro?.message}
-            disabled={gettingAddress || isEditMode || isViewMode}
+            disabled={isViewMode}
           />
 
           <InputComponent
@@ -345,7 +345,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             placeholder="Digite o número da residência"
             register={register('numero')}
             errorMessage={errors.numero?.message}
-            disabled={isEditMode || isViewMode}
+            disabled={isViewMode}
           />
 
           <InputComponent
@@ -355,7 +355,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             placeholder="Digite o complemento (opcional)"
             register={register('complemento')}
             errorMessage={errors.complemento?.message}
-            disabled={isEditMode || isViewMode}
+            disabled={isViewMode}
           />
         </GridContainer>
       </Fieldset>

@@ -113,7 +113,9 @@ const EmployeeDetailsPage = () => {
         <DefaultButton
           type="button"
           text="Editar funcionário"
-          onClick={() => router.push(`/funcionarios/editar/${id}`)}
+          onClick={() => {
+            router.push(`/funcionarios/editar/${id}`);
+          }}
         />
       </ButtonContainer>
       <EmployeeForm formId={formId} defaultValues={employee} mode="view" />
