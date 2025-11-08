@@ -1,18 +1,47 @@
 import { useEffect, useRef, useState } from 'react';
 
+function parseNonStandardDate(dateTimeString: string): Date {
+  if (!dateTimeString) return new Date();
+  // 1. Trim the non-standard time zone identifier ([America/Sao_Paulo])
+  const trimmedString = dateTimeString.split('[')[0];
+
+  // 2. Reduce the precision of the fractional seconds.
+  // JS Date objects usually handle millisecond precision (3 digits).
+  // The input has too many digits (455594240).
+  const parts = trimmedString.split('.');
+
+  if (parts.length > 1) {
+    const fractionalSeconds = parts[1].substring(0, 3);
+    const timeZoneOffset = parts[1].substring(
+      parts[1].indexOf('-') || parts[1].indexOf('+'),
+    );
+
+    // Reassemble the string with millisecond precision
+    const cleanString = `${parts[0]}.${fractionalSeconds}${timeZoneOffset}`;
+
+    // 3. Create the Date object
+    return new Date(cleanString);
+  }
+
+  // Fallback for unexpected format
+  return new Date(trimmedString);
+}
+
 const useLiveTime = (serverTimeData: string) => {
-  const dateTime = serverTimeData ? new Date(serverTimeData) : new Date();
-  const time = serverTimeData ? dateTime.getTime() : Date.now();
+  const parseDate = parseNonStandardDate(serverTimeData);
+
+  const dateTime = parseDate ? new Date(parseDate) : new Date();
+  const time = parseDate ? dateTime.getTime() : Date.now();
 
   const [liveTime, setLiveTime] = useState<Date>(dateTime);
   const serverSyncTimeRef = useRef<number>(time);
 
-  // refreshes when serverTimeData is fetched
+  // refreshes when parseDate is fetched
   useEffect(() => {
-    if (!serverTimeData) return;
+    if (!parseDate) return;
 
-    serverSyncTimeRef.current = new Date(serverTimeData).getTime();
-    setLiveTime(new Date(serverTimeData));
+    serverSyncTimeRef.current = new Date(parseDate).getTime();
+    setLiveTime(new Date(parseDate));
   }, [serverTimeData]);
 
   // updates every second based on the initial server time
