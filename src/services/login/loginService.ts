@@ -1,5 +1,6 @@
 import { ILoginResponse } from '@/interfaces/login/loginResponse';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import { api } from '../api';
 
 interface ILoginBody {
@@ -15,6 +16,11 @@ export const loginAuth = async (
   const url = '/auth/login';
   try {
     const response: AxiosResponse<ILoginResponse> = await api.post(url, body);
+
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.token,
+      JSON.stringify(response.data.access_token),
+    );
 
     const { data } = response;
     return { data, error: null };

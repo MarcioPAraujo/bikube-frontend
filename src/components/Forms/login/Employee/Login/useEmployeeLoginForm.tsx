@@ -90,10 +90,6 @@ const useEmployeeLoginForm = () => {
       SESSION_STORAGE_KEYS.employee,
       JSON.stringify(userData),
     );
-    sessionStorage.setItem(
-      SESSION_STORAGE_KEYS.token,
-      JSON.stringify(result.data.access_token),
-    );
     setUser(userData);
   };
 
