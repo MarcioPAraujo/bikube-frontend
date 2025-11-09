@@ -19,6 +19,7 @@ import { Icon } from '@/components/Icons/Icons';
 import { useAuth } from '@/hooks/useAuth';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import SellVacationModal from '@/components/modals/SellVacationModal/SellVacationModal';
+import ApplyLeaveSickModal from '@/components/modals/ApplyLeaveSickModal/ApplyLeaveSickModal';
 import {
   ActionButton,
   BadgeContainer,
@@ -116,6 +117,12 @@ const EmployeeDetailsPage = () => {
         employeeId={id}
         isOpen={sellVacationModal}
         onClose={() => setSellVacationModal(false)}
+        refetch={refetch}
+      />
+      <ApplyLeaveSickModal
+        employeeId={id}
+        isOpen={applySickLeaveModal}
+        onClose={() => setApplySickLeaveModal(false)}
         refetch={refetch}
       />
 

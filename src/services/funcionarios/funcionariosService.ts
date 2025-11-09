@@ -120,3 +120,22 @@ export const sellEmployeeVacationDays = async (
     return handleError(error, 'Erro ao vender dias de férias');
   }
 };
+
+export const applySickLeave = async (
+  employeeId: string,
+  daysOfSickLeave: number,
+): Promise<Result<boolean>> => {
+  const url = '/espelho/atestado';
+
+  const body = {
+    funcionarioid: employeeId,
+    diasDeAtestado: daysOfSickLeave,
+  };
+
+  try {
+    await api.put(url, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Erro ao aplicar atestado médico');
+  }
+};
