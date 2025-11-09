@@ -1,5 +1,5 @@
 import { useAuth, User } from '@/hooks/useAuth';
-import { getListOfEmployees } from '@/services/funcionarios/funcionariosService';
+import { getEmployeeById } from '@/services/funcionarios/funcionariosService';
 import { loginAuth } from '@/services/login/loginService';
 import { termsOfUseService } from '@/services/termsOfUse/termsofUseService';
 import { notifyError } from '@/utils/handleToast';
@@ -47,21 +47,12 @@ const useEmployeeLoginForm = () => {
     }
     if (!result.data) return;
 
-    const employeesList = await getListOfEmployees();
-    if (employeesList.error) {
-      notifyError(employeesList.error);
-      return;
-    }
-    if (!employeesList.data) return;
-
-    const employee = employeesList.data.find(
-      emp => emp.email === result.data.email,
-    );
-    if (!employee) {
+    const employee = await getEmployeeById(result.data.idfuncionario);
+    if (!employee.data) {
       notifyError('Funcionário não encontrado');
       return;
     }
-    userId.current = employee.id;
+    userId.current = result.data.idfuncionario;
 
     /*
     let proceedWithLogin = true;
@@ -78,12 +69,11 @@ const useEmployeeLoginForm = () => {
     */
 
     const userData: User = {
-      email: result.data.email,
-      id: employee.id,
-      nome: employee.nome,
+      id: result.data.idfuncionario,
+      nome: employee.data.nome,
       register: data.register,
       role: result.data.role,
-      setor: employee.idsetor.nome,
+      setor: employee.data.idsetor.nome,
     };
 
     sessionStorage.setItem(

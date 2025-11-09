@@ -10,6 +10,7 @@ import {
 import { format, parseISO } from 'date-fns';
 import { notifyError, notifySuccess } from '@/utils/handleToast';
 import AlertModal from '@/components/modals/AlertModal/AlertModal';
+import { useAuth } from '@/hooks/useAuth';
 import {
   Button,
   Calendar,
@@ -41,6 +42,7 @@ const monthNames = [
 ];
 
 const HolidaysPage: React.FC = () => {
+  const { user } = useAuth();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const { calendarDaysDate, handleNextMonth, handlePrevMonth, month, year } =
     useMonthCalendar(currentDate, setCurrentDate);
@@ -108,15 +110,17 @@ const HolidaysPage: React.FC = () => {
       />
 
       <Container>
-        <HolidayButton
-          type="button"
-          onClick={() => setWarningModal(true)}
-          disabled={!currentDate}
-        >
-          marcar{' '}
-          <strong>{format(currentDate || new Date(), 'dd/MM/yyyy')}</strong>{' '}
-          como feriado
-        </HolidayButton>
+        {user?.role !== 'FUNCIONARIO' && (
+          <HolidayButton
+            type="button"
+            onClick={() => setWarningModal(true)}
+            disabled={!currentDate}
+          >
+            marcar{' '}
+            <strong>{format(currentDate || new Date(), 'dd/MM/yyyy')}</strong>{' '}
+            como feriado
+          </HolidayButton>
+        )}
         <CalendarWrapper>
           <Header>
             <Button type="button" onClick={handlePrevMonth}>

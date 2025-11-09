@@ -15,6 +15,7 @@ import mobileMask from '@/utils/masks/mobileMask';
 import moneyMask from '@/utils/masks/moneyMask';
 import cepMask from '@/utils/masks/cepMask';
 import getAddressByCep from '@/services/address';
+import { useAuth } from '@/hooks/useAuth';
 import { Fieldset, FormContainer, GridContainer, Legend } from './styles';
 
 interface Address {
@@ -28,6 +29,7 @@ interface IEmployeeFormProps {
   mode: 'create' | 'edit' | 'view';
   formId: string;
   defaultValues?: EmployeesFormValues;
+  sector?: string;
   onSubmit?: (data: EmployeesFormValues) => void;
 }
 
@@ -41,10 +43,10 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
   mode,
   formId,
   defaultValues,
-  onSubmit = () => {
-    return 0;
-  },
+  sector,
+  onSubmit = () => 0,
 }) => {
+  const { user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -64,6 +66,18 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
 
   useEffect(() => {
     const initializeForm = async () => {
+      if (!defaultValues) return;
+
+      Object.entries(defaultValues).forEach(([key, value]) => {
+        setValue(key as keyof EmployeesFormValues, value);
+      });
+
+      const positionOption = positions.find(
+        option => option.value === defaultValues.cargo,
+      );
+      if (positionOption) {
+        setSelectedPosition(positionOption);
+      }
       const response = await getsectors();
       if (!response.data) return;
       const sectorsOptions: IOption[] = response.data.map(sector => ({
@@ -71,24 +85,12 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
         label: sector.nome,
       }));
       setSectorsOptions(sectorsOptions);
-      if (!defaultValues) return;
-
-      Object.entries(defaultValues).forEach(([key, value]) => {
-        setValue(key as keyof EmployeesFormValues, value);
-      });
 
       const sectorOption = sectorsOptions.find(
         option => option.value === defaultValues.numerosetor,
       );
       if (sectorOption) {
         setSelectedSector(sectorOption);
-      }
-
-      const positionOption = positions.find(
-        option => option.value === defaultValues.cargo,
-      );
-      if (positionOption) {
-        setSelectedPosition(positionOption);
       }
     };
     initializeForm();
@@ -261,18 +263,30 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             errorMessage={errors.cargo?.message}
             disabled={isEditMode || isViewMode}
           />
-          <SelectComponent
-            id="sector-select"
-            fieldClassName="setor"
-            options={sectorsOptions}
-            selectedOption={selectedSector}
-            onChange={handleSectorChange}
-            placeholder="Selecione um setor"
-            label="Setor"
-            enableSearch
-            errorMessage={errors.numerosetor?.message}
-            disabled={isViewMode}
-          />
+          {user?.role !== 'FUNCIONARIO' && (
+            <SelectComponent
+              id="sector-select"
+              fieldClassName="setor"
+              options={sectorsOptions}
+              selectedOption={selectedSector}
+              onChange={handleSectorChange}
+              placeholder="Selecione um setor"
+              label="Setor"
+              enableSearch
+              errorMessage={errors.numerosetor?.message}
+              disabled={isViewMode}
+            />
+          )}
+          {sector && (
+            <InputComponent
+              id="sector-view"
+              classname="setor-view"
+              labelText="Setor"
+              placeholder="Setor do funcionário"
+              defaultValue={sector}
+              disabled
+            />
+          )}
         </GridContainer>
       </Fieldset>
       <Fieldset>

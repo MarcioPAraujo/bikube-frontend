@@ -44,6 +44,9 @@ const PointLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (user.role === 'FUNCIONARIO' && tab.baseUrl.includes('/colaboradores')) {
       return false;
     }
+    if (user.role === 'FUNCIONARIO' && tab.baseUrl.includes('/csv')) {
+      return false;
+    }
     return true;
   });
   return (

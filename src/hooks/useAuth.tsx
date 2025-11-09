@@ -17,7 +17,6 @@ import { createContext, ReactNode } from 'react';
 
 export interface User {
   register: string;
-  email: string;
   role: string;
   nome: string;
   id: string;

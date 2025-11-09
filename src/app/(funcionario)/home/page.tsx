@@ -94,6 +94,7 @@ const HomePage: React.FC = () => {
         formId="viewEmployeeDetailsForm"
         defaultValues={employee}
         mode="view"
+        sector={employeeData.idsetor.nome}
       />
     </main>
   );
