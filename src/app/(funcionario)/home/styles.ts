@@ -11,17 +11,6 @@ export const SituationStatus = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
-export const ButtonsContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-export const ActionButton = styled.button`
-  display: inline-block;
-  width: fit-content;
-  padding: 0.6rem 1rem;
-  font-size: 1.4rem;
-  font-weight: 600;
-`;
 
 export const SituationGrid = styled.div`
   display: grid;

@@ -8,12 +8,8 @@ import { EmployeesFormValues } from '@/validation/Employees/EmployeesForm';
 import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import cepMask from '@/utils/masks/cepMask';
-import { useState } from 'react';
-import SellVacationModal from '@/components/modals/SellVacationModal/SellVacationModal';
 import {
-  ActionButton,
   BadgeContainer,
-  ButtonsContainer,
   SituationBadge,
   SituationGrid,
   SituationStatus,
@@ -26,11 +22,10 @@ const HomePage: React.FC = () => {
 
   const id = user?.id as string;
 
-  const { data, isPlaceholderData, refetch } = useQuery({
+  const { data, isPlaceholderData } = useQuery({
     queryKey: ['employeeDetails', id],
     queryFn: () => getEmployeeById(id),
   });
-  const [vacationModal, setVacationModal] = useState(false);
 
   if (!data && !isPlaceholderData) return null;
 
@@ -68,13 +63,6 @@ const HomePage: React.FC = () => {
 
   return (
     <main>
-      <SellVacationModal
-        employeeId={id}
-        isOpen={vacationModal}
-        onClose={() => setVacationModal(false)}
-        refetch={refetch}
-      />
-
       <div>
         <Title>Minhas informações</Title>
         <SituationStatus>
@@ -100,11 +88,6 @@ const HomePage: React.FC = () => {
               <ValueBadge>{employeeData.saldoAtestado}</ValueBadge>
             </BadgeContainer>
           </SituationGrid>
-          <ButtonsContainer>
-            <ActionButton type="button" onClick={() => setVacationModal(true)}>
-              Vender férias
-            </ActionButton>
-          </ButtonsContainer>
         </SituationStatus>
       </div>
       <EmployeeForm
