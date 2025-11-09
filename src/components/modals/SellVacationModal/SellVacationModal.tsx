@@ -117,8 +117,8 @@ const SellVacationModal: React.FC<ISellVacationModalProps> = ({
       <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Title>Vender Férias</Title>
         <Message>
-          Isso se trata de solicitar a venda de dias de férias. Escolha a
-          quantidade, quando as férias forem aprovadas os dias serão vendidos.
+          O valor é descontado no próximo cálculo de férias. Caso ultrapassar
+          1/3 do saldo total do funcionário o valor será ignorado
         </Message>
         <Display>
           <DigitContainer>
