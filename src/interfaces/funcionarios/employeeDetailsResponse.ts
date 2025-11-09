@@ -8,12 +8,16 @@ export interface IEmployeeDetailsResponse {
   salario: number;
   contabancaria: string;
   dataentrada: string;
-  datasaida: string | null;
+  datasaida: null;
   funcao: string;
   status: string;
   feriasDisponiveis: number;
   fracoesDisponiveis: number;
+  ultimoCalculo: null;
   periodo14dias: boolean;
+  deFerias: boolean;
+  saldoAtestado: number; // how many days of sick leave the employee has
+  venderFerias: number; // how many days of vacation the employee has selled
   id_telefone: IDTelefone;
   idsetor: Idsetor;
   id_endereco: IDEndereco;

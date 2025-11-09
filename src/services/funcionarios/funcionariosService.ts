@@ -101,3 +101,22 @@ export const updateEmployeeAddress = async (
     return handleError(error, 'Erro ao atualizar endereço do funcionário');
   }
 };
+
+export const sellEmployeeVacationDays = async (
+  employeeId: string,
+  daysToSell: number,
+): Promise<Result<boolean>> => {
+  const url = '/ferias/venderferias';
+
+  const body = {
+    funcionarioid: employeeId,
+    quantidadeDias: daysToSell,
+  };
+
+  try {
+    await api.put(url, body);
+    return { data: true, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Erro ao vender dias de férias');
+  }
+};

@@ -18,7 +18,20 @@ import IconButton from '@/components/Buttons/IconButton';
 import { Icon } from '@/components/Icons/Icons';
 import { useAuth } from '@/hooks/useAuth';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
-import { ButtonContainer, RemoveButton, TitleWrapper } from './styles';
+import SellVacationModal from '@/components/modals/SellVacationModal/SellVacationModal';
+import {
+  ActionButton,
+  BadgeContainer,
+  ButtonContainer,
+  ButtonsContainer,
+  Header,
+  RemoveButton,
+  SituationBadge,
+  SituationGrid,
+  SituationStatus,
+  TitleWrapper,
+  ValueBadge,
+} from './styles';
 
 const formId = 'employeeDetailsForm';
 
@@ -28,8 +41,10 @@ const EmployeeDetailsPage = () => {
   const router = useRouter();
   const [successFullRemoval, setSuccessFullRemoval] = useState(false);
   const [warningModal, setWarningModal] = useState(false);
+  const [sellVacationModal, setSellVacationModal] = useState(false);
+  const [applySickLeaveModal, setApplySickLeaveModal] = useState(false);
 
-  const { data, isPlaceholderData } = useQuery({
+  const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['employeeDetails', id],
     queryFn: () => getEmployeeById(id),
   });
@@ -55,6 +70,8 @@ const EmployeeDetailsPage = () => {
       </div>
     );
   }
+
+  const { data: employeeData } = data;
 
   const employee: EmployeesFormValues = {
     nome: data.data?.nome,
@@ -95,29 +112,78 @@ const EmployeeDetailsPage = () => {
         confirmText="Sim, iniciar desligamento"
         cancelText="Cancelar"
       />
-      <div>
-        <TitleWrapper>
-          <IconButton
-            iconNode={<Icon name="ArrowBack" />}
-            onClick={() => router.push('/funcionarios')}
-          />
-          <h1>Detalhes do Funcionário</h1>
-        </TitleWrapper>
-        {user?.role === 'ADMIN' && (
-          <RemoveButton type="button" onClick={() => setWarningModal(true)}>
-            Dar inicio ao processo de desligamento
-          </RemoveButton>
-        )}
-      </div>
-      <ButtonContainer>
-        <DefaultButton
-          type="button"
-          text="Editar funcionário"
-          onClick={() => {
-            router.push(`/funcionarios/editar/${id}`);
-          }}
-        />
-      </ButtonContainer>
+      <SellVacationModal
+        employeeId={id}
+        isOpen={sellVacationModal}
+        onClose={() => setSellVacationModal(false)}
+        refetch={refetch}
+      />
+
+      <Header>
+        <div>
+          <div>
+            <TitleWrapper>
+              <IconButton
+                iconNode={<Icon name="ArrowBack" />}
+                onClick={() => router.push('/funcionarios')}
+              />
+              <h1>Detalhes do Funcionário</h1>
+            </TitleWrapper>
+            {user?.role === 'ADMIN' && (
+              <RemoveButton type="button" onClick={() => setWarningModal(true)}>
+                Dar inicio ao processo de desligamento
+              </RemoveButton>
+            )}
+          </div>
+          <ButtonContainer>
+            <DefaultButton
+              type="button"
+              text="Editar funcionário"
+              onClick={() => {
+                router.push(`/funcionarios/editar/${id}`);
+              }}
+            />
+          </ButtonContainer>
+        </div>
+        <SituationStatus>
+          <SituationGrid>
+            <BadgeContainer>
+              <SituationBadge>De férias:</SituationBadge>
+              <ValueBadge>{employeeData.deFerias ? 'Sim' : 'Não'}</ValueBadge>
+            </BadgeContainer>
+            <BadgeContainer>
+              <SituationBadge>Férias vendidas:</SituationBadge>
+              <ValueBadge>{employeeData.venderFerias}</ValueBadge>
+            </BadgeContainer>
+            <BadgeContainer>
+              <SituationBadge>Saldo de férias:</SituationBadge>
+              <ValueBadge>{employeeData.feriasDisponiveis}</ValueBadge>
+            </BadgeContainer>
+            <BadgeContainer>
+              <SituationBadge>frações de férias disponíveis:</SituationBadge>
+              <ValueBadge>{employeeData.fracoesDisponiveis}</ValueBadge>
+            </BadgeContainer>
+            <BadgeContainer>
+              <SituationBadge>Saldo de atestados:</SituationBadge>
+              <ValueBadge>{employeeData.saldoAtestado}</ValueBadge>
+            </BadgeContainer>
+          </SituationGrid>
+          <ButtonsContainer>
+            <ActionButton
+              type="button"
+              onClick={() => setApplySickLeaveModal(true)}
+            >
+              Aplicar atestado médico
+            </ActionButton>
+            <ActionButton
+              type="button"
+              onClick={() => setSellVacationModal(true)}
+            >
+              Vender férias
+            </ActionButton>
+          </ButtonsContainer>
+        </SituationStatus>
+      </Header>
       <EmployeeForm formId={formId} defaultValues={employee} mode="view" />
     </div>
   );
