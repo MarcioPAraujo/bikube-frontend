@@ -28,6 +28,12 @@ const tabs: ITab[] = [
     url: '/gestao-do-ponto/feriados',
     description: 'Visualize os feriados oficiais.',
   },
+  {
+    label: 'Exportar CSV',
+    baseUrl: '/gestao-do-ponto/csv',
+    url: '/gestao-do-ponto/csv',
+    description: 'Importe registros de ponto via arquivo CSV.',
+  },
 ];
 
 const PointLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {

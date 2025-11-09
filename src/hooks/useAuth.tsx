@@ -73,6 +73,7 @@ const rhRoutes = [
   '/gestao-do-ponto/solicitacoes',
   '/gestao-do-ponto/colaboradores',
   '/gestao-do-ponto/feriados',
+  '/gestao-do-ponto/csv',
 
   // all recrutation routes are allowed for RH
   '/recrutamento',
