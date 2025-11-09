@@ -8,17 +8,29 @@ import { EmployeesFormValues } from '@/validation/Employees/EmployeesForm';
 import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import cepMask from '@/utils/masks/cepMask';
-import { Title } from './styles';
+import { useState } from 'react';
+import SellVacationModal from '@/components/modals/SellVacationModal/SellVacationModal';
+import {
+  ActionButton,
+  BadgeContainer,
+  ButtonsContainer,
+  SituationBadge,
+  SituationGrid,
+  SituationStatus,
+  Title,
+  ValueBadge,
+} from './styles';
 
 const HomePage: React.FC = () => {
   const { user } = useAuth();
 
   const id = user?.id as string;
 
-  const { data, isPlaceholderData } = useQuery({
+  const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['employeeDetails', id],
     queryFn: () => getEmployeeById(id),
   });
+  const [vacationModal, setVacationModal] = useState(false);
 
   if (!data && !isPlaceholderData) return null;
 
@@ -52,9 +64,49 @@ const HomePage: React.FC = () => {
     numerosetor: data.data.idsetor.id.toString(),
   };
 
+  const { data: employeeData } = data;
+
   return (
     <main>
-      <Title>Minhas informações</Title>
+      <SellVacationModal
+        employeeId={id}
+        isOpen={vacationModal}
+        onClose={() => setVacationModal(false)}
+        refetch={refetch}
+      />
+
+      <div>
+        <Title>Minhas informações</Title>
+        <SituationStatus>
+          <SituationGrid>
+            <BadgeContainer>
+              <SituationBadge>De férias:</SituationBadge>
+              <ValueBadge>{employeeData.deFerias ? 'Sim' : 'Não'}</ValueBadge>
+            </BadgeContainer>
+            <BadgeContainer>
+              <SituationBadge>Férias vendidas:</SituationBadge>
+              <ValueBadge>{employeeData.venderFerias}</ValueBadge>
+            </BadgeContainer>
+            <BadgeContainer>
+              <SituationBadge>Saldo de férias:</SituationBadge>
+              <ValueBadge>{employeeData.feriasDisponiveis}</ValueBadge>
+            </BadgeContainer>
+            <BadgeContainer>
+              <SituationBadge>frações de férias disponíveis:</SituationBadge>
+              <ValueBadge>{employeeData.fracoesDisponiveis}</ValueBadge>
+            </BadgeContainer>
+            <BadgeContainer>
+              <SituationBadge>Saldo de atestados:</SituationBadge>
+              <ValueBadge>{employeeData.saldoAtestado}</ValueBadge>
+            </BadgeContainer>
+          </SituationGrid>
+          <ButtonsContainer>
+            <ActionButton type="button" onClick={() => setVacationModal(true)}>
+              Vender férias
+            </ActionButton>
+          </ButtonsContainer>
+        </SituationStatus>
+      </div>
       <EmployeeForm
         formId="viewEmployeeDetailsForm"
         defaultValues={employee}
