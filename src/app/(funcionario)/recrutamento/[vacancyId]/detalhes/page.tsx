@@ -1,9 +1,23 @@
 'use client';
 
-import { getAllVacancies } from '@/services/vacancy/vacancyService';
+import {
+  closeVacancy,
+  getAllVacancies,
+} from '@/services/vacancy/vacancyService';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
-import { Field, FieldLabel, FieldsContainer, FieldValue } from './styles';
+import { DefaultButton } from '@/components/Buttons/DefaultButton';
+import { useState } from 'react';
+import WarningModal from '@/components/modals/WarningModal/WarningModal';
+import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
+import { notifyError } from '@/utils/handleToast';
+import {
+  Field,
+  FieldLabel,
+  FieldsContainer,
+  FieldValue,
+  PageContainer,
+} from './styles';
 
 const vacancyLevelRecord: Record<string, string> = {
   inciante: 'Júnior',
@@ -13,7 +27,9 @@ const vacancyLevelRecord: Record<string, string> = {
 
 const VacancyDetailsPage: React.FC = () => {
   const { vacancyId } = useParams<{ vacancyId: string }>();
-  const { data, isPlaceholderData } = useQuery({
+  const [warningModalOpen, setWarningModalOpen] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['vacancies', vacancyId],
     queryFn: async () => {
       const result = await getAllVacancies();
@@ -23,6 +39,18 @@ const VacancyDetailsPage: React.FC = () => {
     },
     placeholderData: keepPreviousData,
   });
+
+  const handleCloseVacancy = async () => {
+    const response = await closeVacancy(Number(vacancyId));
+    if (response.error) {
+      notifyError(response.error);
+      setWarningModalOpen(false);
+      return;
+    }
+    refetch();
+    setSuccessModalOpen(true);
+    setWarningModalOpen(false);
+  };
 
   if (!data && !isPlaceholderData) return null;
 
@@ -37,34 +65,64 @@ const VacancyDetailsPage: React.FC = () => {
   const vacancy = data[0];
 
   return (
-    <FieldsContainer>
-      <Field>
-        <FieldLabel>Tipo de contrato</FieldLabel>
-        <FieldValue>{vacancy.tipoContrato}</FieldValue>
-      </Field>
-      <Field>
-        <FieldLabel>Nível da vaga</FieldLabel>
-        <FieldValue>
-          {vacancyLevelRecord[vacancy.nivel] || vacancy.nivel}
-        </FieldValue>
-      </Field>
-      <Field>
-        <FieldLabel>Local</FieldLabel>
-        <FieldValue>{vacancy.localizacao}</FieldValue>
-      </Field>
-      <Field>
-        <FieldLabel>Modelo de trabalho</FieldLabel>
-        <FieldValue>{vacancy.modelo}</FieldValue>
-      </Field>
-      <Field>
-        <FieldLabel>Descrição da vaga</FieldLabel>
-        <FieldValue>{vacancy.descricao}</FieldValue>
-      </Field>
-      <Field>
-        <FieldLabel>Informações adicionais</FieldLabel>
-        <FieldValue>{vacancy.informacoes}</FieldValue>
-      </Field>
-    </FieldsContainer>
+    <>
+      <WarningModal
+        isOpen={warningModalOpen}
+        title="Encerrar Vaga"
+        message="Tem certeza que deseja encerrar esta vaga? Esta ação não pode ser desfeita."
+        confirmText="Confirmar"
+        cancelText="Cancelar"
+        onConfirm={handleCloseVacancy}
+        onCancel={() => setWarningModalOpen(false)}
+      />
+      <SuccessModal
+        isOpen={successModalOpen}
+        title="Vaga Encerrada"
+        message="A vaga foi encerrada com sucesso."
+        buttonText="Fechar"
+        onClose={() => setSuccessModalOpen(false)}
+      />
+
+      <PageContainer>
+        <div>
+          <DefaultButton
+            text="Encerrar Vaga"
+            variant="bordered"
+            onClick={() => setWarningModalOpen(true)}
+            disabled={vacancy.status === 'finalizado'}
+          />
+        </div>
+
+        <FieldsContainer>
+          <Field>
+            <FieldLabel>Tipo de contrato</FieldLabel>
+            <FieldValue>{vacancy.tipoContrato}</FieldValue>
+          </Field>
+          <Field>
+            <FieldLabel>Nível da vaga</FieldLabel>
+            <FieldValue>
+              {vacancyLevelRecord[vacancy.nivel] || vacancy.nivel}
+            </FieldValue>
+          </Field>
+          <Field>
+            <FieldLabel>Local</FieldLabel>
+            <FieldValue>{vacancy.localizacao}</FieldValue>
+          </Field>
+          <Field>
+            <FieldLabel>Modelo de trabalho</FieldLabel>
+            <FieldValue>{vacancy.modelo}</FieldValue>
+          </Field>
+          <Field>
+            <FieldLabel>Descrição da vaga</FieldLabel>
+            <FieldValue>{vacancy.descricao}</FieldValue>
+          </Field>
+          <Field>
+            <FieldLabel>Informações adicionais</FieldLabel>
+            <FieldValue>{vacancy.informacoes}</FieldValue>
+          </Field>
+        </FieldsContainer>
+      </PageContainer>
+    </>
   );
 };
 export default VacancyDetailsPage;

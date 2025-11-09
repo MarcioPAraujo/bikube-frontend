@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 
+export const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  margin-top: 2.4rem;
+`;
+
 export const FieldsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));

@@ -213,3 +213,18 @@ export const advanceCadidateToNextStep = async (
     return handleError(error, 'Erro ao avançar candidato para a próxima etapa');
   }
 };
+
+export const closeVacancy = async (
+  vacancyId: number,
+): Promise<Result<boolean>> => {
+  const ENDPOINT = '/vaga/finalizarVaga';
+
+  const body = { vagaid: vacancyId };
+
+  try {
+    await api.post(ENDPOINT, body);
+    return { data: true, error: null };
+  } catch (error) {
+    return handleError(error, 'Erro ao encerrar a vaga');
+  }
+};
