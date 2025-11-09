@@ -17,7 +17,7 @@ import { ListaEntrada } from '@/interfaces/mirror/employeeMirrorResponse';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { getEmployeeMirrors } from '@/services/mirror/mirrorService';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import RenderIf from '@/components/RenderIf/RenderIf';
 import {
   Field,
@@ -268,7 +268,9 @@ const HistoryPointPage: React.FC = () => {
         <Table.Body>
           {pagination.currentRows.map(row => (
             <Table.Row key={row.id}>
-              <Table.BodyCell>{format(row.data, 'dd/MM/yyyy')}</Table.BodyCell>
+              <Table.BodyCell>
+                {format(parseISO(row.data), 'dd/MM/yyyy')}
+              </Table.BodyCell>
               <RenderIf isTrue={row.entradas.length >= 1}>
                 {row.entradas.map(entry => (
                   <Table.BodyCell key={entry.id}>
