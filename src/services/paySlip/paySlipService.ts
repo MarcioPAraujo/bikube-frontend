@@ -26,3 +26,24 @@ export const generatePaySlipPdf = async (
     return handleError(error, 'Erro ao gerar PDF do espelho de pagamento.');
   }
 };
+
+export const generatePaySlipCsv = async (
+  date: string,
+): Promise<Result<string>> => {
+  const endpoint = `/espelho/gerarCSV/${date}`;
+
+  try {
+    const response = await api.get(endpoint, {
+      responseType: 'blob', // Important for binary data
+    });
+
+    // Create a URL for the blob
+    const url = window.URL.createObjectURL(
+      new Blob([response.data], { type: 'application/zip' }),
+    );
+
+    return { error: null, data: url };
+  } catch (error) {
+    return handleError(error, 'Erro ao gerar CSV do espelho de pagamento.');
+  }
+};

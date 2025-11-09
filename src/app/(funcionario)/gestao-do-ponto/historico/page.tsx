@@ -3,7 +3,10 @@
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import SelectComponent from '@/components/Inputs/Select/Select';
 import { IOption } from '@/interfaces/option';
-import { generatePaySlipPdf } from '@/services/paySlip/paySlipService';
+import {
+  generatePaySlipCsv,
+  generatePaySlipPdf,
+} from '@/services/paySlip/paySlipService';
 import { notifyError } from '@/utils/handleToast';
 import { useState } from 'react';
 import { Table } from '@/components/Table/Index/Index';
@@ -121,6 +124,38 @@ const HistoryPointPage: React.FC = () => {
     }
   };
 
+  const handleGenereateCsv = async () => {
+    if (!filterdDate) return;
+    if (user?.role === 'FUNCIONARIO') return;
+    const dateStr = format(filterdDate, 'yyyy-MM-dd');
+
+    const response = await generatePaySlipCsv(dateStr);
+
+    if (response.error) {
+      notifyError(response.error);
+      return;
+    }
+    if (!response.data) {
+      notifyError('Nenhum dado recebido para o CSV.');
+      return;
+    }
+
+    const url = response.data;
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'espelho.zip'); // Set the file name
+
+    // Append to the document and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up and remove the link
+    link.parentNode?.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   const handleYearChange = (value: string) => {
     // Allow only numbers
     const numericValue = value.replace(/\D/g, '');
@@ -218,6 +253,15 @@ const HistoryPointPage: React.FC = () => {
           onClick={handleGeneratePdf}
           disabled={isGenerateDisabled()}
         />
+        {user?.role !== 'FUNCIONARIO' && (
+          <DefaultButton
+            text="Baixar csv"
+            variant="bordered"
+            type="button"
+            onClick={() => handleGenereateCsv()}
+            disabled={!filterdDate || user?.role === 'FUNCIONARIO'}
+          />
+        )}
       </Header>
       <Table.Root tableClassName="points-history">
         <Table.Header columns={columns} />
