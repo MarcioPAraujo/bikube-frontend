@@ -4,7 +4,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getVacationsByMonth } from '@/services/vacations/vacationService';
 import { IVacationByMonthResponse } from '@/interfaces/vacation/vacationsByMonthReponse';
 import RenderIf from '@/components/RenderIf/RenderIf';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { DefaultButton } from '@/components/Buttons/DefaultButton';
 import {
   CardsContainer,
@@ -116,10 +116,15 @@ const EmployeesList: React.FC<EmployeeVacationListProps> = ({
                   >
                     <strong>{vocationRequest.funcionario.nome}</strong>
                     <div>
-                      Início: {format(vocationRequest.dataInicio, 'dd/MM/yyyy')}
+                      Início:{' '}
+                      {format(
+                        parseISO(vocationRequest.dataInicio),
+                        'dd/MM/yyyy',
+                      )}
                     </div>
                     <div>
-                      Fim: {format(vocationRequest.dataFim, 'dd/MM/yyyy')}
+                      Fim:{' '}
+                      {format(parseISO(vocationRequest.dataFim), 'dd/MM/yyyy')}
                     </div>
                   </EmployeeCard>
                 ))}
