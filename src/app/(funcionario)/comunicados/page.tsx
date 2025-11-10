@@ -151,7 +151,7 @@ const AnnouncementsPage = () => {
               type="button"
               key={announcement.id}
               onClick={() => {
-                announcementIdRef.current = announcement.id;
+                announcementIdRef.current = announcement.comunicado.id;
                 updateViewStatus();
               }}
             >
