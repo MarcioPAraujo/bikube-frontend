@@ -66,8 +66,19 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
 
   useEffect(() => {
     const initializeForm = async () => {
-      if (!defaultValues) return;
+      if (!defaultValues) {
+        // mode is 'create'
+        const response = await getsectors();
+        if (!response.data) return;
+        const sectorsOptions: IOption[] = response.data.map(sector => ({
+          value: sector.id.toString(),
+          label: sector.nome,
+        }));
+        setSectorsOptions(sectorsOptions);
+        return;
+      }
 
+      // mode is 'edit' or 'view'
       Object.entries(defaultValues).forEach(([key, value]) => {
         setValue(key as keyof EmployeesFormValues, value);
       });
@@ -277,7 +288,7 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
               disabled={isViewMode}
             />
           )}
-          {sector && (
+          {sector && user?.role === 'FUNCIONARIO' && (
             <InputComponent
               id="sector-view"
               classname="setor-view"
