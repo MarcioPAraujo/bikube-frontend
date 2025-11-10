@@ -55,7 +55,7 @@ const VacancyMatchesChart: React.FC<IVacancyMatchesChartProps> = ({
   }
 
   const data: ChartData<'doughnut'> = {
-    labels: ['Pussuem', 'Não possuem'],
+    labels: ['Possuem', 'Não possuem'],
     datasets: [
       {
         data: [matchers, nonMatchers],

@@ -84,7 +84,7 @@ const AddNewLanguageModal: React.FC<AddNewSkillModalProps> = ({
     <ModalBackground>
       <ModalContent>
         <TitleWrapper>
-          <Title>Adicionar novo idoma</Title>
+          <Title>Adicionar novo idioma</Title>
           <IconButton
             onClick={() => setWarningModal(true)}
             iconNode={<Icon name="CloseIcon" />}

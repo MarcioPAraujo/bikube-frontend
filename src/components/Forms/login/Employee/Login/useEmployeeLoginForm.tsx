@@ -54,7 +54,6 @@ const useEmployeeLoginForm = () => {
     }
     userId.current = result.data.idfuncionario;
 
-    /*
     let proceedWithLogin = true;
     if (result.data.termo === 'false') {
       setAcceptTermsModal(true);
@@ -66,7 +65,6 @@ const useEmployeeLoginForm = () => {
     }
 
     if (!proceedWithLogin) return;
-    */
 
     const userData: User = {
       id: result.data.idfuncionario,

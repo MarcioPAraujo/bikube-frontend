@@ -46,6 +46,8 @@ const columns = [
   'Saída - A',
   'Entrada - B',
   'Saída - B',
+  'Ausência',
+  'Abono',
 ];
 
 const emptyEntries = Array.from({ length: 4 }, () => '-- : -- : --');
@@ -233,11 +235,15 @@ const HistoryPointPage: React.FC = () => {
                     {formatHour(entry.hora)}
                   </Table.BodyCell>
                 ))}
+                <Table.BodyCell>{row.ausencia ? 'Sim' : 'Não'}</Table.BodyCell>
+                <Table.BodyCell>{row.descricaoAbono || '-'}</Table.BodyCell>
               </RenderIf>
               <RenderIf isTrue={row.entradas.length === 0}>
                 {emptyEntries.map((entry, index) => (
                   <Table.BodyCell key={index}>{entry}</Table.BodyCell>
                 ))}
+                <Table.BodyCell>{row.ausencia ? 'Sim' : 'Não'}</Table.BodyCell>
+                <Table.BodyCell>{row.descricaoAbono || '-'}</Table.BodyCell>
               </RenderIf>
             </Table.Row>
           ))}
