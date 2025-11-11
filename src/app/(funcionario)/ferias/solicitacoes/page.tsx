@@ -78,6 +78,7 @@ const VacationsRequestsPage: React.FC = () => {
 
     const hasConflict = response.data.length > 0;
     if (hasConflict) {
+      setAlertModalOpen(false);
       setConflictModalOpen(true);
     }
     return hasConflict;

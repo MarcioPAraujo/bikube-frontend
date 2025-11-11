@@ -10,7 +10,7 @@ import RequestVacationForm from '@/components/Forms/RequestVacationForm/RequestV
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getEmployeeVacations } from '@/services/vacations/vacationService';
 import { useAuth } from '@/hooks/useAuth';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { PageContainer, Status } from './styles';
 
 const columns = ['Data Início', 'Data Fim', 'Status'];
@@ -53,10 +53,10 @@ const MyVacationsPage: React.FC = () => {
           {pagination.currentRows.map(vacation => (
             <Table.Row key={vacation.id}>
               <Table.BodyCell>
-                {format(vacation.dataInicio, 'dd/MM/yyyy')}
+                {format(parseISO(vacation.dataInicio), 'dd/MM/yyyy')}
               </Table.BodyCell>
               <Table.BodyCell>
-                {format(vacation.dataFim, 'dd/MM/yyyy')}
+                {format(parseISO(vacation.dataFim), 'dd/MM/yyyy')}
               </Table.BodyCell>
               <Table.BodyCell>
                 <Status className={vacation.status}>{vacation.status}</Status>
