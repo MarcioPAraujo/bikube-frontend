@@ -12,7 +12,6 @@ import {
   addDays,
   addYears,
   subYears,
-  isValid,
 } from 'date-fns';
 
 const today = new Date();
@@ -45,8 +44,6 @@ const useMonthCalendar = (
 ) => {
   const currentDate = useMemo(() => {
     if (date) {
-      console.log('is valid date', isValid(date));
-      console.log('date', date);
       return date;
     }
     return new Date();

@@ -187,10 +187,10 @@ const VacationsRequestsPage: React.FC = () => {
               <Table.BodyCell>{request.funcionario.cargo}</Table.BodyCell>
               <Table.BodyCell>{request.setorfuncionario}</Table.BodyCell>
               <Table.BodyCell>
-                {format(request.dataInicio, 'dd/MM/yyyy')}
+                {format(parseISO(request.dataInicio), 'dd/MM/yyyy')}
               </Table.BodyCell>
               <Table.BodyCell>
-                {format(request.dataFim, 'dd/MM/yyyy')}
+                {format(parseISO(request.dataFim), 'dd/MM/yyyy')}
               </Table.BodyCell>
               <Table.BodyCell>
                 <Container>
@@ -201,11 +201,6 @@ const VacationsRequestsPage: React.FC = () => {
                       vacationId.current = request.id;
                       vacationStartDate.current = request.dataInicio;
                       vacationEndDate.current = request.dataFim;
-                      console.log(
-                        'start date string',
-                        vacationStartDate.current,
-                      );
-                      console.log('end date string', vacationEndDate.current);
                       setAlertModalOpen(true);
                     }}
                   >
