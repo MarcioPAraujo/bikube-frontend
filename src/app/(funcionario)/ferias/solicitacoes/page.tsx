@@ -104,14 +104,16 @@ const VacationsRequestsPage: React.FC = () => {
 
   return (
     <div>
-      <VacationConflictsModal
-        isOpen={conflictModalOpen}
-        onClose={() => setConflictModalOpen(false)}
-        onApproveAnyway={updateVacationStatus}
-        conflicts={conflicts.current}
-        currentVacationEndDate={parseISO(vacationEndDate.current)}
-        currentVacationStartDate={parseISO(vacationStartDate.current)}
-      />
+      {conflictModalOpen && (
+        <VacationConflictsModal
+          isOpen={conflictModalOpen}
+          onClose={() => setConflictModalOpen(false)}
+          onApproveAnyway={updateVacationStatus}
+          conflicts={conflicts.current}
+          currentVacationEndDate={parseISO(vacationEndDate.current)}
+          currentVacationStartDate={parseISO(vacationStartDate.current)}
+        />
+      )}
 
       <AlertModal
         isOpen={alertModalOpen}
@@ -199,8 +201,11 @@ const VacationsRequestsPage: React.FC = () => {
                       vacationId.current = request.id;
                       vacationStartDate.current = request.dataInicio;
                       vacationEndDate.current = request.dataFim;
-                      console.log('start date', vacationStartDate.current);
-                      console.log('end date', vacationEndDate.current);
+                      console.log(
+                        'start date string',
+                        vacationStartDate.current,
+                      );
+                      console.log('end date string', vacationEndDate.current);
                       setAlertModalOpen(true);
                     }}
                   >
