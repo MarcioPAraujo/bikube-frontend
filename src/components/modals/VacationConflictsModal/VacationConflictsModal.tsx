@@ -65,6 +65,9 @@ const VacationConflictsModal: React.FC<VocationConflictsModalProps> = ({
   const [compareSatartDate, setCompareStartDate] = useState<Date | null>(null);
   const [compareEndDate, setCompareEndDate] = useState<Date | null>(null);
 
+  console.log('start date', currentVacationStartDate);
+  console.log('end date', currentVacationEndDate);
+
   const isDateInRange = (date: Date) => {
     let classname = '';
 

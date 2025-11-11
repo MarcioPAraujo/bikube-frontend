@@ -199,6 +199,8 @@ const VacationsRequestsPage: React.FC = () => {
                       vacationId.current = request.id;
                       vacationStartDate.current = request.dataInicio;
                       vacationEndDate.current = request.dataFim;
+                      console.log('start date', vacationStartDate.current);
+                      console.log('end date', vacationEndDate.current);
                       setAlertModalOpen(true);
                     }}
                   >
