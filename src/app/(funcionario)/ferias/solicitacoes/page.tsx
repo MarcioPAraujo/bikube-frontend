@@ -20,6 +20,7 @@ import { format, parseISO } from 'date-fns';
 import { notifyError } from '@/utils/handleToast';
 import VacationConflictsModal from '@/components/modals/VacationConflictsModal/VacationConflictsModal';
 import { IConflictVacationResponse } from '@/interfaces/vacation/conflictVacationsResponse';
+import { getsectors } from '@/services/setor/setorService';
 import {
   ApproveButton,
   Container,
@@ -27,11 +28,6 @@ import {
   RejectButton,
   SectorContainer,
 } from './styles';
-
-const sectorOptions: IOption[] = Array.from({ length: 5 }).map((_, index) => ({
-  label: `Setor ${index + 1}`,
-  value: `setor-${index + 1}`,
-}));
 
 const columns = ['Nome', 'Cargo', 'Setor', 'Data Início', 'Data Fim', 'Ações'];
 
@@ -53,14 +49,40 @@ const VacationsRequestsPage: React.FC = () => {
     placeholderData: keepPreviousData,
   });
 
+  const { data: sectors } = useQuery({
+    queryKey: ['sectors'],
+    queryFn: async () => {
+      const response = await getsectors();
+      if (response.error) {
+        return [];
+      }
+      if (!response.data) {
+        return [];
+      }
+      return response.data.map(sector => ({
+        label: sector.nome,
+        value: sector.id.toString(),
+      }));
+    },
+  });
+
   const employeessList = data?.data || [];
+  const sectorOptions = sectors || [];
 
   const filteredRequests = employeessList.filter(request => {
+    if (!search && !sector?.label) return true;
+    if (search && !sector?.label) {
+      return request.funcionario.nome
+        .toLowerCase()
+        .includes(search.toLowerCase());
+    }
+    if (!search && sector?.label) {
+      return request.funcionario.idsetor.nome === sector.label;
+    }
     const matchesSearch = request.funcionario.nome
       .toLowerCase()
       .includes(search.toLowerCase());
-    const matchesSector =
-      !sector.label || request.funcionario.idsetor.nome === sector.label;
+    const matchesSector = request.funcionario.idsetor.nome === sector.label;
     return matchesSearch && matchesSector;
   });
   const pagination = usePaginationRange(filteredRequests, DEFAULT_PAGE_SIZE);
