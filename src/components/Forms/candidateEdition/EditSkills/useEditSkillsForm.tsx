@@ -1,4 +1,3 @@
-import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
 import { IOption } from '@/interfaces/option';
@@ -24,7 +23,6 @@ const useEditSkillsForm = ({
   defaultValues,
   refetch,
 }: IEditSkillsFormProps) => {
-  const { candidate } = useCandidateAuth();
   const [warningModalOpen, setWarningModalOpen] = useState<boolean>(false);
   const [successModalOpen, setSuccessModalOpen] = useState<boolean>(false);
   const [skillsOptions, setSkillsOptions] = useState<IOption[]>([]);
@@ -86,10 +84,8 @@ const useEditSkillsForm = ({
       return;
     }
 
-    const candidateId = candidate?.id || '0';
     const body: ICandidateProfileEditBodyRequest = {
       ...candidateData,
-      id: Number(candidateId),
       habilidades: data.skills.map(skill => ({
         habilidade: skill.competency,
         tempoExperiencia: Number(skill.periodInMonths),

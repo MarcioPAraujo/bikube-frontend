@@ -103,6 +103,21 @@ export const editCandidateById = async (
   }
 };
 
+export const getCandidate = async (): Promise<
+  Result<ICandidateDetailsResponse>
+> => {
+  const ENDPOINT = 'candidato/meuperfil';
+
+  try {
+    const response: AxiosResponse<ICandidateDetailsResponse> = await api.get(
+      ENDPOINT,
+    );
+    return { data: response.data, error: null };
+  } catch (error: any) {
+    return handleError(error, 'falha ao buscar o candidato');
+  }
+};
+
 export const getCandidateById = async (
   id: number,
 ): Promise<Result<ICandidateDetailsResponse>> => {
@@ -118,10 +133,8 @@ export const getCandidateById = async (
   }
 };
 
-export const DeleteCandidateById = async (
-  id: number,
-): Promise<Result<boolean>> => {
-  const ENDPOINT = `/candidato/${id}`;
+export const DeleteCandidateById = async (): Promise<Result<boolean>> => {
+  const ENDPOINT = '/candidato';
   try {
     await api.delete(ENDPOINT);
     return { data: true, error: null };

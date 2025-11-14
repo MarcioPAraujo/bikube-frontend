@@ -1,5 +1,4 @@
 export interface ICandidateProfileEditBodyRequest {
-  id: number;
   telefone: string;
   linkedin: string;
   github: string;

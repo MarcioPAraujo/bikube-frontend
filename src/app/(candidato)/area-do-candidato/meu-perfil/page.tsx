@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   DeleteCandidateById,
-  getCandidateById,
+  getCandidate,
 } from '@/services/candidate/candidateService';
 import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { notifyError } from '@/utils/handleToast';
@@ -35,7 +35,7 @@ import {
 } from './styles';
 
 const MyProfilePage: React.FC = () => {
-  const { candidate, setCandidate } = useCandidateAuth();
+  const { setCandidate } = useCandidateAuth();
   const router = useRouter();
   const [personalDataFormVisible, setPersonalDataFormVisible] = useState(false);
   const [academicFormVisible, setAcademicFormVisible] = useState(false);
@@ -45,12 +45,12 @@ const MyProfilePage: React.FC = () => {
 
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ['candidateProfile'],
-    queryFn: () => getCandidateById(Number(candidate?.id) || 0),
+    queryFn: () => getCandidate(),
     placeholderData: keepPreviousData,
   });
 
   const handleDeleteAccount = async () => {
-    const resutl = await DeleteCandidateById(Number(candidate?.id) || 0);
+    const resutl = await DeleteCandidateById();
     if (resutl.error) {
       notifyError(resutl.error);
     }

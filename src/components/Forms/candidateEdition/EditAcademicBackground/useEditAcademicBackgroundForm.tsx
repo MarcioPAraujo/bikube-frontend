@@ -1,4 +1,3 @@
-import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
 import { IOption } from '@/interfaces/option';
@@ -26,7 +25,6 @@ const useEditAcademicBackgroundForm = (
   onClose: VoidFunction,
   candidateData: ICandidateDetailsResponse,
 ) => {
-  const { candidate } = useCandidateAuth();
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [warningModalOpen, setWarningModalOpen] = useState(false);
   const [languagesList, setLanguagesList] = useState<IOption[]>([]);
@@ -113,10 +111,8 @@ const useEditAcademicBackgroundForm = (
   };
 
   const buildBody = (data: AcademicDataSchemaType) => {
-    const candidateId = candidate?.id || '0';
     const body: ICandidateProfileEditBodyRequest = {
       ...candidateData,
-      id: Number(candidateId),
       formacaoAcademica: data.education
         ? data.education.map(edu => {
             const start = parse(edu.startDate, 'dd/MM/yyyy', new Date());

@@ -1,4 +1,3 @@
-import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
 import { IOption } from '@/interfaces/option';
@@ -25,7 +24,6 @@ const useEditPersonalDataForm = ({
   cadidateData,
   onClose,
 }: IHookProps) => {
-  const { candidate } = useCandidateAuth();
   const {
     control,
     register,
@@ -94,10 +92,8 @@ const useEditPersonalDataForm = ({
   };
 
   const onFormSubmit = async (data: PersonalDataSchemaType) => {
-    const candidateId = candidate?.id || '0';
     const body: ICandidateProfileEditBodyRequest = {
       ...cadidateData,
-      id: Number(candidateId),
       cidade: data.city,
       estado: data.state,
       telefone: data.phoneNumber,

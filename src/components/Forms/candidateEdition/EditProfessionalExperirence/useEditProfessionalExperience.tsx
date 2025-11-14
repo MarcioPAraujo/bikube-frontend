@@ -1,4 +1,3 @@
-import { useCandidateAuth } from '@/hooks/usecandidateAuth';
 import { ICandidateDetailsResponse } from '@/interfaces/candidate/cadidateDetailsResponse';
 import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
 import { editCandidateById } from '@/services/candidate/candidateService';
@@ -23,7 +22,6 @@ const useProfessionalExperience = ({
   refetch,
   candidateData,
 }: UseProfessionalExperienceProps) => {
-  const { candidate } = useCandidateAuth();
   const [warningModal, setWarningModal] = useState<boolean>(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const {
@@ -79,11 +77,8 @@ const useProfessionalExperience = ({
   };
 
   const buildBody = (data: ProfessionalSchemaType) => {
-    const candidateId = candidate?.id || '0';
-
     const body: ICandidateProfileEditBodyRequest = {
       ...candidateData,
-      id: Number(candidateId),
       experiencias: data.isFirstJob
         ? []
         : data.experiences.map(exp => {
