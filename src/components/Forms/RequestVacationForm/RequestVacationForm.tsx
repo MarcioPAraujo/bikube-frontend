@@ -26,6 +26,8 @@ import {
   Calendar,
   Day,
   Header,
+  ModalContent,
+  RulesContainer,
   VacationForm,
   WeekDay,
   Year,
@@ -51,6 +53,22 @@ const monthNames = [
   'Outubro',
   'Novembro',
   'Dezembro',
+];
+
+const generalRules = [
+  'Sua solicitação não deve ultrapassar o seu saldo atual.',
+  'O período de sua solicitação deve ocorrer dentro de um ano após a aquisição do saldo.',
+  'O dia inicial de sua solicitação não pode ocorrer nos 2 dias anteriores à um feriado.',
+  'O dia inicial de sua solicitação não pode ocorrer nos 2 dias anteriores à uma folga remunerada (Quintas e Sextas).',
+  'O dia inicial de sua solicitação não pode ocorrer em um final de semana (Sábados e Domingos).',
+  'Uma solicitação deverá ser feita no mínimo 30 dias antes da data inicial desejada.',
+];
+const fractionalRules = [
+  'As férias poderão ser fracionadas em até 3 vezes desde que haja saldo suficiente para tal.',
+  'Em caso de fracionamento, um dos períodos não poderá possuir menos que 14 dias.',
+  'Outros períodos não podem possuir menos que 5 dias.',
+  'Solicitações que façam com que o saldo restante seja menor que 5 dias serão negadas',
+  'Solicitações que façam com que o saldo restante seja menor que 14 dias serão negadas caso o funcionário, não tenha usufruído de um período de 14 dias ou mais.',
 ];
 
 const RequestVacationForm: React.FC<IRequestVacationFormProps> = ({
@@ -199,64 +217,79 @@ const RequestVacationForm: React.FC<IRequestVacationFormProps> = ({
 
   return (
     <ModalBackground>
-      <VacationForm onSubmit={handleSubmit(onSubmit)}>
-        <h2>Solicitar férias</h2>
-        <Header>
-          <ButtonsContainer>
-            <abbr title="Ano Anterior">
-              <Button type="button" onClick={() => handleSubYears()}>
-                <MdKeyboardDoubleArrowLeft />
-              </Button>
-            </abbr>
-            <abbr title="Mês Anterior">
-              <Button type="button" onClick={handlePrevMonth}>
-                <MdKeyboardArrowLeft />
-              </Button>
-            </abbr>
-          </ButtonsContainer>
-          <Year>
-            {monthNames[month]}/{year}
-          </Year>
-          <ButtonsContainer>
-            <abbr title="Próximo Mês">
-              <Button type="button" onClick={handleNextMonth}>
-                <MdKeyboardArrowRight />
-              </Button>
-            </abbr>
-            <abbr title="Próximo Ano">
-              <Button type="button" onClick={() => handleAddyears()}>
-                <MdKeyboardDoubleArrowRight />
-              </Button>
-            </abbr>
-          </ButtonsContainer>
-        </Header>
-        <Calendar>
-          {weekDays.map(day => (
-            <WeekDay key={day}>{day}</WeekDay>
-          ))}
-          {calendarDaysDate.map(day => (
-            <Day
-              key={day.dayDate.toISOString()}
-              className={isDateInRange(day)}
-              type="button"
-              onClick={() => handleDayClick(day.dayDate)}
-            >
-              {day.dayDate.getDate()}
-            </Day>
-          ))}
-        </Calendar>
-
-        <DefaultButton
-          text="Soliciar"
-          type="submit"
-          disabled={isSubmitting || !isValid}
-        />
-        <DefaultButton
-          text="Cancelar"
-          variant="bordered"
-          onClick={handleClose}
-        />
-      </VacationForm>
+      <ModalContent>
+        <RulesContainer>
+          <h2>Regras Gerais</h2>
+          <ul>
+            {generalRules.map((rule, index) => (
+              <li key={index}>{rule}</li>
+            ))}
+          </ul>
+          <h2>Regras para Férias Fracionadas</h2>
+          <ul>
+            {fractionalRules.map((rule, index) => (
+              <li key={index}>{rule}</li>
+            ))}
+          </ul>
+        </RulesContainer>
+        <VacationForm onSubmit={handleSubmit(onSubmit)}>
+          <h2>Solicitar férias</h2>
+          <Header>
+            <ButtonsContainer>
+              <abbr title="Ano Anterior">
+                <Button type="button" onClick={() => handleSubYears()}>
+                  <MdKeyboardDoubleArrowLeft />
+                </Button>
+              </abbr>
+              <abbr title="Mês Anterior">
+                <Button type="button" onClick={handlePrevMonth}>
+                  <MdKeyboardArrowLeft />
+                </Button>
+              </abbr>
+            </ButtonsContainer>
+            <Year>
+              {monthNames[month]}/{year}
+            </Year>
+            <ButtonsContainer>
+              <abbr title="Próximo Mês">
+                <Button type="button" onClick={handleNextMonth}>
+                  <MdKeyboardArrowRight />
+                </Button>
+              </abbr>
+              <abbr title="Próximo Ano">
+                <Button type="button" onClick={() => handleAddyears()}>
+                  <MdKeyboardDoubleArrowRight />
+                </Button>
+              </abbr>
+            </ButtonsContainer>
+          </Header>
+          <Calendar>
+            {weekDays.map(day => (
+              <WeekDay key={day}>{day}</WeekDay>
+            ))}
+            {calendarDaysDate.map(day => (
+              <Day
+                key={day.dayDate.toISOString()}
+                className={isDateInRange(day)}
+                type="button"
+                onClick={() => handleDayClick(day.dayDate)}
+              >
+                {day.dayDate.getDate()}
+              </Day>
+            ))}
+          </Calendar>
+          <DefaultButton
+            text="Soliciar"
+            type="submit"
+            disabled={isSubmitting || !isValid}
+          />
+          <DefaultButton
+            text="Cancelar"
+            variant="bordered"
+            onClick={handleClose}
+          />
+        </VacationForm>
+      </ModalContent>
     </ModalBackground>
   );
 };

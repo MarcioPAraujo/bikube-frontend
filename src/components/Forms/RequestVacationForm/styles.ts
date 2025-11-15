@@ -1,13 +1,47 @@
 import styled from 'styled-components';
 
+export const ModalContent = styled.div`
+  display: flex;
+  gap: 2rem;
+  background-color: #fff;
+
+  position: relative;
+  z-index: 1;
+
+  width: clamp(30rem, 90%, 90rem);
+
+  & > :first-child,
+  & > :last-child {
+    flex: 1;
+  }
+`;
+export const RulesContainer = styled.div`
+  background-color: #ffffff;
+  padding: 1rem 2rem;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 2.4rem;
+  }
+  ul {
+    margin-bottom: 2rem;
+    list-style-type: disc;
+    padding-left: 1.5rem;
+
+    li {
+      margin-bottom: 0.5rem;
+      font-size: 1.6rem;
+      color: ${({ theme }) => theme.colors.GRAY.hex_353535};
+    }
+  }
+`;
 export const VacationForm = styled.form`
   background-color: #ffffff;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  position: relative;
-  z-index: 10;
 `;
 
 export const Header = styled.div`
