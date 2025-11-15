@@ -35,20 +35,22 @@ import {
   TextArea,
 } from './styles';
 
-// LHOFGC98
-// SF91PL33
-
 enum DestinataryOption {
   TODOS = 'todos',
   SETORES = 'setores',
   DIRECIONADO = 'direcionado',
 }
 
+/**
+ * Options for the destinatary selection checkboxes
+ * @returns Array of IOption objects representing destinatary options
+ */
 const destinataryOptions: IOption[] = [
   { label: 'Todos', value: DestinataryOption.TODOS },
   { label: 'Setores', value: DestinataryOption.SETORES },
   { label: 'Colaborador Específico', value: DestinataryOption.DIRECIONADO },
 ];
+
 const NewAnnouncementPage = () => {
   const router = useRouter();
   const [destinataryOption, setDestinataryOption] = useState('');
@@ -60,6 +62,11 @@ const NewAnnouncementPage = () => {
 
   const allEmployeesRef = useRef<IEmployeeResponse[]>([]);
 
+  /**
+   * Initializes the React Hook Form for the announcement form
+   * with validation using Yup schema
+   * @returns The form methods and state
+   */
   const {
     control,
     register,
@@ -72,6 +79,12 @@ const NewAnnouncementPage = () => {
     resolver: yupResolver(AnnouncementSchema),
   });
 
+  /**
+   * Loads the sectors and employees options on component mount
+   * These options are used in the select inputs for destinatary selection
+   * The sectors are fetched from the setor service
+   * The employees are fetched from the funcionarios service
+   */
   useEffect(() => {
     const initialLoad = async () => {
       const sectorsResult = await getsectors();
@@ -96,8 +109,18 @@ const NewAnnouncementPage = () => {
     initialLoad();
   }, []);
 
+  /**
+   * Handles the form submission for creating a new announcement
+   * It constructs the payload based on the selected destinatary option
+   * and sends the announcement using the announcements service
+   * @param data - The form data containing announcement details
+   */
   const onSubmit = async (data: AnnouncementFormData) => {
     let employees: IEmployeeResponse[] = [];
+
+    /**
+     * Handles the case when the announcement is directed to specific sectors
+     */
     if (data.type === DestinataryOption.SETORES) {
       const sectorsIds = new Set(data.sectors as string[]);
 
@@ -105,6 +128,10 @@ const NewAnnouncementPage = () => {
         sectorsIds.has(employee.idsetor.id.toString()),
       );
     }
+
+    /**
+     * Handles the case when the announcement is directed to a specific employee
+     */
     if (data.type === DestinataryOption.DIRECIONADO) {
       const directedEmployeeId = data.directedEmployees?.value;
       const directedEmployee = allEmployeesRef.current.find(
@@ -114,22 +141,35 @@ const NewAnnouncementPage = () => {
         employees = [directedEmployee];
       }
     }
+
+    /**
+     * Handles the case when the announcement is for all employees
+     */
     if (data.type === DestinataryOption.TODOS) {
       employees = allEmployeesRef.current;
     }
 
+    /**
+     * Constructs the payload and sends the announcement
+     */
     const payload: IAnnouncementBodyRequest = {
       titulo: data.title,
       texto: data.content,
       funcionarios: employees,
     };
 
+    /**
+     * Sends the announcement and handles success or error responses
+     */
     const response = await sendAnnouncement(payload);
     if (response.error) {
       notifyError(response.error);
       return;
     }
 
+    /**
+     * Shows the success modal on successful announcement creation
+     */
     setSuccessModal(true);
   };
 

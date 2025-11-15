@@ -10,6 +10,10 @@ import WarningModal from '@/components/modals/WarningModal/WarningModal';
 import { Header, TitleContainer } from './styles';
 
 const FORM_ID = 'new-vacancy-form';
+
+/**
+ * New vacancy page
+ */
 const NewVacancyPage: React.FC = () => {
   const router = useRouter();
   const [warningModalOpen, setWarningModalOpen] = useState(false);

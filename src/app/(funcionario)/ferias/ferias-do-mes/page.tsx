@@ -47,6 +47,11 @@ const VacationsPage: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
+  /**
+   * Handles the selection of an employee from the list
+   * It sets the selected employee ID and updates the start and end dates
+   * @param period - The vacation period of the selected employee
+   */
   const handleSelectEmployee = (period: IVacationPerid) => {
     setSelectedEmployeeId(period.employeeId);
     const startDate = period.initialDate;
@@ -57,6 +62,12 @@ const VacationsPage: React.FC = () => {
     setEndDate(formattedEndDate);
   };
 
+  /**
+   * Determines if a given date falls within the selected date range
+   * It highlights the dates in the calendar accordingly
+   * @param date - The date to check
+   * @returns A string indicating if the date is in range
+   */
   const isDateInRange = (date: Date) => {
     if (startDate && endDate) {
       const isInRange = date >= startDate && date <= endDate;

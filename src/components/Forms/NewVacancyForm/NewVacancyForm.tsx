@@ -84,6 +84,10 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
 
   const selectedState = watch('state');
 
+  /**
+   * Fetches Brazilian states and skills options on component mount
+   * and cities options when a state is selected
+   */
   useEffect(() => {
     const getStates = async () => {
       const result = await fetchBrazilianStates();
@@ -114,6 +118,9 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
     getStates();
   }, []);
 
+  /**
+   * Fetches cities when a state is selected
+   */
   useEffect(() => {
     if (!selectedState) {
       setCitiesOptions([]);
@@ -131,6 +138,10 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
     getCities();
   }, [selectedState]);
 
+  /**
+   * Refetches skills options from the server
+   * used after adding a new skill
+   */
   const refetchSkillsOptions = async () => {
     const result = await getSkills();
     if (result.error) {
@@ -147,12 +158,17 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
   };
 
   const onFormSubmit = async (data: NewVacancySchemaType) => {
+    // prepare skills for the request body
     const skillsForBody = skills
       ? skills.map((skill, index) => ({
           habilidade: skill,
           peso: skills.length - index,
         }))
       : [];
+
+    /**
+     * Constructs the request body for creating a new vacancy
+     */
     const body: IVacancyBodyRequest = {
       titulo: data.title,
       modelo: data.workModel,
@@ -165,12 +181,19 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
       habilidades: skillsForBody,
     };
 
+    /**
+     * Creates a new vacancy and handles the response
+     */
     const result = await createNewVancancy(body);
     if (result.error) {
       notifyError(result.error);
       return;
     }
 
+    /**
+     * If vacancy creation is successful, fetch candidates by skills
+     * and send them notification emails about the new vacancy
+     */
     const skillsLabels = data.skills
       ? data.skills.map(skill => skill.label)
       : [];
@@ -184,6 +207,10 @@ const NewVacancyForm: React.FC<NewVacancyFormProps> = ({ formId }) => {
 
     const candidates = cadidatesBySkillsResult.data || [];
 
+    /**
+     * Prepares email body and sends notification emails to candidates
+     * about the new vacancy
+     */
     if (candidates.length > 0) {
       const emailBody = {
         tituloVaga: data.title,

@@ -12,6 +12,7 @@ interface IStep {
   step: 'triagem' | 'entrevista' | 'oferta';
 }
 
+/** List of recruitment steps with their details */
 const steps: IStep[] = [
   {
     step: 'triagem',
@@ -42,6 +43,7 @@ const VacancyStepsPage: React.FC = () => {
   const searchParams = useSearchParams();
   const [vacancyName, setVacancyName] = useState<string>('');
 
+  // Sets the vacancy name from URL search parameters
   useEffect(() => {
     const name = searchParams.get('nome');
     if (name) {

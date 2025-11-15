@@ -29,6 +29,7 @@ import {
   SectorContainer,
 } from './styles';
 
+// Table columns for the vacation requests
 const columns = ['Nome', 'Cargo', 'Setor', 'Data Início', 'Data Fim', 'Ações'];
 
 const VacationsRequestsPage: React.FC = () => {
@@ -43,12 +44,20 @@ const VacationsRequestsPage: React.FC = () => {
   const vacationStartDate = useRef<string>('');
   const vacationEndDate = useRef<string>('');
 
+  /**
+   * Fetches the pending vacation requests using React Query
+   * @returns The pending vacations data along with fetching status and refetch function
+   */
   const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['pending-vacations'],
     queryFn: () => getPendingVacations(),
     placeholderData: keepPreviousData,
   });
 
+  /**
+   * Fetches the list of sectors using React Query
+   * @returns The sectors data formatted for the SelectComponent
+   */
   const { data: sectors } = useQuery({
     queryKey: ['sectors'],
     queryFn: async () => {
@@ -69,24 +78,42 @@ const VacationsRequestsPage: React.FC = () => {
   const employeessList = data?.data || [];
   const sectorOptions = sectors || [];
 
+  /**
+   * Filters the vacation requests based on the search term and selected sector
+   * @returns The filtered list of vacation requests
+   */
   const filteredRequests = employeessList.filter(request => {
+    // if no search term and no sector selected, include all requests
     if (!search && !sector?.label) return true;
+
+    // if only search term is provided
     if (search && !sector?.label) {
       return request.funcionario.nome
         .toLowerCase()
         .includes(search.toLowerCase());
     }
+
+    // if only sector is selected
     if (!search && sector?.label) {
       return request.funcionario.idsetor.nome === sector.label;
     }
+
+    // if both search term and sector are provided
     const matchesSearch = request.funcionario.nome
       .toLowerCase()
       .includes(search.toLowerCase());
     const matchesSector = request.funcionario.idsetor.nome === sector.label;
     return matchesSearch && matchesSector;
   });
+
+  // Sets up pagination for the filtered vacation requests
   const pagination = usePaginationRange(filteredRequests, DEFAULT_PAGE_SIZE);
 
+  /**
+   * Checks for conflicts in the selected vacation request
+   * If conflicts are found, it opens the conflict modal
+   * @returns boolean indicating if there are conflicts
+   */
   const isThereConflictInVacation = async (): Promise<boolean> => {
     if (!vacationId.current) return false;
     const response = await getConflictVacations(vacationId.current);
@@ -106,6 +133,9 @@ const VacationsRequestsPage: React.FC = () => {
     return hasConflict;
   };
 
+  /** * Updates the status of the selected vacation request
+   * It approves or refuses the vacation based on the action state
+   */
   const updateVacationStatus = async () => {
     if (!action || !vacationId.current) return;
 
@@ -123,6 +153,7 @@ const VacationsRequestsPage: React.FC = () => {
     refetch();
   };
 
+  // First render guard to handle loading state
   if (!isPlaceholderData && !data) return null;
 
   return (

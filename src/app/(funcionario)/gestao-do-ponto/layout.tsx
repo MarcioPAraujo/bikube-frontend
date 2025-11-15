@@ -3,6 +3,7 @@
 import Tabs, { ITab } from '@/components/Tabs/Tabs';
 import { useAuth } from '@/hooks/useAuth';
 
+// Defines the tabs for the point management section
 const tabs: ITab[] = [
   {
     label: 'Registros de ponto',
@@ -39,6 +40,11 @@ const tabs: ITab[] = [
 const PointLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
 
+  /**
+   * Filters the tabs based on the user's role
+   * to restrict access to certain sections
+   * for 'FUNCIONARIO' role users
+   */
   const filteredTabs = tabs.filter(tab => {
     if (!user) return false;
     if (user.role === 'FUNCIONARIO' && tab.baseUrl.includes('/colaboradores')) {

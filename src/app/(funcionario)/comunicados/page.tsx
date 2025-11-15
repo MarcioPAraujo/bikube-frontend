@@ -1,7 +1,7 @@
 'use client';
 
 import SearchBarComponent from '@/components/Inputs/SearchBar';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Table } from '@/components/Table/Index/Index';
 import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
@@ -41,6 +41,10 @@ const AnnouncementsPage = () => {
 
   const userId = user?.id || '';
 
+  /**
+   * Fetches the announcements for the logged-in user using React Query
+   * @returns The announcements data
+   */
   const { data, refetch } = useQuery({
     queryKey: ['announcemnts'],
     queryFn: async () => {
@@ -52,11 +56,21 @@ const AnnouncementsPage = () => {
     placeholderData: keepPreviousData,
   });
 
+  /**
+   * Stores the announcements data or an empty array if no data is available
+   * useful to avoid null or undefined errors
+   * @returns The announcements array
+   */
   let announcements: IAnnouncementsResponse[] = [];
   if (data) {
     announcements = data;
   }
 
+  /**
+   * Filters the announcements based on the search term and date range
+   * @param announcements - The list of announcements to filter
+   * @returns The filtered list of announcements
+   */
   const filteredAnnouncements = announcements.filter(announcement => {
     const annoucementDate = announcement.comunicado.datacriacao;
     const parsedDate = parseISO(annoucementDate);
@@ -82,15 +96,20 @@ const AnnouncementsPage = () => {
       .toLowerCase()
       .includes(search.toLowerCase());
   });
+
+  /**
+   * Sets the pagination for the filtered announcements
+   * @returns The pagination object for the filtered announcements
+   */
   const pagination = usePaginationRange(
     filteredAnnouncements,
     DEFAULT_PAGE_SIZE,
   );
 
-  useEffect(() => {
-    pagination.setCurrentPage(1);
-  }, [search]);
-
+  /**
+   * Updates the view status of the announcement and refetches the data
+   * it's used when an announcement is clicked
+   */
   const updateViewStatus = async () => {
     const response = await updateAnnouncement(announcementIdRef.current);
     if (response.error) {
@@ -132,7 +151,10 @@ const AnnouncementsPage = () => {
           <SearchBarComponent
             placeholder="Buscar comunicados"
             value={search}
-            onSearch={e => setSearch(e.target.value)}
+            onSearch={e => {
+              setSearch(e.target.value);
+              pagination.setCurrentPage(1);
+            }}
           />
         </FiltersContainer>
       </Header>

@@ -43,6 +43,10 @@ const PUBLIC_ENDPOINTS = [
   '/candidato/aceitartermos',
 ];
 
+/**
+ * Attaches the Authorization header with the access token to each request
+ * if the endpoint is not public
+ */
 api.interceptors.request.use(
   async config => {
     const isPublicEndpoint = PUBLIC_ENDPOINTS.some(endpoint =>
@@ -78,13 +82,10 @@ export async function refreshAccessToken(): Promise<string> {
 
   try {
     const refreshPayload = JSON.parse(refreshToken);
-    console.log('Using refresh token:', refreshPayload);
     // The returned data is the new access token.
     const { data } = await api.post('/auth/refresh', {
       token: refreshPayload,
     });
-
-    console.log('New access token received:', data);
 
     if (data) {
       localStorage.setItem(LOCAL_STORAGE_KEYS.token, data);
@@ -95,11 +96,15 @@ export async function refreshAccessToken(): Promise<string> {
       new Error('Refresh token endpoint did not return a new access token.'),
     );
   } catch (error) {
-    console.error('Refresh token failed:', error);
     return Promise.reject(error);
   }
 }
 
+/**
+ * Processes the queue of failed requests after token refresh
+ * @param error - The error encountered during the refresh process
+ * @param token - The new access token, if refresh was successful
+ */
 const processQueue = (
   error: AxiosError | null,
   token: string | null = null,
@@ -112,6 +117,9 @@ const processQueue = (
   failedQueue = [];
 };
 
+/**
+ * Response interceptor to handle 401 errors and token refresh
+ */
 api.interceptors.response.use(
   response => response,
   async error => {

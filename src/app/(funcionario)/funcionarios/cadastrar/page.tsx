@@ -29,9 +29,16 @@ const RegisterEmployeePage = () => {
   const [warningModal, setWarningModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /**
+   * Handles the form submission for registering a new employee
+   * @param data - The data submitted from the form
+   */
   const onFormSubmit = async (data: EmployeesFormValues) => {
     setIsSubmitting(true);
 
+    /**
+     * Prepares the employee data to match the IEmployeeBody interface
+     */
     const employeeData: IEmployeeBody = {
       nome: data.nome,
       salario: parseFloat(
@@ -55,13 +62,17 @@ const RegisterEmployeePage = () => {
       numerosetor: data.numerosetor,
     };
 
+    // Calls the service to create the employee
     const response = await createEmployee(employeeData);
+
+    // Handles any errors from the service
     if (response.error) {
       notifyError(response.error);
       setIsSubmitting(false);
       return;
     }
 
+    // On success, show the success modal
     setIsSubmitting(false);
     setSuccessModal(true);
   };

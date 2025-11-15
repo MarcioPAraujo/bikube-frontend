@@ -11,6 +11,11 @@ import { TopTitle } from './styles';
 const columns = ['Nome'];
 const SectorsPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  /**
+   * Fetches the list of sectors using React Query
+   * @returns The sectors data along with fetching status and refetch function
+   */
   const {
     data: sectors,
     isFetching,
@@ -20,6 +25,9 @@ const SectorsPage = () => {
     queryFn: () => getsectors(),
   });
 
+  /**
+   * Displays a loading message while the sectors data is being fetched
+   */
   if (isFetching) {
     return <div>Carregando setores...</div>;
   }

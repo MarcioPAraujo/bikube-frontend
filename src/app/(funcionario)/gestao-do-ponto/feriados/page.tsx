@@ -48,12 +48,21 @@ const HolidaysPage: React.FC = () => {
     useMonthCalendar(currentDate, setCurrentDate);
   const [warningModal, setWarningModal] = useState(false);
 
+  /**
+   * Fetches the holidays for the selected year using React Query
+   * @returns The holidays data mapped by date
+   */
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['holidays', year],
     queryFn: () => getHolidaysOfYear(year),
     select: result => result.data,
   });
 
+  /**
+   * Determines the CSS classes for a given day in the calendar
+   * @param dayDate - The calendar day object
+   * @returns A string of CSS classes based on the day's properties
+   */
   const getDayClass = (dayDate: ICalendarDay) => {
     // add verification for holidays here in the future
     let classes = '';
@@ -73,6 +82,9 @@ const HolidaysPage: React.FC = () => {
     return classes;
   };
 
+  /**
+   * Marks the currently selected day as a holiday
+   */
   const markDayAsHoliday = async () => {
     if (!currentDate) return;
     const parsedDate = parseISO(format(currentDate, 'yyyy-MM-dd'));
@@ -89,6 +101,7 @@ const HolidaysPage: React.FC = () => {
     }
   };
 
+  // Handles the first load with no data
   if (!isPlaceholderData && !data) return null;
 
   return (
@@ -110,6 +123,7 @@ const HolidaysPage: React.FC = () => {
       />
 
       <Container>
+        {/* Holiday marking button, only visible to non-employee users */}
         {user?.role !== 'FUNCIONARIO' && (
           <HolidayButton
             type="button"

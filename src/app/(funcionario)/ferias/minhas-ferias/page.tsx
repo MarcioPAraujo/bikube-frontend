@@ -13,21 +13,31 @@ import { useAuth } from '@/hooks/useAuth';
 import { format, parseISO } from 'date-fns';
 import { PageContainer, Status } from './styles';
 
+// Table columns for the employee's vacations
 const columns = ['Data Início', 'Data Fim', 'Status'];
 
 const MyVacationsPage: React.FC = () => {
   const { user } = useAuth();
+
+  /**
+   * Fetches the vacations of the logged-in employee using React Query
+   * @returns The employee's vacations data along with fetching status and refetch function
+   */
   const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['employee-vacations'],
     queryFn: () => getEmployeeVacations(user?.id || ''),
     placeholderData: keepPreviousData,
   });
 
+  // Stores the vacations data or an empty array if no data is available
   const vacationsList = data?.data || [];
 
   const [showRequestModal, setShowRequestModal] = useState<boolean>(false);
+
+  // Sets up pagination for the employee's vacations
   const pagination = usePaginationRange(vacationsList, DEFAULT_PAGE_SIZE);
 
+  // First render guard to handle loading state
   if (!isPlaceholderData && !data) return null;
 
   return (

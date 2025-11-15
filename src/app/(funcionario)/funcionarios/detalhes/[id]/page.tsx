@@ -45,11 +45,19 @@ const EmployeeDetailsPage = () => {
   const [sellVacationModal, setSellVacationModal] = useState(false);
   const [applySickLeaveModal, setApplySickLeaveModal] = useState(false);
 
+  /**
+   * Fetches the employee details using React Query
+   * @returns The employee data along with fetching status
+   */
   const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['employeeDetails', id],
     queryFn: () => getEmployeeById(id),
   });
 
+  /**
+   * Handles the removal of an employee
+   * It is triggered when the user confirms the removal in the warning modal
+   */
   const handleRemoveEmployee = async () => {
     const response = await deleteEmployeeById(id);
     if (response.error) {
@@ -61,8 +69,10 @@ const EmployeeDetailsPage = () => {
     setSuccessFullRemoval(true);
   };
 
+  // First load or employee not found
   if (!data && !isPlaceholderData) return null;
 
+  // Employee not found
   if (!data || !data.data) {
     return (
       <div>
@@ -72,8 +82,14 @@ const EmployeeDetailsPage = () => {
     );
   }
 
+  // Extract employee data
   const { data: employeeData } = data;
 
+  /**
+   * It formats the employee data to match the EmployeesFormValues interface
+   * it is used to populate the EmployeeForm component
+   * @return Formatted employee data
+   */
   const employee: EmployeesFormValues = {
     nome: data.data?.nome,
     salario: formatCurrency(data.data.salario),

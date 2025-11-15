@@ -69,6 +69,10 @@ const CandidateDetailsPage: React.FC = () => {
   }>();
   const [successModalOpen, setSuccessModalOpen] = useState<boolean>(false);
 
+  /**
+   * Fetches the candidate details in the vacancy using React Query
+   * @returns The candidate data along with fetching status
+   */
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['candidateDetails', candidateId, vacancyId],
     queryFn: () =>
@@ -81,6 +85,11 @@ const CandidateDetailsPage: React.FC = () => {
     placeholderData: keepPreviousData,
   });
 
+  /**
+   * Advances the candidate to the next step in the recruitment process
+   * Triiggered when the user clicks the advance button
+   * Handles success and error notifications accordingly
+   */
   const advanceCandidate = async () => {
     const result = await advanceCadidateToNextStep(
       Number(vacancyId),
@@ -93,6 +102,7 @@ const CandidateDetailsPage: React.FC = () => {
     setSuccessModalOpen(true);
   };
 
+  // Handles the first load with no data
   if (!data && !isPlaceholderData) {
     return (
       <SectionsContainer>
@@ -103,6 +113,7 @@ const CandidateDetailsPage: React.FC = () => {
     );
   }
 
+  // Handles the case when there are no candidate details
   if (!data || !data.data || !data.data.profile) {
     return (
       <SectionsContainer>
@@ -116,6 +127,10 @@ const CandidateDetailsPage: React.FC = () => {
     );
   }
 
+  /**
+   * Processes and maps the candidate's profile data into structured arrays
+   * for languages, skills, professional experiences, and academic formations
+   */
   const languages: ILanguages[] = data.data.profile.idiomas.map(
     (lang: Idioma) => ({
       level: lang.nivel.toString(),

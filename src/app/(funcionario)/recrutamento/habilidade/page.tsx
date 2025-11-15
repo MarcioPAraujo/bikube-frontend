@@ -17,6 +17,10 @@ import { Page } from './styles';
 const SkillsPage: React.FC = () => {
   const [skillsModal, setSkillsModal] = useState<boolean>(false);
 
+  /**
+   * Fetches the list of skills using React Query
+   * @returns The skills data along with fetching status and refetch function
+   */
   let skills: ISkillsListResponse[] = [];
   const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['skills'],
@@ -24,12 +28,24 @@ const SkillsPage: React.FC = () => {
     select: result => result.data || [],
   });
 
+  /**
+   * Stores the list of skills or an empty array if no data is available
+   * @returns array of skills
+   */
   if (data) {
     skills = data;
   }
 
+  /**
+   * Sets up pagination for the skills list
+   * @return pagination object containing current rows, page info, and setters
+   */
   const pagination = usePaginationRange(skills, DEFAULT_PAGE_SIZE);
 
+  /**
+   * Handles th first load with no skills
+   * there is not previous data to show and skills length is zero
+   */
   if (skills.length === 0 && !isPlaceholderData) {
     return (
       <>
@@ -50,6 +66,9 @@ const SkillsPage: React.FC = () => {
     );
   }
 
+  /**
+   * Handles the case when there are no skills after deletions
+   */
   if (skills.length === 0) {
     return (
       <>
@@ -70,6 +89,9 @@ const SkillsPage: React.FC = () => {
     );
   }
 
+  /**
+   * Renders the skills page with a table of skills and pagination
+   */
   return (
     <>
       <AddNewSkillModal

@@ -25,6 +25,10 @@ const EmployeesPointManagementPage: React.FC = () => {
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const [employees, setEmployees] = useState<IEmployeeResponse[]>([]);
 
+  /**
+   * Fetches the list of sectors using React Query
+   * @returns The sectors data mapped to options format
+   */
   let sectorsOptions: IOption[] = [];
   const { data } = useQuery({
     queryKey: ['sectors'],
@@ -39,12 +43,15 @@ const EmployeesPointManagementPage: React.FC = () => {
     },
   });
 
+  // Stores the list of sectors options if available
   if (data) {
     sectorsOptions = data;
   }
 
+  // Sets up pagination for the employees list
   const pagination = usePaginationRange(employees, DEFAULT_PAGE_SIZE);
 
+  // Fetches and filters employees based on the selected sector
   useEffect(() => {
     const getEmployeesBySector = async () => {
       const response = await getListOfEmployees();

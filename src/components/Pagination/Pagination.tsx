@@ -30,7 +30,6 @@ interface PaginationProps {
  * @param {SetStateAction} setCurrentPage - state action to update the current page as the the navigation occur.
  * @returns
  */
-
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,

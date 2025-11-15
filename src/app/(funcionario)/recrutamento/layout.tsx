@@ -5,12 +5,20 @@
 import Tabs, { ITab } from '@/components/Tabs/Tabs';
 import { usePathname } from 'next/navigation';
 
+/**
+ * Set of paths where the recruitment tabs should be rendered
+ */
 const render = new Set(['vagas', 'habilidade', 'idioma']);
 
 const RecruitmentLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const pathname = usePathname();
+  /**
+   * Defines the tabs for the recruitment section
+   * These tabs will be rendered based on the current path
+   * @return array of ITab objects
+   */
   const tabs: ITab[] = [
     {
       label: 'Vagas',
@@ -32,6 +40,10 @@ const RecruitmentLayout: React.FC<{ children: React.ReactNode }> = ({
     },
   ];
 
+  /**
+   * Renders the tabs if the current path matches any of the defined tabs
+   * because these tabs should not appear in sub-pages
+   */
   const paths = pathname.split('/');
   if (paths.some(path => render.has(path))) {
     return (
@@ -42,6 +54,9 @@ const RecruitmentLayout: React.FC<{ children: React.ReactNode }> = ({
     );
   }
 
+  /**
+   * Renders only the children if no tabs are to be displayed
+   */
   return <div>{children}</div>;
 };
 export default RecruitmentLayout;

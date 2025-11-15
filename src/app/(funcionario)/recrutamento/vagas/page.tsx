@@ -22,6 +22,10 @@ const RecutamentoPage: React.FC = () => {
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
 
+  /**
+   * Fetches the list of vacancies using React Query
+   * @returns The vacancies data along with fetching status
+   */
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['vacancies'],
     queryFn: async () => {
@@ -32,28 +36,59 @@ const RecutamentoPage: React.FC = () => {
     placeholderData: keepPreviousData,
   });
 
+  /**
+   * Stores the list of vacancies or an empty array if no data is available
+   * @returns array of vacancies
+   */
   const listOfVacancies = data || [];
 
+  /**
+   * Filters and sorts the vacancies based on the search input
+   * @returns Filtered and sorted vacancies array
+   */
   const normalizedSearch = normalizeString(search);
   const filteredVacancies = listOfVacancies
+    /**
+     * Filters the vacancies whose titles include the normalized search string
+     * it ignores accents and is case-insensitive
+     * and sorts them to prioritize those starting with the search string
+     */
     .filter(vacancy =>
       normalizeString(vacancy.titulo).includes(normalizedSearch),
     )
     .sort((a, b) => {
+      /**
+       * Normalizes the titles of the vacancies for comparison
+       */
       const normalizedA = normalizeString(a.titulo);
       const normalizedB = normalizeString(b.titulo);
 
+      /**
+       * Determines if each title starts with the normalized search string
+       */
       const aStartsWithSearch = normalizedA.startsWith(normalizedSearch);
       const bStartsWithSearch = normalizedB.startsWith(normalizedSearch);
 
+      // Prioritizes vacancies whose titles start with the search string
       if (aStartsWithSearch && !bStartsWithSearch) return -1;
+
+      // If only b starts with the search string, it comes first
       if (!aStartsWithSearch && bStartsWithSearch) return 1;
 
+      // If both or neither start with the search string, sort alphabetically
       return normalizedA.localeCompare(normalizedB);
     });
 
+  /**
+   * Sets up pagination for the filtered vacancies
+   * @returns Pagination object
+   */
   const pagination = usePaginationRange(filteredVacancies, PAGE_SIZE);
 
+  /**
+   * First render check: if there's no data and it's not placeholder data,
+   * it means it's the first render and the data is still being fetched
+   */
   if (!data && !isPlaceholderData) {
     return (
       <div>
@@ -74,6 +109,11 @@ const RecutamentoPage: React.FC = () => {
     );
   }
 
+  /**
+   * Displays a message if no vacancies are found
+   * It occurs when the data is fetched but the list is empty
+   * when the search yields no results and some error during data fetching
+   */
   if (!data || data.length === 0) {
     return (
       <div>

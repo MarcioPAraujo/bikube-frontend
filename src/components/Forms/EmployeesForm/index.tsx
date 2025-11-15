@@ -18,6 +18,7 @@ import getAddressByCep from '@/services/address';
 import { useAuth } from '@/hooks/useAuth';
 import { Fieldset, FormContainer, GridContainer, Legend } from './styles';
 
+// Address interface for fetching address by CEP
 interface Address {
   city: string;
   neighborhood: string;
@@ -33,6 +34,7 @@ interface IEmployeeFormProps {
   onSubmit?: (data: EmployeesFormValues) => void;
 }
 
+// Options for the position select input
 const positions: IOption[] = [
   { value: 'RH', label: 'Recursos Humanos' },
   { value: 'ADMIN', label: 'Administrador' },
@@ -64,6 +66,12 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
   const [sectorsOptions, setSectorsOptions] = useState<IOption[]>([]);
   const [gettingAddress, setGettingAddress] = useState(false);
 
+  /**
+   * Initializes the form based on the mode and default values
+   * - For 'create' mode, it fetches the sectors options
+   * - For 'edit' or 'view' mode, it populates the form with default values
+   * and fetches the sectors options
+   */
   useEffect(() => {
     const initializeForm = async () => {
       if (!defaultValues) {

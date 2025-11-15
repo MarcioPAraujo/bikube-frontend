@@ -11,12 +11,21 @@ interface IChildrenProps {
   children: React.ReactNode;
 }
 
+/**
+ * Layout component for vacancy details, steps, and dashboard pages
+ * It renders tabs for navigation between these sections
+ * and displays the vacancy name based on URL search parameters
+ */
 const Layout: React.FC<IChildrenProps> = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [vacancyName, setVacancyName] = useState<string>('');
 
+  /**
+   * Sets the vacancy name from URL search parameters
+   * on component mount and when searchParams change
+   */
   useEffect(() => {
     const name = searchParams.get('nome');
     if (name) {
@@ -24,6 +33,11 @@ const Layout: React.FC<IChildrenProps> = ({ children }) => {
     }
   }, [searchParams]);
 
+  /**
+   * Renders a back button and vacancy name
+   * when on the candidates sub-page
+   * No tabs are displayed in this case
+   */
   if (pathname.includes('candidatos')) {
     return (
       <div>
@@ -39,6 +53,10 @@ const Layout: React.FC<IChildrenProps> = ({ children }) => {
     );
   }
 
+  /**
+   * Defines the base paths for the tabs
+   * by manipulating the current pathname
+   */
   const pathnameArr = pathname.split('/');
   pathnameArr.pop();
   const dashboardPath = [...pathnameArr, 'dashboard'].join('/');
@@ -49,6 +67,7 @@ const Layout: React.FC<IChildrenProps> = ({ children }) => {
   const dashboard = `${dashboardPath}?nome=${vacancyName}`;
   const details = `${detailsPath}?nome=${vacancyName}`;
 
+  // Defines the tabs for vacancy navigation
   const tabs: ITab[] = [
     {
       label: 'Detalhes',
@@ -70,6 +89,7 @@ const Layout: React.FC<IChildrenProps> = ({ children }) => {
     },
   ];
 
+  // Renders the layout with tabs and vacancy name
   return (
     <div>
       <PageTitle>{vacancyName}</PageTitle>

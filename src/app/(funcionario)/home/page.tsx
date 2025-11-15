@@ -17,13 +17,23 @@ import {
 } from './styles';
 
 const HomePage: React.FC = () => {
+  /**
+   * Fetches the employee details using React Query
+   */
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['employeeDetails'],
     queryFn: () => getEmployeeData(),
   });
 
+  /**
+   * If there's no data and it's not placeholder data, return null
+   * it's the first render and the data is still being fetched
+   */
   if (!data && !isPlaceholderData) return null;
 
+  /**
+   * If there's still no data, or an error occurred, show a loading message
+   */
   if (!data || !data.data) {
     return (
       <div>
@@ -33,6 +43,9 @@ const HomePage: React.FC = () => {
     );
   }
 
+  /**
+   * It formats the employee data to match the EmployeesFormValues interface
+   */
   const employee: EmployeesFormValues = {
     nome: data.data?.nome,
     salario: formatCurrency(data.data.salario),

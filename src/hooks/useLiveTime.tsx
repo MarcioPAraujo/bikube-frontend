@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
+/**
+ * Parses a non-standard date-time string into a Date object
+ * Handles strings with excessive fractional second precision and time zone identifiers
+ * @param dateTimeString - The non-standard date-time string to parse
+ * @returns A Date object representing the parsed date and time
+ */
 function parseNonStandardDate(dateTimeString: string): Date {
   if (!dateTimeString) return new Date();
   // 1. Trim the non-standard time zone identifier ([America/Sao_Paulo])

@@ -30,11 +30,18 @@ const EmployeeDetailsPage = () => {
   const [successfullEdition, setSuccessfullEdition] = useState(false);
   const [warningModalEdit, setWarningModalEdit] = useState(false);
 
+  /**
+   * Fetches the employee details using React Query
+   * @returns The employee data along with fetching status
+   */
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['employeeEdition', id],
     queryFn: () => getEmployeeById(id),
   });
 
+  /**   * Handles the form submission for editing employee details
+   * @param formData - The data submitted from the form
+   */
   const onFormSubmit = async (formData: EmployeesFormValues) => {
     if (!data || !data.data) return;
 
@@ -49,6 +56,7 @@ const EmployeeDetailsPage = () => {
 
     const salary = Number(formData.salario.replace(/[R$,.]/g, '')) / 100;
 
+    // Prepare the request body for updating employee details
     const body: EditEmployeeBodyRequest = {
       email: oldEmail,
       funcao: formData.funcao,
@@ -60,6 +68,7 @@ const EmployeeDetailsPage = () => {
       telefonenovo: phoneChanged ? newPhone : undefined,
     };
 
+    // Prepare the request body for updating employee address
     const addressBody: EditEmployeeAddressBodyRequest = {
       funcionarioid: id,
       cep: formData.cep,
@@ -71,6 +80,9 @@ const EmployeeDetailsPage = () => {
       complemento: formData.complemento || '',
     };
 
+    /**
+     * Sends the update requests for employee details and address
+     */
     const response = await updateEmployee(body);
     if (response.error) {
       notifyError(response.error);
@@ -85,8 +97,10 @@ const EmployeeDetailsPage = () => {
     setSuccessfullEdition(true);
   };
 
+  // First load or employee not found
   if (!data && !isPlaceholderData) return null;
 
+  // Employee not found
   if (!data || !data.data) {
     return (
       <div>
@@ -96,6 +110,10 @@ const EmployeeDetailsPage = () => {
     );
   }
 
+  /**
+   * Formats the employee data to match the EmployeesFormValues interface
+   * @returns Formatted employee data
+   */
   const employee: EmployeesFormValues = {
     nome: data.data?.nome,
     salario: formatCurrency(data.data.salario),

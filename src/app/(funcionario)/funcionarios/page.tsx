@@ -15,6 +15,7 @@ import { IEmployeeResponse } from '@/interfaces/funcionarios/getListOfEmployeesR
 import { useAuth } from '@/hooks/useAuth';
 import { CustomLink, TopTitle } from './styles';
 
+// Table columns for the employees list
 const columns = ['Nome', 'Cargo', 'Setor', 'Função', 'Data de Admissão'];
 
 const EmployeesPage = () => {
@@ -22,6 +23,11 @@ const EmployeesPage = () => {
   const { push } = useRouter();
   const [search, setSearch] = useState<string>('');
 
+  /**
+   * Fetches the list of employees using React Query
+   * It filters out the logged-in user from the list
+   * @returns The employees data
+   */
   let employees: IEmployeeResponse[] = [];
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['employees'],
@@ -42,17 +48,29 @@ const EmployeesPage = () => {
     placeholderData: keepPreviousData,
   });
 
+  // Stores the employees data if available
   if (data) {
     employees = data;
   }
 
+  /**
+   * Filters the employees based on the search input
+   * @returns Filtered employees array
+   */
   const filteredSearch = employees.filter(employee =>
     employee.nome.toLowerCase().includes(search.toLowerCase()),
   );
+
+  /**
+   * Sets up pagination for the filtered employees list
+   * @returns Pagination object
+   */
   const pagination = usePaginationRange(filteredSearch, DEFAULT_PAGE_SIZE);
 
+  // First render guard to handle loading state
   if (!data && !isPlaceholderData) return null;
 
+  // Handles the loading state while fetching employees
   if (!data) {
     return (
       <div>
@@ -62,6 +80,7 @@ const EmployeesPage = () => {
     );
   }
 
+  // Handles the case when there are no employees registered
   if (employees.length === 0) {
     return (
       <div>

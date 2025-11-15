@@ -38,6 +38,9 @@ const CSVPage = () => {
   const [selectedMonth, setSelectedMonth] = useState<IOption>({} as IOption);
   const [year, setYear] = useState<string>('');
 
+  /**
+   * Handles the generation and download of the pay slip CSV file
+   */
   const handleGenereateCsv = async () => {
     if (user?.role === 'FUNCIONARIO') return;
 
@@ -75,6 +78,10 @@ const CSVPage = () => {
     window.URL.revokeObjectURL(url);
   };
 
+  /**
+   * Handles changes to the year input field
+   * Ensures only valid years are entered (between 1970 and current year)
+   */
   const handleYearChange = (value: string) => {
     // Allow only numbers
     const numericValue = value.replace(/\D/g, '');
@@ -100,6 +107,9 @@ const CSVPage = () => {
     setYear(slicedValue);
   };
 
+  /**
+   * Clears the selected filters
+   */
   const handleClearFilters = () => {
     setSelectedMonth({} as IOption);
     setYear('');

@@ -3,6 +3,7 @@
 import Tabs, { ITab } from '@/components/Tabs/Tabs';
 import { useAuth } from '@/hooks/useAuth';
 
+// Defines the tabs for the vacation section
 const tabs: ITab[] = [
   {
     label: 'Minhas férias',
@@ -24,6 +25,10 @@ const tabs: ITab[] = [
   },
 ];
 
+/**
+ * Layout component for the vacation section
+ * It renders the tabs based on the user role
+ */
 const VacationLayout: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
@@ -31,6 +36,10 @@ const VacationLayout: React.FC<{
 
   const isEmployee = user?.role === 'FUNCIONARIO';
 
+  /**
+   * Filters the tabs based on the user role
+   * Employees only see the "Minhas férias" tab
+   */
   const filteredTabs = isEmployee ? [tabs[0]] : tabs;
 
   return (

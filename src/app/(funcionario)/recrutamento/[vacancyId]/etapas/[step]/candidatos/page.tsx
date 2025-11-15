@@ -20,6 +20,10 @@ const VacancyCandidatesPage: React.FC = () => {
   const searchParams = useSearchParams();
   const [vacancyName, setVacancyName] = useState<string>('');
 
+  /**
+   * Fetches the candidates for the vacancy and step using React Query
+   * @returns The candidates data
+   */
   const { data: candidates } = useQuery({
     queryKey: ['vacancyApplicants', step, vacancyId],
     queryFn: () =>
@@ -31,8 +35,12 @@ const VacancyCandidatesPage: React.FC = () => {
     placeholderData: keepPreviousData,
   });
 
+  // Stores the applicants array or an empty array if no data is available
   const applicants = candidates?.data || [];
 
+  /**
+   * Sets the vacancy name from the search parameters on component mount
+   */
   useEffect(() => {
     const name = searchParams.get('nome');
     if (name) {
@@ -40,6 +48,10 @@ const VacancyCandidatesPage: React.FC = () => {
     }
   }, [searchParams]);
 
+  /**
+   * Filters and sorts the candidates based on the search input
+   * @returns Filtered and sorted candidates array
+   */
   const normalizedSearch = normalizeString(search);
   const filteredCandidates = useMemo(() => {
     if (!search) return applicants;
@@ -56,6 +68,9 @@ const VacancyCandidatesPage: React.FC = () => {
       });
   }, [search, candidates]);
 
+  /**
+   * Sets up pagination for the filtered candidates
+   */
   const pagination = usePaginationRange(filteredCandidates, DEFAULT_PAGE_SIZE);
 
   return (

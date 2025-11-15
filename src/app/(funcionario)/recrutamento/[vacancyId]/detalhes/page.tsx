@@ -19,6 +19,9 @@ import {
   PageContainer,
 } from './styles';
 
+/**
+ * Mapping of vacancy levels to their display names
+ */
 const vacancyLevelRecord: Record<string, string> = {
   inciante: 'Júnior',
   intermediario: 'Pleno',
@@ -29,17 +32,27 @@ const VacancyDetailsPage: React.FC = () => {
   const { vacancyId } = useParams<{ vacancyId: string }>();
   const [warningModalOpen, setWarningModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
+
+  /**
+   * Fetches the vacancy details using React Query
+   * @returns The vacancy data along with fetching status and refetch function
+   */
   const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['vacancies', vacancyId],
     queryFn: async () => {
       const result = await getAllVacancies();
       if (!result.data) return [];
+      // Filters the vacancy by ID
       const vacancy = result.data.filter(v => v.id === Number(vacancyId));
       return vacancy;
     },
     placeholderData: keepPreviousData,
   });
 
+  /**
+   * Handles the closure of a vacancy
+   * Closes the vacancy and shows success or error modals accordingly
+   */
   const handleCloseVacancy = async () => {
     const response = await closeVacancy(Number(vacancyId));
     if (response.error) {
@@ -52,8 +65,10 @@ const VacancyDetailsPage: React.FC = () => {
     setWarningModalOpen(false);
   };
 
+  // First load or vacancy not found
   if (!data && !isPlaceholderData) return null;
 
+  // Vacancy not found
   if (!data || data.length === 0) {
     return (
       <div>
@@ -62,6 +77,11 @@ const VacancyDetailsPage: React.FC = () => {
       </div>
     );
   }
+
+  /**
+   * Stores the vacancy details, which is the first item in the data array
+   * since we filtered by vacancyId in the query function
+   */
   const vacancy = data[0];
 
   return (

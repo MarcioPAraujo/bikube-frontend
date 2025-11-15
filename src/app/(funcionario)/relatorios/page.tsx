@@ -12,38 +12,67 @@ import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
 import { FiltersContainer, Header } from './styles';
 
+/**
+ * Defines the columns for the reports table
+ */
 const columns = ['Registro do funcionário', 'Descrição', 'Data'];
+
 const ReportsPage: FC = () => {
   const [search, setSearch] = useState<string>('');
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
+  /**
+   * Fetches the logs data using React Query
+   * @returns The logs data
+   */
   let logs: ILogsresponse[] = [];
   const { data, isFetching } = useQuery({
     queryKey: ['reports'],
     queryFn: () => getLogs(),
   });
 
+  /**
+   * Stores the logs data if available
+   * it avoids errors when data is undefined
+   * @return logs array
+   */
   if (data?.data) {
     logs = data.data;
   }
+
+  /**
+   * Filters the logs based on search input and date range
+   * @returns Filtered logs array
+   */
   const filteredLogs = logs.filter(log => {
+    /**
+     * Checks if the log matches the search criteria
+     */
     const matchesSearch = log.registro
       .toLowerCase()
       .includes(search.toLowerCase());
 
     const logDate = new Date(log.data);
 
+    /**
+     * Handles various filtering scenarios based on search and date inputs
+     * @return boolean indicating if the log matches the filters
+     */
     if (!search.trim() && startDate && endDate) {
+      // Both dates provided, no search
       return startDate <= logDate && endDate >= logDate;
     }
     if (!search.trim() && startDate && !endDate) {
+      // Only start date provided, no search
       return startDate <= logDate;
     }
     if (!search.trim() && !startDate && endDate) {
+      // Only end date provided, no search
       return endDate >= logDate;
     }
     if (search.trim() && startDate && endDate) {
+      // Search and both dates provided
       const isInStartDateRange = startDate <= logDate;
       const isInEndDateRange = endDate >= logDate;
       return matchesSearch && isInEndDateRange && isInStartDateRange;
@@ -51,6 +80,10 @@ const ReportsPage: FC = () => {
     return matchesSearch;
   });
 
+  /**
+   * Sets up pagination for the filtered logs
+   * @returns Pagination object
+   */
   const pagination = usePaginationRange(filteredLogs, DEFAULT_PAGE_SIZE);
 
   if (isFetching) {
@@ -62,6 +95,7 @@ const ReportsPage: FC = () => {
     );
   }
 
+  // Displays a message if no logs are found
   if (logs.length === 0) {
     return (
       <div>

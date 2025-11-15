@@ -14,6 +14,10 @@ const Watch: React.FC<WatchProps> = ({
   isRegisteredFullDay,
   isDisabled,
 }) => {
+  /**
+   * Fetches the current server timestamp using React Query
+   * This ensures that the time displayed is synchronized with the server
+   */
   const { data } = useQuery({
     queryKey: ['current-timestamp'],
     queryFn: getCurrentTimestamp,
@@ -22,6 +26,12 @@ const Watch: React.FC<WatchProps> = ({
     select: result => result.data,
   });
 
+  /**
+   * Uses a custom hook to get live updating time based on the server timestamp
+   * This hook updates the time every second to provide a real-time clock display
+   * @param initialTime The initial time fetched from the server
+   * @returns The current live time
+   */
   const time = useLiveTime(data || '');
 
   return (

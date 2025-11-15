@@ -24,6 +24,7 @@ import {
   Label,
 } from './styles';
 
+// Options for month selection
 const monthsOptions: IOption[] = [
   { label: 'Janeiro', value: '1' },
   { label: 'Fevereiro', value: '2' },
@@ -39,6 +40,7 @@ const monthsOptions: IOption[] = [
   { label: 'Dezembro', value: '12' },
 ];
 
+// Table columns for the history page
 const columns = [
   'Data',
   'Entrada - A',
@@ -49,6 +51,7 @@ const columns = [
   'Abono',
 ];
 
+// Placeholder for empty entries in the table
 const emptyEntries = Array.from({ length: 4 }, () => '-- : -- : --');
 
 const HistoryPointPage: React.FC = () => {
@@ -57,6 +60,10 @@ const HistoryPointPage: React.FC = () => {
   const [year, setYear] = useState<string>('');
   const [filterdDate, setFilteredDate] = useState<Date | null>(null);
 
+  /**
+   * Fetches the mirror data for the selected month and year using React Query
+   * @returns The list of entries for the selected month
+   */
   let marksOfMonth: ListaEntrada[] = [];
   const { data } = useQuery({
     queryKey: ['mirror-history', filterdDate],
@@ -76,12 +83,17 @@ const HistoryPointPage: React.FC = () => {
     },
   });
 
+  // Stores the list of entries for the month if available
   if (data) {
     marksOfMonth = data[0]?.listaEntradas || [];
   }
 
+  // Sets up pagination for the entries list
   const pagination = usePaginationRange(marksOfMonth, DEFAULT_PAGE_SIZE);
 
+  /**
+   * Handles the generation and download of the pay slip PDF file
+   */
   const handleGeneratePdf = async () => {
     if (!mirrorId) {
       notifyError('Nenhum espelho selecionado para gerar o PDF.');
@@ -118,6 +130,10 @@ const HistoryPointPage: React.FC = () => {
     }
   };
 
+  /**
+   * Handles changes to the year input field
+   * Ensures only valid years are entered (between 1970 and current year)
+   */
   const handleYearChange = (value: string) => {
     // Allow only numbers
     const numericValue = value.replace(/\D/g, '');
@@ -143,6 +159,10 @@ const HistoryPointPage: React.FC = () => {
     setYear(slicedValue);
   };
 
+  /**
+   * Applies the selected month and year filters to fetch the corresponding data
+   * Sets the filteredDate state based on user selections
+   */
   const handleApplyFilters = () => {
     if (!selectedMonth || !year) return;
 
@@ -150,12 +170,23 @@ const HistoryPointPage: React.FC = () => {
     const date = new Date(parseInt(year, 10), month, 1);
     setFilteredDate(date);
   };
+
+  /**
+   * Clears the selected filters
+   * This resets the month, year, and filtered date states
+   * It allows the user to start a new filtering process
+   */
   const handleClearFilters = () => {
     setSelectedMonth({} as IOption);
     setYear('');
     setFilteredDate(null);
   };
 
+  /**
+   * Determines if the "Generate PDF" button should be disabled
+   * based on the selected date being in the future
+   * @returns A boolean indicating if the button should be disabled
+   */
   const isGenerateDisabled = () => {
     if (!filterdDate) return true;
     const currentDate = new Date();
@@ -171,6 +202,7 @@ const HistoryPointPage: React.FC = () => {
     return false;
   };
 
+  // Formats the hour string to display only hours, minutes, and seconds
   const formatHour = (hour: string) => {
     return hour.slice(0, 8);
   };

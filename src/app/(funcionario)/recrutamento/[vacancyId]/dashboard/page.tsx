@@ -24,12 +24,19 @@ const VacancyDashboardPage: React.FC = () => {
   const { vacancyId } = useParams<{ vacancyId: string }>();
   const [vacancyName, setVacancyName] = useState<string>('');
 
+  /**
+   * Fetches the top applicants for the vacancy using React Query
+   * @returns The top applicants data along with fetching status
+   */
   const { data, isPlaceholderData } = useQuery({
     queryKey: ['top-applicants', vacancyId],
     queryFn: () => getTopApplicantsForVacancy(Number(vacancyId)),
     placeholderData: keepPreviousData,
   });
 
+  /**
+   * Sets the vacancy name from the search parameters on component mount
+   */
   useEffect(() => {
     const name = searchParams.get('nome');
     if (name) {
@@ -45,6 +52,7 @@ const VacancyDashboardPage: React.FC = () => {
   // e.g. /funcionario/recrutamento/123/etapas/triagem/456
   const basePath = [...pathArray, 'etapas', 'triagem', 'candidatos'].join('/');
 
+  // Handles the first load with no data
   if (!data && !isPlaceholderData) {
     return (
       <PageWrapper>
@@ -53,6 +61,7 @@ const VacancyDashboardPage: React.FC = () => {
     );
   }
 
+  // Handles the case when there are no candidates
   if (!data || !data.data) {
     return (
       <PageWrapper>
