@@ -2,6 +2,7 @@ import { Result } from '@/interfaces/apiResult';
 import { IEmployeeMirrorResponse } from '@/interfaces/mirror/employeeMirrorResponse';
 import axios, { AxiosResponse } from 'axios';
 import handleError from '@/utils/handleError';
+import { IMonthMirrorResponse } from '@/interfaces/mirror/monthMirrorResponse';
 import { api } from '../api';
 
 export interface IHolidayResponse {
@@ -42,6 +43,21 @@ export const getEmployeeMirrors = async (
     return { data: response.data, error: null };
   } catch (error: any) {
     return handleError(error, 'Falha ao recuperrar os espelhos de ponto');
+  }
+};
+
+export const getMonthMirror = async (): Promise<
+  Result<IMonthMirrorResponse>
+> => {
+  const END_POINT = '/espelho/espelhoDoMes';
+
+  try {
+    const response: AxiosResponse<IMonthMirrorResponse> = await api.get(
+      END_POINT,
+    );
+    return { data: response.data, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Falha ao recuperar o espelho do mês');
   }
 };
 

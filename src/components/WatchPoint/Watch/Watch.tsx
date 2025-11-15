@@ -7,8 +7,13 @@ import { SaveButton, TimeDisplay, WatchContainer } from './styles';
 interface WatchProps {
   onSaveTime: (time: Date) => void;
   isRegisteredFullDay: boolean;
+  isDisabled: boolean;
 }
-const Watch: React.FC<WatchProps> = ({ onSaveTime, isRegisteredFullDay }) => {
+const Watch: React.FC<WatchProps> = ({
+  onSaveTime,
+  isRegisteredFullDay,
+  isDisabled,
+}) => {
   const { data } = useQuery({
     queryKey: ['current-timestamp'],
     queryFn: getCurrentTimestamp,
@@ -26,7 +31,7 @@ const Watch: React.FC<WatchProps> = ({ onSaveTime, isRegisteredFullDay }) => {
         <SaveButton
           type="button"
           onClick={() => onSaveTime(time)}
-          disabled={isRegisteredFullDay}
+          disabled={isRegisteredFullDay || isDisabled}
         >
           Registrar ponto
         </SaveButton>
