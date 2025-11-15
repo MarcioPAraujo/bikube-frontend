@@ -225,13 +225,11 @@ const HistoryPointPage: React.FC = () => {
                 {format(parseISO(row.data), 'dd/MM/yyyy')}
               </Table.BodyCell>
               <RenderIf isTrue={row.entradas.length >= 1}>
-                {row.entradas.map(entry => {
-                  return (
-                    <Table.BodyCell key={entry.id}>
-                      {formatHour(entry.hora)}
-                    </Table.BodyCell>
-                  );
-                })}
+                {row.entradas.map(entry => (
+                  <Table.BodyCell key={entry.id}>
+                    {formatHour(entry.hora)}
+                  </Table.BodyCell>
+                ))}
                 {row.entradas.length < 4 &&
                   Array.from({ length: 4 - row.entradas.length }).map(
                     (_, index) => (

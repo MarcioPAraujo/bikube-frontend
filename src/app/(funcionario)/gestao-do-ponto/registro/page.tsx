@@ -8,11 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getCurrentTimestamp } from '@/services/pointManagement';
 import { format, parseISO } from 'date-fns';
 import { Entrada } from '@/interfaces/mirror/employeeMirrorResponse';
-import {
-  getEmployeeMirrors,
-  getMonthMirror,
-  markMirror,
-} from '@/services/mirror/mirrorService';
+import { getMonthMirror, markMirror } from '@/services/mirror/mirrorService';
 import { useState } from 'react';
 import { PageContainer } from './styles';
 
@@ -37,22 +33,6 @@ const Point: React.FC = () => {
       return (
         response.data.listaEntradas.find(e => e.data === date)?.entradas || []
       );
-      /*
-      const mirrors = await getEmployeeMirrors(employeeId);
-      const currentDate = await getCurrentTimestamp();
-      let date = format(new Date(), 'yyyy-MM-dd');
-      if (currentDate.data) {
-        date = format(parseISO(currentDate.data), 'yyyy-MM-dd');
-      }
-      if (!mirrors.data) return [];
-
-      const mirrorOfDay = mirrors.data.filter(mirr => {
-        return mirr.listaEntradas.some(e => e.data === date);
-      });
-      const entriesOfDay = mirrorOfDay.map(m => m.listaEntradas).flat();
-      const marks = entriesOfDay.filter(e => e.data === date);
-      return marks.map(m => m.entradas).flat();
-      */
     },
   });
 
