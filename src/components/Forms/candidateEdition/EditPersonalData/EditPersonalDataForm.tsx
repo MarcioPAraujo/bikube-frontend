@@ -107,6 +107,7 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({
             register={register('birthday', {
               onChange: e => setValue('birthday', ddmmyyyyMask(e.target.value)),
             })}
+            disabled
             errorType={errors.birthday}
           />
           <Controller

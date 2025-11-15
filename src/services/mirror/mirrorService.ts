@@ -15,6 +15,21 @@ export interface IJustificationRequest {
   descricao: string;
 }
 
+export const getMyMirrors = async (): Promise<
+  Result<IEmployeeMirrorResponse[]>
+> => {
+  const END_POINT = '/espelho/meuespelho';
+
+  try {
+    const response: AxiosResponse<IEmployeeMirrorResponse[]> = await api.get(
+      END_POINT,
+    );
+    return { data: response.data, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Falha ao recuperrar os espelhos de ponto');
+  }
+};
+
 export const getEmployeeMirrors = async (
   employeeId: string,
 ): Promise<Result<IEmployeeMirrorResponse[]>> => {

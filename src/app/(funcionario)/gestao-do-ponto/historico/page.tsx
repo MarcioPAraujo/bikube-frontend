@@ -12,8 +12,7 @@ import usePaginationRange from '@/hooks/usePaginationRange';
 import { DEFAULT_PAGE_SIZE } from '@/utils/defaultPageSize';
 import { ListaEntrada } from '@/interfaces/mirror/employeeMirrorResponse';
 import { useQuery } from '@tanstack/react-query';
-import { useAuth } from '@/hooks/useAuth';
-import { getEmployeeMirrors } from '@/services/mirror/mirrorService';
+import { getMyMirrors } from '@/services/mirror/mirrorService';
 import { format, parseISO } from 'date-fns';
 import RenderIf from '@/components/RenderIf/RenderIf';
 import {
@@ -53,9 +52,6 @@ const columns = [
 const emptyEntries = Array.from({ length: 4 }, () => '-- : -- : --');
 
 const HistoryPointPage: React.FC = () => {
-  const { user } = useAuth();
-
-  const employeeId = user?.id || '';
   const [mirrorId, setMirrorId] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<IOption>({} as IOption);
   const [year, setYear] = useState<string>('');
@@ -65,7 +61,7 @@ const HistoryPointPage: React.FC = () => {
   const { data } = useQuery({
     queryKey: ['mirror-history', filterdDate],
     queryFn: async () => {
-      const mirrors = await getEmployeeMirrors(employeeId);
+      const mirrors = await getMyMirrors();
       if (!mirrors.data || !filterdDate) return [];
       const parsedDate = format(filterdDate, 'yyyy-MM-dd');
 

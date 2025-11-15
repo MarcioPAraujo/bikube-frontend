@@ -51,6 +51,20 @@ export const createEmployee = async (
   }
 };
 
+export const getEmployeeData = async (): Promise<
+  Result<IEmployeeDetailsResponse>
+> => {
+  const url = '/funcionario/meuperfil';
+  try {
+    const response: AxiosResponse<IEmployeeDetailsResponse> = await api.get(
+      url,
+    );
+    return { data: response.data, error: null };
+  } catch (error: any) {
+    return handleError(error, 'Erro ao buscar detalhes do funcionário');
+  }
+};
+
 export const getEmployeeById = async (
   id: string,
 ): Promise<Result<IEmployeeDetailsResponse>> => {

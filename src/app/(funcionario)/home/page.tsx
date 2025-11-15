@@ -1,8 +1,7 @@
 'use client';
 
 import EmployeeForm from '@/components/Forms/EmployeesForm';
-import { useAuth } from '@/hooks/useAuth';
-import { getEmployeeById } from '@/services/funcionarios/funcionariosService';
+import { getEmployeeData } from '@/services/funcionarios/funcionariosService';
 import formatCurrency from '@/utils/formatCurrency';
 import { EmployeesFormValues } from '@/validation/Employees/EmployeesForm';
 import { useQuery } from '@tanstack/react-query';
@@ -18,13 +17,9 @@ import {
 } from './styles';
 
 const HomePage: React.FC = () => {
-  const { user } = useAuth();
-
-  const id = user?.id as string;
-
   const { data, isPlaceholderData } = useQuery({
-    queryKey: ['employeeDetails', id],
-    queryFn: () => getEmployeeById(id),
+    queryKey: ['employeeDetails'],
+    queryFn: () => getEmployeeData(),
   });
 
   if (!data && !isPlaceholderData) return null;
