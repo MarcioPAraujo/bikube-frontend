@@ -226,11 +226,25 @@ const HistoryPointPage: React.FC = () => {
                 {format(parseISO(row.data), 'dd/MM/yyyy')}
               </Table.BodyCell>
               <RenderIf isTrue={row.entradas.length >= 1}>
-                {row.entradas.map(entry => (
-                  <Table.BodyCell key={entry.id}>
-                    {formatHour(entry.hora)}
-                  </Table.BodyCell>
-                ))}
+                {row.entradas.map((entry, i) => {
+                  const lenght = row.entradas.length - 1;
+                  if (i < lenght && i < 4) {
+                    return (
+                      <Table.BodyCell key={entry.id}>
+                        {formatHour(entry.hora)}
+                      </Table.BodyCell>
+                    );
+                  }
+                  if (i === lenght && i < 4) {
+                    const emptyCells = 4 - lenght;
+                    return Array.from({ length: emptyCells }).map((_, idx) => (
+                      <Table.BodyCell key={`${idx}empty`}>
+                        -- : -- : --
+                      </Table.BodyCell>
+                    ));
+                  }
+                  return null;
+                })}
                 <Table.BodyCell>{row.ausencia ? 'Sim' : 'Não'}</Table.BodyCell>
                 <Table.BodyCell>{row.descricaoAbono || '-'}</Table.BodyCell>
               </RenderIf>
