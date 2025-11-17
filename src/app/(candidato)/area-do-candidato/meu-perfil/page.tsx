@@ -82,6 +82,7 @@ const MyProfilePage: React.FC = () => {
           city: data.data?.cidade || '',
           linkedin: data.data?.linkedin || '',
           github: data.data?.github || '',
+          birthday: '01/01/1990',
         }}
       />
       <EditAcademicBackgroundForm

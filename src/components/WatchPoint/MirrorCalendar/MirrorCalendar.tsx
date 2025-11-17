@@ -4,7 +4,6 @@ import {
   ListaEntrada,
 } from '@/interfaces/mirror/employeeMirrorResponse';
 import { getEmployeeMirrors } from '@/services/mirror/mirrorService';
-import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from '@/components/Icons/Icons';
