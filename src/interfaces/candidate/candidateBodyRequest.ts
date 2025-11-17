@@ -4,6 +4,7 @@ export interface ICandidateBodyRequest {
   email: string;
   telefone: string;
   linkedin: string;
+  datanascimento: string;
   github: string;
   cidade: string;
   estado: string;

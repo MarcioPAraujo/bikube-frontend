@@ -38,6 +38,10 @@ export const registerNewCandidate = async (
     nome: steps.step2.name,
     telefone: steps.step2.phoneNumber,
     linkedin: steps.step2.linkedin,
+    datanascimento: format(
+      parse(steps.step2.birthday, 'dd/MM/yyyy', new Date()),
+      'yyyy-MM-dd',
+    ),
     github: steps.step2.github,
     experiencias: steps.step4.isFirstJob
       ? []

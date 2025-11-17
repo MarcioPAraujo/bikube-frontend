@@ -54,6 +54,10 @@ const useEmployeeLoginForm = () => {
     }
     userId.current = result.data.idfuncionario;
 
+    /**
+     * Checks if the user needs to accept terms of use or is logging in for the first time
+     * If so, it sets the appropriate state to handle these scenarios before completing login
+     */
     let proceedWithLogin = true;
     if (result.data.termo === 'false') {
       setAcceptTermsModal(true);
@@ -66,6 +70,9 @@ const useEmployeeLoginForm = () => {
 
     if (!proceedWithLogin) return;
 
+    /**
+     * Stores the logged-in employee data in sessionStorage and updates the user context
+     */
     const userData: User = {
       id: result.data.idfuncionario,
       nome: employee.data.nome,

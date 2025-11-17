@@ -14,6 +14,7 @@ export const loginAuth = async (
   body: ILoginBody,
 ): Promise<Result<ILoginResponse>> => {
   const url = '/auth/login';
+
   try {
     const response: AxiosResponse<ILoginResponse> = await api.post(url, body);
 
