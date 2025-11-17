@@ -53,6 +53,7 @@ const MyProfilePage: React.FC = () => {
     const resutl = await DeleteCandidateById();
     if (resutl.error) {
       notifyError(resutl.error);
+      return;
     }
     logout();
     setWarningModalVisible(false);
