@@ -2,7 +2,6 @@ import UnderlinedSelect from '@/components/Inputs/UndelinedSelect/UnderlinedSele
 import UnderlinedInput from '@/components/Inputs/UnderlinedInput/UnderlinedInput';
 import ModalBackground from '@/components/modals/elements/ModalBackground';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
-import ddmmyyyyMask from '@/utils/masks/ddmmyyyyMask';
 import mobileMask from '@/utils/masks/mobileMask';
 import { stateNames } from '@/utils/statesNames';
 import { PersonalDataSchemaType } from '@/validation/candidateRegister/PersonalDataSchema';
@@ -99,16 +98,6 @@ const EditPersonalDataForm: React.FC<EditPersonalDataFormProps> = ({
                 setValue('phoneNumber', mobileMask(e.target.value)),
             })}
             errorType={errors.phoneNumber}
-          />
-          <UnderlinedInput
-            id="birthday"
-            labelText="Data de nascimento"
-            placeholder="Insira sua data de nascimento"
-            register={register('birthday', {
-              onChange: e => setValue('birthday', ddmmyyyyMask(e.target.value)),
-            })}
-            disabled
-            errorType={errors.birthday}
           />
           <Controller
             control={control}
