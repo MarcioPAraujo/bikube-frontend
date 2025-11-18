@@ -231,7 +231,7 @@ const CandidateDetailsPage: React.FC = () => {
                   />
                   <UnderlinedInput
                     id={`degree-${index}`}
-                    labelText="Grau"
+                    labelText="Curso"
                     placeholder=""
                     value={formation.degree}
                     disabled
