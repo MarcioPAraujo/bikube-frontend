@@ -52,7 +52,7 @@ const HolidaysPage: React.FC = () => {
    * Fetches the holidays for the selected year using React Query
    * @returns The holidays data mapped by date
    */
-  const { data, isPlaceholderData } = useQuery({
+  const { data } = useQuery({
     queryKey: ['holidays', year],
     queryFn: () => getHolidaysOfYear(year),
     select: result => result.data,
@@ -64,7 +64,6 @@ const HolidaysPage: React.FC = () => {
    * @returns A string of CSS classes based on the day's properties
    */
   const getDayClass = (dayDate: ICalendarDay) => {
-    // add verification for holidays here in the future
     let classes = '';
 
     classes += dayDate.isCurrentMonth ? '' : ' not-current-month';
@@ -74,9 +73,9 @@ const HolidaysPage: React.FC = () => {
       classes += ' weekend';
     }
 
-    const fomrattedDate = format(dayDate.dayDate, 'yyyy-MM-dd');
+    const formattedDate = format(dayDate.dayDate, 'yyyy-MM-dd');
     if (data) {
-      classes += data[fomrattedDate] ? ' holiday' : '';
+      classes += data[formattedDate] ? ' holiday' : '';
     }
 
     return classes;
@@ -100,9 +99,6 @@ const HolidaysPage: React.FC = () => {
       notifyError(response.error);
     }
   };
-
-  // Handles the first load with no data
-  if (!isPlaceholderData && !data) return null;
 
   return (
     <>
