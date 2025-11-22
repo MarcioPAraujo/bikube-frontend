@@ -8,7 +8,8 @@ export const ModalContent = styled.div`
   position: relative;
   z-index: 1;
 
-  width: clamp(30rem, 90%, 90rem);
+  width: clamp(30rem, 90%, 100rem);
+  max-height: 60rem;
 
   & > :first-child,
   & > :last-child {
