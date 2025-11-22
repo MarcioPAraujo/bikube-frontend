@@ -49,7 +49,7 @@ const RegisterEmployeePage = () => {
       cpf: data.cpf,
       email: data.email,
       cargo: data.cargo,
-      contabancaria: data.contabancaria,
+      contabancaria: '00000000',
       dataentrada: formatDateToISO(data.dataentrada),
       cep: data.cep,
       logradouro: data.logradouro,

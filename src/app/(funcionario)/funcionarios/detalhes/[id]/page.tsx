@@ -98,7 +98,7 @@ const EmployeeDetailsPage = () => {
     cpf: data.data.cpf,
     email: data.data.email,
     cargo: data.data.cargo,
-    contabancaria: data.data.contabancaria,
+    contabancaria: '00000000',
     dataentrada: format(parseISO(data.data.dataentrada), 'dd/MM/yyyy'),
     cep: data.data.id_endereco.cep,
     logradouro: data.data.id_endereco.logradouro,

@@ -82,6 +82,8 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
           value: sector.id.toString(),
           label: sector.nome,
         }));
+        setValue('contabancaria', '00000000');
+        trigger('contabancaria');
         setSectorsOptions(sectorsOptions);
         return;
       }
@@ -142,11 +144,6 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
     const formattedValue = mobileMask(value);
     setValue('telefone', formattedValue);
     trigger('telefone');
-  };
-  const hadleBankAccountChange = (value: string) => {
-    const onlyNumbers = value.replace(/\D/g, '');
-    setValue('contabancaria', onlyNumbers);
-    trigger('contabancaria');
   };
   const handleWageChange = (value: string) => {
     const formattedValue = moneyMask(value);
@@ -240,16 +237,6 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
               onChange: e => handlePhoneChange(e.target.value),
             })}
             errorMessage={errors.telefone?.message}
-            disabled={isViewMode}
-          />
-          <InputComponent
-            id="bank-account"
-            labelText="Conta Bancária"
-            placeholder="Digite a conta bancária do funcionário"
-            register={register('contabancaria', {
-              onChange: e => hadleBankAccountChange(e.target.value),
-            })}
-            errorMessage={errors.contabancaria?.message}
             disabled={isViewMode}
           />
           <InputComponent

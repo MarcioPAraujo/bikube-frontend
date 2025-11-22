@@ -3,7 +3,6 @@ import {
   DDMMYYYY_REGEX,
   EMAIL_REGEX,
   MOBILE_REGEX,
-  ONLY_NUMBERS,
   ZIP_CODE_REGEX,
 } from '@/utils/regex/regexes';
 import * as yup from 'yup';
@@ -47,10 +46,7 @@ export const EmployeesFormSchema = yup.object().shape({
       const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
       return !isNaN(numericValue) && numericValue > 0;
     }),
-  contabancaria: yup
-    .string()
-    .required('A conta bancária é obrigatória')
-    .matches(ONLY_NUMBERS, 'A conta bancária deve conter apenas números'),
+  contabancaria: yup.string().required('A conta bancária é obrigatória'),
   dataentrada: yup
     .string()
     .required('A data de admissão é obrigatória')

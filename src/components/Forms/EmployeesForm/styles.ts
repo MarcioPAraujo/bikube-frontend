@@ -24,8 +24,7 @@ export const GridContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 1.6rem;
 
-  .complement,
-  .name {
+  .complement {
     grid-column: span 2;
   }
 `;
