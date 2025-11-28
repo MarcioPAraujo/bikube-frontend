@@ -41,6 +41,8 @@ const publicRoutes = {
   PROFESSIONAL_INFO: '/candidato-registro/experiencia-profissional',
   ACADEMIC_INFO: '/candidato-registro/formacao-academica',
   SKILLS: '/candidato-registro/habilidades',
+  TERMS_OF_USE: '/candidato-termos-de-uso',
+  PRIVACY_POLICY: '/candidato-politicas-de-privacidade',
 };
 
 /**

@@ -26,3 +26,9 @@ export const CustomLink = styled(Link)`
     text-decoration: underline;
   }
 `;
+export const FormLinksContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 2.4rem;
+  flex-wrap: wrap;
+`;

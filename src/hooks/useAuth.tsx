@@ -43,7 +43,14 @@ const AuthContext = createContext({} as IUserProvider);
  * RH routes are accessible to users with the "RH" role
  * There is no routes defined for admin role, because admin has access to all routes
  */
-const publicRoutes = ['/', '/email', '/codigo', '/redefinir-senha'];
+const publicRoutes = [
+  '/',
+  '/email',
+  '/codigo',
+  '/redefinir-senha',
+  '/termos-de-uso',
+  '/politicas-de-privacidade',
+];
 const employeeRoutes = [
   '/home',
   '/minhas-informacoes',
