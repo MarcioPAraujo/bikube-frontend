@@ -5,6 +5,7 @@ import IconButton from '@/components/Buttons/IconButton';
 import { Icon } from '@/components/Icons/Icons';
 import CandidateLoginForm from '@/components/Forms/login/Candidate/Login/CandidateLoginForm';
 import { PageContainer } from '../styles';
+import { BottomLinksContainer, CustomLink } from './styles';
 
 const CandidateLoginPage: React.FC = () => {
   const router = useRouter();
@@ -15,6 +16,12 @@ const CandidateLoginPage: React.FC = () => {
         onClick={() => router.push('/')}
       />
       <CandidateLoginForm />
+      <BottomLinksContainer>
+        <CustomLink href="/candidato-termos-de-uso">Termos de Uso</CustomLink>
+        <CustomLink href="/candidato-politicas-de-privacidade">
+          Política de Privacidade
+        </CustomLink>
+      </BottomLinksContainer>
     </PageContainer>
   );
 };
