@@ -24,6 +24,11 @@ export const SaveButton = styled.button`
   border-radius: 0.375rem;
   cursor: pointer;
 
+  &:disabled {
+    cursor: not-allowed;
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_e2e2e2};
+  }
+
   transition: background-color 0.3s ease, color 0.3s ease;
   &:hover {
     color: #000;

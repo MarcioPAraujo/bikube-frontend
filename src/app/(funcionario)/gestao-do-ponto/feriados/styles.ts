@@ -105,4 +105,5 @@ export const HolidayName = styled.span`
   text-align: center;
   padding: 0 1rem;
   margin: auto;
+  word-break: break-all;
 `;

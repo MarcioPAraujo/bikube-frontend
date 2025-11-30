@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const CardContainer = styled.div`
+  height: 100%;
   width: clamp(20rem, 100%, 40rem);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 

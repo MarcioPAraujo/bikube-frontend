@@ -100,7 +100,7 @@ const NewAnnouncementPage = () => {
       if (employeesResult.data) {
         allEmployeesRef.current = employeesResult.data;
         const employeesOpts = employeesResult.data.map(employee => ({
-          label: employee.nome,
+          label: `${employee.nome} - ${employee.funcao}`,
           value: employee.id,
         }));
         setEmployeesOptions(employeesOpts);
