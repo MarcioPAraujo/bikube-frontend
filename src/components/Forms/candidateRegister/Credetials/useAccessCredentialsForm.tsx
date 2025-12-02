@@ -2,6 +2,7 @@ import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import { sendCodeToEmail } from '@/services/email/emailService';
 import { decryptPassword, encryptPassword } from '@/utils/encryptPassword';
 import { notifyError } from '@/utils/handleToast';
+import { emailMask } from '@/utils/masks/emailMask';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import {
   CredentialsSchema,
@@ -52,6 +53,11 @@ const useAccessCredentialsForm = () => {
     retrieveData();
   }, []);
 
+  const onEmailChange = (value: string) => {
+    const formattedEmail = emailMask(value);
+    setValue('email', formattedEmail);
+  };
+
   const onFormSubmit = async (data: CredentialsSchemaType) => {
     const result = await sendCodeToEmail(data.email);
     if (result.error) {
@@ -88,6 +94,7 @@ const useAccessCredentialsForm = () => {
   return {
     hookform,
     onFormSubmit,
+    onEmailChange,
     back,
   };
 };

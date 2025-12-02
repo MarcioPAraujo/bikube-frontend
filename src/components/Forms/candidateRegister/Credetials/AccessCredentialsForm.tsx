@@ -9,6 +9,7 @@ const AccessCredentialsForm: React.FC = () => {
     hookform: { errors, handleSubmit, isSubmitting, register },
     back,
     onFormSubmit,
+    onEmailChange,
   } = useAccessCredentialsForm();
 
   return (
@@ -28,7 +29,9 @@ const AccessCredentialsForm: React.FC = () => {
             id="email"
             labelText="Email"
             placeholder="Insira seu email"
-            register={register('email')}
+            register={register('email', {
+              onChange: e => onEmailChange(e.target.value),
+            })}
             errorType={errors.email}
           />
           <UnderlinedInput
