@@ -82,7 +82,7 @@ const VacationsRequestsPage: React.FC = () => {
    * Filters the vacation requests based on the search term and selected sector
    * @returns The filtered list of vacation requests
    */
-  const filteredRequests = employeessList.filter(request => {
+  const filteredRequests = employeessList?.filter(request => {
     // if no search term and no sector selected, include all requests
     if (!search && !sector?.label) return true;
 
