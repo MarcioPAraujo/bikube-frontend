@@ -16,6 +16,7 @@ import moneyMask from '@/utils/masks/moneyMask';
 import cepMask from '@/utils/masks/cepMask';
 import getAddressByCep from '@/services/address';
 import { useAuth } from '@/hooks/useAuth';
+import { emailMask } from '@/utils/masks/emailMask';
 import { Fieldset, FormContainer, GridContainer, Legend } from './styles';
 
 // Address interface for fetching address by CEP
@@ -150,6 +151,11 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
     setValue('salario', formattedValue);
     trigger('salario');
   };
+  const handleEmailChange = (value: string) => {
+    const formattedValue = emailMask(value);
+    setValue('email', formattedValue);
+    trigger('email');
+  };
 
   const handleCepChange = async (cep: string) => {
     const formattedCep = cepMask(cep);
@@ -225,7 +231,9 @@ const EmployeeForm: React.FC<IEmployeeFormProps> = ({
             id="email"
             labelText="E-mail"
             placeholder="Digite o e-mail do funcionário"
-            register={register('email')}
+            register={register('email', {
+              onChange: e => handleEmailChange(e.target.value),
+            })}
             errorMessage={errors.email?.message}
             disabled={isViewMode}
           />
