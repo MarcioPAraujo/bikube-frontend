@@ -298,12 +298,6 @@ Files and important symbols referenced in this doc (open them directly):
 
 ---
 
-If you want, I can:
-
-- generate CONTRIBUTING.md and CODE_OF_CONDUCT templates,
-- produce a short developer onboarding checklist with commands and VSCode settings,
-- or create a diagram-style file that maps service dependencies and routes.
-
 ## Backend repository: [bikube-backend](https://github.com/VictorYuzoBR/api-rh)
 
 Colaborators:
