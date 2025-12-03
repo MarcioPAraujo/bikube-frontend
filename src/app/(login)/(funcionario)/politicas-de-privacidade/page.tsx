@@ -93,10 +93,10 @@ const PrivacyPolicyPage: React.FC = () => {
         </Paragraph>
         <Paragraph>
           <strong>4.3.</strong> Após a sua demissão, os dados serão mantidos
-          armazenados pelo período necessário para o cumprimento de obrigações
-          legais e regulatórias (prazos prescricionais trabalhistas, fiscais e
-          previdenciários). Após o decurso desses prazos, os dados serão
-          excluídos de forma segura.
+          armazenados pelo período de 5 anos para o cumprimento de obrigações
+          legais e regulatórias (prazos trabalhistas, processos trabalhistas,
+          fiscais e previdenciários). Após o decurso desses prazos, os dados
+          serão excluídos de forma segura.
         </Paragraph>
       </section>
       <section>
