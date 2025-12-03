@@ -44,6 +44,12 @@ export const createEmployee = async (
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.response) {
+        if (axiosError.response.data) {
+          return { data: null, error: axiosError.response.data as string };
+        }
+        if (axiosError.response.status === 400) {
+          return { data: null, error: 'Dados inválidos fornecidos' };
+        }
         return { data: null, error: axiosError.response.data as string };
       }
     }
