@@ -29,7 +29,7 @@ const VacancyCard: React.FC<IVancancyCardProps> = ({
           style={{ objectFit: 'cover' }}
         />
       </ImageContainer>
-      <CardContent>
+      <CardContent className="content">
         <h3>{title}</h3>
         <p>
           <strong>Local:</strong> {location}
