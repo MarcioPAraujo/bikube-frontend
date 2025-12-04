@@ -46,3 +46,9 @@ export const CustomLink = styled(Link)`
   text-decoration: none;
   color: inherit;
 `;
+export const CardLink = styled(Link)`
+  height: 30rem;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+`;

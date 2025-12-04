@@ -13,6 +13,7 @@ import {
 import RenderIf from '@/components/RenderIf/RenderIf';
 import { VacancyStage } from '@/utils/vacanciesStages';
 import {
+  CardLink,
   CustomLink,
   H2,
   MainContainer,
@@ -92,7 +93,7 @@ const CandidateHomeMain: React.FC = () => {
           >
             {filteredOpenVacancies?.map((vacancy, index) => (
               <SwiperSlide key={index}>
-                <CustomLink
+                <CardLink
                   href={`/area-do-candidato/vagas/abertas?id=${vacancy.id}`}
                 >
                   <VacancyCard
@@ -101,7 +102,7 @@ const CandidateHomeMain: React.FC = () => {
                     location={vacancy.localizacao}
                     contractType={vacancy.tipoContrato}
                   />
-                </CustomLink>
+                </CardLink>
               </SwiperSlide>
             ))}
           </Swiper>
@@ -140,7 +141,7 @@ const CandidateHomeMain: React.FC = () => {
           >
             {candidateVacanciesFiltered?.map((vacancy, index) => (
               <SwiperSlide key={index}>
-                <CustomLink
+                <CardLink
                   href={`/area-do-candidato/vagas/aplicadas?id=${vacancy.vaga.id}`}
                 >
                   <VacancyCard
@@ -149,7 +150,7 @@ const CandidateHomeMain: React.FC = () => {
                     location={vacancy.vaga.localizacao}
                     contractType={vacancy.vaga.tipoContrato}
                   />
-                </CustomLink>
+                </CardLink>
               </SwiperSlide>
             ))}
           </Swiper>
