@@ -24,6 +24,7 @@ const useEditAcademicBackgroundForm = (
   defaultValues: AcademicDataSchemaType,
   onClose: VoidFunction,
   candidateData: ICandidateDetailsResponse,
+  refetch: VoidFunction,
 ) => {
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [warningModalOpen, setWarningModalOpen] = useState(false);
@@ -161,6 +162,7 @@ const useEditAcademicBackgroundForm = (
       notifyError(result.error);
       return;
     }
+    refetch();
     setSuccessModalOpen(true);
   };
 

@@ -49,7 +49,7 @@ const EditAcademicBackgroundForm: React.FC<EditAcademicBackgroundFormProps> = ({
     hookform: { control, register, handleSubmit, errors, isSubmitting },
     educationFieldArray: { appendEducation, removeEducation, educationArray },
     languageFieldArray: { addLanguage, removeLanguage, languagesArray },
-  } = useEditAcademicBackgroundForm(defaultValues, onClose, data);
+  } = useEditAcademicBackgroundForm(defaultValues, onClose, data, refetch);
 
   if (!isOpen) return null;
 
