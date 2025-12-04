@@ -21,6 +21,7 @@ import { notifyError } from '@/utils/handleToast';
 import VacationConflictsModal from '@/components/modals/VacationConflictsModal/VacationConflictsModal';
 import { IConflictVacationResponse } from '@/interfaces/vacation/conflictVacationsResponse';
 import { getsectors } from '@/services/setor/setorService';
+import { IPendingVacationsListResponse } from '@/interfaces/vacation/pendingVacationListResponse';
 import {
   ApproveButton,
   Container,
@@ -48,6 +49,7 @@ const VacationsRequestsPage: React.FC = () => {
    * Fetches the pending vacation requests using React Query
    * @returns The pending vacations data along with fetching status and refetch function
    */
+  let list: IPendingVacationsListResponse[] = [];
   const { data, isPlaceholderData, refetch } = useQuery({
     queryKey: ['pending-vacations'],
     queryFn: () => getPendingVacations(),
@@ -75,14 +77,18 @@ const VacationsRequestsPage: React.FC = () => {
     },
   });
 
-  const employeessList = data?.data || [];
+  if (data && data.data) {
+    list = data.data;
+  }
+
+  // const employeessList = data?.data || [];
   const sectorOptions = sectors || [];
 
   /**
    * Filters the vacation requests based on the search term and selected sector
    * @returns The filtered list of vacation requests
    */
-  const filteredRequests = employeessList?.filter(request => {
+  const filteredRequests = list?.filter(request => {
     // if no search term and no sector selected, include all requests
     if (!search && !sector?.label) return true;
 
@@ -277,7 +283,7 @@ const VacationsRequestsPage: React.FC = () => {
         </Table.Body>
       </Table.Root>
       <Pagination
-        totalOfData={employeessList.length}
+        totalOfData={list.length}
         currentPage={pagination.currentPage}
         setCurrentPage={pagination.setCurrentPage}
         totalPages={pagination.totalPages}
