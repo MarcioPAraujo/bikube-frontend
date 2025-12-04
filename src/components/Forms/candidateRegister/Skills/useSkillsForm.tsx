@@ -3,6 +3,7 @@ import { useStepsRegistration } from '@/hooks/useStepsRegistration';
 import { IOption } from '@/interfaces/option';
 import { registerNewCandidate } from '@/services/candidate/candidateService';
 import { getSkills } from '@/services/skilss/skilssService';
+import { candidateAcceptTerms } from '@/services/termsOfUse/termsofUseService';
 import { notifyError } from '@/utils/handleToast';
 import { SESSION_STORAGE_KEYS } from '@/utils/sessionStorageKeys';
 import {
@@ -20,6 +21,7 @@ const useSkillsForm = () => {
     useStepsRegistration();
   const [successModalOpen, setSuccessModalOpen] = useState<boolean>(false);
   const [skillsOptions, setSkillsOptions] = useState<IOption[]>([]);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const {
     control,
@@ -79,8 +81,9 @@ const useSkillsForm = () => {
   const onRemove = (index: number) => {
     if (fields.length === 1) return;
     const currentValues = getValues();
-    const newValues = currentValues.skills.filter((_, i) => i !== index);
-    storeValues({ skills: newValues });
+    const newSkills = currentValues.skills.filter((_, i) => i !== index);
+    const newValues = { ...currentValues, skills: newSkills };
+    storeValues(newValues);
     remove(index);
   };
 
@@ -90,13 +93,19 @@ const useSkillsForm = () => {
     field: 'competency' | 'periodInMonths',
   ) => {
     const currentValues = getValues();
-    const newValues = currentValues.skills.map((skill, i) =>
+    const newSkills = currentValues.skills.map((skill, i) =>
       i === index ? { ...skill, [field]: value } : skill,
     );
-    storeValues({ skills: newValues });
+
+    const newValues = { ...currentValues, skills: newSkills };
+    storeValues(newValues);
   };
 
   const onSubmit = async (data: SkillsSchemaType) => {
+    if (!isChecked) {
+      notifyError('Você deve aceitar os termos para continuar');
+      return;
+    }
     const hasDuplicates = data.skills.some(
       (skill, index) =>
         data.skills.findIndex(s => s.competency === skill.competency) !== index,
@@ -116,6 +125,10 @@ const useSkillsForm = () => {
     if (result.error) {
       notifyError(result.error);
       return;
+    }
+
+    if (result.data) {
+      await candidateAcceptTerms(result.data.id);
     }
 
     setSuccessModalOpen(true);
@@ -146,6 +159,8 @@ const useSkillsForm = () => {
     errors,
     isSubmitting,
     control,
+    isChecked,
+    setIsChecked,
   };
 
   return {

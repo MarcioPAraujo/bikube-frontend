@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 
 export const Form = styled.form`
@@ -15,6 +16,55 @@ export const Content = styled.div`
   width: clamp(30rem, 100%, 70rem);
   gap: 3.6rem;
   padding-bottom: 2.4rem;
+`;
+
+export const CheckboxLabel = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.4rem;
+
+  & > div {
+    position: relative;
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  &:has(input:checked) {
+    & > div > svg {
+      opacity: 1;
+    }
+  }
+
+  & > div > svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+  }
+`;
+export const CheckboxInput = styled.input`
+  width: 1.6rem;
+  height: 1.6rem;
+  appearance: none;
+  border: 1px solid ${({ theme }) => theme.colors.GRAY.hex_919191};
+  border-radius: 0.2rem;
+  cursor: pointer;
+
+  &:checked {
+    background-color: ${({ theme }) => theme.colors.GREEN.hex_018D1F};
+    border: 1px solid ${({ theme }) => theme.colors.GREEN.hex_018D1F};
+  }
+`;
+
+export const CustomLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.YELLOW.hex_FFB936};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.YELLOW.hex_9E4A00};
+  }
 `;
 
 export const Description = styled.p`

@@ -13,6 +13,7 @@ import handleError from '@/utils/handleError';
 import { ICandidateProfileEditBodyRequest } from '@/interfaces/candidate/candidateProfileEditBodyRequest';
 import { ISendNewVacancyEmailBodyRequest } from '@/interfaces/vacation/sendNewVacancyEmailBodyRequest';
 import { ICandidateBySkillsResponse } from '@/interfaces/candidate/candidateySkillsresponse';
+import { ICandidateRegisterResponse } from '@/interfaces/candidate/CandidateRegisterResponse';
 import { api } from '../api';
 
 export interface ICreateCandidateRequest {
@@ -25,7 +26,7 @@ export interface ICreateCandidateRequest {
 
 export const registerNewCandidate = async (
   steps: ICreateCandidateRequest,
-): Promise<Result<boolean>> => {
+): Promise<Result<ICandidateRegisterResponse>> => {
   const ENDPOINT = '/candidato';
 
   const decryptedPassword = await decryptPassword(steps.step1.password);
@@ -83,8 +84,11 @@ export const registerNewCandidate = async (
   };
 
   try {
-    await api.post(ENDPOINT, body);
-    return { data: true, error: null };
+    const response: AxiosResponse<ICandidateRegisterResponse> = await api.post(
+      ENDPOINT,
+      body,
+    );
+    return { data: response.data, error: null };
   } catch (error: any) {
     const axiosError = error as AxiosError;
     if (axiosError.response) {

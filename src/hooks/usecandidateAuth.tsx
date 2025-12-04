@@ -43,6 +43,8 @@ const publicRoutes = {
   SKILLS: '/candidato-registro/habilidades',
   TERMS_OF_USE: '/candidato-termos-de-uso',
   PRIVACY_POLICY: '/candidato-politicas-de-privacidade',
+  REGISTER_POLICIES: '/candidato-registro/politicas-de-privacidade',
+  REGISTER_TERMS: '/candidato-registro/termos-de-uso',
 };
 
 /**

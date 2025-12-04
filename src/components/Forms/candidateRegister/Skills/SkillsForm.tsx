@@ -7,7 +7,10 @@ import { theme } from '@/styles/theme';
 import SuccessModal from '@/components/modals/SuccessModal/SuccessModal';
 import {
   AddButton,
+  CheckboxInput,
+  CheckboxLabel,
   Content,
+  CustomLink,
   Description,
   FieldWrapper,
   Form,
@@ -19,7 +22,15 @@ import useSkillsForm from './useSkillsForm';
 const SkillsForm = () => {
   const router = useRouter();
   const {
-    hookform: { errors, register, handleSubmit, isSubmitting, control },
+    hookform: {
+      errors,
+      register,
+      handleSubmit,
+      isSubmitting,
+      control,
+      isChecked,
+      setIsChecked,
+    },
     append,
     back,
     skillsOptions,
@@ -31,6 +42,7 @@ const SkillsForm = () => {
     storeOnChange,
     onPeriodChange,
   } = useSkillsForm();
+
   return (
     <>
       <SuccessModal
@@ -51,6 +63,27 @@ const SkillsForm = () => {
           isNextDisabled={isSubmitting}
         />
         <Content>
+          <div style={{ position: 'relative' }}>
+            <CheckboxLabel>
+              <div>
+                <CheckboxInput
+                  type="checkbox"
+                  id="terms"
+                  checked={isChecked}
+                  onChange={() => setIsChecked(!isChecked)}
+                />
+                <Icon name="Check" size={14} color="white" />
+              </div>
+              Aceitar{' '}
+              <CustomLink href="/candidato-registro/termos-de-uso">
+                termos de uso
+              </CustomLink>{' '}
+              e{' '}
+              <CustomLink href="/candidato-registro/politicas-de-privacidade">
+                política de privacidade
+              </CustomLink>
+            </CheckboxLabel>
+          </div>
           <Description>Adicione até 10 habilidades diferentes</Description>
           <AddButton
             type="button"

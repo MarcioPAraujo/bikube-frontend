@@ -125,6 +125,7 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
     }
   }, []);
 
+  /*
   useEffect(() => {
     const steps = [step1, step2, step3, step4, step5];
 
@@ -141,6 +142,7 @@ export const StepsRegistrationProvider: FC<IChildren> = ({ children }) => {
       redirect(steps[firstIncompleteIndex].pathname);
     }
   }, [currentStep, step1, step2, step3, step4, step5]);
+  */
 
   useEffect(() => {
     if (pathname.startsWith(basePath)) return;
