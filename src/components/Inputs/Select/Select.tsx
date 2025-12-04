@@ -43,9 +43,11 @@ const SelectComponent: FC<ISelectProps> = ({
   const selectRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>('');
-  const filteredOptions: IOption[] = options.filter(option =>
-    option.label.toLowerCase().includes(searchValue.toLowerCase()),
-  );
+  const filteredOptions: IOption[] = options
+    ? options.filter(option =>
+        option.label.toLowerCase().includes(searchValue.toLowerCase()),
+      )
+    : [];
   const handleOptionClick = (option: IOption) => {
     onChange(option);
     setIsOpen(false);
