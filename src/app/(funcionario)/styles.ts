@@ -14,6 +14,27 @@ export const Header = styled.header`
   padding: 0 2rem;
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.3);
 `;
+export const ActionsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+`;
+export const LogoutButton = styled.button`
+  background: none;
+  border: none;
+  height: 4rem;
+  width: 4rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.GRAY.hex_454545};
+  }
+`;
 export const DataContainer = styled.div`
   display: flex;
   gap: 1.6rem;
