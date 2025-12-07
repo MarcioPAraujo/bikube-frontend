@@ -3,6 +3,7 @@
 import EmployeeForm from '@/components/Forms/EmployeesForm';
 import {
   deleteEmployeeById,
+  getCSVofDeletedEmployee,
   getEmployeeById,
 } from '@/services/funcionarios/funcionariosService';
 import formatCurrency from '@/utils/formatCurrency';
@@ -54,11 +55,41 @@ const EmployeeDetailsPage = () => {
     queryFn: () => getEmployeeById(id),
   });
 
+  const handleCSV = async () => {
+    const csvResponse = await getCSVofDeletedEmployee(id);
+    if (csvResponse.error) {
+      notifyError(csvResponse.error);
+      return;
+    }
+
+    if (!csvResponse.data) {
+      notifyError('Erro ao gerar CSV do funcionário desligado.');
+      return;
+    }
+
+    const url = csvResponse.data;
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'espelho.zip'); // Set the file name
+
+    // Append to the document and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up and remove the link
+    link.parentNode?.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   /**
    * Handles the removal of an employee
    * It is triggered when the user confirms the removal in the warning modal
    */
   const handleRemoveEmployee = async () => {
+    await handleCSV();
+
     const response = await deleteEmployeeById(id);
     if (response.error) {
       notifyError(response.error);
@@ -123,7 +154,7 @@ const EmployeeDetailsPage = () => {
       <WarningModal
         isOpen={warningModal}
         title="Atenção!"
-        message="Tem certeza que deseja iniciar o processo de desligamento deste funcionário?"
+        message="Tem certeza que deseja iniciar o processo de desligamento deste funcionário? Essa ação não pode ser desfeita."
         onCancel={() => setWarningModal(false)}
         onConfirm={handleRemoveEmployee}
         confirmText="Sim, iniciar desligamento"

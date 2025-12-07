@@ -159,3 +159,26 @@ export const applySickLeave = async (
     return handleError(error, 'Erro ao aplicar atestado médico');
   }
 };
+export const getCSVofDeletedEmployee = async (
+  id: string,
+): Promise<Result<string>> => {
+  const endpoint = `/funcionario/csvdesligamento/${id}`;
+
+  try {
+    const response = await api.get(endpoint, {
+      responseType: 'blob', // Important for binary data
+    });
+
+    // Create a URL for the blob
+    const url = window.URL.createObjectURL(
+      new Blob([response.data], { type: 'application/zip' }),
+    );
+
+    return { error: null, data: url };
+  } catch (error) {
+    return handleError(
+      error,
+      'Erro ao gerar CSV de desligamento do funcionário.',
+    );
+  }
+};
