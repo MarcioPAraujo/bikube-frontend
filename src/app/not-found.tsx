@@ -28,7 +28,9 @@ const NotFoundPage: React.FC = () => {
         </LogoWrapper>
         <ContentWrapper>
           <Title>404</Title>
-          <Description>A página que procura não exite</Description>
+          <Description>
+            A página que procura não exite, volte para a página anterior
+          </Description>
           <Button type="button" onClick={() => router.back()}>
             Voltar a página anterior
           </Button>
